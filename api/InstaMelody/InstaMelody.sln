@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstaMelody.Infrastructure", "InstaMelody.Infrastructure\InstaMelody.Infrastructure.csproj", "{F04AF6C8-F68A-49BB-9E72-9F1EB89DE83F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstaMelody.Model", "InstaMelody.Model\InstaMelody.Model.csproj", "{A807A43F-8543-44BA-B2EE-720E10097810}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstaMelody.Business", "InstaMelody.Business\InstaMelody.Business.csproj", "{B26398AC-3D43-411D-BA08-068047E6E62F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstaMelody.Data", "InstaMelody.Data\InstaMelody.Data.csproj", "{4187E0EC-6C30-45BF-AF72-C49A52FE96D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstaMelody.API", "InstaMelody.API\InstaMelody.API.csproj", "{5EB2E566-BE50-4A3C-B1B2-D57B7BB5185F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{79335F0E-B7E8-40BA-8580-6FC053D9E29F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstaMelody.Tests", "InstaMelody.Tests\InstaMelody.Tests.csproj", "{857FF526-A214-455C-9751-1C85AAB25B91}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F04AF6C8-F68A-49BB-9E72-9F1EB89DE83F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F04AF6C8-F68A-49BB-9E72-9F1EB89DE83F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F04AF6C8-F68A-49BB-9E72-9F1EB89DE83F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F04AF6C8-F68A-49BB-9E72-9F1EB89DE83F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A807A43F-8543-44BA-B2EE-720E10097810}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A807A43F-8543-44BA-B2EE-720E10097810}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A807A43F-8543-44BA-B2EE-720E10097810}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A807A43F-8543-44BA-B2EE-720E10097810}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B26398AC-3D43-411D-BA08-068047E6E62F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B26398AC-3D43-411D-BA08-068047E6E62F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B26398AC-3D43-411D-BA08-068047E6E62F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B26398AC-3D43-411D-BA08-068047E6E62F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4187E0EC-6C30-45BF-AF72-C49A52FE96D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4187E0EC-6C30-45BF-AF72-C49A52FE96D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4187E0EC-6C30-45BF-AF72-C49A52FE96D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4187E0EC-6C30-45BF-AF72-C49A52FE96D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EB2E566-BE50-4A3C-B1B2-D57B7BB5185F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EB2E566-BE50-4A3C-B1B2-D57B7BB5185F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EB2E566-BE50-4A3C-B1B2-D57B7BB5185F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EB2E566-BE50-4A3C-B1B2-D57B7BB5185F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{857FF526-A214-455C-9751-1C85AAB25B91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{857FF526-A214-455C-9751-1C85AAB25B91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{857FF526-A214-455C-9751-1C85AAB25B91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{857FF526-A214-455C-9751-1C85AAB25B91}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{857FF526-A214-455C-9751-1C85AAB25B91} = {79335F0E-B7E8-40BA-8580-6FC053D9E29F}
+	EndGlobalSection
+EndGlobal

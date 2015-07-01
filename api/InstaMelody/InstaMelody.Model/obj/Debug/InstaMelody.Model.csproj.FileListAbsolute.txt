@@ -1,0 +1,10 @@
+Z:\Desktop\InstaMelody\InstaMelody\InstaMelody.Model\bin\Debug\NLog.config
+Z:\Desktop\InstaMelody\InstaMelody\InstaMelody.Model\bin\Debug\InstaMelody.Model.dll
+Z:\Desktop\InstaMelody\InstaMelody\InstaMelody.Model\bin\Debug\InstaMelody.Model.pdb
+Z:\Desktop\InstaMelody\InstaMelody\InstaMelody.Model\bin\Debug\InstaMelody.Infrastructure.dll
+Z:\Desktop\InstaMelody\InstaMelody\InstaMelody.Model\bin\Debug\NLog.dll
+Z:\Desktop\InstaMelody\InstaMelody\InstaMelody.Model\bin\Debug\InstaMelody.Infrastructure.pdb
+Z:\Desktop\InstaMelody\InstaMelody\InstaMelody.Model\bin\Debug\NLog.xml
+Z:\Desktop\InstaMelody\InstaMelody\InstaMelody.Model\obj\Debug\InstaMelody.Model.csprojResolveAssemblyReference.cache
+Z:\Desktop\InstaMelody\InstaMelody\InstaMelody.Model\obj\Debug\InstaMelody.Model.dll
+Z:\Desktop\InstaMelody\InstaMelody\InstaMelody.Model\obj\Debug\InstaMelody.Model.pdb

@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A807A43F-8543-44BA-B2EE-720E10097810}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>InstaMelody.Model</RootNamespace>
+    <AssemblyName>InstaMelody.Model</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ApiModels\ApiFile.cs" />
+    <Compile Include="ApiModels\ApiMessage.cs" />
+    <Compile Include="ApiModels\ApiRequest.cs" />
+    <Compile Include="ApiModels\ApiTime.cs" />
+    <Compile Include="ApiModels\ApiToken.cs" />
+    <Compile Include="ApiModels\ApiUserFileUpload.cs" />
+    <Compile Include="ApiModels\ApiUserMelodyFileUpload.cs" />
+    <Compile Include="ApiModels\ApiUserMessageFileUpload.cs" />
+    <Compile Include="Category.cs" />
+    <Compile Include="Enums\FileUploadTypeEnum.cs" />
+    <Compile Include="Enums\LoopEffectsEnum.cs" />
+    <Compile Include="Enums\MediaTypeEnum.cs" />
+    <Compile Include="FileUploadToken.cs" />
+    <Compile Include="Image.cs" />
+    <Compile Include="Melody.cs" />
+    <Compile Include="MelodyCategory.cs" />
+    <Compile Include="MelodyLoop.cs" />
+    <Compile Include="MelodyLoopPart.cs" />
+    <Compile Include="Message.cs" />
+    <Compile Include="MessageImage.cs" />
+    <Compile Include="MessageMelody.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Station.cs" />
+    <Compile Include="StationCategory.cs" />
+    <Compile Include="StationFollower.cs" />
+    <Compile Include="StationMessage.cs" />
+    <Compile Include="StationMessageUserLike.cs" />
+    <Compile Include="User.cs" />
+    <Compile Include="UserFriend.cs" />
+    <Compile Include="UserMessage.cs" />
+    <Compile Include="UserPassword.cs" />
+    <Compile Include="UserSession.cs" />
+    <Compile Include="Utilities.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\InstaMelody.Infrastructure\InstaMelody.Infrastructure.csproj">
+      <Project>{f04af6c8-f68a-49bb-9e72-9f1eb89de83f}</Project>
+      <Name>InstaMelody.Infrastructure</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
