@@ -45,8 +45,7 @@
     <Compile Include="AuthenticationBLL.cs" />
     <Compile Include="CategoryBLL.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="FileUploadBLL.cs" />
-    <Compile Include="ImageBLL.cs" />
+    <Compile Include="FileBLL.cs" />
     <Compile Include="MelodyBLL.cs" />
     <Compile Include="MessageBLL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -5,6 +5,7 @@
         Unknown = 0,
         Text,
         Image,
+        Video,
         Melody
     }
 }

@@ -147,6 +147,9 @@ namespace InstaMelody.Data
                 conn.Open();
                 cmd.ExecuteNonQuery();
             }
+
+            var melodyDal = new Melodies();
+            melodyDal.DeleteMelodyCategoriesByCategoryId(categoryId);
         }
 
         /// <summary>

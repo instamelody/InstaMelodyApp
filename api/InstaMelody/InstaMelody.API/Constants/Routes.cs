@@ -150,11 +150,6 @@
         #region Melody Routes
 
         /// <summary>
-        /// The route upload
-        /// </summary>
-        public const string RouteUpload = "Upload";
-
-        /// <summary>
         /// The route loop
         /// </summary>
         public const string RouteLoop = "Loop";
@@ -188,14 +183,24 @@
         #region Messages Routes
 
         /// <summary>
-        /// The route read
+        /// The route chat
         /// </summary>
-        public const string RouteRead = "Read";
+        public const string RouteChat = "Chat";
 
         /// <summary>
-        /// The route reply
+        /// The route chat user
         /// </summary>
-        public const string RouteReply = "Reply";
+        public const string RouteChatUser = "Chat/User";
+
+        /// <summary>
+        /// The route chat message
+        /// </summary>
+        public const string RouteChatMessage = "Chat/Message";
+
+        /// <summary>
+        /// The route chat remove
+        /// </summary>
+        public const string RouteChatRemove = "Chat/Delete";
 
         #endregion Messages Routes
 

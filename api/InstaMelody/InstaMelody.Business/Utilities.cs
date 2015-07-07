@@ -2,6 +2,7 @@
 using InstaMelody.Business.Properties;
 using InstaMelody.Model;
 using InstaMelody.Data;
+using InstaMelody.Model.Enums;
 
 namespace InstaMelody.Business
 {
@@ -33,7 +34,24 @@ namespace InstaMelody.Business
                 }
             }
 
+            if (result == null)
+            {
+                throw new UnauthorizedAccessException("Could not validate session.");
+            }
+
             return result;
+        }
+
+        /// <summary>
+        /// Ares the users friends.
+        /// </summary>
+        /// <param name="user1">The user1.</param>
+        /// <param name="user2">The user2.</param>
+        /// <returns></returns>
+        public static bool AreUsersFriends(Guid user1, Guid user2)
+        {
+            var bll = new UserFriends();
+            return bll.AreUsersFriends(user1, user2);
         }
 
         /// <summary>
@@ -86,6 +104,32 @@ namespace InstaMelody.Business
 
             }
             return string.Empty;
+        }
+
+        /// <summary>
+        /// Gets the file path.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="mediaType">Type of the media.</param>
+        /// <returns></returns>
+        public static string GetFilePath(string fileName, MediaTypeEnum mediaType)
+        {
+            var mediaPath = string.Empty;
+            switch (mediaType)
+            {
+                case MediaTypeEnum.Image:
+                    mediaPath = Settings.Default.ImageFileUploadFolder;
+                    break;
+                case MediaTypeEnum.Video:
+                    mediaPath = Settings.Default.VideoFileUploadFolder;
+                    break;
+                case MediaTypeEnum.Melody:
+                    mediaPath = Settings.Default.AudioFileUploadFolder;
+                    break;
+            }
+            return string.Format("{0}/{1}/{2}", 
+                Settings.Default.BaseFileUploadFolder,
+                mediaPath, fileName);
         }
     }
 }

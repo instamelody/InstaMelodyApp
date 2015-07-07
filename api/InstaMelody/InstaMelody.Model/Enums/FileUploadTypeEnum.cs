@@ -5,8 +5,8 @@
         Unknown = 0,
         UserImage,
         UserMelody,
-        StationImage,
         MessageImage,
-        MessageMelody
+        MessageMelody,
+        MessageVideo
     }
 }

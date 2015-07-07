@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Net;
@@ -44,63 +43,295 @@ namespace InstaMelody.API.Controllers
         }
 
         /// <summary>
-        /// Gets the messages by user.
+        /// Creates the chat.
         /// </summary>
         /// <param name="request">The request.</param>
         /// <returns></returns>
+        [HttpPost]
+        [Route(Routes.RouteChat)]
+        public HttpResponseMessage CreateChat(ApiRequest request)
+        {
+            HttpResponseMessage response;
+
+            if (request != null)
+            {
+                try
+                {
+                    // Log call
+                    InstaMelodyLogger.Log(
+                        string.Format("Create Chat - Token: {0}", request.Token),
+                        LogLevel.Trace);
+
+                    var bll = new MessageBLL();
+                    var result = bll.StartChat(request.User, request.Message, request.Token);
+
+                    if (result == null)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.FailedCreateChat);
+                    }
+                    else
+                    {
+                        response = this.Request.CreateResponse(HttpStatusCode.OK, result);
+                    }
+                }
+                catch (Exception exc)
+                {
+                    if (exc is UnauthorizedAccessException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, exc.Message);
+                    }
+                    else if (exc is DataException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, exc.Message);
+                    }
+                    else
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
+                    }
+                    response.ReasonPhrase = exc.Message;
+                }
+            }
+            else
+            {
+                InstaMelodyLogger.Log("Received NULL CreateChat request", LogLevel.Trace);
+                response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.NullChat);
+            }
+
+            return response;
+        }
+
+        /// <summary>
+        /// Gets the chat.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
-        [Route(Routes.RouteAll)]
-        public HttpResponseMessage GetMessagesByUser(ApiRequest request)
+        [Route(Routes.RouteChat)]
+        public HttpResponseMessage GetChat()
         {
             HttpResponseMessage response;
 
             var nvc = HttpUtility.ParseQueryString(Request.RequestUri.Query);
-            var token = nvc["token"];
-            var userId = nvc["id"];
-            var userName = nvc["displayName"];
-            var userEmail = nvc["emailAddress"];
-            var threaded = nvc["threaded"];
 
-            if (string.IsNullOrEmpty(token)
-                || (string.IsNullOrEmpty(userId) && string.IsNullOrEmpty(userName) && string.IsNullOrEmpty(userEmail)))
+            Guid _token;
+            var token = nvc["token"];
+            Guid.TryParse(token, out _token);
+
+            Guid _chat;
+            var chat = nvc["chatId"];
+            Guid.TryParse(chat, out _chat);
+
+            if (_token.Equals(default(Guid)))
             {
-                response = token == null
-                    ? this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, Exceptions.FailedValidation)
-                    : this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.NullIncompleteMessage);
+                InstaMelodyLogger.Log("Received NULL GetChat request", LogLevel.Trace);
+                response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, 
+                    Exceptions.FailedAuthentication);
             }
             else
             {
                 try
                 {
+                    // Log call
                     InstaMelodyLogger.Log(
-                        string.Format("Get Message For User - Token: {0}", token),
+                        string.Format("Get Chat - Token: {0}, Chat: {1}", _token, _chat),
                         LogLevel.Trace);
 
-                    Guid _userId;
-                    Guid _token;
-                    Guid.TryParse(userId, out _userId);
-                    Guid.TryParse(token, out _token);
+                    var bll = new MessageBLL();
+                    var result = bll.GetChat(new Chat {Id = _chat}, _token);
 
-                    bool _threaded;
-                    bool.TryParse(threaded, out _threaded);
+                    if (result == null)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, 
+                            string.Format(Exceptions.FailedGetChat, _chat));
+                    }
+                    else
+                    {
+                        response = this.Request.CreateResponse(HttpStatusCode.OK, result);
+                    }
+                }
+                catch (Exception exc)
+                {
+                    if (exc is UnauthorizedAccessException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, exc.Message);
+                    }
+                    else if (exc is DataException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, exc.Message);
+                    }
+                    else
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
+                    }
+                    response.ReasonPhrase = exc.Message;
+                }
+            }
+
+            return response;
+        }
+
+        /// <summary>
+        /// Adds the user to chat.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route(Routes.RouteChatUser)]
+        public HttpResponseMessage AddUserToChat(ApiRequest request)
+        {
+            HttpResponseMessage response;
+
+            if (request != null)
+            {
+                try
+                {
+                    // Log call
+                    InstaMelodyLogger.Log(
+                        string.Format("Add User To Chat - Token: {0}, Chat: {1}, User: {2}", 
+                            request.Token,
+                            request.Chat.Id,
+                            request.User.Id.Equals(default(Guid)) 
+                                ? request.User.DisplayName 
+                                : request.User.Id.ToString()),
+                        LogLevel.Trace);
 
                     var bll = new MessageBLL();
-                    var results = bll.GetMessagesByUser(new User
-                        {
-                            Id = _userId,
-                            DisplayName = userName,
-                            EmailAddress = userEmail
-                        }, _token, _threaded);
+                    var result = bll.AddUserToChat(request.Chat, request.User, request.Token);
 
-                    if (results != null && results.Any())
+                    if (result == null)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.FailedAddUserToChat);
+                    }
+                    else
+                    {
+                        response = this.Request.CreateResponse(HttpStatusCode.OK, result);
+                    }
+                }
+                catch (Exception exc)
+                {
+                    if (exc is UnauthorizedAccessException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, exc.Message);
+                    }
+                    else if (exc is DataException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, exc.Message);
+                    }
+                    else
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
+                    }
+                    response.ReasonPhrase = exc.Message;
+                }
+            }
+            else
+            {
+                InstaMelodyLogger.Log("Received NULL AddUserToChat request", LogLevel.Trace);
+                response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.NullChat);
+            }
+
+            return response;
+        }
+
+        /// <summary>
+        /// Sends the chat message.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route(Routes.RouteChatMessage)]
+        public HttpResponseMessage SendChatMessage(ApiRequest request)
+        {
+            HttpResponseMessage response;
+
+            if (request != null)
+            {
+                try
+                {
+                    // Log call
+                    InstaMelodyLogger.Log(
+                        string.Format("Send Chat Message - Chat: {0}, Token: {1}", request.Chat.Id, request.Token),
+                        LogLevel.Trace);
+
+                    var bll = new MessageBLL();
+                    var result = bll.SendChatMessage(request.Chat, request.Message, request.Token);
+
+                    if (result == null)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.FailedSendChatMessage);
+                    }
+                    else
+                    {
+                        response = this.Request.CreateResponse(HttpStatusCode.OK, result);
+                    }
+                }
+                catch (Exception exc)
+                {
+                    if (exc is UnauthorizedAccessException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, exc.Message);
+                    }
+                    else if (exc is DataException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, exc.Message);
+                    }
+                    else
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
+                    }
+                    response.ReasonPhrase = exc.Message;
+                }
+            }
+            else
+            {
+                InstaMelodyLogger.Log("Received NULL SendChatMessage request", LogLevel.Trace);
+                response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.NullChat);
+            }
+
+            return response;
+        }
+
+        /// <summary>
+        /// Gets the user chats.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route(Routes.RouteChatUser)]
+        public HttpResponseMessage GetUserChats()
+        {
+            HttpResponseMessage response;
+
+            var nvc = HttpUtility.ParseQueryString(Request.RequestUri.Query);
+
+            Guid _token;
+            var token = nvc["token"];
+            Guid.TryParse(token, out _token);
+
+            if (_token.Equals(default(Guid)))
+            {
+                InstaMelodyLogger.Log("Received NULL GetUserChats request", LogLevel.Trace);
+                response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, Exceptions.FailedAuthentication);
+            }
+            else
+            {
+                try
+                {
+                    // Log call
+                    InstaMelodyLogger.Log(
+                        string.Format("Get User Chats - Token: {0}", _token),
+                        LogLevel.Trace);
+
+                    var bll = new MessageBLL();
+                    var results = bll.GetAllUserChats(_token);
+
+                    if (results == null || !results.Any())
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest,
+                            Exceptions.FailedGetUserChats);
+                    }
+                    else
                     {
                         response = this.Request.CreateResponse(HttpStatusCode.OK, results);
                     }
-                    else
-                    {
-                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, 
-                            string.Format(Exceptions.FailedGetMessages, _token));
-                    }
                 }
                 catch (Exception exc)
                 {
@@ -124,221 +355,29 @@ namespace InstaMelody.API.Controllers
         }
 
         /// <summary>
-        /// Sends the message.
+        /// Removes the user from chat.
         /// </summary>
         /// <param name="request">The request.</param>
         /// <returns></returns>
-        [HttpPut]
         [HttpPost]
-        [Route(Routes.RouteNew)]
-        public HttpResponseMessage SendMessage(ApiRequest request)
+        [Route(Routes.RouteChatRemove)]
+        public HttpResponseMessage RemoveUserFromChat(ApiRequest request)
         {
             HttpResponseMessage response;
 
-            if (request != null && request.UserMessage != null)
+            if (request != null)
             {
                 try
                 {
                     // Log call
                     InstaMelodyLogger.Log(
-                        string.Format("Send Message - Recipient Id: {0}, Token: {1}", 
-                            request.UserMessage.RecipientId, request.Token),
+                        string.Format("Remove User From Chat - Chat: {0}, Token: {1}", request.Chat.Id, request.Token),
                         LogLevel.Trace);
 
                     var bll = new MessageBLL();
-                    var result = bll.SendMessageToUser(request.UserMessage.RecipientId, 
-                        request.Message ?? request.UserMessage.Message, request.Token);
-
-                    if (result == null)
-                    {
-                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest,
-                            string.Format(Exceptions.FailedSendMessage, request.UserMessage.RecipientId));
-                    }
-                    else
-                    {
-                        response = this.Request.CreateResponse(HttpStatusCode.OK, result);
-                    }
-                }
-                catch (Exception exc)
-                {
-                    if (exc is UnauthorizedAccessException)
-                    {
-                        response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, exc.Message);
-                    }
-                    else if (exc is DataException)
-                    {
-                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, exc.Message);
-                    }
-                    else
-                    {
-                        response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
-                    }
-                    response.ReasonPhrase = exc.Message;
-                }
-            }
-            else
-            {
-                InstaMelodyLogger.Log("Received NULL SendMessage request", LogLevel.Trace);
-                response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.NullIncompleteMessage);
-            }
-
-            return response;
-        }
-
-        /// <summary>
-        /// Reads the message.
-        /// </summary>
-        /// <param name="request">The request.</param>
-        /// <returns></returns>
-        [HttpPost]
-        [Route(Routes.RouteRead)]
-        public HttpResponseMessage ReadMessage(ApiRequest request)
-        {
-            HttpResponseMessage response;
-
-            if (request != null && request.UserMessage != null)
-            {
-                try
-                {
-                    // Log call
-                    InstaMelodyLogger.Log(
-                        string.Format("Read Message - UserMessageId: {0}, Token: {1}",
-                            request.UserMessage.Id, request.Token),
-                        LogLevel.Trace);
-
-                    var bll = new MessageBLL();
-                    var result = bll.ReadMessage(request.UserMessage, request.Token);
-
-                    if (result == null)
-                    {
-                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, 
-                            string.Format(Exceptions.FailedReadMessage, request.UserMessage.Id));
-                    }
-                    else
-                    {
-                        response = this.Request.CreateResponse(HttpStatusCode.OK, result);
-                    }
-                }
-                catch (Exception exc)
-                {
-                    if (exc is UnauthorizedAccessException)
-                    {
-                        response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, exc.Message);
-                    }
-                    else if (exc is DataException)
-                    {
-                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, exc.Message);
-                    }
-                    else
-                    {
-                        response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
-                    }
-                    response.ReasonPhrase = exc.Message;
-                }
-            }
-            else
-            {
-                InstaMelodyLogger.Log("Received NULL ReadMessage request", LogLevel.Trace);
-                response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.NullIncompleteMessage);
-            }
-
-            return response;
-        }
-
-        /// <summary>
-        /// Replies to message.
-        /// </summary>
-        /// <param name="request">The request.</param>
-        /// <returns></returns>
-        [HttpPost]
-        [Route(Routes.RouteReply)]
-        public HttpResponseMessage ReplyToMessage(ApiRequest request)
-        {
-            HttpResponseMessage response;
-
-            if (request != null && request.UserMessage != null 
-                && request.Message != null)
-            {
-                try
-                {
-                    // Log call
-                    InstaMelodyLogger.Log(
-                        string.Format("Send Reply Message - Sender Id: {0}, Recipient Id: {1}, Token: {2}",
-                            request.UserMessage.UserId, request.UserMessage.RecipientId, request.Token),
-                        LogLevel.Trace);
-
-                    var bll = new MessageBLL();
-                    var result = bll.ReplyToMessage(request.UserMessage, request.Message, request.Token);
-
-                    if (result == null)
-                    {
-                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest,
-                            string.Format(Exceptions.FailedReplyMessage, 
-                                (request.UserMessage == null 
-                                || request.UserMessage.Message == null 
-                                || request.UserMessage.Message.Id.Equals(default(Guid))) 
-                                    ? request.Message.Id 
-                                    : request.UserMessage.Message.Id));
-                    }
-                    else
-                    {
-                        response = this.Request.CreateResponse(HttpStatusCode.OK, result);
-                    }
-
-                }
-                catch (Exception exc)
-                {
-                    if (exc is UnauthorizedAccessException)
-                    {
-                        response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, exc.Message);
-                    }
-                    else if (exc is DataException)
-                    {
-                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, exc.Message);
-                    }
-                    else
-                    {
-                        response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
-                    }
-                    response.ReasonPhrase = exc.Message;
-                }
-            }
-            else
-            {
-                InstaMelodyLogger.Log("Received NULL or incomplete ReplyToMessage request", LogLevel.Trace);
-                response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.NullIncompleteMessage);
-            }
-
-            return response;
-        }
-
-        /// <summary>
-        /// Deletes the message.
-        /// </summary>
-        /// <param name="request">The request.</param>
-        /// <returns></returns>
-        [HttpPost]
-        [Route(Routes.RouteDelete)]
-        public HttpResponseMessage DeleteMessage(ApiRequest request)
-        {
-            HttpResponseMessage response;
-
-            if (request != null && request.UserMessage != null
-                && request.Message != null)
-            {
-                try
-                {
-                    // Log call
-                    InstaMelodyLogger.Log(
-                        string.Format("Delete Message - Message Id: {0}, Token: {1}",
-                            request.UserMessage.Id, request.Token),
-                        LogLevel.Trace);
-
-                    var bll = new MessageBLL();
-                    bll.DeleteUserMessage(request.UserMessage, request.Token);
+                    bll.RemoveUserFromChat(request.Chat, request.Token);
 
                     response = this.Request.CreateResponse(HttpStatusCode.Accepted);
-
                 }
                 catch (Exception exc)
                 {
@@ -359,41 +398,11 @@ namespace InstaMelody.API.Controllers
             }
             else
             {
-                InstaMelodyLogger.Log("Received NULL or incomplete DeleteMessage request", LogLevel.Trace);
-                response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.NullIncompleteMessage);
+                InstaMelodyLogger.Log("Received NULL RemoveUserFromChat request", LogLevel.Trace);
+                response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.NullChat);
             }
 
             return response;
-        }
-
-        public HttpResponseMessage SendPostToStation(ApiRequest request)
-        {
-            // TODO: 
-            throw new NotImplementedException();
-        }
-
-        public HttpResponseMessage SendMessageToStation(ApiRequest request)
-        {
-            // TODO: 
-            throw new NotImplementedException();
-        }
-
-        public HttpResponseMessage GetMessagesByStation(ApiRequest request)
-        {
-            // TODO: 
-            throw new NotImplementedException();
-        }
-
-        public HttpResponseMessage GetPostsByStation(ApiRequest request)
-        {
-            // TODO: 
-            throw new NotImplementedException();
-        }
-
-        public HttpResponseMessage DeletePost(ApiRequest request)
-        {
-            // TODO: 
-            throw new NotImplementedException();
         }
     }
 }

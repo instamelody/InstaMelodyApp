@@ -2,7 +2,7 @@
 {
     public class ApiUserMelodyFileUpload
     {
-        public Melody Melody { get; set; }
+        public UserMelody UserMelody { get; set; }
 
         public FileUploadToken FileUploadToken { get; set; }
     }

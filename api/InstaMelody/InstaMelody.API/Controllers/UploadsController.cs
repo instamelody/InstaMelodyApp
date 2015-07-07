@@ -20,6 +20,12 @@ namespace InstaMelody.API.Controllers
     [RoutePrefix(Routes.PrefixUpload01)]
     public class UploadsController : ApiController
     {
+        /// <summary>
+        /// Uploads the file.
+        /// </summary>
+        /// <param name="sessionToken">The session token.</param>
+        /// <param name="token">The token.</param>
+        /// <returns></returns>
         [HttpPost]
         [Route(Routes.RouteUploadToken)]
         public async Task<HttpResponseMessage> UploadFile(Guid sessionToken, Guid token)
@@ -34,7 +40,7 @@ namespace InstaMelody.API.Controllers
                            sessionToken, token),
                        LogLevel.Trace);
 
-                    var bll = new FileUploadBLL();
+                    var bll = new FileBLL();
                     var isUploadValid = bll.CanUploadFile(sessionToken, token);
 
                     if (isUploadValid)
@@ -104,7 +110,7 @@ namespace InstaMelody.API.Controllers
             var rootUrl = Request.RequestUri.AbsoluteUri.Replace(
                             Request.RequestUri.AbsolutePath, string.Empty);
 
-            var bll = new FileUploadBLL();
+            var bll = new FileBLL();
             var uploadMetadata = bll.GetTokenInfo(token);
             if (uploadMetadata == null) return null;
             

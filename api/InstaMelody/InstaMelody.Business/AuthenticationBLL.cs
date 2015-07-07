@@ -154,8 +154,12 @@ namespace InstaMelody.Business
         /// <exception cref="System.Data.DataException">Both old and new password values must be provided to reset the user password.</exception>
         public ApiToken UpdatePassword(UserPassword password, Guid sessionToken)
         {
-            var sessionUser = Utilities.GetUserBySession(sessionToken);
-            if (sessionUser == null || sessionUser == default(User))
+            User sessionUser;
+            try
+            {
+                sessionUser = Utilities.GetUserBySession(sessionToken);
+            }
+            catch (Exception)
             {
                 throw new UnauthorizedAccessException(string.Format("Could not find a valid session for Session: {0}.", sessionToken));
             }

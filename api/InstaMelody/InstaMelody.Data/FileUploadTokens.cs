@@ -163,6 +163,64 @@ namespace InstaMelody.Data
         }
 
         /// <summary>
+        /// Finds the token.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="mediaType">Type of the media.</param>
+        /// <returns></returns>
+        public FileUploadToken FindToken(Guid userId, string fileName, MediaTypeEnum mediaType)
+        {
+            FileUploadToken result = null;
+
+            using (var conn = new SqlConnection(ConnString))
+            {
+                var cmd = conn.CreateCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = @"SELECT TOP 1 * FROM dbo.FileUploadTokens
+                                    WHERE UserId = @UserId AND MediaType = @MediaType 
+                                        AND FileName = @FileName AND IsDeleted = 0";
+
+                cmd.Parameters.Add(new SqlParameter
+                {
+                    ParameterName = "UserId",
+                    Value = userId,
+                    SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                });
+                cmd.Parameters.Add(new SqlParameter
+                {
+                    ParameterName = "MediaType",
+                    Value = mediaType.ToString(),
+                    SqlDbType = SqlDbType.VarChar,
+                    Direction = ParameterDirection.Input
+                });
+                cmd.Parameters.Add(new SqlParameter
+                {
+                    ParameterName = "FileName",
+                    Value = fileName,
+                    SqlDbType = SqlDbType.VarChar,
+                    Direction = ParameterDirection.Input
+                });
+
+                conn.Open();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (!reader.IsClosed && reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            result = new FileUploadToken();
+                            result = result.ParseFromDataReader(reader);
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Expires the token.
         /// </summary>
         /// <param name="token">The token.</param>

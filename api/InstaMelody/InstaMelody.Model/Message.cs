@@ -26,7 +26,9 @@ namespace InstaMelody.Model
 
         public Image Image { get; set; }
 
-        public Melody Melody { get; set; }
+        public UserMelody UserMelody { get; set; }
+
+        public Video Video { get; set; }
 
         #endregion Relationship Properties
 

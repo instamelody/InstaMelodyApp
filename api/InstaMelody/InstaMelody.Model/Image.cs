@@ -16,6 +16,8 @@ namespace InstaMelody.Model
 
         public bool IsDeleted { get; set; }
 
+        public string FilePath { get; set; }
+
         /// <summary>
         /// Parses from data reader.
         /// </summary>

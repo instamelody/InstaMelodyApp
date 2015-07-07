@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiModels\ApiChatFileUpload.cs" />
     <Compile Include="ApiModels\ApiFile.cs" />
     <Compile Include="ApiModels\ApiMessage.cs" />
     <Compile Include="ApiModels\ApiRequest.cs" />
@@ -49,20 +50,23 @@
     <Compile Include="ApiModels\ApiToken.cs" />
     <Compile Include="ApiModels\ApiUserFileUpload.cs" />
     <Compile Include="ApiModels\ApiUserMelodyFileUpload.cs" />
-    <Compile Include="ApiModels\ApiUserMessageFileUpload.cs" />
     <Compile Include="Category.cs" />
+    <Compile Include="Chat.cs" />
+    <Compile Include="ChatMessage.cs" />
+    <Compile Include="ChatUser.cs" />
     <Compile Include="Enums\FileUploadTypeEnum.cs" />
     <Compile Include="Enums\LoopEffectsEnum.cs" />
     <Compile Include="Enums\MediaTypeEnum.cs" />
+    <Compile Include="FileGroup.cs" />
     <Compile Include="FileUploadToken.cs" />
     <Compile Include="Image.cs" />
     <Compile Include="Melody.cs" />
     <Compile Include="MelodyCategory.cs" />
-    <Compile Include="MelodyLoop.cs" />
-    <Compile Include="MelodyLoopPart.cs" />
+    <Compile Include="MelodyFileGroup.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="MessageImage.cs" />
     <Compile Include="MessageMelody.cs" />
+    <Compile Include="MessageVideo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Station.cs" />
     <Compile Include="StationCategory.cs" />
@@ -71,10 +75,14 @@
     <Compile Include="StationMessageUserLike.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UserFriend.cs" />
-    <Compile Include="UserMessage.cs" />
+    <Compile Include="UserLoop.cs" />
+    <Compile Include="UserLoopPart.cs" />
+    <Compile Include="UserMelody.cs" />
+    <Compile Include="UserMelodyPart.cs" />
     <Compile Include="UserPassword.cs" />
     <Compile Include="UserSession.cs" />
     <Compile Include="Utilities.cs" />
+    <Compile Include="Video.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InstaMelody.Infrastructure\InstaMelody.Infrastructure.csproj">

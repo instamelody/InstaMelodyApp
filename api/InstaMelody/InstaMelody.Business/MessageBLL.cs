@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-
+using InstaMelody.Business.Properties;
 using InstaMelody.Data;
 using InstaMelody.Model;
 using InstaMelody.Model.ApiModels;
@@ -14,434 +14,519 @@ namespace InstaMelody.Business
     {
         #region Public Methods
 
-        #region User Messages
+        #region User Chats
 
         /// <summary>
-        /// Sends the message to user.
+        /// Starts the chat.
         /// </summary>
-        /// <param name="recipientId">The recipient identifier.</param>
+        /// <param name="friend">The friend.</param>
         /// <param name="message">The message.</param>
         /// <param name="sessionToken">The session token.</param>
-        /// <param name="enforceFriendship">if set to <c>true</c> [enforce friendship].</param>
         /// <returns></returns>
-        /// <exception cref="System.UnauthorizedAccessException">Could not validate session.</exception>
-        /// <exception cref="System.Data.DataException">
-        /// Cannot send a NULL message
-        /// or
-        /// or
-        /// </exception>
-        public object SendMessageToUser(Guid recipientId, Message message, Guid sessionToken, bool enforceFriendship = false)
+        /// <exception cref="System.UnauthorizedAccessException">Only Friends of the authenticated User can be added to a Chat.</exception>
+        /// <exception cref="System.Data.DataException">Failed to create Chat.</exception>
+        public object StartChat(User friend, Message message, Guid sessionToken)
         {
             var sessionUser = Utilities.GetUserBySession(sessionToken);
-            if (sessionUser == null)
-            {
-                throw new UnauthorizedAccessException("Could not validate session.");
-            }
 
-            if (message == null 
-                || (string.IsNullOrWhiteSpace(message.Description)
-                    && message.Image == null && message.Melody == null))
-            {
-                throw new DataException("Cannot send a NULL message");
-            }
-
-            if (recipientId.Equals(sessionUser.Id))
-            {
-                throw new UnauthorizedAccessException("User cannot send a message to themself.");
-            }
-
-            // check to see if users are friends
+            // check requested user is friends with session user if setting is set
             var userBll = new UserBLL();
-            if (enforceFriendship && !userBll.AreUsersFriends(recipientId, sessionUser.Id))
+            var foundFriend = userBll.FindUser(friend);
+            if (Settings.Default.UsersCanOnlyMessageFriends 
+                && !Utilities.AreUsersFriends(sessionUser.Id, foundFriend.Id))
             {
-                throw new UnauthorizedAccessException(
-                    string.Format("Cannot send a message to User {0} becuase they are not added as a friend.", recipientId));
+                throw new UnauthorizedAccessException("Only Friends of the authenticated User can be added to a Chat.");
             }
 
-            var msg = this.CreateMessage(message);
-            if (msg == null)
+            // create chat
+            var dal = new Chats();
+            var newChat = dal.CreateChat();
+            if (newChat == null)
             {
-                throw new DataException(string.Format("Could not create Message to Send to User: {0}", recipientId));
+                throw new DataException("Failed to create Chat.");
             }
 
-            var dal = new UserMessages();
-
-            var usrMsg = dal.AddUserMessage(sessionUser.Id, recipientId, msg.Id);
-            if (usrMsg == null)
+            // add users to chat
+            dal.AddUserToChat(new ChatUser
             {
-                throw new DataException(
-                    string.Format("Error creating user message. Sender: {0}, Recipient: {1}, Message: {2}",
-                        sessionUser.Id, recipientId, msg.Id));
+                ChatId = newChat.Id,
+                UserId = foundFriend.Id
+            });
+            dal.AddUserToChat(new ChatUser
+            {
+                ChatId = newChat.Id,
+                UserId = sessionUser.Id
+            });
+
+            // create chat message
+            var chatMessage = this.CreateChatMessage(newChat, sessionUser, message);
+
+            // TODO: send push notification to requested user
+
+            // return chat & file upload token (if necessary)
+            if (chatMessage.Item2 != null)
+            {
+                return new ApiChatFileUpload
+                {
+                    Chat = this.GetChat(newChat),
+                    FileUploadToken = chatMessage.Item2
+                };
             }
 
-            // attach message to user message
-            usrMsg.Message = msg;
-
-
-            // TODO: check message images or melodies
-            if (msg.Image != null || msg.Melody != null)
-            {
-                return this.GetUserMessageFileUpload(usrMsg, sessionUser.Id);
-            }
-
-            return usrMsg;
+            return newChat;
         }
 
         /// <summary>
-        /// Reads the message.
+        /// Gets the chat.
         /// </summary>
-        /// <param name="message">The message.</param>
+        /// <param name="chat">The chat.</param>
         /// <param name="sessionToken">The session token.</param>
         /// <returns></returns>
-        /// <exception cref="System.UnauthorizedAccessException">
-        /// Could not validate session.
-        /// or
-        /// Only the recipient of a message can mark a message as read.
-        /// </exception>
-        /// <exception cref="System.Data.DataException">
-        /// </exception>
-        public UserMessage ReadMessage(UserMessage message, Guid sessionToken)
+        /// <exception cref="System.ArgumentException">No valid Chat Id provided.</exception>
+        /// <exception cref="System.Data.DataException">Could not find the requested Chat, Id {0}.</exception>
+        public Chat GetChat(Chat chat, Guid sessionToken)
         {
-            var sessionUser = Utilities.GetUserBySession(sessionToken);
-            if (sessionUser == null)
+            // check token
+            Utilities.GetUserBySession(sessionToken);
+
+            if (chat.Id.Equals(default(Guid)))
             {
-                throw new UnauthorizedAccessException("Could not validate session.");
+                throw new ArgumentException("No valid Chat Id provided.");
             }
 
-            var usrMsg = this.GetUserMessage(message);
-            if (usrMsg == null)
-            {
-                throw new DataException(string.Format("Failed to retrieve User Message record with Id: {0}", message.Id));
-            }
-
-            if (!usrMsg.RecipientId.Equals(sessionUser.Id))
-            {
-                throw new UnauthorizedAccessException("Only the recipient of a message can mark a message as read.");
-            }
-
-            var dal = new Messages();
-            dal.MarkMessagAsRead(usrMsg.MessageId);
-
-            // mark message as read
-            var readMessage = dal.GetMessageById(usrMsg.MessageId);
-            if (!readMessage.IsRead)
-            {
-                throw new DataException(string.Format("Failed to mark Message: {0} as read.", readMessage.Id));
-            }
-
-            // clone the user message and add read message to cloned
-            var clonedMessage = usrMsg.Clone();
-            clonedMessage.Message = readMessage;
-
-            return clonedMessage;
+            return this.GetChat(chat);
         }
 
         /// <summary>
-        /// Replies to message.
+        /// Adds the user to chat.
         /// </summary>
-        /// <param name="message">The message.</param>
-        /// <param name="replyMessage">The reply message.</param>
+        /// <param name="chat">The chat.</param>
+        /// <param name="requestedUser">The requested user.</param>
         /// <param name="sessionToken">The session token.</param>
-        /// <param name="enforceFriendship">if set to <c>true</c> [enforce friendship].</param>
         /// <returns></returns>
-        /// <exception cref="System.UnauthorizedAccessException">Could not validate session.</exception>
-        /// <exception cref="System.Data.DataException"></exception>
-        public object ReplyToMessage(UserMessage message, Message replyMessage, Guid sessionToken, bool enforceFriendship = false)
+        /// <exception cref="System.UnauthorizedAccessException">Only Friends of the authenticated User can be added to a Chat.</exception>
+        /// <exception cref="System.ArgumentException">No valid Chat Id provided.</exception>
+        public Chat AddUserToChat(Chat chat, User requestedUser, Guid sessionToken)
         {
+            // check token
             var sessionUser = Utilities.GetUserBySession(sessionToken);
-            if (sessionUser == null)
-            {
-                throw new UnauthorizedAccessException("Could not validate session.");
-            }
 
-            var usrMsg = this.GetUserMessage(message);
-            if (usrMsg == null)
-            {
-                throw new DataException(string.Format("Failed to retrieve User Message record with Id: {0}", message.Id));
-            }
-
-            if (!sessionUser.Id.Equals(usrMsg.RecipientId) && !sessionUser.Id.Equals(usrMsg.UserId))
-            {
-                throw new UnauthorizedAccessException(
-                    string.Format("User {0} is not allowed to reply to a message of which they are not the sender or recipient.",
-                        sessionUser.Id));
-            }
-
-            // prepare & send reply message
-            replyMessage.ParentId = usrMsg.MessageId;
-            var msgRecipient = sessionUser.Id.Equals(usrMsg.RecipientId) ? usrMsg.UserId : usrMsg.RecipientId;
-
-            return this.SendMessageToUser(msgRecipient, replyMessage, sessionToken, enforceFriendship);
-        }
-
-        /// <summary>
-        /// Gets the messages by user.
-        /// </summary>
-        /// <param name="user">The user.</param>
-        /// <param name="sessionToken">The session token.</param>
-        /// <param name="threaded">if set to <c>true</c> [threaded].</param>
-        /// <returns></returns>
-        /// <exception cref="System.UnauthorizedAccessException">Could not validate session.
-        /// or
-        /// User Messages can only be requested by the User the messages belong to.</exception>
-        public IList<UserMessage> GetMessagesByUser(User user, Guid sessionToken, bool threaded = false)
-        {
-            var sessionUser = Utilities.GetUserBySession(sessionToken);
-            if (sessionUser == null)
-            {
-                throw new UnauthorizedAccessException("Could not validate session.");
-            }
-
+            // check requested user is friends with session user if setting is set
             var userBll = new UserBLL();
-            var foundUser = userBll.GetUser(user, sessionToken);
-            if (foundUser == null)
+            var foundFriend = userBll.FindUser(requestedUser);
+            if (Settings.Default.UsersCanOnlyMessageFriends
+                && !Utilities.AreUsersFriends(sessionUser.Id, foundFriend.Id))
             {
-                throw new UnauthorizedAccessException("Could not find a user record witht the credentials provided.");
+                throw new UnauthorizedAccessException("Only Friends of the authenticated User can be added to a Chat.");
             }
 
-            if (!foundUser.Id.Equals(sessionUser.Id))
+            if (chat.Id.Equals(default(Guid)))
             {
-                throw new UnauthorizedAccessException("User Messages can only be requested by the User to whom the messages belong.");
+                throw new ArgumentException("No valid Chat Id provided.");
             }
 
-            var dal = new UserMessages();
-            var messages = dal.GetUserMessagesByUser(sessionUser.Id);
-            foreach (var userMessage in messages)
-            {
-                userMessage.Message = this.GetMessageById(userMessage.MessageId);
-            }
+            var dal = new Chats();
+            var foundChat = dal.GetChatById(chat.Id);
 
-            return (threaded) ? this.ThreadMessages(messages) : messages;
+            // add requested user to chat
+            dal.AddUserToChat(new ChatUser
+            {
+                ChatId = foundChat.Id,
+                UserId = requestedUser.Id
+            });
+
+            // TODO: send push notifications to all users in chat
+
+            return this.GetChat(foundChat);
         }
 
         /// <summary>
-        /// Deletes the user message.
+        /// Sends the chat message.
         /// </summary>
+        /// <param name="chat">The chat.</param>
         /// <param name="message">The message.</param>
         /// <param name="sessionToken">The session token.</param>
-        public void DeleteUserMessage(UserMessage message, Guid sessionToken)
+        /// <returns></returns>
+        /// <exception cref="System.UnauthorizedAccessException">Cannot send a message to a Chat that this User is not a member of.</exception>
+        public object SendChatMessage(Chat chat, Message message, Guid sessionToken)
         {
+            // check token
             var sessionUser = Utilities.GetUserBySession(sessionToken);
-            if (sessionUser == null)
+
+            var dal = new Chats();
+
+            // check user is part of chat
+            var chatUsers = dal.GetUsersInChat(sessionUser.Id);
+            if (!chatUsers.Any(u => u.UserId.Equals(sessionUser.Id)))
             {
-                throw new UnauthorizedAccessException("Could not validate session.");
+                throw new UnauthorizedAccessException("Cannot send a message to a Chat that this User is not a member of.");
             }
 
-            var usrMsg = this.GetUserMessage(message);
-            if (usrMsg == null)
+            // create message
+            var chatMessage = this.CreateChatMessage(chat, sessionUser, message);
+
+            // TODO: send push notification to all users in chat
+
+            // return new chat message
+            if (chatMessage.Item2 != null)
             {
-                throw new DataException(string.Format("Failed to retrieve User Message record with Id: {0}", message.Id));
+                return new ApiChatFileUpload
+                {
+                    ChatMessage = chatMessage.Item1,
+                    FileUploadToken = chatMessage.Item2
+                };
             }
 
-            if (!sessionUser.Id.Equals(usrMsg.RecipientId) && !sessionUser.Id.Equals(usrMsg.UserId))
-            {
-                throw new UnauthorizedAccessException(
-                    string.Format("User {0} is not allowed to delete a message of which they are not the sender or recipient.",
-                        sessionUser.Id));
-            }
-
-            var dal = new UserMessages();
-            if (sessionUser.Id.Equals(usrMsg.RecipientId))
-            {
-                dal.DeleteUserMessageForRecipient(usrMsg.Id);
-            }
-            else
-            {
-                dal.DeleteUserMessageForSender(usrMsg.Id);
-            }
+            return chatMessage;
         }
 
-        #endregion User Messages
+        /// <summary>
+        /// Gets all user chats.
+        /// </summary>
+        /// <param name="sessionToken">The session token.</param>
+        /// <returns></returns>
+        public IList<Chat> GetAllUserChats(Guid sessionToken)
+        {
+            List<Chat> results = null;
 
-        #region Station Messages
+            // check token
+            var sessionUser = Utilities.GetUserBySession(sessionToken);
 
-        // TODO: Create Station message BLL functions
+            // retrieve all chats for user
+            var dal = new Chats();
+            var chats = dal.GetChatsByUserId(sessionUser.Id);
+            if (chats != null && chats.Any())
+            {
+                results = chats.Select(this.GetChat).ToList();
+            }
 
-        #endregion Station Messages
+            // return all chats
+            return results;
+        }
+
+        /// <summary>
+        /// Removes the user from chat.
+        /// </summary>
+        /// <param name="chat">The chat.</param>
+        /// <param name="sessionToken">The session token.</param>
+        /// <exception cref="System.ArgumentException"></exception>
+        /// <exception cref="System.UnauthorizedAccessException">Cannot remove User from a Chat they do not belong to.</exception>
+        public void RemoveUserFromChat(Chat chat, Guid sessionToken)
+        {
+            // check token
+            var sessionUser = Utilities.GetUserBySession(sessionToken);
+
+            if (chat.Id.Equals(default(Guid)))
+            {
+                throw new ArgumentException();
+            }
+
+            // update chat
+            var dal = new Chats();
+            var chatUsers = dal.GetUsersInChat(chat.Id);
+            if (!chatUsers.Any(c => c.UserId.Equals(sessionUser.Id)))
+            {
+                throw new UnauthorizedAccessException("Cannot remove User from a Chat they do not belong to.");
+            }
+
+            dal.DeleteChatUser(chat.Id, sessionUser.Id);
+
+            // TODO: send push notification to other chat users
+        }
+
+        #endregion User Chats
 
         #endregion Public Methods
 
         #region Private Methods
 
         /// <summary>
-        /// Threads the messages.
+        /// Gets the chat.
         /// </summary>
-        /// <param name="messages">The messages.</param>
+        /// <param name="chat">The chat.</param>
         /// <returns></returns>
-        private IList<UserMessage> ThreadMessages(IList<UserMessage> messages)
+        /// <exception cref="System.Data.DataException">Could not find the requested Chat, Id {0}.</exception>
+        private Chat GetChat(Chat chat)
         {
-            if (messages == null || !messages.Any())
+            var dal = new Chats();
+
+            //// check user is part of chat
+            //var chatUsers = dal.GetUsersInChat(chat.Id);
+            //if (!chatUsers.Any(c => c.UserId.Equals(sessionUser.Id)))
+            //{
+            //    throw new UnauthorizedAccessException("Cannot get a chat that this User is not a member of.");
+            //}
+
+            // get chat
+            var foundChat = dal.GetChatById(chat.Id);
+            if (foundChat == null)
             {
-                return null;
+                throw new DataException("Could not find the requested Chat, Id {0}.");
             }
 
-            var threadedMessages = new List<UserMessage>();
-
-            foreach (var userMessage in messages)
+            // get chat users
+            var users = this.GetUsersByChat(foundChat);
+            foreach (var user in users)
             {
-                if (userMessage.Message == null)
+                foundChat.Users.Add(user);
+            }
+            
+            // get chat messages
+            var messages = dal.GetMessagesByChat(foundChat.Id);
+            foreach (var message in messages)
+            {
+                var messageRecord = this.GetMessageByChatMessage(message);
+                if (messageRecord != null)
                 {
-                    continue;
+                    message.Message = messageRecord;
+                    foundChat.Messages.Add(message);
                 }
-
-                if (userMessage.Message.ParentId == null
-                    || userMessage.Message.ParentId.Equals(default(Guid)))
-                {
-                    threadedMessages.Add(userMessage);
-                }
-
-                userMessage.ReplyMessages = this.NestMessages(userMessage.MessageId, messages);
             }
 
-            return threadedMessages;
+            // return chat
+            return foundChat;
         }
 
         /// <summary>
-        /// Nests the messages.
+        /// Gets the users by chat.
         /// </summary>
-        /// <param name="parentMessageId">The parent message identifier.</param>
-        /// <param name="messages">The messages.</param>
+        /// <param name="chat">The chat.</param>
         /// <returns></returns>
-        private IList<UserMessage> NestMessages(Guid parentMessageId, IList<UserMessage> messages)
+        private IList<User> GetUsersByChat(Chat chat)
         {
-            if (messages == null || !messages.Any())
+            List<User> results = null;
+
+            if (chat != null)
             {
-                return null;
+                results = new List<User>();
+
+                var dal = new Chats();
+                var users = dal.GetUsersInChat(chat.Id);
+
+                var userBll = new UserBLL();
+                foreach (var chatUser in users)
+                {
+                    var user = userBll.FindUser(new User { Id = chatUser.UserId });
+                    results.Add(user);
+                }
             }
 
-            var nestedMessages = new List<UserMessage>();
-
-            nestedMessages.AddRange(messages.Where(m => m.Message.ParentId.Equals(parentMessageId)));
-
-            return nestedMessages;
+            return results;
         }
 
         /// <summary>
-        /// Gets the user message.
+        /// Gets the message by chat message.
         /// </summary>
         /// <param name="message">The message.</param>
         /// <returns></returns>
-        /// <exception cref="System.Data.DataException">Cannot retrieve NULL UserMessage</exception>
-        private UserMessage GetUserMessage(UserMessage message)
+        private Message GetMessageByChatMessage(ChatMessage message)
         {
-            UserMessage userMessage = null;
-
-            if (message.MessageId.Equals(default(Guid)) && message.Id.Equals(default(int))
-                && (message.Message == null || message.Message.Id.Equals(default(Guid))))
+            // get message by chat message
+            var dal = new Messages();
+            var foundMessage = dal.GetMessageById(message.MessageId);
+            if (foundMessage == null)
             {
-                throw new DataException("Cannot retrieve NULL UserMessage");
+                return null;
             }
 
-            var dal = new UserMessages();
-            var usrMsg = dal.GetUserMessageById(message.Id);
-            if (usrMsg == null)
+            // get attachments
+            switch (foundMessage.MediaType)
             {
-                var msgId = message.MessageId.Equals(default(Guid)) ? message.Message.Id : message.MessageId;
-                usrMsg = dal.GetUserMessageByMessageId(msgId);
-                if (usrMsg != null)
-                {
-                    userMessage = usrMsg;
-                }
-            }
-            else
-            {
-                userMessage = usrMsg;
+                case MediaTypeEnum.Image:
+                    foundMessage.Image = this.GetMessageImage(foundMessage);
+                    break;
+                case MediaTypeEnum.Video:
+                    foundMessage.Video = this.GetMessageVideo(foundMessage);
+                    break;
+                case MediaTypeEnum.Melody:
+                    foundMessage.UserMelody = this.GetMessageMelody(foundMessage);
+                    break;
             }
 
-            return userMessage;
+            // return message
+            return foundMessage;
         }
 
         /// <summary>
-        /// Gets the message by identifier.
+        /// Gets the message image.
         /// </summary>
-        /// <param name="messageId">The message identifier.</param>
+        /// <param name="message">The message.</param>
         /// <returns></returns>
-        private Message GetMessageById(Guid messageId)
+        /// <exception cref="System.ArgumentException">Invalid Message.</exception>
+        private Image GetMessageImage(Message message)
         {
-            var dal = new Messages();
-
-            var message = dal.GetMessageById(messageId);
-            var msgImg = this.GetMessageImageByMessageId(message.Id);
-            if (msgImg != null)
+            if (message == null || message.Id.Equals(default(Guid)))
             {
-                message.Image = msgImg.Image;
+                throw new ArgumentException("Invalid Message.");
             }
-            // TODO: Uncomment once GetMessageMelodyByMessageId is implemented
-            //message.Melody = this.GetMessageMelodyByMessageId(message.Id);
 
-            return message;
+            Image result = null;
+
+            // get message image
+            var dal = new Messages();
+            var messageImage  = dal.GetImageByMessageId(message.Id);
+            if (messageImage != null)
+            {
+                result = new Image();
+
+                var imgDal = new Images();
+                var image = imgDal.GetImageById(messageImage.Id);
+                if (image == null) return null;
+
+                image.FilePath = Utilities.GetFilePath(image.FileName, MediaTypeEnum.Image);
+            }
+
+            return result;
         }
 
+        /// <summary>
+        /// Gets the message video.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException">Invalid Message.</exception>
+        private Video GetMessageVideo(Message message)
+        {
+            if (message == null || message.Id.Equals(default(Guid)))
+            {
+                throw new ArgumentException("Invalid Message.");
+            }
+            Video result = null;
+
+            // get message image
+            var dal = new Messages();
+            var messageVideo = dal.GetVideoByMessageId(message.Id);
+            if (messageVideo != null)
+            {
+                result = new Video();
+
+                var vidDal = new Videos();
+                var video = vidDal.GetVideoById(messageVideo.Id);
+                if (video == null) return null;
+
+                video.FilePath = Utilities.GetFilePath(video.FileName, MediaTypeEnum.Video);
+            }
+
+            return result;
+        }
+
+        private UserMelody GetMessageMelody(Message message)
+        {
+            // TODO:
+
+            // get message melody
+
+            // get melody
+
+            // get file path
+
+            // return melody if found
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Creates the chat message.
+        /// </summary>
+        /// <param name="chat">The chat.</param>
+        /// <param name="sender">The sender.</param>
+        /// <param name="message">The message.</param>
+        /// <returns></returns>
+        private Tuple<ChatMessage, FileUploadToken> CreateChatMessage(Chat chat, User sender, Message message)
+        {
+            var dal = new Chats();
+            if (chat.Id.Equals(default(Guid)))
+            {
+                throw new ArgumentException("A valid Chat Id must be provided.");
+            }
+
+            var foundChat = dal.GetChatById(chat.Id);
+            if (foundChat == null)
+            {
+                throw  new ArgumentException(string.Format("Chat Id {0} not found.", chat.Id));
+            }
+
+            // create message
+            var newMessage = this.CreateMessage(message, sender.Id);
+
+            // create chat message
+            var newChatMessage = dal.CreateChatMessage(new ChatMessage
+            {
+                ChatId = foundChat.Id,
+                MessageId = newMessage.Item1.Id,
+                SenderId = sender.Id
+            });
+            newChatMessage.Message = newMessage.Item1;
+
+            // return chat message and upload token
+            return new Tuple<ChatMessage, FileUploadToken>(newChatMessage, newMessage.Item2);
+        }
 
         /// <summary>
         /// Creates the message.
         /// </summary>
         /// <param name="message">The message.</param>
+        /// <param name="senderId">The sender identifier.</param>
         /// <returns></returns>
-        /// <exception cref="System.Data.DataException">Could not create message</exception>
-        private Message CreateMessage(Message message)
+        /// <exception cref="System.Data.DataException">
+        /// Cannot create a NULL Message.
+        /// or
+        /// UserId is not valid.
+        /// </exception>
+        private Tuple<Message, FileUploadToken> CreateMessage(Message message, Guid senderId)
         {
-            var dal = new Messages();
-
-            var addedMessage = dal.AddMessage(message);
-            if (addedMessage == null)
+            if (message == null)
             {
-                throw new DataException("Could not create Message.");
+                throw new DataException("Cannot create a NULL Message.");
+            }
+            if (senderId.Equals(default(Guid)))
+            {
+                throw new DataException("UserId is not valid.");
             }
 
+            // create message
+            var dal = new Messages();
+            var addedMessage = dal.AddMessage(message);
+
+            FileUploadToken addedToken = null;
+            var fileUploadToken = new FileUploadToken
+            {
+                UserId = senderId,
+                DateCreated = DateTime.UtcNow
+            };
+
+            // create attachment
             if (message.Image != null)
             {
-                message.MediaType = MediaTypeEnum.Image;
+                var newImage = this.CreateMessageImage(addedMessage.Id, message.Image);
+                addedMessage.Image = newImage.Image;
 
-                var createdMessageImage = this.CreateMessageImage(addedMessage.Id, message.Image);
-                if (createdMessageImage != null && createdMessageImage.Image != null)
-                {
-                    addedMessage.Image = createdMessageImage.Image;
-                }
+                fileUploadToken.MediaType = FileUploadTypeEnum.MessageImage;
+                fileUploadToken.FileName = addedMessage.Image.FileName;
             }
-            else if (message.Melody != null)
+            else if (message.Video != null)
             {
-                // TODO:
+                var newVideo = this.CreateMessageVideo(addedMessage.Id, message.Video);
+                addedMessage.Video = newVideo.Video;
+
+                fileUploadToken.MediaType = FileUploadTypeEnum.MessageVideo;
+                fileUploadToken.FileName = addedMessage.Video.FileName;
             }
-
-            return addedMessage;
-        }
-
-        /// <summary>
-        /// Gets the message image by message identifier.
-        /// </summary>
-        /// <param name="messageId">The message identifier.</param>
-        /// <returns></returns>
-        private MessageImage GetMessageImageByMessageId(Guid messageId)
-        {
-            MessageImage result = null;
-
-            var dal = new MessageImages();
-            result = dal.GetImageByMessageId(messageId);
-            if (result == null)
+            else if (message.UserMelody != null)
             {
-                throw new DataException("Failed to retrieve Message Image.");
+                var newMelody = this.CreateMessageMelody(addedMessage.Id, message.UserMelody);
+                addedMessage.UserMelody = newMelody.UserMelody;
+
+                // TODO: determine how to handle user melody file upload tokens
             }
 
-            var imageBll = new ImageBLL();
-            var image = imageBll.GetImage(new Image
+            if (!fileUploadToken.MediaType.Equals(FileUploadTypeEnum.Unknown))
             {
-                Id = result.ImageId
-            });
-            if (image == null)
-            {
-                throw new DataException("Failed to retrieve Image.");
+                var fileBll = new FileBLL();
+                addedToken = fileBll.CreateToken(fileUploadToken);
             }
 
-            result.Image = image;
-
-            return result;
-        }
-
-        private MessageMelody GetMessageMelodyByMessageId(Guid messageId)
-        {
-            // TODO:
-            throw new NotImplementedException();
+            return new Tuple<Message, FileUploadToken>(addedMessage, addedToken);
         }
 
         /// <summary>
@@ -450,113 +535,99 @@ namespace InstaMelody.Business
         /// <param name="messageId">The message identifier.</param>
         /// <param name="image">The image.</param>
         /// <returns></returns>
-        /// <exception cref="System.Data.DataException">No MessageId provided to create Message Image.
-        /// or
-        /// Could not create Message Image.</exception>
+        /// <exception cref="System.Data.DataException">Failed to create a MessageImage record.</exception>
         private MessageImage CreateMessageImage(Guid messageId, Image image)
         {
-            if (messageId.Equals(default(Guid)))
+            // create image
+            var fileBll = new FileBLL();
+            var addedImage = fileBll.AddImage(image);
+
+            // create message image
+            var dal = new Messages();
+            var addedMessageImage = dal.AddMessageImage(messageId, addedImage.Id);
+            if (addedMessageImage == null)
             {
-                throw new DataException("No MessageId provided to create Message Image.");
+                throw new DataException("Failed to create a MessageImage record.");
             }
 
-            var imageBll = new ImageBLL();
-            var addedImage = imageBll.AddImage(image);
-            if (addedImage == null)
-            {
-                throw new DataException("Failed to add Image.");
-            }
+            addedImage.FilePath = Utilities.GetFilePath(addedImage.FileName, MediaTypeEnum.Image);
+            addedMessageImage.Image = addedImage;
 
-            var dal = new MessageImages();
-            var addedMsgImg = dal.AddMessageImage(messageId, addedImage.Id);
-            if (addedMsgImg == null)
-            {
-                throw new DataException("Could not create Message Image.");
-            }
-            else
-            {
-                addedMsgImg.Image = addedImage;
-            }
-
-            return addedMsgImg;
-        }
-
-        private MessageMelody CreateMessageMelody(MessageMelody melody)
-        {
-            // TODO:
-            throw new NotImplementedException();
+            // return message image
+            return addedMessageImage;
         }
 
         /// <summary>
-        /// Gets the user message file upload.
+        /// Creates the message video.
         /// </summary>
-        /// <param name="usrMsg">The usr MSG.</param>
-        /// <param name="userId">The user identifier.</param>
+        /// <param name="messageId">The message identifier.</param>
+        /// <param name="video">The video.</param>
         /// <returns></returns>
-        /// <exception cref="System.ArgumentException">User Message cannot be null.</exception>
-        /// <exception cref="System.Data.DataException"></exception>
-        private ApiUserMessageFileUpload GetUserMessageFileUpload(UserMessage usrMsg, Guid userId)
+        /// <exception cref="System.Data.DataException">Failed to create a MessageVideo record.</exception>
+        private MessageVideo CreateMessageVideo(Guid messageId, Video video)
         {
-            if (usrMsg.Message == null) throw new ArgumentException("User Message cannot be null.");
+            // create image
+            var fileBll = new FileBLL();
+            var addedVideo = fileBll.AddVideo(video);
 
-            if (usrMsg.Message.Image != null || usrMsg.Message.Melody != null)
+            // create message image
+            var dal = new Messages();
+            var addedMessageVideo = dal.AddMessageVideo(messageId, addedVideo.Id);
+            if (addedMessageVideo == null)
             {
-                // create file upload token
-                var uploadToken = new FileUploadToken
-                {
-                    UserId = userId,
-                    MediaType = FileUploadTypeEnum.Unknown
-                };
-
-                // determine if uploading image or melody
-                if (usrMsg.Message.Image != null)
-                {
-                    uploadToken.MediaType = FileUploadTypeEnum.MessageImage;
-                    uploadToken.FileName = usrMsg.Message.Image.FileName;
-                }
-                else if (usrMsg.Message.Melody != null)
-                {
-                    uploadToken.MediaType = FileUploadTypeEnum.MessageMelody;
-                    uploadToken.FileName = usrMsg.Message.Melody.FileName;
-                }
-
-                var uploadBll = new FileUploadBLL();
-                var createdToken = uploadBll.CreateToken(uploadToken);
-
-                return new ApiUserMessageFileUpload
-                {
-                    UserMessage = usrMsg,
-                    FileUploadToken = createdToken
-                };
+                throw new DataException("Failed to create a MessageVideo record.");
             }
 
-            throw new DataException();
+            addedVideo.FilePath = Utilities.GetFilePath(addedVideo.FileName, MediaTypeEnum.Video);
+            addedMessageVideo.Video = addedVideo;
+
+            // return message image
+            return addedMessageVideo;
+        }
+
+        private MessageMelody CreateMessageMelody(Guid messageId, UserMelody melody)
+        {
+            // TODO:
+
+            // create melody
+
+            // create message melody
+
+            // get file path
+
+            // return message melody
+
+            throw new NotImplementedException();
         }
 
         #endregion Private Methods
-
+        
         #region Internal Methods
 
         /// <summary>
-        /// Deletes the user message image.
+        /// Deletes the message image.
         /// </summary>
-        /// <param name="imgId">The img identifier.</param>
-        internal void DeleteUserMessageImage(int imgId)
+        /// <param name="imageId">The image identifier.</param>
+        internal void DeleteMessageImage(int imageId)
         {
-            // delete message image record
-            var dal = new MessageImages();
-            dal.DeleteMessageImageByImageId(imgId);
+            var dal = new Messages();
+            dal.DeleteMessageImageByImageId(imageId);
         }
 
-        internal void DeleteUserMessageMelody(int melodyId)
+        /// <summary>
+        /// Deletes the message video.
+        /// </summary>
+        /// <param name="videoId">The video identifier.</param>
+        internal void DeleteMessageVideo(int videoId)
+        {
+            var dal = new Messages();
+            dal.DeleteMessageVideoByVideoId(videoId);
+        }
+
+        internal void DeleteMessageUserMelody()
         {
             // TODO:
             throw new NotImplementedException();
-
-
-            // delete message melody record
-            var dal = new MessageMelodies();
-            dal.DeleteMessageMelodyByMelodyId(melodyId);
         }
 
         #endregion Internal Methods

@@ -1,0 +1,17 @@
+instaMelody Server Details
+=======================================
+instaMelody-01
+5YWQpdKa6YMr
+
+
+
+RDP
+i: 104.130.230.164
+u: Administrator
+p: 5YWQpdKa6YMr
+
+
+dbuser
+db: InstaMelody
+u: instamelody
+p: RjThht7N7bWv8hmy

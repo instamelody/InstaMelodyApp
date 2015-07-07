@@ -9,7 +9,7 @@ namespace InstaMelody.Model
 
         public Guid MessageId { get; set; }
 
-        public int MelodyId { get; set; }
+        public Guid UserMelodyId { get; set; }
 
         public DateTime DateCreated { get; set; }
 
@@ -17,7 +17,7 @@ namespace InstaMelody.Model
 
         #region Relationship Properties
 
-        public Melody Melody { get; set; } 
+        public UserMelody UserMelody { get; set; }
 
         #endregion Relationship Properties
 
@@ -30,7 +30,7 @@ namespace InstaMelody.Model
         {
             this.Id = Convert.ToInt32(dataReader["Id"]);
             this.MessageId = (Guid)dataReader["MessageId"];
-            this.MelodyId = Convert.ToInt32(dataReader["MelodyId"]);
+            this.UserMelodyId = (Guid)dataReader["UserMelodyId"];
             this.DateCreated = Convert.ToDateTime(dataReader["DateCreated"]);
             this.IsDeleted = Convert.ToBoolean(dataReader["IsDeleted"]);
 

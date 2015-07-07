@@ -15,6 +15,8 @@ namespace InstaMelody.Business
 {
     public class UserBLL
     {
+        #region Public Methods
+
         /// <summary>
         /// Finds the user.
         /// </summary>
@@ -26,25 +28,16 @@ namespace InstaMelody.Business
         {
             User foundUser = null;
 
-            var sessionUser = Utilities.GetUserBySession(sessionToken);
-            if (sessionUser == null || sessionUser == default(User))
+            try
+            {
+                Utilities.GetUserBySession(sessionToken);
+            }
+            catch (Exception)
             {
                 throw new UnauthorizedAccessException(string.Format("Could not find a valid session for Session: {0}.", sessionToken));
             }
 
-            if (!user.Id.Equals(default(Guid)))
-            {
-                foundUser = this.GetUserById(user.Id, sessionToken);
-            }
-            
-            if (foundUser == null && !string.IsNullOrWhiteSpace(user.DisplayName))
-            {
-                foundUser = this.GetUserByDisplayName(user.DisplayName);
-            }
-            else if (foundUser == null && !string.IsNullOrWhiteSpace(user.EmailAddress))
-            {
-                foundUser = this.GetUserByEmailAddress(user.EmailAddress);
-            }
+            foundUser = this.FindUser(user);
 
             return this.GetUserWithImage(foundUser);
         }
@@ -60,8 +53,13 @@ namespace InstaMelody.Business
         public User GetUser(User user, Guid sessionToken)
         {
             User foundUser = null;
-            var sessionUser = Utilities.GetUserBySession(sessionToken);
-            if (sessionUser == null || sessionUser == default(User))
+
+            User sessionUser;
+            try
+            {
+                sessionUser = Utilities.GetUserBySession(sessionToken);
+            }
+            catch (Exception)
             {
                 throw new UnauthorizedAccessException(string.Format("Could not find a valid session for Session: {0}.", sessionToken));
             }
@@ -333,10 +331,13 @@ namespace InstaMelody.Business
         /// <returns></returns>
         public ApiUserFileUpload UpdateUserImage(User userToUpdate, Image newImage, Guid sessionToken)
         {
-            var sessionUser = Utilities.GetUserBySession(sessionToken);
-            if (sessionUser == null)
+            try
             {
-                throw new UnauthorizedAccessException("Could not validate session.");
+                 Utilities.GetUserBySession(sessionToken);
+            }
+            catch (Exception)
+            {
+                throw new UnauthorizedAccessException(string.Format("Could not find a valid session for Session: {0}.", sessionToken));
             }
 
             if (newImage == null
@@ -346,13 +347,13 @@ namespace InstaMelody.Business
             }
 
             // find user profile
-            var existingUser = this.FindUser(userToUpdate, sessionToken);
+            var existingUser = this.FindUser(userToUpdate);
             if (existingUser == null || existingUser.Id.Equals(default(Guid)))
             {
                 throw new ArgumentException("Could not find user.");
             }
 
-            var imageBll = new ImageBLL();
+            var imageBll = new FileBLL();
 
             // delete existing profile image
             if (existingUser.UserImageId != null && !existingUser.UserImageId.Equals(default(int)))
@@ -372,7 +373,7 @@ namespace InstaMelody.Business
             updatedUser.Image = addedImage;
 
             // create file upload token
-            var uploadBll = new FileUploadBLL();
+            var uploadBll = new FileBLL();
             var uploadToken = uploadBll.CreateToken(new FileUploadToken
             {
                 UserId = updatedUser.Id,
@@ -409,7 +410,16 @@ namespace InstaMelody.Business
         /// <exception cref="System.Data.DataException"></exception>
         public User DeleteUser(User user, Guid sessionToken)
         {
-            var sessionUser = Utilities.GetUserBySession(sessionToken);
+            User sessionUser;
+            try
+            {
+                sessionUser = Utilities.GetUserBySession(sessionToken);
+            }
+            catch (Exception)
+            {
+                throw new UnauthorizedAccessException(string.Format("Could not find a valid session for Session: {0}.", sessionToken));
+            }
+
             if (sessionUser == null || !sessionUser.Id.Equals(user.Id))
             {
                 throw new UnauthorizedAccessException("A user can only delete their own profile.");
@@ -435,7 +445,7 @@ namespace InstaMelody.Business
             // delete profile image
             if (user.UserImageId != null)
             {
-                var imageBll = new ImageBLL();
+                var imageBll = new FileBLL();
                 imageBll.DeleteImage(new Image
                 {
                     Id = (int)user.UserImageId
@@ -457,10 +467,14 @@ namespace InstaMelody.Business
         /// Could not find requested friend in database.</exception>
         public string RequestFriend(User friend, Guid sessionToken)
         {
-            var sessionUser = Utilities.GetUserBySession(sessionToken);
-            if (sessionUser == null)
+            User sessionUser;
+            try
             {
-                throw new UnauthorizedAccessException("Could not validate session.");
+                sessionUser = Utilities.GetUserBySession(sessionToken);
+            }
+            catch (Exception)
+            {
+                throw new UnauthorizedAccessException(string.Format("Could not find a valid session for Session: {0}.", sessionToken));
             }
 
             if (friend == null
@@ -510,10 +524,14 @@ namespace InstaMelody.Business
         /// Could not find requested friend in database.</exception>
         public User ApproveFriendRequest(User requestor, Guid sessionToken)
         {
-            var sessionUser = Utilities.GetUserBySession(sessionToken);
-            if (sessionUser == null)
+            User sessionUser;
+            try
             {
-                throw new UnauthorizedAccessException("Could not validate session.");
+                sessionUser = Utilities.GetUserBySession(sessionToken);
+            }
+            catch (Exception)
+            {
+                throw new UnauthorizedAccessException(string.Format("Could not find a valid session for Session: {0}.", sessionToken));
             }
 
             if (requestor == null
@@ -571,10 +589,14 @@ namespace InstaMelody.Business
         /// Could not find requested friend in database.</exception>
         public string DenyFriendRequest(User requestor, Guid sessionToken)
         {
-            var sessionUser = Utilities.GetUserBySession(sessionToken);
-            if (sessionUser == null)
+            User sessionUser;
+            try
             {
-                throw new UnauthorizedAccessException("Could not validate session.");
+                sessionUser = Utilities.GetUserBySession(sessionToken);
+            }
+            catch (Exception)
+            {
+                throw new UnauthorizedAccessException(string.Format("Could not find a valid session for Session: {0}.", sessionToken));
             }
 
             if (requestor == null
@@ -631,10 +653,14 @@ namespace InstaMelody.Business
         /// Could not find requested friend in database.</exception>
         public string DeleteFriend(User friend, Guid sessionToken)
         {
-            var sessionUser = Utilities.GetUserBySession(sessionToken);
-            if (sessionUser == null)
+            User sessionUser;
+            try
             {
-                throw new UnauthorizedAccessException("Could not validate session.");
+                sessionUser = Utilities.GetUserBySession(sessionToken);
+            }
+            catch (Exception)
+            {
+                throw new UnauthorizedAccessException(string.Format("Could not find a valid session for Session: {0}.", sessionToken));
             }
 
             if (friend == null
@@ -681,10 +707,14 @@ namespace InstaMelody.Business
         /// <exception cref="System.Data.DataException"></exception>
         public IList<User> GetFriendsByUser(Guid sessionToken)
         {
-            var sessionUser = Utilities.GetUserBySession(sessionToken);
-            if (sessionUser == null)
+            User sessionUser;
+            try
             {
-                throw new UnauthorizedAccessException("Could not validate session.");
+                sessionUser = Utilities.GetUserBySession(sessionToken);
+            }
+            catch (Exception)
+            {
+                throw new UnauthorizedAccessException(string.Format("Could not find a valid session for Session: {0}.", sessionToken));
             }
 
             var dal = new UserFriends();
@@ -706,10 +736,14 @@ namespace InstaMelody.Business
         /// <exception cref="System.Data.DataException"></exception>
         public IList<User> GetPendingFriendsByUser(Guid sessionToken)
         {
-            var sessionUser = Utilities.GetUserBySession(sessionToken);
-            if (sessionUser == null)
+            User sessionUser;
+            try
             {
-                throw new UnauthorizedAccessException("Could not validate session.");
+                sessionUser = Utilities.GetUserBySession(sessionToken);
+            }
+            catch (Exception)
+            {
+                throw new UnauthorizedAccessException(string.Format("Could not find a valid session for Session: {0}.", sessionToken));
             }
 
             var dal = new UserFriends();
@@ -722,9 +756,9 @@ namespace InstaMelody.Business
             return this.GetUsersWithImages(friends);
         }
 
-
-
-
+        #endregion Public Methods
+        
+        #region Private Methods
 
         /// <summary>
         /// Updates the user image.
@@ -745,7 +779,15 @@ namespace InstaMelody.Business
                 throw new UnauthorizedAccessException(string.Format("Invalid Session Token: {0}.", sessionToken));
             }
 
-            var sessionUser = Utilities.GetUserBySession(sessionToken);
+            User sessionUser;
+            try
+            {
+                sessionUser = Utilities.GetUserBySession(sessionToken);
+            }
+            catch (Exception)
+            {
+                throw new UnauthorizedAccessException(string.Format("Could not find a valid session for Session: {0}.", sessionToken));
+            }
             if (sessionUser == null || !sessionUser.Id.Equals(userToUpdate.Id))
             {
                 throw new UnauthorizedAccessException(
@@ -773,7 +815,7 @@ namespace InstaMelody.Business
         {
             if (user.UserImageId != null && !user.UserImageId.Equals(default(int)))
             {
-                var imageBll = new ImageBLL();
+                var imageBll = new FileBLL();
                 var image = imageBll.GetImage(new Image
                 {
                     Id = (int)user.UserImageId
@@ -803,8 +845,9 @@ namespace InstaMelody.Business
             return results;
         }
 
+        #endregion Private Methods
 
-
+        #region Internal Methods
 
         /// <summary>
         /// Deletes the user image.
@@ -821,15 +864,32 @@ namespace InstaMelody.Business
         }
 
         /// <summary>
-        /// Ares the users friends.
+        /// Finds the user.
         /// </summary>
-        /// <param name="user1Id">The user1 identifier.</param>
-        /// <param name="user2Id">The user2 identifier.</param>
+        /// <param name="user">The user.</param>
         /// <returns></returns>
-        internal bool AreUsersFriends(Guid user1Id, Guid user2Id)
+        internal User FindUser(User user)
         {
-            var bll = new UserFriends();
-            return bll.AreUsersFriends(user1Id, user2Id);
+            User foundUser = null;
+
+            if (!user.Id.Equals(default(Guid)))
+            {
+                var bll = new Users();
+                foundUser = bll.FindById(user.Id);
+            }
+
+            if (foundUser == null && !string.IsNullOrWhiteSpace(user.DisplayName))
+            {
+                foundUser = this.GetUserByDisplayName(user.DisplayName);
+            }
+            else if (foundUser == null && !string.IsNullOrWhiteSpace(user.EmailAddress))
+            {
+                foundUser = this.GetUserByEmailAddress(user.EmailAddress);
+            }
+
+            return foundUser;
         }
+
+        #endregion Internal Methods
     }
 }

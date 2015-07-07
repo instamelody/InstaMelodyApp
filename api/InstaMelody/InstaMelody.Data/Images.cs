@@ -50,7 +50,7 @@ namespace InstaMelody.Data
                 }
             }
 
-            throw new DataException();
+            throw new DataException("Failed to create a new Image.");
         }
 
         /// <summary>

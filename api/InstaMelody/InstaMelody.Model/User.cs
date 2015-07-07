@@ -102,8 +102,6 @@ namespace InstaMelody.Model
 
         public Image Image { get; set; }
 
-        public IList<UserMessage> Messages { get; set; }
-
         public IList<User> Friends { get; set; }
 
         #endregion Relationship Properties

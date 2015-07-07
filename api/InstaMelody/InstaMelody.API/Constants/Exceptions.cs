@@ -111,34 +111,32 @@
         /// <summary>
         /// The null message
         /// </summary>
-        public const string NullMessage = "NULL Message request.";
+        public const string NullChat = "NULL Chat request.";
 
         /// <summary>
-        /// The null incomplete message
+        /// The failed create chat
         /// </summary>
-        public const string NullIncompleteMessage = "NULL or Incomplete Message request.";
+        public const string FailedCreateChat = "Failed to create a Chat.";
 
         /// <summary>
-        /// The failed get messages
+        /// The failed add user to chat
         /// </summary>
-        public const string FailedGetMessages = "Failed to get messages for Session: {0}";
+        public const string FailedAddUserToChat = "Failed to add the requested User to the Chat.";
 
         /// <summary>
         /// The failed send message
         /// </summary>
-        public const string FailedSendMessage = "Failed to send message to User: {0}";
-
-
-        /// <summary>
-        /// The failed reply message
-        /// </summary>
-        public const string FailedReplyMessage = "Failed to reply to Message: {0}.";
-
+        public const string FailedSendChatMessage = "Failed to send a new Chat Message.";
 
         /// <summary>
-        /// The failed read message
+        /// The failed get chat
         /// </summary>
-        public const string FailedReadMessage = "Failed to mark Message: {0} as read.";
+        public const string FailedGetChat = "Failed to get Chat with Id {0}.";
+
+        /// <summary>
+        /// The failed get user chats
+        /// </summary>
+        public const string FailedGetUserChats = "Failed to get Chats for User.";
 
         #endregion Messages Exceptions
 

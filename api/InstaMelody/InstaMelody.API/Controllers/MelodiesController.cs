@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Net;
 using System.Net.Http;
@@ -53,23 +52,26 @@ namespace InstaMelody.API.Controllers
             HttpResponseMessage response;
 
             var nvc = HttpUtility.ParseQueryString(Request.RequestUri.Query);
-            var token = nvc["token"];
-            var id = nvc["id"];
-            var categoryId = nvc["categoryId"];
-
             Guid _token;
+            var token = nvc["token"];
             Guid.TryParse(token, out _token);
 
             int _id;
+            var id = nvc["id"];
             int.TryParse(id, out _id);
 
-            int _categoryId;
-            int.TryParse(categoryId, out _categoryId);
+            int _groupId;
+            var groupId = nvc["groupId"];
+            int.TryParse(groupId, out _groupId);
+
+            var fileName = nvc["fileName"];
+            var groupName = nvc["groupName"];
 
             if (_token.Equals(default(Guid)))
             {
                 InstaMelodyLogger.Log("Received NULL GetMelodies request", LogLevel.Trace);
-                response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, "No Token provided.");
+                response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized,
+                    Exceptions.FailedAuthentication);
             }
             else
             {
@@ -80,38 +82,29 @@ namespace InstaMelody.API.Controllers
                         string.Format("Get Melodies - Token: {0}", _token),
                         LogLevel.Trace);
 
-                    IList<Melody> results = null;
-                    Melody result = null;
-
                     var bll = new MelodyBLL();
-                    if (id != null && !_id.Equals(default(int)))
+
+                    object result;
+                    if (!_groupId.Equals(default(int)) || !string.IsNullOrWhiteSpace(groupName))
                     {
-                        // get melody by id
-                        result = bll.GetBaseMelody(new Melody { Id = _id }, _token);
+                        result = bll.GetFileGroup(new FileGroup { Id = _groupId, Name = groupName });
                     }
-                    else if (categoryId != null && !_categoryId.Equals(default(int)))
+                    else if (!_id.Equals(default(int)) || !string.IsNullOrWhiteSpace(fileName))
                     {
-                        // get melodies by category
-                        results = bll.GetBaseMelodies(_token, new Category{ Id = _categoryId });
+                        result = bll.GetBaseMelody(new Melody { Id = _id, FileName = fileName });
                     }
                     else
                     {
-                        // get all melodies
-                        results = bll.GetBaseMelodies(_token);
+                        result = bll.GetFileGroups();
                     }
 
-                    if (result != null)
+                    if (result == null)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.FailedGetMelodies);
+                    }
+                    else
                     {
                         response = this.Request.CreateResponse(HttpStatusCode.OK, result);
-                    }
-                    else if (results != null)
-                    {
-                        response = this.Request.CreateResponse(HttpStatusCode.OK, results);
-                    }
-                    else
-                    {
-                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest,
-                            string.Format(Exceptions.FailedGetMelodies));
                     }
                 }
                 catch (Exception exc)
@@ -129,7 +122,7 @@ namespace InstaMelody.API.Controllers
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
                     response.ReasonPhrase = exc.Message;
-                } 
+                }
             }
 
             return response;
@@ -146,23 +139,19 @@ namespace InstaMelody.API.Controllers
             HttpResponseMessage response;
 
             var nvc = HttpUtility.ParseQueryString(Request.RequestUri.Query);
-            var token = nvc["token"];
-            var id = nvc["id"];
-            var categoryId = nvc["categoryId"];
-
             Guid _token;
+            var token = nvc["token"];
             Guid.TryParse(token, out _token);
 
-            int _id;
-            int.TryParse(id, out _id);
-
-            int _categoryId;
-            int.TryParse(categoryId, out _categoryId);
+            Guid _melodyId;
+            var melodyId = nvc["id"];
+            Guid.TryParse(melodyId, out _melodyId);
 
             if (_token.Equals(default(Guid)))
             {
                 InstaMelodyLogger.Log("Received NULL GetUserMelodies request", LogLevel.Trace);
-                response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, "No Token provided.");
+                response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized,
+                    Exceptions.FailedAuthentication);
             }
             else
             {
@@ -170,41 +159,28 @@ namespace InstaMelody.API.Controllers
                 {
                     // Log call
                     InstaMelodyLogger.Log(
-                        string.Format("Get User Melodies - Token: {0}", _token),
+                        string.Format("Get User Melodies - Token: {0}, MelodyId: {1}", _token, _melodyId),
                         LogLevel.Trace);
 
-                    IList<Melody> results = null;
-                    Melody result = null;
-
                     var bll = new MelodyBLL();
-                    if (id != null && !_id.Equals(default(int)))
+                    object result;
+
+                    if (_melodyId.Equals(default(Guid)))
                     {
-                        // get melody by id
-                        result = bll.GetMelody(new Melody { Id = _id }, _token);
-                    }
-                    else if (categoryId != null && !_categoryId.Equals(default(int)))
-                    {
-                        // get melodies by category
-                        results = bll.GetUserMelodies(_token, new Category { Id = _categoryId });
+                        result = bll.GetUserMelodies(_token);
                     }
                     else
                     {
-                        // get all melodies
-                        results = bll.GetUserMelodies(_token);
+                        result = bll.GetUserMelody(new UserMelody { Id = _melodyId }, _token);
                     }
 
-                    if (result != null)
+                    if (result == null)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.FailedGetUserMelodies);
+                    }
+                    else
                     {
                         response = this.Request.CreateResponse(HttpStatusCode.OK, result);
-                    }
-                    else if (results != null)
-                    {
-                        response = this.Request.CreateResponse(HttpStatusCode.OK, results);
-                    }
-                    else
-                    {
-                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest,
-                            string.Format(Exceptions.FailedGetUserMelodies));
                     }
                 }
                 catch (Exception exc)
@@ -222,21 +198,21 @@ namespace InstaMelody.API.Controllers
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
                     response.ReasonPhrase = exc.Message;
-                } 
+                }
             }
 
             return response;
         }
 
         /// <summary>
-        /// Creates the user melody.
+        /// Adds the user melody.
         /// </summary>
         /// <param name="request">The request.</param>
         /// <returns></returns>
-        [HttpPost]
         [HttpPut]
+        [HttpPost]
         [Route(Routes.RouteNew)]
-        public HttpResponseMessage CreateUserMelody(ApiRequest request)
+        public HttpResponseMessage AddUserMelody(ApiRequest request)
         {
             HttpResponseMessage response;
 
@@ -244,19 +220,19 @@ namespace InstaMelody.API.Controllers
             {
                 try
                 {
+                    // Log call
                     InstaMelodyLogger.Log(
-                        string.Format(
-                            "Create User Melody - FileName: {0}, Token: {1}.",
-                            request.Melody != null ? request.Melody.FileName : "NULL",
-                            request.Token),
+                        string.Format("Add User Melody - Token: {0}, FileName: {1}",
+                            request.Token,
+                            request.Melody.FileName),
                         LogLevel.Trace);
 
                     var bll = new MelodyBLL();
-                    var result = bll.CreateUserMelody(request.Melody, request.Token);
+                    var result = bll.CreateUserMelody(request.UserMelody, request.Melody, request.Token);
 
                     if (result == null)
                     {
-                        response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, Exceptions.FailedCreateMelody);
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.FailedCreateMelody);
                     }
                     else
                     {
@@ -282,7 +258,7 @@ namespace InstaMelody.API.Controllers
             }
             else
             {
-                InstaMelodyLogger.Log("Received NULL CreateUserMelody request", LogLevel.Trace);
+                InstaMelodyLogger.Log("Received NULL AddUserMelody request", LogLevel.Trace);
                 response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.NullMelodies);
             }
 
@@ -304,16 +280,15 @@ namespace InstaMelody.API.Controllers
             {
                 try
                 {
+                    // Log call
                     InstaMelodyLogger.Log(
-                        string.Format(
-                            "Delete User Melody - Id: {0}, FileName: {1}, Token: {2}.",
-                            request.Melody != null ? request.Melody.Id.ToString() : "NULL",
-                            request.Melody != null ? request.Melody.FileName : "NULL",
-                            request.Token),
+                        string.Format("Delete User Melody - Token: {0}, User Melody Id: {1}",
+                            request.Token,
+                            request.UserMelody.Id),
                         LogLevel.Trace);
 
                     var bll = new MelodyBLL();
-                    bll.DeleteUserMelody(request.Melody, request.Token);
+                    bll.DeleteUserMelody(request.UserMelody, request.Token);
 
                     response = this.Request.CreateResponse(HttpStatusCode.Accepted);
                 }
@@ -341,47 +316,6 @@ namespace InstaMelody.API.Controllers
             }
 
             return response;
-        }
-
-        [HttpPost]
-        [HttpPut]
-        [Route(Routes.RouteLoop)]
-        public HttpResponseMessage CreateMelodyLoop(ApiRequest request)
-        {
-            // TODO: 
-            throw new NotImplementedException();
-        }
-
-        [HttpGet]
-        [Route(Routes.RouteLoop)]
-        public HttpResponseMessage GetMelodyLoop()
-        {
-            // TODO: 
-            throw new NotImplementedException();
-        }
-
-        [HttpPost]
-        [Route(Routes.RouteLoopAdd)]
-        public HttpResponseMessage AttatchToMelodyLoop(ApiRequest request)
-        {
-            // TODO: 
-            throw new NotImplementedException();
-        }
-
-        [HttpPost]
-        [Route(Routes.RouteLoopUpdate)]
-        public HttpResponseMessage UpdateMelodyLoop(ApiRequest request)
-        {
-            // TODO: 
-            throw new NotImplementedException();
-        }
-
-        [HttpPost]
-        [Route(Routes.RouteLoopDelete)]
-        public HttpResponseMessage DeleteMelodyLoop(ApiRequest request)
-        {
-            // TODO: 
-            throw new NotImplementedException();
         }
     }
 }
