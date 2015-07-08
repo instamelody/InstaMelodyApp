@@ -5,4 +5,3 @@ Z:\Desktop\InstaMelody\InstaMelody\InstaMelody.Infrastructure\bin\Debug\NLog.dll
 Z:\Desktop\InstaMelody\InstaMelody\InstaMelody.Infrastructure\bin\Debug\NLog.xml
 Z:\Desktop\InstaMelody\InstaMelody\InstaMelody.Infrastructure\obj\Debug\InstaMelody.Infrastructure.dll
 Z:\Desktop\InstaMelody\InstaMelody\InstaMelody.Infrastructure\obj\Debug\InstaMelody.Infrastructure.pdb
-Z:\Desktop\InstaMelody\InstaMelody\InstaMelody.Infrastructure\obj\Debug\InstaMelody.Infrastructure.csprojResolveAssemblyReference.cache

@@ -49,7 +49,7 @@ namespace InstaMelody.API.Controllers
         /// <param name="request">The request.</param>
         /// <returns></returns>
         [HttpPost]
-        [Route(Routes.RouteUpdate)]
+        [Route(Routes.RouteUser)]
         public HttpResponseMessage Authenticate(User request)
         {
             HttpResponseMessage response;
@@ -302,7 +302,7 @@ namespace InstaMelody.API.Controllers
         [Route(Routes.RouteResetPassword)]
         public HttpResponseMessage ResetUserPassword(ApiRequest request)
         {
-            // TODO: 
+            // TODO: reset user password
             throw new NotImplementedException();
         }
     }

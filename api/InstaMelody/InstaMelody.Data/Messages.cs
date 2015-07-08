@@ -560,7 +560,121 @@ namespace InstaMelody.Data
         #endregion MessageVideos
 
         #region MessageMelodies
-        // TODO: create dal for MessageMelodies
+
+        /// <summary>
+        /// Adds the message melody.
+        /// </summary>
+        /// <param name="messageId">The message identifier.</param>
+        /// <param name="userMelodyId">The user melody identifier.</param>
+        /// <returns></returns>
+        public MessageMelody AddMessageMelody(Guid messageId, Guid userMelodyId)
+        {
+            using (var conn = new SqlConnection(ConnString))
+            {
+                var cmd = conn.CreateCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = @"INSERT INTO dbo.MessageMelodies
+                                    (MessageId, UserMelodyId, DateCreated, IsDeleted)
+                                    VALUES (@MessageId, @UserMelodyId, @DateCreated, 0)";
+
+                cmd.Parameters.Add(new SqlParameter
+                {
+                    ParameterName = "MessageId",
+                    Value = messageId,
+                    SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                });
+                cmd.Parameters.Add(new SqlParameter
+                {
+                    ParameterName = "UserMelodyId",
+                    Value = userMelodyId,
+                    SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                });
+                cmd.Parameters.Add(new SqlParameter
+                {
+                    ParameterName = "DateCreated",
+                    Value = DateTime.UtcNow,
+                    SqlDbType = SqlDbType.DateTime,
+                    Direction = ParameterDirection.Input
+                });
+
+                conn.Open();
+                cmd.ExecuteNonQuery();
+            }
+
+            return this.GetMessageMelodyByMessageId(messageId);
+        }
+
+        /// <summary>
+        /// Gets the message melody by message identifier.
+        /// </summary>
+        /// <param name="messageId">The message identifier.</param>
+        /// <returns></returns>
+        public MessageMelody GetMessageMelodyByMessageId(Guid messageId)
+        {
+            MessageMelody result = null;
+
+            using (var conn = new SqlConnection(ConnString))
+            {
+                var cmd = conn.CreateCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = @"SELECT TOP 1 * FROM dbo.MessageMelodies
+                                    WHERE MessageId = @MessageId AND IsDeleted = 0";
+
+                cmd.Parameters.Add(new SqlParameter
+                {
+                    ParameterName = "MessageId",
+                    Value = messageId,
+                    SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                });
+
+                conn.Open();
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (!reader.IsClosed && reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            result = new MessageMelody();
+                            result = result.ParseFromDataReader(reader);
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Deletes the message melody by melody identifier.
+        /// </summary>
+        /// <param name="userMelodyId">The user melody identifier.</param>
+        public void DeleteMessageMelodyByMelodyId(Guid userMelodyId)
+        {
+            using (var conn = new SqlConnection(ConnString))
+            {
+                var cmd = conn.CreateCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = @"UPDATE dbo.MessageMelodies
+                                    SET IsDeleted = 1
+                                    WHERE UserMelodyId = @UserMelodyId";
+
+                cmd.Parameters.Add(new SqlParameter
+                {
+                    ParameterName = "UserMelodyId",
+                    Value = userMelodyId,
+                    SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                });
+
+                conn.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+
         #endregion MessageMelodies
     }
 }

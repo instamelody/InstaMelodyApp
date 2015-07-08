@@ -129,8 +129,6 @@ namespace InstaMelody.Business
                 throw new DataException("Failed to create a File Upload Token.");
             }
 
-            // TODO: delete old tokens
-
             return createdToken;
         }
 
@@ -451,16 +449,17 @@ namespace InstaMelody.Business
             messageBll.DeleteMessageVideo(deletedVideoId);
         }
 
+        /// <summary>
+        /// Deletes the message melody records.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
         private void DeleteMessageMelodyRecords(string fileName)
         {
-            // TODO:
-            throw new NotImplementedException();
-        }
+            var melodyBll = new MelodyBLL();
+            var deletedUserMelodyGuid = melodyBll.DeleteUserMelodyByMelodyFileName(fileName);
 
-        private void DeleteStationImageRecords()
-        {
-            // TODO:
-            throw new NotImplementedException();
+            var messageBll = new MessageBLL();
+            messageBll.DeleteMessageUserMelody(deletedUserMelodyGuid);
         }
 
         /// <summary>

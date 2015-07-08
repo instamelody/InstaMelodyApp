@@ -62,7 +62,7 @@ namespace InstaMelody.Data
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = @"INSERT INTO dbo.ChatMessages
                                     (ChatId, MessageId, SenderId, DateCreated)
-                                    VALUES (@ChatId, @MessageId, @SenderId @DateCreated)
+                                    VALUES (@ChatId, @MessageId, @SenderId, @DateCreated)
 
                                     SELECT SCOPE_IDENTITY() AS [SCOPE_IDENTITY];";
 
@@ -127,7 +127,7 @@ namespace InstaMelody.Data
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = @"INSERT INTO dbo.ChatUsers
                                     (UserId, ChatId, DateCreated)
-                                    VALUES (@UserId, @ChatId @DateCreated)
+                                    VALUES (@UserId, @ChatId, @DateCreated)
 
                                     SELECT SCOPE_IDENTITY() AS [SCOPE_IDENTITY];";
 
@@ -412,7 +412,7 @@ namespace InstaMelody.Data
                 {
                     ParameterName = "UserId",
                     Value = userId,
-                    SqlDbType = SqlDbType.DateTime,
+                    SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
                 });
 

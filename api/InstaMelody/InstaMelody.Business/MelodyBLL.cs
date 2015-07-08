@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using InstaMelody.Business.Properties;
 using InstaMelody.Data;
 using InstaMelody.Model;
 using InstaMelody.Model.ApiModels;
@@ -161,7 +162,7 @@ namespace InstaMelody.Business
             var userMelodies = dal.GetUserMelodiesByUserId(sessionUser.Id);
             if (userMelodies == null)
             {
-                throw new DataException("Could not find any created Melodies for this User");
+                throw new DataException("Could not find any created Melodies for this User.");
             }
 
             // get parts of user melody
@@ -191,79 +192,15 @@ namespace InstaMelody.Business
         /// Creates the user melody.
         /// </summary>
         /// <param name="userMelody">The user melody.</param>
-        /// <param name="melody">The melody.</param>
         /// <param name="sessionToken">The session token.</param>
         /// <returns></returns>
-        /// <exception cref="System.ArgumentException">
-        /// Must provide a valid FileName to create a new User Melody.
-        /// or
-        /// </exception>
-        public ApiUserMelodyFileUpload CreateUserMelody(UserMelody userMelody, Melody melody, Guid sessionToken)
+        /// <exception cref="System.ArgumentException">Must provide a valid FileName to create a new User Melody.
+        /// or</exception>
+        public ApiUserMelodyFileUpload CreateUserMelody(UserMelody userMelody, Guid sessionToken)
         {
             var sessionUser = Utilities.GetUserBySession(sessionToken);
 
-            if (string.IsNullOrEmpty(melody.FileName))
-            {
-                throw new ArgumentException("Must provide a valid FileName to create a new User Melody.");
-            }
-
-            if (string.IsNullOrWhiteSpace(melody.Name))
-            {
-                melody.Name = melody.FileName;
-            }
-
-            if (string.IsNullOrWhiteSpace(userMelody.Name))
-            {
-                userMelody.Name = melody.Name;
-            }
-
-            // validate parts exist
-            this.CheckMelodies(userMelody.Parts);
-
-            // find existing user melody
-            var existing = this.UserMelodyExistsWithName(sessionUser.Id, userMelody.Name);
-            if (existing)
-            {
-                throw new ArgumentException(
-                    string.Format("A User-created Melody already exists with the name: {0}.",
-                        userMelody.Name));
-            }
-
-            // create new melody
-            var createdMelody = this.CreateMelody(melody);
-            userMelody.Parts.Add(createdMelody);
-
-            // create user melody
-            var dal = new UserMelodies();
-            var createdUserMelody = dal.CreateUserMelody(new UserMelody
-            {
-                Name = userMelody.Name,
-                UserId = sessionUser.Id,
-                DateCreated = DateTime.UtcNow
-            });
-
-            // create user melody parts
-            foreach (var part in userMelody.Parts)
-            {
-                dal.CreateUserMelodyPart(createdUserMelody.Id, part.Id);
-            }
-            createdUserMelody.Parts = this.GetUserMelodyParts(createdUserMelody.Id);
-
-            // create file upload token
-            var fileBll = new FileBLL();
-            var createdToken = fileBll.CreateToken(new FileUploadToken
-            {
-                UserId = sessionUser.Id,
-                FileName = createdMelody.FileName,
-                MediaType = FileUploadTypeEnum.UserMelody,
-                DateCreated = DateTime.UtcNow
-            });
-
-            return new ApiUserMelodyFileUpload
-            {
-                FileUploadToken = createdToken,
-                UserMelody = createdUserMelody
-            };
+            return this.CreateUserMelody(userMelody, sessionUser);
         }
 
         /// <summary>
@@ -307,60 +244,205 @@ namespace InstaMelody.Business
             dal.DeleteUserMelody(foundMelody.Id);
         }
 
+        /// <summary>
+        /// Gets the user loops.
+        /// </summary>
+        /// <param name="sessionToken">The session token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Data.DataException">Could not find any created Loops beloging to this User.</exception>
         public IList<UserLoop> GetUserLoops(Guid sessionToken)
         {
-            // TODO:
-            throw new NotImplementedException();
-
             var sessionUser = Utilities.GetUserBySession(sessionToken);
+
+            var dal = new UserLoops();
+            var loops = dal.GetUserLoopsByUserId(sessionUser.Id);
+            if (loops == null || !loops.Any())
+            {
+                throw new DataException("Could not find any created Loops beloging to this User.");
+            }
+
+            foreach (var userLoop in loops)
+            {
+                userLoop.Parts = this.GetUserLoopParts(userLoop.Id);
+            }
+
+            return loops;
         }
 
+        /// <summary>
+        /// Gets the loop.
+        /// </summary>
+        /// <param name="loop">The loop.</param>
+        /// <param name="sessionToken">The session token.</param>
+        /// <returns></returns>
         public UserLoop GetLoop(UserLoop loop, Guid sessionToken)
         {
-            // TODO:
-            throw new NotImplementedException();
+            Utilities.GetUserBySession(sessionToken);
 
-            var sessionUser = Utilities.GetUserBySession(sessionToken);
+            return this.GetUserLoop(loop);
         }
 
-        public UserLoop CreateLoop(UserLoop loop, Guid sessionToken)
+        /// <summary>
+        /// Creates the loop.
+        /// </summary>
+        /// <param name="loop">The loop.</param>
+        /// <param name="newPart">The new part.</param>
+        /// <param name="sessionToken">The session token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException">Cannot create a new Loop without a Loop name.</exception>
+        /// <exception cref="System.Data.DataException"></exception>
+        public object CreateLoop(UserLoop loop, UserLoopPart newPart, Guid sessionToken)
         {
-            // TODO:
-            throw new NotImplementedException();
+            // TODO: test this function
 
             var sessionUser = Utilities.GetUserBySession(sessionToken);
+            
+            var dal = new UserLoops();
+
+            // check loop name
+            if (string.IsNullOrWhiteSpace(loop.Name))
+            {
+                throw new ArgumentException("Cannot create a new Loop without a Name.");
+            }
+
+            var existing = dal.GetUserLoopByUserIdAndName(sessionUser.Id, loop.Name);
+            if (existing != null)
+            {
+                throw new DataException(
+                    string.Format("The user has already created a Loop with the name: {0}.",
+                        existing.Name));
+            }
+
+            // create loop
+            var createdLoop = dal.CreateUserLoop(new UserLoop
+            {
+                UserId = sessionUser.Id,
+                Name = loop.Name,
+                DateCreated = DateTime.UtcNow,
+                DateModified = DateTime.UtcNow
+            });
+
+            // create loop parts
+            var createdPart = new UserLoopPart(); 
+            try
+            {
+                // get or create new melody
+                var createdMelody = this.GetExistingOrCreateNewUserMelody(newPart.Melody, sessionUser);
+                var upload = createdMelody as ApiUserMelodyFileUpload;
+                var melody = (upload != null)
+                    ? upload.UserMelody
+                    : ((UserMelody) createdMelody);
+                createdPart = this.CreateUserLoopPart(createdLoop.Id, melody.Id, newPart);
+            }
+            catch (Exception)
+            {
+                dal.DeleteUserLoop(createdLoop.Id);
+                if (!createdPart.Id.Equals(default(int)))
+                {
+                    dal.DeleteLoopPart(createdPart.Id);
+                }
+                throw;
+            }
+
+            return this.GetUserLoop(createdLoop);
         }
 
-        public UserLoop AttachPartToLoop(UserLoop loop, UserMelody newPart, Guid sessionToken)
+        /// <summary>
+        /// Attaches the part to loop.
+        /// </summary>
+        /// <param name="loop">The loop.</param>
+        /// <param name="newPart">The new part.</param>
+        /// <param name="sessionToken">The session token.</param>
+        /// <returns></returns>
+        public UserLoop AttachPartToLoop(UserLoop loop, UserLoopPart newPart, Guid sessionToken)
         {
-            // TODO:
-            throw new NotImplementedException();
+            // TODO: test this function
 
             var sessionUser = Utilities.GetUserBySession(sessionToken);
+
+            // get loop
+            var foundLoop = this.GetUserLoop(loop);
+
+            var createdPart = new UserLoopPart();
+            try
+            {
+                // get or create new melody
+                var createdMelody = this.GetExistingOrCreateNewUserMelody(newPart.Melody, sessionUser);
+                var upload = createdMelody as ApiUserMelodyFileUpload;
+                var melody = (upload != null)
+                    ? upload.UserMelody
+                    : ((UserMelody)createdMelody);
+                createdPart = this.CreateUserLoopPart(foundLoop.Id, melody.Id, newPart);
+            }
+            catch (Exception)
+            {
+                var dal = new UserLoops();
+                dal.DeleteUserLoop(foundLoop.Id);
+                if (!createdPart.Id.Equals(default(int)))
+                {
+                    dal.DeleteLoopPart(createdPart.Id);
+                }
+                throw;
+            }
+
+            return this.GetUserLoop(foundLoop);
         }
 
-        public UserLoop CreateMelodyAndAttachToLoop(UserMelody userMelody, Melody melody, UserLoop loop, Guid sessionToken)
-        {
-            // TODO:
-            throw new NotImplementedException();
-
-            var sessionUser = Utilities.GetUserBySession(sessionToken);
-        }
-
+        /// <summary>
+        /// Deletes the part from loop.
+        /// </summary>
+        /// <param name="loop">The loop.</param>
+        /// <param name="part">The part.</param>
+        /// <param name="sessionToken">The session token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.UnauthorizedAccessException">Requesting user is not authorized to delete this part of the Loop.</exception>
+        /// <exception cref="System.Data.DataException"></exception>
         public UserLoop DeletePartFromLoop(UserLoop loop, UserMelody part, Guid sessionToken)
         {
-            // TODO:
-            throw new NotImplementedException();
-
             var sessionUser = Utilities.GetUserBySession(sessionToken);
+
+            var foundLoop = this.GetUserLoop(loop);
+
+            var foundUserMelody = this.GetUserMelody(part);
+            if (!foundUserMelody.UserId.Equals(sessionUser.Id)
+                && !foundLoop.UserId.Equals(sessionUser.Id))
+            {
+                throw new UnauthorizedAccessException("Requesting user is not authorized to delete this part of the Loop.");
+            }
+
+            var foundPart = foundLoop.Parts.FirstOrDefault(p => p.UserMelodyId.Equals(foundUserMelody.Id));
+            if (foundPart == null)
+            {
+                throw new DataException(
+                    string.Format("Could not find the requested part of Loop: {0} to be deleted.",
+                        foundLoop.Id));
+            }
+
+            var dal = new UserLoops();
+            dal.DeleteLoopPart(foundPart.Id);
+
+            return this.GetUserLoop(foundLoop);
         }
 
+        /// <summary>
+        /// Deletes the loop.
+        /// </summary>
+        /// <param name="loop">The loop.</param>
+        /// <param name="sessionToken">The session token.</param>
+        /// <exception cref="System.UnauthorizedAccessException">Requesting user is not authorized to delete this Loop.</exception>
         public void DeleteLoop(UserLoop loop, Guid sessionToken)
         {
-            // TODO:
-            throw new NotImplementedException();
-
             var sessionUser = Utilities.GetUserBySession(sessionToken);
+
+            var foundLoop = this.GetUserLoop(loop);
+            if (!foundLoop.UserId.Equals(sessionUser.Id))
+            {
+                throw new UnauthorizedAccessException("Requesting user is not authorized to delete this Loop.");
+            }
+
+            // delete user loop & parts (handled @ DAL)
+            var dal = new UserLoops();
+            dal.DeleteUserLoop(foundLoop.Id);
         }
 
         #endregion Public Methods
@@ -458,34 +540,6 @@ namespace InstaMelody.Business
         }
 
         /// <summary>
-        /// Gets the user melody.
-        /// </summary>
-        /// <param name="melody">The melody.</param>
-        /// <returns></returns>
-        /// <exception cref="System.ArgumentException">Could not find the requested Melody with the provided information.</exception>
-        private UserMelody GetUserMelody(UserMelody melody)
-        {
-            var dal = new UserMelodies();
-
-            var result = dal.GetUserMelodyById(melody.Id);
-            if (result == null
-                && (!melody.UserId.Equals(default(Guid)) && !string.IsNullOrWhiteSpace(melody.Name)))
-            {
-                result = dal.GetUserMelodyByUserIdAndName(melody.UserId, melody.Name);
-            }
-
-            if (result == null)
-            {
-                throw new ArgumentException("Could not find the requested Melody with the provided information.");
-            }
-
-            // get parts of user melody
-            result.Parts = this.GetUserMelodyParts(result.Id);
-
-            return result;
-        }
-
-        /// <summary>
         /// Gets the user melody parts.
         /// </summary>
         /// <param name="userMelodyId">The user melody identifier.</param>
@@ -530,6 +584,287 @@ namespace InstaMelody.Business
             return melody;
         }
 
+        /// <summary>
+        /// Gets the user loop.
+        /// </summary>
+        /// <param name="loop">The loop.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException">Could not find the requested Loop with the provided information.</exception>
+        private UserLoop GetUserLoop(UserLoop loop)
+        {
+            var dal = new UserLoops();
+
+            var result = dal.GetUserLoopById(loop.Id);
+            if (result == null
+                && (!loop.UserId.Equals(default(Guid)) && !string.IsNullOrWhiteSpace(loop.Name)))
+            {
+                result = dal.GetUserLoopByUserIdAndName(loop.UserId, loop.Name);
+            }
+
+            if (result == null)
+            {
+                throw new ArgumentException("Could not find the requested Loop with the provided information.");
+            }
+
+            // get user loop parts
+            result.Parts = this.GetUserLoopParts(result.Id);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Gets the user loop parts.
+        /// </summary>
+        /// <param name="userLoopId">The user loop identifier.</param>
+        /// <returns></returns>
+        private IList<UserLoopPart> GetUserLoopParts(Guid userLoopId)
+        {
+            var dal = new UserLoops();
+
+            var results = dal.GetPartsByUserLoopId(userLoopId);
+            if (results == null || !results.Any())
+            {
+                return null;
+            }
+
+            // get user melody
+            foreach (var userLoopPart in results)
+            {
+                userLoopPart.Melody = 
+                    this.GetUserMelody(new UserMelody
+                    {
+                        Id = userLoopPart.UserMelodyId
+                    });
+            }
+
+            return results;
+        }
+
+        /// <summary>
+        /// Gets the existing or create new user melody.
+        /// </summary>
+        /// <param name="userMelody">The user melody.</param>
+        /// <param name="user">The user.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException">Could not find or create a new Melody to attach to this Loop.</exception>
+        private object GetExistingOrCreateNewUserMelody(UserMelody userMelody, User user)
+        {
+            // determine if melody exists
+            object createdOrFoundMelody;
+            try
+            {
+                createdOrFoundMelody = this.GetUserMelody(userMelody);
+            }
+            catch (Exception)
+            {
+                createdOrFoundMelody = this.CreateUserMelody(userMelody, user);
+            }
+
+            if (createdOrFoundMelody == null)
+            {
+                throw new ArgumentException("Could not find or create a new Melody to attach to this Loop.");
+            }
+
+            return createdOrFoundMelody;
+        }
+
+        /// <summary>
+        /// Creates the user loop part.
+        /// </summary>
+        /// <param name="loopId">The loop identifier.</param>
+        /// <param name="userMelodyId">The user melody identifier.</param>
+        /// <param name="part">The part.</param>
+        /// <param name="isFirstPart">if set to <c>true</c> [is first part].</param>
+        /// <returns></returns>
+        /// <exception cref="System.Data.DataException">Failed to create User Loop part.</exception>
+        private UserLoopPart CreateUserLoopPart(Guid loopId, Guid userMelodyId, UserLoopPart part, bool isFirstPart = false)
+        {
+            var dal = new UserLoops();
+            var newPart = new UserLoopPart
+            {
+                UserLoopId = loopId,
+                UserMelodyId = userMelodyId,
+                StartTime = part.StartTime ?? TimeSpan.Zero,
+                StartEffect = (part.StartEffect == LoopEffectsEnum.Unknown) 
+                    ? Settings.Default.LoopPartFirstStartEffect 
+                    : part.StartEffect,
+                StartEffectDuration = part.StartEffectDuration ?? Settings.Default.LoopPartFirstStartDuration,
+                EndTime = part.EndTime,
+                EndEffect = (part.EndEffect == LoopEffectsEnum.Unknown) 
+                    ? Settings.Default.LoopPartEndEffect
+                    : part.EndEffect,
+                EndEffectDuration = part.EndEffectDuration ?? Settings.Default.LoopPartEndEffectDuration,
+                OrderIndex = 1,
+                DateCreated = DateTime.UtcNow
+            };
+
+            if (!isFirstPart)
+            {
+                var lastIndex = dal.GetLastOrderIndexForLoop(loopId);
+                newPart.OrderIndex = lastIndex + 1;
+                newPart.StartTime = part.StartTime ?? TimeSpan.Zero;
+                newPart.StartEffect = (part.StartEffect == LoopEffectsEnum.Unknown) 
+                    ? Settings.Default.LoopPartStartEffect
+                    : part.StartEffect;
+                newPart.StartEffectDuration = part.StartEffectDuration ?? Settings.Default.LoopPartStartEffectDuration;
+            }
+
+            var createdPart = dal.CreateUserLoopPart(part);
+            if (createdPart == null)
+            {
+                throw new DataException("Failed to create User Loop part.");
+            }
+
+            return createdPart;
+        }
+
         #endregion Private Methods
+
+        #region Internal Methods
+
+        /// <summary>
+        /// Gets the user melody.
+        /// </summary>
+        /// <param name="melody">The melody.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException">Could not find the requested Melody with the provided information.</exception>
+        internal UserMelody GetUserMelody(UserMelody melody)
+        {
+            var dal = new UserMelodies();
+
+            var result = dal.GetUserMelodyById(melody.Id);
+            if (result == null
+                && (!melody.UserId.Equals(default(Guid)) && !string.IsNullOrWhiteSpace(melody.Name)))
+            {
+                result = dal.GetUserMelodyByUserIdAndName(melody.UserId, melody.Name);
+            }
+
+            if (result == null)
+            {
+                throw new ArgumentException("Could not find the requested Melody with the provided information.");
+            }
+
+            // get parts of user melody
+            result.Parts = this.GetUserMelodyParts(result.Id);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Creates the user melody.
+        /// </summary>
+        /// <param name="userMelody">The user melody.</param>
+        /// <param name="sender">The sender.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException">
+        /// Must provide a Melody part with a valid FileName to create a new User Melody.
+        /// or
+        /// </exception>
+        internal ApiUserMelodyFileUpload CreateUserMelody(UserMelody userMelody, User sender)
+        {
+            var melody = userMelody.Parts.FirstOrDefault(m => !string.IsNullOrWhiteSpace(m.FileName));
+            if (melody == null)
+            {
+                throw new ArgumentException("Must provide a Melody part with a valid FileName to create a new User Melody.");
+            }
+
+            if (string.IsNullOrWhiteSpace(melody.Name))
+            {
+                melody.Name = melody.FileName;
+            }
+
+            if (string.IsNullOrWhiteSpace(userMelody.Name))
+            {
+                userMelody.Name = melody.Name;
+            }
+
+            // validate parts exist
+            var parts = userMelody.Parts.Where(p => !p.Id.Equals(default(int))).ToList();
+            this.CheckMelodies(parts);
+
+            // find existing user melody
+            var existing = this.UserMelodyExistsWithName(sender.Id, userMelody.Name);
+            if (existing)
+            {
+                throw new ArgumentException(
+                    string.Format("A User-created Melody already exists with the name: {0}.",
+                        userMelody.Name));
+            }
+
+            // create new melody
+            var createdMelody = this.CreateMelody(melody);
+            parts.Add(createdMelody);
+
+            // create user melody
+            var dal = new UserMelodies();
+            var createdUserMelody = dal.CreateUserMelody(new UserMelody
+            {
+                Name = userMelody.Name,
+                UserId = sender.Id,
+                DateCreated = DateTime.UtcNow
+            });
+
+            // create user melody parts
+            foreach (var part in parts)
+            {
+                dal.CreateUserMelodyPart(createdUserMelody.Id, part.Id);
+            }
+            createdUserMelody.Parts = this.GetUserMelodyParts(createdUserMelody.Id);
+
+            // create file upload token
+            var fileBll = new FileBLL();
+            var createdToken = fileBll.CreateToken(new FileUploadToken
+            {
+                UserId = sender.Id,
+                FileName = createdMelody.FileName,
+                MediaType = FileUploadTypeEnum.UserMelody,
+                DateCreated = DateTime.UtcNow
+            });
+
+            return new ApiUserMelodyFileUpload
+            {
+                FileUploadToken = createdToken,
+                UserMelody = createdUserMelody
+            };
+        }
+
+        /// <summary>
+        /// Deletes the name of the user melody by melody file.
+        /// </summary>
+        /// <param name="melodyFileName">Name of the melody file.</param>
+        /// <returns></returns>
+        internal Guid DeleteUserMelodyByMelodyFileName(string melodyFileName)
+        {
+            // get melody by file name
+            var dal = new Melodies();
+            var melody = dal.GetMelodyByFileName(melodyFileName);
+            if (melody == null)
+            {
+                throw new ArgumentException(
+                    string.Format("Could not find a melody with the provided file name: {0}.", 
+                        melodyFileName));
+            }
+
+            // get user melody by melody id
+            var userMelodyDal = new UserMelodies();
+            var userMelody = userMelodyDal.GetUserMelodyByMelodyId(melody.Id);
+            if (userMelody == null)
+            {
+                throw new DataException(
+                    string.Format("Could not find a User Melody that contained a Melody Part with the file name: {0}",
+                        melodyFileName));
+            }
+
+            // delete melody file
+            dal.DeleteMelody(melody.Id);
+
+            // delete user melody
+            userMelodyDal.DeleteUserMelody(userMelody.Id);
+
+            // return user melody guid
+            return userMelody.Id;
+        }
+
+        #endregion Internal Methods
     }
 }

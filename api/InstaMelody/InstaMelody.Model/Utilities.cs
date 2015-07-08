@@ -44,13 +44,18 @@ namespace InstaMelody.Model
         /// Validates the specified o.
         /// </summary>
         /// <param name="o">The o.</param>
+        /// <param name="ignorePassword">The ignore password.</param>
         /// <returns></returns>
-        public static IEnumerable<string> Validate(object o)
+        public static IEnumerable<string> Validate(object o, bool ignorePassword = false)
         {
             var properties = o.GetType().GetProperties();
 
             foreach (var propertyInfo in properties)
             {
+                if (ignorePassword && propertyInfo.Name.Equals("Password"))
+                {
+                    continue;
+                }
                 var customAttributes = propertyInfo.GetCustomAttributes(typeof(ValidationAttribute), true);
                 foreach (var customAttribute in customAttributes)
                 {

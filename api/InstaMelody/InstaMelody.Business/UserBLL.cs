@@ -111,7 +111,7 @@ namespace InstaMelody.Business
             if (requestor == null || !requestor.Id.Equals(userId))
             {
                 throw new UnauthorizedAccessException(
-                    string.Format("User with session token {0} is not authorized to get User {1}'s data.", session.Token, userId));
+                    string.Format("User with session token {0} is not authorized to get the requested User's data.", session.Token));
             }
 
             User result;
@@ -274,11 +274,11 @@ namespace InstaMelody.Business
             if (sessionUser == null || !sessionUser.Id.Equals(userToUpdate.Id))
             {
                 throw new UnauthorizedAccessException(
-                    string.Format("User with session token {0} is not authorized to update User {1}'s data.", session.Token, userToUpdate.Id));
+                    string.Format("User with session token {0} is not authorized to update this User's data.", session.Token));
             }
 
             // check for validation errors
-            var validationErrors = ModelUtilities.Validate(userToUpdate).ToList();
+            var validationErrors = ModelUtilities.Validate(userToUpdate, ignorePassword: true).ToList();
             if (validationErrors.Any())
             {
                 var sb = new StringBuilder();
@@ -294,13 +294,13 @@ namespace InstaMelody.Business
                 || !userToUpdate.EmailAddress.Equals(sessionUser.EmailAddress))
             {
                 var userExisting = this.GetUserByDisplayName(userToUpdate.DisplayName);
-                if (userExisting.Id != default(Guid))
+                if (!userExisting.Id.Equals(default(Guid)) && !userExisting.Id.Equals(userToUpdate.Id))
                 {
                     throw new DataException(string.Format("User name {0} is not available.", userToUpdate.DisplayName));
                 }
 
                 userExisting = this.GetUserByEmailAddress(userToUpdate.EmailAddress);
-                if (userExisting.Id != default(Guid))
+                if (!userExisting.Id.Equals(default(Guid)) && !userExisting.Id.Equals(userToUpdate.Id))
                 {
                     throw new DataException(string.Format("The email address {0} is already in use.", userToUpdate.EmailAddress));
                 }
@@ -388,18 +388,6 @@ namespace InstaMelody.Business
             };
         }
 
-        public User UnlockUser(Guid userId, Guid sessionToken)
-        {
-            // TODO:
-            throw new NotImplementedException();
-        }
-
-        public User LockUser(Guid userId)
-        {
-            // TODO:
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// Deletes the user.
         /// </summary>
@@ -420,39 +408,39 @@ namespace InstaMelody.Business
                 throw new UnauthorizedAccessException(string.Format("Could not find a valid session for Session: {0}.", sessionToken));
             }
 
-            if (sessionUser == null || !sessionUser.Id.Equals(user.Id))
+            var foundUser = this.FindUser(user);
+            if (foundUser == null)
+            {
+                throw new DataException("User not found.");
+            }
+
+            if (sessionUser == null || !sessionUser.Id.Equals(foundUser.Id))
             {
                 throw new UnauthorizedAccessException("A user can only delete their own profile.");
             }
 
             var dal = new Users();
-            var existingUser = dal.FindById(user.Id);
-            if (existingUser == null)
-            {
-                throw new DataException(string.Format("User ID {0} not found.", user.Id));
-            }
-
-            dal.DeleteUser(user.Id);
-            user.IsDeleted = true;
+            dal.DeleteUser(foundUser.Id);
+            foundUser.IsDeleted = true;
 
             // remove sensitive information
-            user = user.StripSensitiveInfo();
+            foundUser = foundUser.StripSensitiveInfo();
 
             // end and delete all sessions
             var auth = new AuthenticationBLL();
-            auth.DeleteAllUserSessions(user.Id);
+            auth.DeleteAllUserSessions(foundUser.Id);
 
             // delete profile image
-            if (user.UserImageId != null)
+            if (foundUser.UserImageId != null)
             {
                 var imageBll = new FileBLL();
                 imageBll.DeleteImage(new Image
                 {
-                    Id = (int)user.UserImageId
+                    Id = (int)foundUser.UserImageId
                 });
             }
 
-            return user;
+            return foundUser;
         }
 
         /// <summary>
@@ -485,21 +473,8 @@ namespace InstaMelody.Business
                 throw new DataException("No friend information provided.");
             }
 
-            var userDal = new Users();
-
             // try to request friend by id, email, or display name
-            User requestedFriend = null;
-            if (!friend.Id.Equals(default(Guid)))
-            {
-                requestedFriend = userDal.FindById(friend.Id);
-            }
-
-            if (requestedFriend == null)
-            {
-                requestedFriend = userDal.FindByDisplayName(friend.DisplayName) ??
-                                  userDal.FindByEmail(friend.EmailAddress);
-            }
-
+            var requestedFriend = this.FindUser(friend);
             if (requestedFriend == null)
             {
                 throw new DataException("Could not find requested friend in database.");
@@ -542,21 +517,8 @@ namespace InstaMelody.Business
                 throw new DataException("No friend information provided to approve.");
             }
 
-            var userDal = new Users();
-
             // try to request friend by id, email, or display name
-            User requestingFriend = null;
-            if (!requestor.Id.Equals(default(Guid)))
-            {
-                requestingFriend = userDal.FindById(requestor.Id);
-            }
-
-            if (requestingFriend == null)
-            {
-                requestingFriend = userDal.FindByDisplayName(requestor.DisplayName) ??
-                                  userDal.FindByEmail(requestor.EmailAddress);
-            }
-
+            var requestingFriend = this.FindUser(requestor);
             if (requestingFriend == null)
             {
                 throw new DataException("Could not find requested friend in database.");
@@ -573,7 +535,7 @@ namespace InstaMelody.Business
                 throw new DataException(string.Format("User: {0} not authorized to execute this request.", sessionUser.Id));
             }
 
-            requestingFriend = requestingFriend.StripSensitiveInfo();
+            requestingFriend = requestingFriend.StripSensitiveInfoForFriends();
             return this.GetUserWithImage(requestingFriend);
         }
 
@@ -607,21 +569,8 @@ namespace InstaMelody.Business
                 throw new DataException("No friend information provided to deny.");
             }
 
-            var userDal = new Users();
-
             // try to request friend by id, email, or display name
-            User requestingFriend = null;
-            if (!requestor.Id.Equals(default(Guid)))
-            {
-                requestingFriend = userDal.FindById(requestor.Id);
-            }
-
-            if (requestingFriend == null)
-            {
-                requestingFriend = userDal.FindByDisplayName(requestor.DisplayName) ??
-                                  userDal.FindByEmail(requestor.EmailAddress);
-            }
-
+            var requestingFriend = this.FindUser(requestor);
             if (requestingFriend == null)
             {
                 throw new DataException("Could not find requested friend in database.");
@@ -671,21 +620,8 @@ namespace InstaMelody.Business
                 throw new DataException("No friend information provided to delete.");
             }
 
-            var userDal = new Users();
-
             // try to request friend by id, email, or display name
-            User requestingFriend = null;
-            if (!friend.Id.Equals(default(Guid)))
-            {
-                requestingFriend = userDal.FindById(friend.Id);
-            }
-
-            if (requestingFriend == null)
-            {
-                requestingFriend = userDal.FindByDisplayName(friend.DisplayName) ??
-                                  userDal.FindByEmail(friend.EmailAddress);
-            }
-
+            User requestingFriend = this.FindUser(friend);
             if (requestingFriend == null)
             {
                 throw new DataException("Could not find requested friend in database.");
@@ -724,6 +660,11 @@ namespace InstaMelody.Business
                 throw new DataException(string.Format("Could not find friends for User: {0}", sessionUser.Id));
             }
 
+            foreach (var friend in friends)
+            {
+                friend.StripSensitiveInfoForFriends();
+            }
+
             return this.GetUsersWithImages(friends);
         }
 
@@ -751,6 +692,11 @@ namespace InstaMelody.Business
             if (friends == null || !friends.Any())
             {
                 throw new DataException(string.Format("Could not find pending friends for User: {0}", sessionUser.Id));
+            }
+
+            foreach (var friend in friends)
+            {
+                friend.StripSensitiveInfoForFriends();
             }
 
             return this.GetUsersWithImages(friends);

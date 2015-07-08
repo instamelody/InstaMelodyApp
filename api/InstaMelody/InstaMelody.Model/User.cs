@@ -62,7 +62,7 @@ namespace InstaMelody.Model
         [StringLength(64, ErrorMessage = "Hash salt cannot exceed 64 characters")]
         public string HashSalt { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Password is required.")]
         [StringLength(255, ErrorMessage = "Password cannot exceed 255 characters")]
         public string Password { get; set; }
 
@@ -158,6 +158,29 @@ namespace InstaMelody.Model
         {
             this.HashSalt = string.Empty;
             this.Password = string.Empty;
+
+            return this;
+        }
+
+        /// <summary>
+        /// Strips the information for friends.
+        /// </summary>
+        /// <returns></returns>
+        public User StripSensitiveInfoForFriends()
+        {
+            this.PhoneNumber = string.Empty;
+            this.HashSalt = string.Empty;
+            this.Password = string.Empty;
+            this.FacebookToken = string.Empty;
+            this.FacebookUserId = string.Empty;
+            this.TwitterSecret = string.Empty;
+            this.TwitterToken = string.Empty;
+            this.TwitterUserId = string.Empty;
+            this.TwitterUsername = string.Empty;
+            this.LastLoginFailure = null;
+            this.LastLoginSuccess = null;
+            this.NumberLoginFailures = 0;
+            this.IsLocked = false;
 
             return this;
         }

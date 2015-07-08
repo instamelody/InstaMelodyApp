@@ -107,6 +107,50 @@ namespace InstaMelody.Data
         }
 
         /// <summary>
+        /// Gets the user melody by melody identifier.
+        /// </summary>
+        /// <param name="melodyId">The melody identifier.</param>
+        /// <returns></returns>
+        public UserMelody GetUserMelodyByMelodyId(int melodyId)
+        {
+            UserMelody result = null;
+
+            using (var conn = new SqlConnection(ConnString))
+            {
+                var cmd = conn.CreateCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = @"SELECT TOP 1 m.* FROM dbo.UserMelodies m
+                                    JOIN dbo.UserMelodyParts p
+                                    ON p.UserMelodyId = m.Id
+                                    WHERE p.IsDeleted = 0 AND m.IsDeleted = 0
+                                        AND p.MelodyId = @MelodyId";
+
+                cmd.Parameters.Add(new SqlParameter
+                {
+                    ParameterName = "MelodyId",
+                    Value = melodyId,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                });
+
+                conn.Open();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (!reader.IsClosed && reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            result = new UserMelody();
+                            result = result.ParseFromDataReader(reader);
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Gets the user melodies by user identifier.
         /// </summary>
         /// <param name="userId">The user identifier.</param>

@@ -11,13 +11,13 @@ namespace InstaMelody.Business
         /// <summary>
         /// The get user by session.
         /// </summary>
-        /// <param name="sessionId">
-        /// The session id.
-        /// </param>
+        /// <param name="sessionId">The session id.</param>
+        /// <param name="includeSensitiveInfo">if set to <c>true</c> [include sensitive information].</param>
         /// <returns>
-        /// The <see cref="User"/>.
+        /// The <see cref="User" />.
         /// </returns>
-        public static User GetUserBySession(Guid sessionId)
+        /// <exception cref="System.UnauthorizedAccessException">Could not validate session.</exception>
+        public static User GetUserBySession(Guid sessionId, bool includeSensitiveInfo = false)
         {
             User result = null;
 
@@ -30,7 +30,10 @@ namespace InstaMelody.Business
                 if (findUser != null && !findUser.Id.Equals(default(Guid)))
                 {
                     result = findUser;
-                    result = result.StripSensitiveInfo();
+                    if (!includeSensitiveInfo)
+                    {
+                        result = result.StripSensitiveInfo();
+                    }
                 }
             }
 

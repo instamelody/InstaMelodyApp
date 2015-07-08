@@ -19,7 +19,6 @@ Z:\Desktop\InstaMelody\InstaMelody\InstaMelody.Tests\bin\Debug\System.Web.WebPag
 Z:\Desktop\InstaMelody\InstaMelody\InstaMelody.Tests\bin\Debug\System.Web.WebPages.Deployment.dll
 Z:\Desktop\InstaMelody\InstaMelody\InstaMelody.Tests\bin\Debug\InstaMelody.API.pdb
 Z:\Desktop\InstaMelody\InstaMelody\InstaMelody.Tests\bin\Debug\InstaMelody.Business.pdb
-Z:\Desktop\InstaMelody\InstaMelody\InstaMelody.Tests\bin\Debug\InstaMelody.Data.pdb
 Z:\Desktop\InstaMelody\InstaMelody\InstaMelody.Tests\bin\Debug\InstaMelody.Infrastructure.pdb
 Z:\Desktop\InstaMelody\InstaMelody\InstaMelody.Tests\bin\Debug\InstaMelody.Model.pdb
 Z:\Desktop\InstaMelody\InstaMelody\InstaMelody.Tests\bin\Debug\System.Web.Http.xml
@@ -35,3 +34,4 @@ Z:\Desktop\InstaMelody\InstaMelody\InstaMelody.Tests\bin\Debug\System.Web.WebPag
 Z:\Desktop\InstaMelody\InstaMelody\InstaMelody.Tests\obj\Debug\InstaMelody.Tests.csprojResolveAssemblyReference.cache
 Z:\Desktop\InstaMelody\InstaMelody\InstaMelody.Tests\obj\Debug\InstaMelody.Tests.dll
 Z:\Desktop\InstaMelody\InstaMelody\InstaMelody.Tests\obj\Debug\InstaMelody.Tests.pdb
+Z:\Desktop\InstaMelody\InstaMelody\InstaMelody.Tests\bin\Debug\InstaMelody.Data.pdb

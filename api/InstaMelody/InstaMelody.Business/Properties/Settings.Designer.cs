@@ -112,5 +112,59 @@ namespace InstaMelody.Business.Properties {
                 return ((bool)(this["UsersCanOnlyMessageFriends"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Unknown")]
+        public global::InstaMelody.Model.Enums.LoopEffectsEnum LoopPartStartEffect {
+            get {
+                return ((global::InstaMelody.Model.Enums.LoopEffectsEnum)(this["LoopPartStartEffect"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("00:00:00")]
+        public global::System.TimeSpan LoopPartStartEffectDuration {
+            get {
+                return ((global::System.TimeSpan)(this["LoopPartStartEffectDuration"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Unknown")]
+        public global::InstaMelody.Model.Enums.LoopEffectsEnum LoopPartEndEffect {
+            get {
+                return ((global::InstaMelody.Model.Enums.LoopEffectsEnum)(this["LoopPartEndEffect"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("00:00:00")]
+        public global::System.TimeSpan LoopPartEndEffectDuration {
+            get {
+                return ((global::System.TimeSpan)(this["LoopPartEndEffectDuration"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Unknown")]
+        public global::InstaMelody.Model.Enums.LoopEffectsEnum LoopPartFirstStartEffect {
+            get {
+                return ((global::InstaMelody.Model.Enums.LoopEffectsEnum)(this["LoopPartFirstStartEffect"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("00:00:00")]
+        public global::System.TimeSpan LoopPartFirstStartDuration {
+            get {
+                return ((global::System.TimeSpan)(this["LoopPartFirstStartDuration"]));
+            }
+        }
     }
 }

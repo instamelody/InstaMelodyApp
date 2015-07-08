@@ -47,10 +47,16 @@ namespace InstaMelody.Model
             this.UserLoopId = (Guid)dataReader["UserLoopId"];
             this.UserMelodyId = (Guid)dataReader["UserMelodyId"];
             this.OrderIndex = Convert.ToInt32(dataReader["OrderIndex"]);
-            this.StartEffect = (LoopEffectsEnum)Enum.Parse(typeof(LoopEffectsEnum), Convert.ToString(dataReader["StartEffect"]));
-            this.EndEffect = (LoopEffectsEnum)Enum.Parse(typeof(LoopEffectsEnum), Convert.ToString(dataReader["EndEffect"]));
             this.DateCreated = Convert.ToDateTime(dataReader["DateCreated"]);
             this.IsDeleted = Convert.ToBoolean(dataReader["IsDeleted"]);
+            if (dataReader["StartEffect"] != DBNull.Value)
+            {
+                this.StartEffect = (LoopEffectsEnum)Enum.Parse(typeof(LoopEffectsEnum), Convert.ToString(dataReader["StartEffect"]));
+            }
+            if (dataReader["EndEffect"] != DBNull.Value)
+            {
+                this.EndEffect = (LoopEffectsEnum)Enum.Parse(typeof(LoopEffectsEnum), Convert.ToString(dataReader["EndEffect"]));
+            }
             if (dataReader["StartTime"] != DBNull.Value)
             {
                 this.StartTime = TimeSpan.FromTicks(Convert.ToInt64(dataReader["StartTime"]));

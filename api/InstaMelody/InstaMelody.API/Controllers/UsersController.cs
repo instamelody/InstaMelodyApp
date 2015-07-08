@@ -88,7 +88,6 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
                 }
             }
             else
@@ -398,13 +397,7 @@ namespace InstaMelody.API.Controllers
                     }
 
                     var bll = new UserBLL();
-                    var user = bll.GetUserById(request.User.Id, request.Token);
-                    if (user == null || user.Id.Equals(default(Guid)))
-                    {
-                        return this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, Exceptions.FailedFindUsers);
-                    }
-
-                    bll.DeleteUser(user, request.Token);
+                    bll.DeleteUser(request.User, request.Token);
 
                     response = this.Request.CreateResponse(HttpStatusCode.Accepted);
                 }
@@ -740,6 +733,10 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, exc.Message);
                     }
+                    else if (exc is DataException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, exc.Message);
+                    }
                     else
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
@@ -797,6 +794,10 @@ namespace InstaMelody.API.Controllers
                     if (exc is UnauthorizedAccessException)
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, exc.Message);
+                    }
+                    else if (exc is DataException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, exc.Message);
                     }
                     else
                     {

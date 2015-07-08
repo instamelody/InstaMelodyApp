@@ -63,7 +63,16 @@ namespace InstaMelody.API.Controllers
                         LogLevel.Trace);
 
                     var bll = new MessageBLL();
-                    var result = bll.StartChat(request.User, request.Message, request.Token);
+
+                    object result = null;
+                    if (request.Users != null)
+                    {
+                        result = bll.StartChat(request.Users, request.Message, request.Token);
+                    }
+                    else if (request.User != null)
+                    {
+                        result = bll.StartChat(request.User, request.Message, request.Token);
+                    }
 
                     if (result == null)
                     {
@@ -117,7 +126,7 @@ namespace InstaMelody.API.Controllers
             Guid.TryParse(token, out _token);
 
             Guid _chat;
-            var chat = nvc["chatId"];
+            var chat = nvc["id"];
             Guid.TryParse(chat, out _chat);
 
             if (_token.Equals(default(Guid)))

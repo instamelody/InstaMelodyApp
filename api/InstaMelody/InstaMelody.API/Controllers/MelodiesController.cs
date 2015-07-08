@@ -222,13 +222,12 @@ namespace InstaMelody.API.Controllers
                 {
                     // Log call
                     InstaMelodyLogger.Log(
-                        string.Format("Add User Melody - Token: {0}, FileName: {1}",
-                            request.Token,
-                            request.Melody.FileName),
+                        string.Format("Add User Melody - Token: {0}",
+                            request.Token),
                         LogLevel.Trace);
 
                     var bll = new MelodyBLL();
-                    var result = bll.CreateUserMelody(request.UserMelody, request.Melody, request.Token);
+                    var result = bll.CreateUserMelody(request.UserMelody, request.Token);
 
                     if (result == null)
                     {
@@ -245,7 +244,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, exc.Message);
                     }
-                    else if (exc is DataException)
+                    else if (exc is DataException || exc is ArgumentException)
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, exc.Message);
                     }

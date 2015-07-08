@@ -157,7 +157,7 @@ namespace InstaMelody.Business
             User sessionUser;
             try
             {
-                sessionUser = Utilities.GetUserBySession(sessionToken);
+                sessionUser = Utilities.GetUserBySession(sessionToken, includeSensitiveInfo: true);
             }
             catch (Exception)
             {
@@ -190,12 +190,12 @@ namespace InstaMelody.Business
             this.DeleteAllUserSessions(updatedUser.Id);
 
             // login user
-            return this.Authenticate(updatedUser.DisplayName, updatedUser.EmailAddress, updatedUser.Password);
+            return this.Authenticate(updatedUser.DisplayName, updatedUser.EmailAddress, password.NewPassword);
         }
 
         public User ResetPassword(string userName)
         {
-            // TODO:
+            // TODO: reset user password
             throw new NotImplementedException();
         }
 
@@ -229,6 +229,8 @@ namespace InstaMelody.Business
             var dal = new Users();
             dal.LockUserAccount(user.Id);
             this.DeleteAllUserSessions(user.Id);
+
+            // TODO: send email to user to unlock account
 
             throw new UnauthorizedAccessException(
                 string.Format("User account has been locked due to {0} concecutive failed login attempts", 

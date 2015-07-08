@@ -32,5 +32,23 @@
     <Setting Name="UsersCanOnlyMessageFriends" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="LoopPartStartEffect" Type="InstaMelody.Model.Enums.LoopEffectsEnum" Scope="Application">
+      <Value Profile="(Default)">Unknown</Value>
+    </Setting>
+    <Setting Name="LoopPartStartEffectDuration" Type="System.TimeSpan" Scope="Application">
+      <Value Profile="(Default)">00:00:00</Value>
+    </Setting>
+    <Setting Name="LoopPartEndEffect" Type="InstaMelody.Model.Enums.LoopEffectsEnum" Scope="Application">
+      <Value Profile="(Default)">Unknown</Value>
+    </Setting>
+    <Setting Name="LoopPartEndEffectDuration" Type="System.TimeSpan" Scope="Application">
+      <Value Profile="(Default)">00:00:00</Value>
+    </Setting>
+    <Setting Name="LoopPartFirstStartEffect" Type="InstaMelody.Model.Enums.LoopEffectsEnum" Scope="Application">
+      <Value Profile="(Default)">Unknown</Value>
+    </Setting>
+    <Setting Name="LoopPartFirstStartDuration" Type="System.TimeSpan" Scope="Application">
+      <Value Profile="(Default)">00:00:00</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

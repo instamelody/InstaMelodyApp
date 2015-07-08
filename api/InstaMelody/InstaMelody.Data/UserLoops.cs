@@ -465,6 +465,67 @@ namespace InstaMelody.Data
         }
 
         /// <summary>
+        /// Gets the last order index for loop.
+        /// </summary>
+        /// <param name="userLoopId">The user loop identifier.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Data.DataException"></exception>
+        public int GetLastOrderIndexForLoop(Guid userLoopId)
+        {
+            using (var conn = new SqlConnection(ConnString))
+            {
+                var cmd = conn.CreateCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = @"SELECT MAX(OrderIndex) FROM dbo.UserLoopParts
+                                    WHERE IsDeleted = 0 AND UserLoopId = @UserLoopId";
+
+                cmd.Parameters.Add(new SqlParameter
+                {
+                    ParameterName = "UserLoopId",
+                    Value = userLoopId,
+                    SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                });
+
+                conn.Open();
+                var obj = cmd.ExecuteScalar();
+                if (!Convert.IsDBNull(obj))
+                {
+                    return Convert.ToInt32(obj);
+                }
+            }
+
+            throw new DataException();
+        }
+
+        /// <summary>
+        /// Deletes the loop part.
+        /// </summary>
+        /// <param name="partId">The part identifier.</param>
+        public void DeleteLoopPart(int partId)
+        {
+            using (var conn = new SqlConnection(ConnString))
+            {
+                var cmd = conn.CreateCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = @"UPDATE dbo.UserLoopParts
+                                    SET IsDeleted = 1
+                                    WHERE IsDeleted = 0 AND Id = @UserLoopPartId";
+
+                cmd.Parameters.Add(new SqlParameter
+                {
+                    ParameterName = "UserLoopPartId",
+                    Value = partId,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                });
+
+                conn.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        /// <summary>
         /// Deletes the parts by user loop identifier.
         /// </summary>
         /// <param name="userLoopId">The user loop identifier.</param>

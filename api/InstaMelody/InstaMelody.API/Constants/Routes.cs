@@ -99,7 +99,7 @@
         /// <summary>
         /// The route update password
         /// </summary>
-        public const string RouteUpdatePassword = "Password";
+        public const string RouteUpdatePassword = "Password/Update";
 
         /// <summary>
         /// The route reset password

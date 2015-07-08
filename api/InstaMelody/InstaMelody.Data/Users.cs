@@ -323,7 +323,7 @@ VALUES(@UserId, @ImageId, @EmailAddress, @DisplayName, @FirstName, @LastName, @P
 	TwitterUsername = @TwitterUsername, TwitterUserId = @TwitterUserId, 
     TwitterToken = @TwitterToken, TwitterSecret = @TwitterSecret, 
     FacebookUserId = @FacebookUserId, FacebookToken = @FacebookToken, 
-    UserImageId = @ImageId, DateModified = @DateModified
+    DateModified = @DateModified
 WHERE Id = @UserId AND IsDeleted = 0";
 
                 cmd.Parameters.Add(new SqlParameter
@@ -331,13 +331,6 @@ WHERE Id = @UserId AND IsDeleted = 0";
                     ParameterName = "UserId",
                     Value = userId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
-                    Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
-                {
-                    ParameterName = "ImageId",
-                    Value = (object)user.UserImageId ?? DBNull.Value,
-                    SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
                 });
                 cmd.Parameters.Add(new SqlParameter
@@ -458,7 +451,7 @@ WHERE Id = @UserId AND IsDeleted = 0";
                 cmd.Parameters.Add(new SqlParameter
                 {
                     ParameterName = "Password",
-                    Value = userId,
+                    Value = password,
                     SqlDbType = SqlDbType.VarChar,
                     Direction = ParameterDirection.Input
                 });

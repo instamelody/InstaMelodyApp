@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace InstaMelody.Model.ApiModels
 {
@@ -19,6 +20,12 @@ namespace InstaMelody.Model.ApiModels
         public Message Message { get; set; }
 
         public User User { get; set; }
+
+        public IList<User> Users { get; set; }
+
+        public UserLoop Loop { get; set; }
+
+        public UserLoopPart LoopPart { get; set; }
 
         public UserPassword UserPassword { get; set; }
 

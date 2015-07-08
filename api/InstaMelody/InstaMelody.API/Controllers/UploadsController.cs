@@ -150,7 +150,7 @@ namespace InstaMelody.API.Controllers
             var fileInfo = new FileInfo(uploadPathFile);
             return new ApiFile(
                 fileInfo.Name,
-                string.Format("{0}/{1}/{2}", rootUrl, uploadPath, fileInfo.Name),
+                string.Format("{0}/{1}", uploadPath, fileInfo.Name),
                 fileInfo.Length / 1024);
         }
     }
