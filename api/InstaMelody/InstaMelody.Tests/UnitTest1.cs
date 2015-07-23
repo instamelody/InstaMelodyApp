@@ -14,6 +14,8 @@ namespace InstaMelody.Tests
         [TestMethod]
         public void TestMethod01()
         {
+            var dal = new UserLoops();
+            var test = dal.GetUserLoopPartById(4);
         }
 
     }

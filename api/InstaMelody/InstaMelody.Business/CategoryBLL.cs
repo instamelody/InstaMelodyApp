@@ -52,7 +52,8 @@ namespace InstaMelody.Business
                 result = dal.GetCategoryById(category.Id);
             }
 
-            if (result == null)
+            if (result == null
+                && !string.IsNullOrWhiteSpace(category.Name))
             {
                 result = dal.GetCategoryByNameAndParent(category.Name, category.ParentId);
             }

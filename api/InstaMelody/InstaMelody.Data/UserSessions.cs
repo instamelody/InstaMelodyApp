@@ -7,6 +7,7 @@ using InstaMelody.Model;
 
 namespace InstaMelody.Data
 {
+    // TODO: refactor DAL
     public class UserSessions : DataAccess
     {
         /// <summary>

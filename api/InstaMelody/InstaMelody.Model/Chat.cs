@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 
 namespace InstaMelody.Model
 {
@@ -21,20 +20,5 @@ namespace InstaMelody.Model
         public IList<User> Users { get; set; }
 
         #endregion Relationship Properties
-
-        /// <summary>
-        /// Parses from data reader.
-        /// </summary>
-        /// <param name="dataReader">The data reader.</param>
-        /// <returns></returns>
-        public Chat ParseFromDataReader(SqlDataReader dataReader)
-        {
-            this.Id = (Guid)dataReader["Id"];
-            this.DateCreated = Convert.ToDateTime(dataReader["DateCreated"]);
-            this.DateModified = Convert.ToDateTime(dataReader["DateModified"]);
-            this.IsDeleted = Convert.ToBoolean(dataReader["IsDeleted"]);
-
-            return this;
-        }
     }
 }

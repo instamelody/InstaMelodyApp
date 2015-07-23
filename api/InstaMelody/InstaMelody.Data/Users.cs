@@ -6,6 +6,7 @@ using InstaMelody.Model;
 
 namespace InstaMelody.Data
 {
+    // TODO: refactor DAL
     public class Users : DataAccess
     {
         /// <summary>
@@ -660,7 +661,7 @@ WHERE Id = @UserId AND IsDeleted = 0";
                 var cmd = conn.CreateCommand();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = @"UPDATE dbo.Users
-                                    SET IsDeleted = 1 
+                                    SET IsDeleted = 1, DateModified = @DateModified
                                     WHERE Id = @UserId";
 
                 cmd.Parameters.Add(new SqlParameter
@@ -668,6 +669,13 @@ WHERE Id = @UserId AND IsDeleted = 0";
                     ParameterName = "UserId",
                     Value = userId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                }); 
+                cmd.Parameters.Add(new SqlParameter
+                {
+                    ParameterName = "DateModified",
+                    Value = DateTime.UtcNow,
+                    SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
                 });
 

@@ -18,34 +18,29 @@ namespace InstaMelody.Data
         {
             var chatId = Guid.NewGuid();
 
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"INSERT INTO dbo.Chats
-                                        (Id, DateCreated, DateModified)
-                                    VALUES (@Id, @DateCreated, @DateCreated)";
+            var query = @"INSERT INTO dbo.Chats (Id, DateCreated, DateModified)
+                        VALUES (@Id, @DateCreated, @DateCreated)";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "Id",
                     Value = chatId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "DateCreated",
                     Value = DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
-
-            return this.GetChatById(chatId);
+            ExecuteNonQuery(query, parameters.ToArray());
+            return GetChatById(chatId);
         }
 
         /// <summary>
@@ -56,38 +51,36 @@ namespace InstaMelody.Data
         /// <exception cref="System.Data.DataException">Could not Create a new ChatMessage</exception>
         public ChatMessage CreateChatMessage(ChatMessage message)
         {
-            using (var conn = new SqlConnection(ConnString))
+            var query = @"INSERT INTO dbo.ChatMessages
+                        (ChatId, MessageId, SenderId, DateCreated)
+                        VALUES (@ChatId, @MessageId, @SenderId, @DateCreated)
+
+                        SELECT SCOPE_IDENTITY() AS [SCOPE_IDENTITY];";
+
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"INSERT INTO dbo.ChatMessages
-                                    (ChatId, MessageId, SenderId, DateCreated)
-                                    VALUES (@ChatId, @MessageId, @SenderId, @DateCreated)
-
-                                    SELECT SCOPE_IDENTITY() AS [SCOPE_IDENTITY];";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "ChatId",
                     Value = message.ChatId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "MessageId",
                     Value = message.MessageId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "SenderId",
                     Value = message.SenderId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "DateCreated",
                     Value = message.DateCreated > DateTime.MinValue
@@ -95,18 +88,17 @@ namespace InstaMelody.Data
                         : DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                var obj = cmd.ExecuteScalar();
-                if (!Convert.IsDBNull(obj))
+            var obj = ExecuteScalar(query, parameters.ToArray());
+            if (!Convert.IsDBNull(obj))
+            {
+                var addedMessage = GetChatMessageById(Convert.ToInt32(obj));
+                if (addedMessage != null)
                 {
-                    var addedMessage = this.GetChatMessageById(Convert.ToInt32(obj));
-                    if (addedMessage != null)
-                    {
-                        this.UpdateChatDateModified(addedMessage.ChatId);
-                        return addedMessage;
-                    }
+                    UpdateChatDateModified(addedMessage.ChatId);
+                    return addedMessage;
                 }
             }
 
@@ -121,31 +113,29 @@ namespace InstaMelody.Data
         /// <exception cref="System.Data.DataException"></exception>
         public ChatUser AddUserToChat(ChatUser user)
         {
-            using (var conn = new SqlConnection(ConnString))
+            var query = @"INSERT INTO dbo.ChatUsers
+                        (UserId, ChatId, DateCreated)
+                        VALUES (@UserId, @ChatId, @DateCreated)
+
+                        SELECT SCOPE_IDENTITY() AS [SCOPE_IDENTITY];";
+
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"INSERT INTO dbo.ChatUsers
-                                    (UserId, ChatId, DateCreated)
-                                    VALUES (@UserId, @ChatId, @DateCreated)
-
-                                    SELECT SCOPE_IDENTITY() AS [SCOPE_IDENTITY];";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "UserId",
                     Value = user.UserId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "ChatId",
                     Value = user.ChatId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "DateCreated",
                     Value = user.DateCreated > DateTime.MinValue
@@ -153,18 +143,17 @@ namespace InstaMelody.Data
                         : DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                var obj = cmd.ExecuteScalar();
-                if (!Convert.IsDBNull(obj))
+            var obj = ExecuteScalar(query, parameters.ToArray());
+            if (!Convert.IsDBNull(obj))
+            {
+                var addedUser = GetChatUserById(Convert.ToInt32(obj));
+                if (addedUser != null)
                 {
-                    var addedUser = this.GetChatUserById(Convert.ToInt32(obj));
-                    if (addedUser != null)
-                    {
-                        this.UpdateChatDateModified(addedUser.ChatId);
-                        return addedUser;
-                    }
+                    UpdateChatDateModified(addedUser.ChatId);
+                    return addedUser;
                 }
             }
 
@@ -178,39 +167,21 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public Chat GetChatById(Guid chatId)
         {
-            Chat result = null;
+            var query = @"SELECT TOP 1 * FROM dbo.Chats
+                        Where Id = @ChatId AND IsDeleted = 0";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT TOP 1 * FROM dbo.Chats
-                                    Where Id = @ChatId AND IsDeleted = 0";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "ChatId",
                     Value = chatId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            result = new Chat();
-                            result = result.ParseFromDataReader(reader);
-                        }
-                    }
                 }
-            }
+            };
 
-            return result;
+            return GetRecord<Chat>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -220,44 +191,24 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public IList<Chat> GetChatsByUserId(Guid userId)
         {
-            List<Chat> results = null;
+            var query = @"SELECT c.* FROM dbo.Chats c
+                        JOIN dbo.ChatUsers u
+                        ON c.Id = u.ChatId
+                        WHERE c.IsDeleted = 0 AND u.IsDeleted = 0
+                        AND u.UserId = @UserId";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT c.* FROM dbo.Chats c
-                                    JOIN dbo.ChatUsers u
-                                    ON c.Id = u.ChatId
-                                    WHERE c.IsDeleted = 0 AND u.IsDeleted = 0
-                                        AND u.UserId = @UserId";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "UserId",
                     Value = userId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        results = new List<Chat>();
-                        while (reader.Read())
-                        {
-                            var result = new Chat();
-                            result = result.ParseFromDataReader(reader);
-                            results.Add(result);
-                        }
-                    }
                 }
-            }
+            };
 
-            return results;
+            return GetRecordSet<Chat>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -267,41 +218,21 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public IList<ChatMessage> GetMessagesByChat(Guid chatId)
         {
-            List<ChatMessage> results = null;
+            var query = @"SELECT * FROM dbo.ChatMessages
+                        WHERE ChatId = @ChatId AND IsDeleted = 0";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT * FROM dbo.ChatMessages
-                                    WHERE ChatId = @ChatId AND IsDeleted = 0";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "ChatId",
                     Value = chatId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        results = new List<ChatMessage>();
-                        while (reader.Read())
-                        {
-                            var result = new ChatMessage();
-                            result = result.ParseFromDataReader(reader);
-                            results.Add(result);
-                        }
-                    }
                 }
-            }
+            };
 
-            return results;
+            return GetRecordSet<ChatMessage>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -311,41 +242,21 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public IList<ChatUser> GetUsersInChat(Guid chatId)
         {
-            List<ChatUser> results = null;
+            var query = @"SELECT * FROM dbo.ChatUsers
+                        WHERE ChatId = @ChatId AND IsDeleted = 0";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT * FROM dbo.ChatUsers
-                                    WHERE ChatId = @ChatId AND IsDeleted = 0";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "ChatId",
                     Value = chatId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        results = new List<ChatUser>();
-                        while (reader.Read())
-                        {
-                            var result = new ChatUser();
-                            result = result.ParseFromDataReader(reader);
-                            results.Add(result);
-                        }
-                    }
                 }
-            }
+            };
 
-            return results;
+            return GetRecordSet<ChatUser>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -354,35 +265,32 @@ namespace InstaMelody.Data
         /// <param name="chatId">The chat identifier.</param>
         public void DeleteChat(Guid chatId)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE dbo.Chats
-                                    SET IsDeleted = 1, DateModified = @DateModified
-                                    WHERE IsDeleted = 0 AND Id = @ChatId";
+            var query = @"UPDATE dbo.Chats
+                        SET IsDeleted = 1, DateModified = @DateModified
+                        WHERE IsDeleted = 0 AND Id = @ChatId";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "ChatId",
                     Value = chatId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "DateModified",
                     Value = DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            ExecuteNonQuery(query, parameters.ToArray());
 
-            this.DeleteChatMessages(chatId);
-            this.DeleteChatUsers(chatId);
+            DeleteChatMessages(chatId);
+            DeleteChatUsers(chatId);
         }
 
         /// <summary>
@@ -392,35 +300,31 @@ namespace InstaMelody.Data
         /// <param name="userId">The user identifier.</param>
         public void DeleteChatUser(Guid chatId, Guid userId)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE dbo.ChatUsers
-                                    SET IsDeleted = 1
-                                    WHERE IsDeleted = 0
-                                        AND ChatId = @ChatId AND UserId = @UserId";
+            var query = @"UPDATE dbo.ChatUsers
+                        SET IsDeleted = 1
+                        WHERE IsDeleted = 0
+                        AND ChatId = @ChatId AND UserId = @UserId";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "ChatId",
                     Value = chatId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "UserId",
                     Value = userId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
-
-            this.UpdateChatDateModified(chatId);
+            ExecuteNonQuery(query, parameters.ToArray());
+            UpdateChatDateModified(chatId);
         }
 
         #endregion Public Methods
@@ -434,39 +338,21 @@ namespace InstaMelody.Data
         /// <returns></returns>
         private ChatMessage GetChatMessageById(int chatMessageId)
         {
-            ChatMessage result = null;
+            var query = @"SELECT TOP 1 * FROM dbo.ChatMessages
+                        WHERE IsDeleted = 0 AND Id = @ChatMessageId";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT TOP 1 * FROM dbo.ChatMessages
-                                    WHERE IsDeleted = 0 AND Id = @ChatMessageId";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "ChatMessageId",
                     Value = chatMessageId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            result = new ChatMessage();
-                            result = result.ParseFromDataReader(reader);
-                        }
-                    }
                 }
-            }
+            };
 
-            return result;
+            return GetRecord<ChatMessage>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -476,39 +362,21 @@ namespace InstaMelody.Data
         /// <returns></returns>
         private ChatUser GetChatUserById(int chatUserId)
         {
-            ChatUser result = null;
+            var query = @"SELECT TOP 1 * FROM dbo.ChatUsers
+                         WHERE IsDeleted = 0 AND Id = @ChatUserId";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT TOP 1 * FROM dbo.ChatUsers
-                                    WHERE IsDeleted = 0 AND Id = @ChatUserId";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "ChatUserId",
                     Value = chatUserId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            result = new ChatUser();
-                            result = result.ParseFromDataReader(reader);
-                        }
-                    }
                 }
-            }
+            };
 
-            return result;
+            return GetRecord<ChatUser>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -517,32 +385,29 @@ namespace InstaMelody.Data
         /// <param name="chatId">The chat identifier.</param>
         private void UpdateChatDateModified(Guid chatId)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE dbo.Chats
-                                    SET DateModified = @DateModified
-                                    WHERE IsDeleted = 0 AND Id = @ChatId";
+            var query = @"UPDATE dbo.Chats
+                        SET DateModified = @DateModified
+                        WHERE IsDeleted = 0 AND Id = @ChatId";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "ChatId",
                     Value = chatId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "DateModified",
                     Value = DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            ExecuteNonQuery(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -551,25 +416,22 @@ namespace InstaMelody.Data
         /// <param name="chatId">The chat identifier.</param>
         private void DeleteChatMessages(Guid chatId)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE dbo.ChatMessages
-                                    SET IsDeleted = 1
-                                    WHERE IsDeleted = 0 AND ChatId = @ChatId";
+            var query = @"UPDATE dbo.ChatMessages
+                        SET IsDeleted = 1
+                        WHERE IsDeleted = 0 AND ChatId = @ChatId";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "ChatId",
                     Value = chatId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            ExecuteNonQuery(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -578,25 +440,22 @@ namespace InstaMelody.Data
         /// <param name="chatId">The chat identifier.</param>
         private void DeleteChatUsers(Guid chatId)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE dbo.ChatUsers
-                                    SET IsDeleted = 1
-                                    WHERE IsDeleted = 0 AND ChatId = @ChatId";
+            var query = @"UPDATE dbo.ChatUsers
+                        SET IsDeleted = 1
+                        WHERE IsDeleted = 0 AND ChatId = @ChatId";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "ChatId",
                     Value = chatId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            ExecuteNonQuery(query, parameters.ToArray());
         }
 
         #endregion Private Methods

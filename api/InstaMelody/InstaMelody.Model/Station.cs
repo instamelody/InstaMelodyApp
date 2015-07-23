@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Data.SqlClient;
 
 namespace InstaMelody.Model
 {
@@ -28,30 +27,22 @@ namespace InstaMelody.Model
 
         public Image Image { get; set; }
 
+        public IList<Category> Categories { get; set; }
+
+        public IList<User> Followers { get; set; }
+
         public IList<StationMessage> Messages { get; set; }
-
-        public IList<StationFollower> Followers { get; set; }
-
-        public IList<StationCategory> Categories { get; set; } 
 
         #endregion Relationship Properties
 
         /// <summary>
-        /// Parses from data reader.
+        /// Clones this instance.
         /// </summary>
-        /// <param name="dataReader">The data reader.</param>
         /// <returns></returns>
-        public Station ParseFromDataReader(SqlDataReader dataReader)
+        public Station Clone()
         {
-            this.Id = Convert.ToInt32(dataReader["Id"]);
-            this.UserId = (Guid) dataReader["UserId"];
-            this.StationImageId = Convert.ToInt32(dataReader["StationImageId"]);
-            this.Name = Convert.ToString(dataReader["Name"]);
-            this.DateCreated = Convert.ToDateTime(dataReader["DateCreated"]);
-            this.DateModified = Convert.ToDateTime(dataReader["DateModified"]);
-            this.IsDeleted = Convert.ToBoolean(dataReader["IsDeleted"]);
-
-            return this;
+            var result = (Station)this.MemberwiseClone();
+            return result;
         }
     }
 }

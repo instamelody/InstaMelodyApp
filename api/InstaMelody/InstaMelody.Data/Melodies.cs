@@ -6,6 +6,7 @@ using InstaMelody.Model;
 
 namespace InstaMelody.Data
 {
+    // TODO: refactor DAL
     public class Melodies : DataAccess
     {
         #region Melodies
@@ -371,7 +372,7 @@ namespace InstaMelody.Data
                 var cmd = conn.CreateCommand();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = @"UPDATE dbo.Melodies
-                                    SET IsDeleted = 1
+                                    SET IsDeleted = 1, DateModified = @DateModified
                                     WHERE IsDeleted = 0 AND Id = @MelodyId";
 
                 cmd.Parameters.Add(new SqlParameter
@@ -379,6 +380,13 @@ namespace InstaMelody.Data
                     ParameterName = "MelodyId",
                     Value = melodyId,
                     SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                });
+                cmd.Parameters.Add(new SqlParameter
+                {
+                    ParameterName = "DateModified",
+                    Value = DateTime.UtcNow,
+                    SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
                 });
 

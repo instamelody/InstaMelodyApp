@@ -16,37 +16,34 @@ namespace InstaMelody.Data
         /// <exception cref="System.Data.DataException">Failed to create a new File Group.</exception>
         public FileGroup CreateFileGroup(string name)
         {
-            using (var conn = new SqlConnection(ConnString))
+            var query = @"INSERT INTO dbo.FileGroups
+                        (Name, DateCreated, DateModified)
+                        VALUES (@Name, @DateCreated, @DateCreated)
+
+                        SELECT SCOPE_IDENTITY() AS [SCOPE_IDENTITY];";
+
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"INSERT INTO dbo.FileGroups
-                                    (Name, DateCreated, DateModified)
-                                    VALUES (@Name, @DateCreated, @DateCreated)
-
-                                    SELECT SCOPE_IDENTITY() AS [SCOPE_IDENTITY];";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "Name",
                     Value = name,
                     SqlDbType = SqlDbType.VarChar,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "DateCreated",
                     Value = DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                var obj = cmd.ExecuteScalar();
-                if (!Convert.IsDBNull(obj))
-                {
-                    return this.GetFileGroupById(Convert.ToInt32(obj));
                 }
+            };
+
+            var obj = ExecuteScalar(query, parameters.ToArray());
+            if (!Convert.IsDBNull(obj))
+            {
+                return GetFileGroupById(Convert.ToInt32(obj));
             }
 
             throw new DataException("Failed to create a new File Group.");
@@ -58,32 +55,10 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public IList<FileGroup> GetFileGroups()
         {
-            List<FileGroup> results = null;
+            var query = @"SELECT * FROM dbo.FileGroups
+                        WHERE IsDeleted = 0";
 
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT * FROM dbo.FileGroups
-                                    WHERE IsDeleted = 0";
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        results = new List<FileGroup>();
-                        while (reader.Read())
-                        {
-                            var result = new FileGroup();
-                            result = result.ParseFromDataReader(reader);
-                            results.Add(result);
-                        }
-                    }
-                }
-            }
-
-            return results;
+            return GetRecordSet<FileGroup>(query);
         }
 
         /// <summary>
@@ -93,38 +68,21 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public FileGroup GetFileGroupById(int fileGroupId)
         {
-            FileGroup result = null;
+            var query = @"SELECT TOP 1 * FROM dbo.FileGroups
+                        WHERE IsDeleted = 0 AND Id = @FileGroupId";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT TOP 1 * FROM dbo.FileGroups
-                                    WHERE IsDeleted = 0 AND Id = @FileGroupId";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "FileGroupId",
                     Value = fileGroupId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            result = new FileGroup();
-                            result = result.ParseFromDataReader(reader);
-                        }
-                    }
                 }
-            }
+            };
 
-            return result;
+            return GetRecord<FileGroup>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -134,38 +92,21 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public FileGroup GetFileGroupByName(string name)
         {
-            FileGroup result = null;
+            var query = @"SELECT TOP 1 * FROM dbo.FileGroups
+                        WHERE IsDeleted = 0 AND Name = @Name";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT TOP 1 * FROM dbo.FileGroups
-                                    WHERE IsDeleted = 0 AND Name = @Name";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "Name",
                     Value = name,
                     SqlDbType = SqlDbType.VarChar,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            result = new FileGroup();
-                            result = result.ParseFromDataReader(reader);
-                        }
-                    }
                 }
-            }
+            };
 
-            return result;
+            return GetRecord<FileGroup>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -175,29 +116,27 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public FileGroup UpdateFileGroup(FileGroup fileGroup)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE dbo.FileGroups
-                                    SET Name = @Name, DateModified = @DateModified
-                                    WHERE Id = @FileGroupId AND IsDeleted = 0";
+            var query = @"UPDATE dbo.FileGroups
+                        SET Name = @Name, DateModified = @DateModified
+                        WHERE Id = @FileGroupId AND IsDeleted = 0";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "FileGroupId",
                     Value = fileGroup.Id,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "Name",
                     Value = fileGroup.Name,
                     SqlDbType = SqlDbType.VarChar,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "DateModified",
                     Value = fileGroup.DateModified > DateTime.MinValue
@@ -205,13 +144,11 @@ namespace InstaMelody.Data
                         : DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
-
-            return this.GetFileGroupById(fileGroup.Id);
+            ExecuteNonQuery(query, parameters.ToArray());
+            return GetFileGroupById(fileGroup.Id);
         }
 
         /// <summary>
@@ -220,28 +157,29 @@ namespace InstaMelody.Data
         /// <param name="fileGroupId">The file group identifier.</param>
         public void DeleteFileGroup(int fileGroupId)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE dbo.FileGroups
-                                    SET IsDeleted = 1
-                                    WHERE Id = @FileGroupId AND IsDeleted = 0";
+            var query = @"UPDATE dbo.FileGroups
+                        SET IsDeleted = 1, DateModified = @DateModified
+                        WHERE Id = @FileGroupId AND IsDeleted = 0";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "FileGroupId",
                     Value = fileGroupId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
+                },
+                new SqlParameter
+                {
+                    ParameterName = "DateModified",
+                    Value = DateTime.UtcNow,
+                    SqlDbType = SqlDbType.DateTime,
+                    Direction = ParameterDirection.Input
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
-
-            var melodyDal = new Melodies();
-            melodyDal.DeleteMelodyFileGroupsByFileGroupId(fileGroupId);
+            ExecuteNonQuery(query, parameters.ToArray());
         }
     }
 }

@@ -282,70 +282,70 @@ GO
 
 -- -- START STATIONS
 
--- CREATE TABLE dbo.Stations
--- 	(Id int IDENTITY(1,1) PRIMARY KEY,
--- 	UserId UNIQUEIDENTIFIER NOT NULL,
--- 	CONSTRAINT FK_Stations_UserId FOREIGN KEY (UserId)
--- 		REFERENCES Users (Id),
---     StationImageId int NULL,
---     CONSTRAINT FK_Stations_StationImageId FOREIGN KEY (StationImageId)
--- 		REFERENCES Images (Id),
--- 	Name varchar(128) NOT NULL,
--- 	DateCreated datetime NOT NULL,
--- 	DateModified datetime NOT NULL,
---	IsDeleted bit NOT NULL DEFAULT 0)
--- GO
+CREATE TABLE dbo.Stations
+	(Id int IDENTITY(1,1) PRIMARY KEY,
+	UserId UNIQUEIDENTIFIER NOT NULL,
+	CONSTRAINT FK_Stations_UserId FOREIGN KEY (UserId)
+		REFERENCES Users (Id),
+    StationImageId int NULL,
+    CONSTRAINT FK_Stations_StationImageId FOREIGN KEY (StationImageId)
+		REFERENCES Images (Id),
+	Name varchar(128) NOT NULL,
+	DateCreated datetime NOT NULL,
+	DateModified datetime NOT NULL,
+	IsDeleted bit NOT NULL DEFAULT 0)
+GO
 
--- CREATE TABLE dbo.StationCategories
--- 	(Id int IDENTITY(1,1) PRIMARY KEY,
--- 	StationId int NOT NULL,
--- 	CONSTRAINT FK_StationCategories_StationId FOREIGN KEY (StationId)
--- 		REFERENCES Stations (Id),
--- 	CategoryId int NOT NULL,
--- 	CONSTRAINT FK_StationCategories_CategoryId FOREIGN KEY (CategoryId)
--- 		REFERENCES Categories (Id),
--- 	DateCreated datetime NOT NULL,
---	IsDeleted bit NOT NULL DEFAULT 0)
--- GO
+CREATE TABLE dbo.StationCategories
+	(Id int IDENTITY(1,1) PRIMARY KEY,
+	StationId int NOT NULL,
+	CONSTRAINT FK_StationCategories_StationId FOREIGN KEY (StationId)
+		REFERENCES Stations (Id),
+	CategoryId int NOT NULL,
+	CONSTRAINT FK_StationCategories_CategoryId FOREIGN KEY (CategoryId)
+		REFERENCES Categories (Id),
+	DateCreated datetime NOT NULL,
+	IsDeleted bit NOT NULL DEFAULT 0)
+GO
 
--- CREATE TABLE dbo.StationMessages
--- 	(Id int IDENTITY(1,1) PRIMARY KEY,
--- 	StationId int NOT NULL,
--- 	CONSTRAINT FK_StationMessages_StationId FOREIGN KEY (StationId)
--- 		REFERENCES Stations (Id),
--- 	MessageId UNIQUEIDENTIFIER NOT NULL,
--- 	CONSTRAINT FK_StationMessages_MessageId FOREIGN KEY (MessageId)
--- 		REFERENCES Messages (Id),
--- 	IsPrivate bit NOT NULL DEFAULT 0,
--- 	DateCreated datetime NOT NULL,
--- 	DateModified datetime NOT NULL,
---	IsDeleted bit NOT NULL DEFAULT 0)
--- GO
+CREATE TABLE dbo.StationFollowers
+	(Id int IDENTITY(1,1) PRIMARY KEY,
+	StationId int NOT NULL,
+	CONSTRAINT FK_StationFollowers_StationId FOREIGN KEY (StationId)
+		REFERENCES Stations (Id),
+	UserId UNIQUEIDENTIFIER NOT NULL,
+	CONSTRAINT FK_StationFollowers_UserId FOREIGN KEY (UserId)
+		REFERENCES Users (Id),
+	DateCreated datetime NOT NULL,
+	IsDeleted bit NOT NULL DEFAULT 0)
+GO
 
--- CREATE TABLE dbo.StationMessageUserLikes
--- 	(Id int IDENTITY(1,1) PRIMARY KEY,
--- 	StationMessageId int NOT NULL,
--- 	CONSTRAINT FK_StationMessageUserLikes_StationMessageId FOREIGN KEY (StationMessageId)
--- 		REFERENCES StationMessages (Id),
--- 	UserId UNIQUEIDENTIFIER NOT NULL,
--- 	CONSTRAINT FK_StationMessageUserLikes_UserId FOREIGN KEY (UserId)
--- 		REFERENCES Users (Id),
--- 	DateCreated datetime NOT NULL,
--- 	DateModified datetime NOT NULL,
---	IsDeleted bit NOT NULL DEFAULT 0)
--- GO
+CREATE TABLE dbo.StationMessages
+	(Id int IDENTITY(1,1) PRIMARY KEY,
+	StationId int NOT NULL,
+	CONSTRAINT FK_StationMessages_StationId FOREIGN KEY (StationId)
+		REFERENCES Stations (Id),
+	MessageId UNIQUEIDENTIFIER NOT NULL,
+	CONSTRAINT FK_StationMessages_MessageId FOREIGN KEY (MessageId)
+		REFERENCES Messages (Id),
+	IsPrivate bit NOT NULL DEFAULT 0,
+	DateCreated datetime NOT NULL,
+	DateModified datetime NOT NULL,
+	IsDeleted bit NOT NULL DEFAULT 0)
+GO
 
--- CREATE TABLE dbo.StationFollowers
--- 	(Id int IDENTITY(1,1) PRIMARY KEY,
--- 	StationId int NOT NULL,
--- 	CONSTRAINT FK_StationFollowers_StationId FOREIGN KEY (StationId)
--- 		REFERENCES Stations (Id),
--- 	UserId UNIQUEIDENTIFIER NOT NULL,
--- 	CONSTRAINT FK_StationFollowers_UserId FOREIGN KEY (UserId)
--- 		REFERENCES Users (Id),
--- 	DateCreated datetime NOT NULL,
---	IsDeleted bit NOT NULL DEFAULT 0)
--- GO
+CREATE TABLE dbo.StationMessageUserLikes
+	(Id int IDENTITY(1,1) PRIMARY KEY,
+	StationMessageId int NOT NULL,
+	CONSTRAINT FK_StationMessageUserLikes_StationMessageId FOREIGN KEY (StationMessageId)
+		REFERENCES StationMessages (Id),
+	UserId UNIQUEIDENTIFIER NOT NULL,
+	CONSTRAINT FK_StationMessageUserLikes_UserId FOREIGN KEY (UserId)
+		REFERENCES Users (Id),
+	DateCreated datetime NOT NULL,
+	DateModified datetime NOT NULL,
+	IsDeleted bit NOT NULL DEFAULT 0)
+GO
 
 -- -- END STATIONS
 

@@ -286,15 +286,12 @@ namespace InstaMelody.Business
         /// Creates the loop.
         /// </summary>
         /// <param name="loop">The loop.</param>
-        /// <param name="newPart">The new part.</param>
         /// <param name="sessionToken">The session token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentException">Cannot create a new Loop without a Loop name.</exception>
         /// <exception cref="System.Data.DataException"></exception>
-        public object CreateLoop(UserLoop loop, UserLoopPart newPart, Guid sessionToken)
+        public object CreateLoop(UserLoop loop, Guid sessionToken)
         {
-            // TODO: test this function
-
             var sessionUser = Utilities.GetUserBySession(sessionToken);
             
             var dal = new UserLoops();
@@ -323,28 +320,27 @@ namespace InstaMelody.Business
             });
 
             // create loop parts
-            var createdPart = new UserLoopPart(); 
             try
             {
-                // get or create new melody
-                var createdMelody = this.GetExistingOrCreateNewUserMelody(newPart.Melody, sessionUser);
-                var upload = createdMelody as ApiUserMelodyFileUpload;
-                var melody = (upload != null)
-                    ? upload.UserMelody
-                    : ((UserMelody) createdMelody);
-                createdPart = this.CreateUserLoopPart(createdLoop.Id, melody.Id, newPart);
+                var parts = this.CreateUserLoopParts(sessionUser, createdLoop.Id, loop.Parts);
+
+                var uploadTokens = (from tuple in parts where tuple.Item2 != null select tuple.Item2).ToList();
+                if (uploadTokens.Any())
+                {
+                    return new ApiLoopFileUpload
+                    {
+                        Loop = this.GetUserLoop(createdLoop),
+                        FileUploadTokens = uploadTokens
+                    };
+                }
+
+                return this.GetUserLoop(createdLoop);
             }
             catch (Exception)
             {
                 dal.DeleteUserLoop(createdLoop.Id);
-                if (!createdPart.Id.Equals(default(int)))
-                {
-                    dal.DeleteLoopPart(createdPart.Id);
-                }
                 throw;
             }
-
-            return this.GetUserLoop(createdLoop);
         }
 
         /// <summary>
@@ -354,38 +350,36 @@ namespace InstaMelody.Business
         /// <param name="newPart">The new part.</param>
         /// <param name="sessionToken">The session token.</param>
         /// <returns></returns>
-        public UserLoop AttachPartToLoop(UserLoop loop, UserLoopPart newPart, Guid sessionToken)
+        public object AttachPartToLoop(UserLoop loop, UserLoopPart newPart, Guid sessionToken)
         {
-            // TODO: test this function
-
             var sessionUser = Utilities.GetUserBySession(sessionToken);
 
             // get loop
             var foundLoop = this.GetUserLoop(loop);
 
-            var createdPart = new UserLoopPart();
+            // create loop parts
             try
             {
-                // get or create new melody
-                var createdMelody = this.GetExistingOrCreateNewUserMelody(newPart.Melody, sessionUser);
-                var upload = createdMelody as ApiUserMelodyFileUpload;
-                var melody = (upload != null)
-                    ? upload.UserMelody
-                    : ((UserMelody)createdMelody);
-                createdPart = this.CreateUserLoopPart(foundLoop.Id, melody.Id, newPart);
+                var parts = this.CreateUserLoopParts(sessionUser, foundLoop.Id, new List<UserLoopPart> { newPart });
+
+                var uploadTokens = (from tuple in parts where tuple.Item2 != null select tuple.Item2).ToList();
+                if (uploadTokens.Any())
+                {
+                    return new ApiLoopFileUpload
+                    {
+                        Loop = this.GetUserLoop(foundLoop),
+                        FileUploadTokens = uploadTokens
+                    };
+                }
+
+                return this.GetUserLoop(foundLoop);
             }
             catch (Exception)
             {
                 var dal = new UserLoops();
                 dal.DeleteUserLoop(foundLoop.Id);
-                if (!createdPart.Id.Equals(default(int)))
-                {
-                    dal.DeleteLoopPart(createdPart.Id);
-                }
                 throw;
             }
-
-            return this.GetUserLoop(foundLoop);
         }
 
         /// <summary>
@@ -420,6 +414,8 @@ namespace InstaMelody.Business
 
             var dal = new UserLoops();
             dal.DeleteLoopPart(foundPart.Id);
+
+            // TODO: reindex loop parts before returning result
 
             return this.GetUserLoop(foundLoop);
         }
@@ -630,11 +626,11 @@ namespace InstaMelody.Business
             // get user melody
             foreach (var userLoopPart in results)
             {
-                userLoopPart.Melody = 
+                userLoopPart.UserMelody = 
                     this.GetUserMelody(new UserMelody
                     {
                         Id = userLoopPart.UserMelodyId
-                    });
+                    }, getDeletedMelodies: true);
             }
 
             return results;
@@ -669,47 +665,79 @@ namespace InstaMelody.Business
         }
 
         /// <summary>
+        /// Creates the user loop parts.
+        /// </summary>
+        /// <param name="owner">The owner.</param>
+        /// <param name="loopId">The loop identifier.</param>
+        /// <param name="parts">The parts.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException">Each Part of a Loop must contain a new or existing Melody.</exception>
+        private IList<Tuple<UserLoopPart, FileUploadToken>> CreateUserLoopParts(User owner, Guid loopId, IList<UserLoopPart> parts)
+        {
+            var createdParts = new List<Tuple<UserLoopPart, FileUploadToken>>();
+            foreach (var part in parts)
+            {
+                if (part.UserMelody == null)
+                {
+                    throw new ArgumentException("Each Part of a Loop must contain a new or existing Melody.");
+                }
+                var createdMelody = this.GetExistingOrCreateNewUserMelody(part.UserMelody, owner);
+                var upload = createdMelody as ApiUserMelodyFileUpload;
+                var melody = (upload != null)
+                    ? upload.UserMelody
+                    : ((UserMelody)createdMelody);
+                var token = (upload != null)
+                    ? upload.FileUploadToken
+                    : null;
+                var createdPart = this.CreateUserLoopPart(loopId, melody.Id, part);
+                createdParts.Add(new Tuple<UserLoopPart, FileUploadToken>(createdPart, token));
+            }
+            return createdParts;
+        }
+
+        /// <summary>
         /// Creates the user loop part.
         /// </summary>
         /// <param name="loopId">The loop identifier.</param>
         /// <param name="userMelodyId">The user melody identifier.</param>
         /// <param name="part">The part.</param>
-        /// <param name="isFirstPart">if set to <c>true</c> [is first part].</param>
         /// <returns></returns>
         /// <exception cref="System.Data.DataException">Failed to create User Loop part.</exception>
-        private UserLoopPart CreateUserLoopPart(Guid loopId, Guid userMelodyId, UserLoopPart part, bool isFirstPart = false)
+        private UserLoopPart CreateUserLoopPart(Guid loopId, Guid userMelodyId, UserLoopPart part)
         {
             var dal = new UserLoops();
+            var lastIndex = dal.GetLastOrderIndexForLoop(loopId);
+
             var newPart = new UserLoopPart
             {
                 UserLoopId = loopId,
                 UserMelodyId = userMelodyId,
                 StartTime = part.StartTime ?? TimeSpan.Zero,
-                StartEffect = (part.StartEffect == LoopEffectsEnum.Unknown) 
-                    ? Settings.Default.LoopPartFirstStartEffect 
+                StartEffect = (part.StartEffect == LoopEffectsEnum.Unknown)
+                    ? Settings.Default.LoopPartFirstStartEffect
                     : part.StartEffect,
                 StartEffectDuration = part.StartEffectDuration ?? Settings.Default.LoopPartFirstStartDuration,
                 EndTime = part.EndTime,
-                EndEffect = (part.EndEffect == LoopEffectsEnum.Unknown) 
+                EndEffect = (part.EndEffect == LoopEffectsEnum.Unknown)
                     ? Settings.Default.LoopPartEndEffect
                     : part.EndEffect,
                 EndEffectDuration = part.EndEffectDuration ?? Settings.Default.LoopPartEndEffectDuration,
-                OrderIndex = 1,
+                OrderIndex = lastIndex + 1,
                 DateCreated = DateTime.UtcNow
             };
 
-            if (!isFirstPart)
+            if (lastIndex > 0)
             {
-                var lastIndex = dal.GetLastOrderIndexForLoop(loopId);
-                newPart.OrderIndex = lastIndex + 1;
                 newPart.StartTime = part.StartTime ?? TimeSpan.Zero;
-                newPart.StartEffect = (part.StartEffect == LoopEffectsEnum.Unknown) 
+                newPart.StartEffect = (part.StartEffect == LoopEffectsEnum.Unknown)
                     ? Settings.Default.LoopPartStartEffect
                     : part.StartEffect;
                 newPart.StartEffectDuration = part.StartEffectDuration ?? Settings.Default.LoopPartStartEffectDuration;
             }
 
-            var createdPart = dal.CreateUserLoopPart(part);
+            dal.UpdateUserLoopDateModified(loopId);
+
+            var createdPart = dal.CreateUserLoopPart(newPart);
             if (createdPart == null)
             {
                 throw new DataException("Failed to create User Loop part.");
@@ -726,17 +754,18 @@ namespace InstaMelody.Business
         /// Gets the user melody.
         /// </summary>
         /// <param name="melody">The melody.</param>
+        /// <param name="getDeletedMelodies">if set to <c>true</c> [get deleted melodies].</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentException">Could not find the requested Melody with the provided information.</exception>
-        internal UserMelody GetUserMelody(UserMelody melody)
+        internal UserMelody GetUserMelody(UserMelody melody, bool getDeletedMelodies = false)
         {
             var dal = new UserMelodies();
 
-            var result = dal.GetUserMelodyById(melody.Id);
+            var result = dal.GetUserMelodyById(melody.Id, getDeletedMelodies);
             if (result == null
                 && (!melody.UserId.Equals(default(Guid)) && !string.IsNullOrWhiteSpace(melody.Name)))
             {
-                result = dal.GetUserMelodyByUserIdAndName(melody.UserId, melody.Name);
+                result = dal.GetUserMelodyByUserIdAndName(melody.UserId, melody.Name, getDeletedMelodies);
             }
 
             if (result == null)

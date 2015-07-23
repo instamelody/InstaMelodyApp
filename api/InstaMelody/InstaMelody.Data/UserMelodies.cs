@@ -6,6 +6,7 @@ using InstaMelody.Model;
 
 namespace InstaMelody.Data
 {
+    // TODO: refactor DAL
     public class UserMelodies : DataAccess
     {
         #region UserMelodies
@@ -69,8 +70,9 @@ namespace InstaMelody.Data
         /// Gets the user melody by identifier.
         /// </summary>
         /// <param name="userMelodyId">The user melody identifier.</param>
+        /// <param name="showDeleted">if set to <c>true</c> [show deleted].</param>
         /// <returns></returns>
-        public UserMelody GetUserMelodyById(Guid userMelodyId)
+        public UserMelody GetUserMelodyById(Guid userMelodyId, bool showDeleted = false)
         {
             UserMelody result = null;
 
@@ -79,7 +81,11 @@ namespace InstaMelody.Data
                 var cmd = conn.CreateCommand();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = @"SELECT TOP 1 * FROM dbo.UserMelodies
-                                    WHERE IsDeleted = 0 AND Id = @UserMelodyId";
+                                    WHERE Id = @UserMelodyId";
+                if (!showDeleted)
+                {
+                    cmd.CommandText += @" AND IsDeleted = 0";
+                }
 
                 cmd.Parameters.Add(new SqlParameter
                 {
@@ -198,8 +204,9 @@ namespace InstaMelody.Data
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <param name="name">The name.</param>
+        /// <param name="showDeleted">if set to <c>true</c> [show deleted].</param>
         /// <returns></returns>
-        public UserMelody GetUserMelodyByUserIdAndName(Guid userId, string name)
+        public UserMelody GetUserMelodyByUserIdAndName(Guid userId, string name, bool showDeleted = false)
         {
             UserMelody result = null;
 
@@ -208,8 +215,12 @@ namespace InstaMelody.Data
                 var cmd = conn.CreateCommand();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = @"SELECT TOP 1 * FROM dbo.UserMelodies
-                                    WHERE IsDeleted = 0 AND UserId = @UserId
+                                    WHERE UserId = @UserId
                                         AND Name = @Name";
+                if (!showDeleted)
+                {
+                    cmd.CommandText += @" AND IsDeleted = 0";
+                }
 
                 cmd.Parameters.Add(new SqlParameter
                 {

@@ -20,21 +20,5 @@ namespace InstaMelody.Model
         public User User { get; set; }
 
         #endregion Relationship Properties
-
-        /// <summary>
-        /// Parses from data reader.
-        /// </summary>
-        /// <param name="dataReader">The data reader.</param>
-        /// <returns></returns>
-        public StationFollower ParseFromDataReader(SqlDataReader dataReader)
-        {
-            this.Id = Convert.ToInt32(dataReader["Id"]);
-            this.StationId = Convert.ToInt32(dataReader["StationId"]);
-            this.UserId = (Guid)dataReader["UserId"];
-            this.DateCreated = Convert.ToDateTime(dataReader["DateCreated"]);
-            this.IsDeleted = Convert.ToBoolean(dataReader["IsDeleted"]);
-
-            return this;
-        }
     }
 }

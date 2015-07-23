@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.SqlClient;
 
 namespace InstaMelody.Model
 {
@@ -22,22 +21,5 @@ namespace InstaMelody.Model
         public Message Message { get; set; }
 
         #endregion Relationship Properties
-
-        /// <summary>
-        /// Parses from data reader.
-        /// </summary>
-        /// <param name="dataReader">The data reader.</param>
-        /// <returns></returns>
-        public ChatMessage ParseFromDataReader(SqlDataReader dataReader)
-        {
-            this.Id = Convert.ToInt32(dataReader["Id"]);
-            this.ChatId = (Guid)dataReader["ChatId"];
-            this.MessageId = (Guid)dataReader["MessageId"];
-            this.SenderId = (Guid)dataReader["SenderId"];
-            this.DateCreated = Convert.ToDateTime(dataReader["DateCreated"]);
-            this.IsDeleted = Convert.ToBoolean(dataReader["IsDeleted"]);
-
-            return this;
-        }
     }
 }

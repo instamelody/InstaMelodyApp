@@ -155,14 +155,9 @@
         public const string RouteLoop = "Loop";
 
         /// <summary>
-        /// The route loop add
+        /// The route loop attach
         /// </summary>
-        public const string RouteLoopAdd = "Loop/Add";
-
-        /// <summary>
-        /// The route loop update
-        /// </summary>
-        public const string RouteLoopUpdate = "Loop/Update";
+        public const string RouteLoopAttach = "Loop/Attach";
 
         /// <summary>
         /// The route loop delete
@@ -203,6 +198,30 @@
         public const string RouteChatRemove = "Chat/Delete";
 
         #endregion Messages Routes
+
+        #region Stations Routes
+
+        /// <summary>
+        /// The route remove categories
+        /// </summary>
+        public const string RouteDeleteCategories = "Delete/Categories";
+
+        /// <summary>
+        /// The route follow
+        /// </summary>
+        public const string RouteFollow = "Follow";
+
+        /// <summary>
+        /// The route unfollow
+        /// </summary>
+        public const string RouteUnfollow = "Unfollow";
+
+        /// <summary>
+        /// The route followers
+        /// </summary>
+        public const string RouteFollowers = "Followers";
+
+        #endregion Stations Routes
 
         #region File Upload Routes
 

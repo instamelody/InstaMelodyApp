@@ -11,6 +11,8 @@ namespace InstaMelody.Model.ApiModels
 
         public Category Category { get; set; }
 
+        public IList<Category> Categories { get; set; } 
+
         public UserMelody UserMelody { get; set; }
 
         public Melody Melody { get; set; }
@@ -30,6 +32,8 @@ namespace InstaMelody.Model.ApiModels
         public UserPassword UserPassword { get; set; }
 
         public Image Image { get; set; }
+
+        public Station Station { get; set; }
 
         #endregion Relationship Properties
     }

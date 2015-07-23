@@ -21,61 +21,58 @@ namespace InstaMelody.Data
         {
             var token = Guid.NewGuid();
 
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"INSERT INTO dbo.FileUploadTokens
-                                    (Token, UserId, FileName, MediaType, DateExpires, DateCreated)
-                                    VALUES (@Token, @UserId, @FileName, @MediaType, @DateExpires, @DateCreated)";
+            var query = @"INSERT INTO dbo.FileUploadTokens
+                        (Token, UserId, FileName, MediaType, DateExpires, DateCreated)
+                        VALUES (@Token, @UserId, @FileName, @MediaType, @DateExpires, @DateCreated)";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "Token",
                     Value = token,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "UserId",
                     Value = userId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "FileName",
                     Value = fileName,
                     SqlDbType = SqlDbType.VarChar,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "MediaType",
                     Value = mediaType.ToString(),
                     SqlDbType = SqlDbType.VarChar,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "DateExpires",
                     Value = expires,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "DateCreated",
                     Value = DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
-            return this.GetTokenDetails(token);
+            ExecuteNonQuery(query, parameters.ToArray());
+            return GetTokenDetails(token);
         }
 
         /// <summary>
@@ -85,38 +82,21 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public FileUploadToken GetTokenDetails(Guid token)
         {
-            FileUploadToken result = null;
+            var query = @"SELECT TOP 1 * FROM dbo.FileUploadTokens
+                        WHERE Token = @Token";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT TOP 1 * FROM dbo.FileUploadTokens
-                                    WHERE Token = @Token";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "Token",
                     Value = token,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            result = new FileUploadToken();
-                            result = result.ParseFromDataReader(reader);
-                        }
-                    }
                 }
-            }
+            };
 
-            return result;
+            return GetRecord<FileUploadToken>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -126,40 +106,21 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public IList<FileUploadToken> GetTokensForUserId(Guid userId)
         {
-            List<FileUploadToken> results = null;
+            var query = @"SELECT * FROM dbo.FileUploadTokens
+                        WHERE UserId = @UserId";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT * FROM dbo.FileUploadTokens
-                                    WHERE UserId = @UserId";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "UserId",
                     Value = userId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        results = new List<FileUploadToken>();
-                        while (reader.Read())
-                        {
-                            var result = new FileUploadToken();
-                            result = result.ParseFromDataReader(reader);
-                            results.Add(result);
-                        }
-                    }
                 }
-            }
+            };
 
-            return results;
+            return GetRecordSet<FileUploadToken>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -171,53 +132,36 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public FileUploadToken FindToken(Guid userId, string fileName, MediaTypeEnum mediaType)
         {
-            FileUploadToken result = null;
+            var query = @"SELECT TOP 1 * FROM dbo.FileUploadTokens
+                        WHERE UserId = @UserId AND MediaType = @MediaType 
+                        AND FileName = @FileName AND IsDeleted = 0";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT TOP 1 * FROM dbo.FileUploadTokens
-                                    WHERE UserId = @UserId AND MediaType = @MediaType 
-                                        AND FileName = @FileName AND IsDeleted = 0";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "UserId",
                     Value = userId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "MediaType",
                     Value = mediaType.ToString(),
                     SqlDbType = SqlDbType.VarChar,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "FileName",
                     Value = fileName,
                     SqlDbType = SqlDbType.VarChar,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            result = new FileUploadToken();
-                            result = result.ParseFromDataReader(reader);
-                        }
-                    }
                 }
-            }
+            };
 
-            return result;
+            return GetRecord<FileUploadToken>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -226,25 +170,22 @@ namespace InstaMelody.Data
         /// <param name="token">The token.</param>
         public void ExpireToken(Guid token)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE dbo.FileUploadTokens
-                                    SET IsDeleted = 1
-                                    WHERE Token = @Token";
+            var query = @"UPDATE dbo.FileUploadTokens
+                        SET IsDeleted = 1
+                        WHERE Token = @Token";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "Token",
                     Value = token,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            ExecuteNonQuery(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -252,24 +193,21 @@ namespace InstaMelody.Data
         /// </summary>
         public void DeleteOldTokens()
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"DELETE FROM dbo.FileUploadTokens
-                                    WHERE DateExpires < @DateExpires";
+            var query = @"DELETE FROM dbo.FileUploadTokens
+                        WHERE DateExpires < @DateExpires";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "DateExpires",
                     Value = DateTime.UtcNow.AddDays(-1),
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            ExecuteNonQuery(query, parameters.ToArray());
         }
     }
 }

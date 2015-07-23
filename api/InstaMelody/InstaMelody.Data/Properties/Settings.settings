@@ -12,9 +12,9 @@
     <Setting Name="DevConnectionString" Type="(Connection string)" Scope="Application">
       <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;ConnectionString&gt;Data Source=.\SQLEXPRESS;Initial Catalog=InstaMelody;Integrated Security=true;&lt;/ConnectionString&gt;
+  &lt;ConnectionString&gt;Data Source=IMAC6D4E;Integrated Security=true;Initial Catalog=InstaMelody;&lt;/ConnectionString&gt;
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
-      <Value Profile="(Default)">Data Source=.\SQLEXPRESS;Initial Catalog=InstaMelody;Integrated Security=true;</Value>
+      <Value Profile="(Default)">Data Source=IMAC6D4E;Integrated Security=true;Initial Catalog=InstaMelody;</Value>
     </Setting>
   </Settings>
 </SettingsFile>

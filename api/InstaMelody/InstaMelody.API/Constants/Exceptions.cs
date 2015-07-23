@@ -102,7 +102,45 @@
 
         #region Stations Exceptions
 
+        /// <summary>
+        /// The null stations
+        /// </summary>
+        public const string NullStations = "NULL Station request.";
 
+        /// <summary>
+        /// The failed create station
+        /// </summary>
+        public const string FailedCreateStation = "Failed to create a new Station.";
+
+        /// <summary>
+        /// The failed update station
+        /// </summary>
+        public const string FailedUpdateStation = "Failed to update Station: {0}.";
+
+        /// <summary>
+        /// The failed remove categories
+        /// </summary>
+        public const string FailedRemoveCategories = "Failed to remove Categories from Station: {0}.";
+
+        /// <summary>
+        /// The failed follow station
+        /// </summary>
+        public const string FailedFollowStation = "Failed to follow Station: {0}.";
+
+        /// <summary>
+        /// The failed unfollow station
+        /// </summary>
+        public const string FailedUnfollowStation = "Failed to un-follow Station: {0}.";
+
+        /// <summary>
+        /// The failed get stations
+        /// </summary>
+        public const string FailedGetStations = "Failed to get stations.";
+
+        /// <summary>
+        /// The failed get station followers
+        /// </summary>
+        public const string FailedGetStationFollowers = "Failed to get followers list for Station: {0}.";
 
         #endregion Stations Exceptions
 
@@ -161,6 +199,26 @@
         /// The failed create melody
         /// </summary>
         public const string FailedCreateMelody = "Failed to create a new Melody.";
+
+        /// <summary>
+        /// The null loop
+        /// </summary>
+        public const string NullLoop = "NULL Loop request.";
+
+        /// <summary>
+        /// The failed create loop
+        /// </summary>
+        public const string FailedCreateLoop = "Failed to create a new Loop.";
+
+        /// <summary>
+        /// The failed attach to loop
+        /// </summary>
+        public const string FailedAttachToLoop = "Failed to attach a new part to Loop {0}.";
+
+        /// <summary>
+        /// The failed delete loop
+        /// </summary>
+        public const string FailedDeleteLoop = "Failed to delete Loop {0}.";
 
         #endregion Melodies Exceptions
 

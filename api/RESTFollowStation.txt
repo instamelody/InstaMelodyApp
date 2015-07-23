@@ -1,0 +1,29 @@
+//REQUEST - POST /v0.1/Station/Follow
+{
+	"Token": "D18AC064-F500-483F-992D-76C137730DEA",
+	"Station":
+	{
+	    "Id": "5"
+	}
+}
+
+//RESPONSE - HTTP/1.1 200 OK
+{
+  "Id": 5,
+  "UserId": "5651a0ad-b934-4be8-88f2-c380f884adf5",
+  "StationImageId": 6,
+  "Name": "Updated Station",
+  "DateCreated": "2015-07-21T19:03:12.48",
+  "DateModified": "2015-07-21T19:30:20.287",
+  "IsDeleted": false,
+  "Image": {
+    "Id": 6,
+    "FileName": "stationtestimage6.jpg",
+    "DateCreated": "2015-07-21T19:30:20.22",
+    "IsDeleted": false,
+    "FilePath": null
+  },
+  "Categories": null,
+  "Followers": null,
+  "Messages": null
+}

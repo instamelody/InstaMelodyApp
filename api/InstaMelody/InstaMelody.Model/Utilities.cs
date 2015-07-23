@@ -50,17 +50,17 @@ namespace InstaMelody.Model
         {
             var properties = o.GetType().GetProperties();
 
-            foreach (var propertyInfo in properties)
+            foreach (var property in properties)
             {
-                if (ignorePassword && propertyInfo.Name.Equals("Password"))
+                if (ignorePassword && property.Name.Equals("Password"))
                 {
                     continue;
                 }
-                var customAttributes = propertyInfo.GetCustomAttributes(typeof(ValidationAttribute), true);
+                var customAttributes = property.GetCustomAttributes(typeof(ValidationAttribute), true);
                 foreach (var customAttribute in customAttributes)
                 {
                     var validationAttribute = (ValidationAttribute)customAttribute;
-                    var isValid = validationAttribute.IsValid(propertyInfo.GetValue(o, BindingFlags.GetProperty, null, null, null));
+                    var isValid = validationAttribute.IsValid(property.GetValue(o, BindingFlags.GetProperty, null, null, null));
 
                     if (!isValid)
                     {

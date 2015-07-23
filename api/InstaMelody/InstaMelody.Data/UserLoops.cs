@@ -19,36 +19,33 @@ namespace InstaMelody.Data
         {
             var userLoopId = Guid.NewGuid();
 
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"INSERT INTO dbo.UserLoops
-                                    (Id, Name, UserId, DateCreated, DateModified)
-                                    VALUES (@UserMelodyId, @Name, @UserId, @DateCreated, @DateCreated)";
+            var query = @"INSERT INTO dbo.UserLoops (Id, Name, UserId, DateCreated, DateModified)
+                        VALUES (@UserMelodyId, @Name, @UserId, @DateCreated, @DateCreated)";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "UserMelodyId",
                     Value = userLoopId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "UserId",
                     Value = loop.UserId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "Name",
                     Value = loop.Name,
                     SqlDbType = SqlDbType.VarChar,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "DateCreated",
                     Value = loop.DateCreated > DateTime.MinValue
@@ -56,13 +53,11 @@ namespace InstaMelody.Data
                         : DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
-
-            return this.GetUserLoopById(userLoopId);
+            ExecuteNonQuery(query, parameters.ToArray());
+            return GetUserLoopById(userLoopId);
         }
 
         /// <summary>
@@ -72,38 +67,21 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public UserLoop GetUserLoopById(Guid userLoopId)
         {
-            UserLoop result = null;
+            var query = @"SELECT TOP 1 * FROM dbo.UserLoops
+                        WHERE IsDeleted = 0 AND Id = @UserLoopId";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT TOP 1 * FROM dbo.UserLoops
-                                    WHERE IsDeleted = 0 AND Id = @UserLoopId";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "UserLoopId",
                     Value = userLoopId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            result = new UserLoop();
-                            result = result.ParseFromDataReader(reader);
-                        }
-                    }
                 }
-            }
+            };
 
-            return result;
+            return GetRecord<UserLoop>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -113,40 +91,21 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public IList<UserLoop> GetUserLoopsByUserId(Guid userId)
         {
-            List<UserLoop> results = null;
+            var query = @"SELECT * FROM dbo.UserLoops
+                        WHERE IsDeleted = 0 AND UserId = @UserId";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT * FROM dbo.UserLoops
-                                    WHERE IsDeleted = 0 AND UserId = @UserId";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "UserId",
                     Value = userId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        results = new List<UserLoop>();
-                        while (reader.Read())
-                        {
-                            var result = new UserLoop();
-                            result = result.ParseFromDataReader(reader);
-                            results.Add(result);
-                        }
-                    }
                 }
-            }
+            };
 
-            return results;
+            return GetRecordSet<UserLoop>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -157,45 +116,28 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public UserLoop GetUserLoopByUserIdAndName(Guid userId, string name)
         {
-            UserLoop result = null;
+            var query = @"SELECT TOP 1 * FROM dbo.UserLoops
+                        WHERE IsDeleted = 0 AND UserId = @UserId AND Name = @Name";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT TOP 1 * FROM dbo.UserLoops
-                                    WHERE IsDeleted = 0 AND UserId = @UserId AND Name = @Name";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "UserId",
                     Value = userId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "Name",
                     Value = name,
                     SqlDbType = SqlDbType.VarChar,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            result = new UserLoop();
-                            result = result.ParseFromDataReader(reader);
-                        }
-                    }
                 }
-            }
+            };
 
-            return result;
+            return GetRecord<UserLoop>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -205,34 +147,31 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public UserLoop UpdateUserLoopDateModified(Guid userLoopId)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE dbo.UserLoops
-                                    SET DateModified = @DateModified
-                                    WHERE IsDeleted = 0 AND Id = @UserLoopId";
+            var query = @"UPDATE dbo.UserLoops
+                        SET DateModified = @DateModified
+                        WHERE IsDeleted = 0 AND Id = @UserLoopId";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "UserLoopId",
                     Value = userLoopId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "DateModified",
                     Value = DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            ExecuteNonQuery(query, parameters.ToArray());
 
-            return this.GetUserLoopById(userLoopId);
+            return GetUserLoopById(userLoopId);
         }
 
         /// <summary>
@@ -241,27 +180,30 @@ namespace InstaMelody.Data
         /// <param name="userLoopId">The user loop identifier.</param>
         public void DeleteUserLoop(Guid userLoopId)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE dbo.UserLoops
-                                    SET IsDeleted = 1
-                                    WHERE IsDeleted = 0 AND Id = @UserLoopId";
+            var query = @"UPDATE dbo.UserLoops
+                        SET IsDeleted = 1, DateModified = @DateModified
+                        WHERE IsDeleted = 0 AND Id = @UserLoopId";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "UserLoopId",
                     Value = userLoopId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
+                },
+                new SqlParameter
+                {
+                    ParameterName = "DateModified",
+                    Value = DateTime.UtcNow,
+                    SqlDbType = SqlDbType.DateTime,
+                    Direction = ParameterDirection.Input
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
-
-            this.DeletePartsByUserLoopId(userLoopId);
+            ExecuteNonQuery(query, parameters.ToArray());
+            DeletePartsByUserLoopId(userLoopId);
         }
 
         #endregion UserLoops
@@ -275,40 +217,38 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public UserLoopPart CreateUserLoopPart(UserLoopPart part)
         {
-            using (var conn = new SqlConnection(ConnString))
+            var query = @"INSERT INTO dbo.UserLoopParts
+                        (UserLoopId, UserMelodyId, OrderIndex, StartTime, StartEffect,
+                        StartEffectDuration, EndTime, EndEffect, EndEffectDuration, DateCreated)
+                        VALUES (@UserLoopId, @UserMelodyId, @OrderIndex, @StartTime, @StartEffect,
+                        @StartEffectDuration, @EndTime, @EndEffect, @EndEffectDuration, @DateCreated)
+
+                        SELECT SCOPE_IDENTITY() AS [SCOPE_IDENTITY];";
+
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"INSERT INTO dbo.UserLoopParts
-                                    (UserLoopId, UserMelodyId, OrderIndex, StartTime, StartEffect,
-                                    StartEffectDuration, EndTime, EndEffect, EndEffectDuration, DateCreated)
-                                    VALUES (@UserLoopId, @UserMelodyId, @OrderIndex, @StartTime, @StartEffect,
-                                    @StartEffectDuration, @EndTime, @EndEffect, @EndEffectDuration, @DateCreated)
-
-                                    SELECT SCOPE_IDENTITY() AS [SCOPE_IDENTITY];";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "UserLoopId",
                     Value = part.UserLoopId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "UserMelodyId",
                     Value = part.UserMelodyId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "OrderIndex",
                     Value = part.OrderIndex,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "StartTime",
                     Value = part.StartTime != null
@@ -316,15 +256,15 @@ namespace InstaMelody.Data
                             : DBNull.Value,
                     SqlDbType = SqlDbType.BigInt,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "StartEffect",
                     Value = part.StartEffect.ToString(),
                     SqlDbType = SqlDbType.VarChar,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "StartEffectDuration",
                     Value = part.StartEffectDuration != null
@@ -332,8 +272,8 @@ namespace InstaMelody.Data
                             : DBNull.Value,
                     SqlDbType = SqlDbType.BigInt,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "EndTime",
                     Value = part.EndTime != null
@@ -341,15 +281,15 @@ namespace InstaMelody.Data
                             : DBNull.Value,
                     SqlDbType = SqlDbType.BigInt,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "EndEffect",
                     Value = part.EndEffect.ToString(),
                     SqlDbType = SqlDbType.VarChar,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "EndEffectDuration",
                     Value = part.EndEffectDuration != null
@@ -357,8 +297,8 @@ namespace InstaMelody.Data
                             : DBNull.Value,
                     SqlDbType = SqlDbType.BigInt,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "DateCreated",
                     Value = part.DateCreated > DateTime.MinValue
@@ -366,14 +306,13 @@ namespace InstaMelody.Data
                         : DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                var obj = cmd.ExecuteScalar();
-                if (!Convert.IsDBNull(obj))
-                {
-                    return this.GetUserLoopPartById(Convert.ToInt32(obj));
                 }
+            };
+
+            var obj = ExecuteScalar(query, parameters.ToArray()); 
+            if (!Convert.IsDBNull(obj))
+            {
+                return GetUserLoopPartById(Convert.ToInt32(obj));
             }
 
             throw new DataException("Failed to create a new User Loop Part.");
@@ -386,38 +325,21 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public UserLoopPart GetUserLoopPartById(int partId)
         {
-            UserLoopPart result = null;
+            var query = @"SELECT TOP 1 * FROM dbo.UserLoopParts
+                        WHERE IsDeleted = 0 AND Id = @UserLoopPartId";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT TOP 1 * FROM dbo.UserLoopParts
-                                    WHERE IsDeleted = 0 AND Id = @UserLoopPartId";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "UserLoopPartId",
                     Value = partId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            result = new UserLoopPart();
-                            result = result.ParseFromDataReader(reader);
-                        }
-                    }
                 }
-            }
+            };
 
-            return result;
+            return GetRecord<UserLoopPart>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -427,41 +349,22 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public IList<UserLoopPart> GetPartsByUserLoopId(Guid userLoopId)
         {
-            List<UserLoopPart> results = null;
+            var query = @"SELECT * FROM dbo.UserLoopParts
+                        WHERE IsDeleted = 0 AND UserLoopId = @UserLoopId
+                        ORDER BY OrderIndex ASC";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT * FROM dbo.UserLoopParts
-                                    WHERE IsDeleted = 0 AND UserLoopId = @UserLoopId
-                                    ORDER BY OrderIndex ASC";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "UserLoopId",
                     Value = userLoopId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        results = new List<UserLoopPart>();
-                        while (reader.Read())
-                        {
-                            var result = new UserLoopPart();
-                            result = result.ParseFromDataReader(reader);
-                            results.Add(result);
-                        }
-                    }
                 }
-            }
+            };
 
-            return results;
+            return GetRecordSet<UserLoopPart>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -472,30 +375,22 @@ namespace InstaMelody.Data
         /// <exception cref="System.Data.DataException"></exception>
         public int GetLastOrderIndexForLoop(Guid userLoopId)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT MAX(OrderIndex) FROM dbo.UserLoopParts
-                                    WHERE IsDeleted = 0 AND UserLoopId = @UserLoopId";
+            var query = @"SELECT MAX(OrderIndex) FROM dbo.UserLoopParts
+                        WHERE IsDeleted = 0 AND UserLoopId = @UserLoopId";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "UserLoopId",
                     Value = userLoopId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                var obj = cmd.ExecuteScalar();
-                if (!Convert.IsDBNull(obj))
-                {
-                    return Convert.ToInt32(obj);
                 }
-            }
+            };
 
-            throw new DataException();
+            var obj = ExecuteScalar(query, parameters.ToArray());
+            return !Convert.IsDBNull(obj) ? Convert.ToInt32(obj) : 0;
         }
 
         /// <summary>
@@ -504,25 +399,22 @@ namespace InstaMelody.Data
         /// <param name="partId">The part identifier.</param>
         public void DeleteLoopPart(int partId)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE dbo.UserLoopParts
-                                    SET IsDeleted = 1
-                                    WHERE IsDeleted = 0 AND Id = @UserLoopPartId";
+            var query = @"UPDATE dbo.UserLoopParts
+                        SET IsDeleted = 1
+                        WHERE IsDeleted = 0 AND Id = @UserLoopPartId";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "UserLoopPartId",
                     Value = partId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            ExecuteNonQuery(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -531,25 +423,22 @@ namespace InstaMelody.Data
         /// <param name="userLoopId">The user loop identifier.</param>
         private void DeletePartsByUserLoopId(Guid userLoopId)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE dbo.UserLoopParts
-                                    SET IsDeleted = 1
-                                    WHERE IsDeleted = 0 AND UserLoopId = @UserLoopId";
+            var query = @"UPDATE dbo.UserLoopParts
+                        SET IsDeleted = 1
+                        WHERE IsDeleted = 0 AND UserLoopId = @UserLoopId";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "UserLoopId",
                     Value = userLoopId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            ExecuteNonQuery(query, parameters.ToArray());
         }
 
         #endregion UserLoopParts

@@ -6,6 +6,7 @@ using InstaMelody.Model;
 
 namespace InstaMelody.Data
 {
+    // TODO: refactor DAL
     public class Messages : DataAccess
     {
         /// <summary>

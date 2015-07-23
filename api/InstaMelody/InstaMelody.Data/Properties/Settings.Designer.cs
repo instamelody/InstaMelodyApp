@@ -37,7 +37,7 @@ namespace InstaMelody.Data.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.\\SQLEXPRESS;Initial Catalog=InstaMelody;Integrated Security=true;")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=IMAC6D4E;Integrated Security=true;Initial Catalog=InstaMelody;")]
         public string DevConnectionString {
             get {
                 return ((string)(this["DevConnectionString"]));

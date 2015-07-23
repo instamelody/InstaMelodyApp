@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.SqlClient;
 using InstaMelody.Model.Enums;
 
 namespace InstaMelody.Model
@@ -32,49 +31,8 @@ namespace InstaMelody.Model
 
         #region Relationship Properties
 
-        public UserMelody Melody { get; set; }
+        public UserMelody UserMelody { get; set; }
 
         #endregion Relationship Properties
-
-        /// <summary>
-        /// Parses from data reader.
-        /// </summary>
-        /// <param name="dataReader">The data reader.</param>
-        /// <returns></returns>
-        public UserLoopPart ParseFromDataReader(SqlDataReader dataReader)
-        {
-            this.Id = Convert.ToInt32(dataReader["Id"]);
-            this.UserLoopId = (Guid)dataReader["UserLoopId"];
-            this.UserMelodyId = (Guid)dataReader["UserMelodyId"];
-            this.OrderIndex = Convert.ToInt32(dataReader["OrderIndex"]);
-            this.DateCreated = Convert.ToDateTime(dataReader["DateCreated"]);
-            this.IsDeleted = Convert.ToBoolean(dataReader["IsDeleted"]);
-            if (dataReader["StartEffect"] != DBNull.Value)
-            {
-                this.StartEffect = (LoopEffectsEnum)Enum.Parse(typeof(LoopEffectsEnum), Convert.ToString(dataReader["StartEffect"]));
-            }
-            if (dataReader["EndEffect"] != DBNull.Value)
-            {
-                this.EndEffect = (LoopEffectsEnum)Enum.Parse(typeof(LoopEffectsEnum), Convert.ToString(dataReader["EndEffect"]));
-            }
-            if (dataReader["StartTime"] != DBNull.Value)
-            {
-                this.StartTime = TimeSpan.FromTicks(Convert.ToInt64(dataReader["StartTime"]));
-            }
-            if (dataReader["StartEffectDuration"] != DBNull.Value)
-            {
-                this.StartEffectDuration = TimeSpan.FromTicks(Convert.ToInt64(dataReader["StartEffectDuration"]));
-            }
-            if (dataReader["EndTime"] != DBNull.Value)
-            {
-                this.EndTime = TimeSpan.FromTicks(Convert.ToInt64(dataReader["EndTime"]));
-            }
-            if (dataReader["EndEffectDuration"] != DBNull.Value)
-            {
-                this.EndEffectDuration = TimeSpan.FromTicks(Convert.ToInt64(dataReader["EndEffectDuration"]));
-            }
-
-            return this;
-        }
     }
 }
