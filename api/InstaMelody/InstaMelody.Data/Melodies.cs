@@ -6,7 +6,6 @@ using InstaMelody.Model;
 
 namespace InstaMelody.Data
 {
-    // TODO: refactor DAL
     public class Melodies : DataAccess
     {
         #region Melodies
@@ -19,24 +18,22 @@ namespace InstaMelody.Data
         /// <exception cref="System.Data.DataException">Failed to create a new Melody.</exception>
         public Melody CreateMelody(Melody melody)
         {
-            using (var conn = new SqlConnection(ConnString))
+            var query = @"INSERT INTO dbo.Melodies
+                        (Name, Description, FileName, IsUserCreated, DateCreated, DateModified)
+                        VALUES (@Name, @Description, @FileName, @IsUserCreated, @DateCreated, @DateCreated)
+
+                        SELECT SCOPE_IDENTITY() AS [SCOPE_IDENTITY];";
+
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"INSERT INTO dbo.Melodies
-                                    (Name, Description, FileName, IsUserCreated, DateCreated, DateModified)
-                                    VALUES (@Name, @Description, @FileName, @IsUserCreated, @DateCreated, @DateCreated)
-
-                                    SELECT SCOPE_IDENTITY() AS [SCOPE_IDENTITY];";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "Name",
                     Value = melody.Name,
                     SqlDbType = SqlDbType.VarChar,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "Description",
                     Value = string.IsNullOrWhiteSpace(melody.Description)
@@ -44,22 +41,22 @@ namespace InstaMelody.Data
                         : (object)melody.Description,
                     SqlDbType = SqlDbType.Text,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "FileName",
                     Value = melody.FileName,
                     SqlDbType = SqlDbType.VarChar,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "IsUserCreated",
                     Value = melody.IsUserCreated,
                     SqlDbType = SqlDbType.Bit,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "DateCreated",
                     Value = melody.DateCreated > DateTime.MinValue
@@ -67,14 +64,13 @@ namespace InstaMelody.Data
                         : DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                var obj = cmd.ExecuteScalar();
-                if (!Convert.IsDBNull(obj))
-                {
-                    return this.GetMelodyById(Convert.ToInt32(obj));
                 }
+            };
+
+            var obj = ExecuteScalar(query, parameters.ToArray());
+            if (!Convert.IsDBNull(obj))
+            {
+                return GetMelodyById(Convert.ToInt32(obj));
             }
 
             throw new DataException("Failed to create a new Melody.");
@@ -87,38 +83,21 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public Melody GetMelodyById(int melodyId)
         {
-            Melody result = null;
+            var query = @"SELECT TOP 1 * FROM dbo.Melodies
+                        WHERE IsDeleted = 0 AND Id = @MelodyId";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT TOP 1 * FROM dbo.Melodies
-                                    WHERE IsDeleted = 0 AND Id = @MelodyId";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "MelodyId",
                     Value = melodyId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            result = new Melody();
-                            result = result.ParseFromDataReader(reader);
-                        }
-                    }
                 }
-            }
+            };
 
-            return result;
+            return GetRecord<Melody>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -128,38 +107,21 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public Melody GetMelodyByFileName(string fileName)
         {
-            Melody result = null;
+            var query = @"SELECT TOP 1 * FROM dbo.Melodies
+                        WHERE IsDeleted = 0 AND UPPER(FileName) = @FileName";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT TOP 1 * FROM dbo.Melodies
-                                    WHERE IsDeleted = 0 AND UPPER(FileName) = @FileName";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "FileName",
                     Value = fileName.ToUpper(),
                     SqlDbType = SqlDbType.VarChar,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            result = new Melody();
-                            result = result.ParseFromDataReader(reader);
-                        }
-                    }
                 }
-            }
+            };
 
-            return result;
+            return GetRecord<Melody>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -168,32 +130,10 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public IList<Melody> GetAllBaseMelodies()
         {
-            List<Melody> results = null;
+            var query = @"SELECT * FROM dbo.Melodies
+                        WHERE IsDeleted = 0 AND IsUserCreated = 0";
 
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT * FROM dbo.Melodies
-                                    WHERE IsDeleted = 0 AND IsUserCreated = 0";
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        results = new List<Melody>();
-                        while (reader.Read())
-                        {
-                            var result = new Melody();
-                            result = result.ParseFromDataReader(reader);
-                            results.Add(result);
-                        }
-                    }
-                }
-            }
-
-            return results;
+            return GetRecordSet<Melody>(query);
         }
 
         /// <summary>
@@ -203,44 +143,25 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public IList<Melody> GetBaseMelodiesByFileGroupId(int fileGroupId)
         {
-            List<Melody> results = null;
+            var query = @"SELECT m.* FROM dbo.Melodies m
+                        JOIN dbo.MelodyFileGroups f
+                        ON m.Id = f.MelodyId
+                        WHERE m.IsDeleted = 0 AND f.IsDeleted = 0
+                        AND m.IsUserCreated = 0
+                        AND f.FileGroupId = @FileGroupId";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT m.* FROM dbo.Melodies m
-                                    JOIN dbo.MelodyFileGroups f
-                                    ON m.Id = f.MelodyId
-                                    WHERE m.IsDeleted = 0 AND f.IsDeleted = 0
-                                        AND m.IsUserCreated = 0
-                                        AND f.FileGroupId = @FileGroupId";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "FileGroupId",
                     Value = fileGroupId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        results = new List<Melody>();
-                        while (reader.Read())
-                        {
-                            var result = new Melody();
-                            result = result.ParseFromDataReader(reader);
-                            results.Add(result);
-                        }
-                    }
                 }
-            }
+            };
 
-            return results;
+            return GetRecordSet<Melody>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -250,44 +171,25 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public IList<Melody> GetBaseMelodiesByCategoryId(int categoryId)
         {
-            List<Melody> results = null;
+            var query = @"SELECT m.* FROM dbo.Melodies m
+                        JOIN dbo.MelodyCategories c
+                        ON m.Id = c.MelodyId
+                        WHERE m.IsDeleted = 0 AND c.IsDeleted = 0
+                        AND m.IsUserCreated = 0
+                        AND c.CategoryId = @CategoryId";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT m.* FROM dbo.Melodies m
-                                    JOIN dbo.MelodyCategories c
-                                    ON m.Id = c.MelodyId
-                                    WHERE m.IsDeleted = 0 AND c.IsDeleted = 0
-                                        AND m.IsUserCreated = 0
-                                        AND c.CategoryId = @CategoryId";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "CategoryId",
                     Value = categoryId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        results = new List<Melody>();
-                        while (reader.Read())
-                        {
-                            var result = new Melody();
-                            result = result.ParseFromDataReader(reader);
-                            results.Add(result);
-                        }
-                    }
                 }
-            }
+            };
 
-            return results;
+            return GetRecordSet<Melody>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -297,30 +199,28 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public Melody UpdateMelody(Melody melody)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE dbo.Melodies
-                                    SET Name = @Name, Description = @Description, FileName = @FileName,
-                                        IsUserCreated = @IsUserCreated, DateModified = @DateModified
-                                    WHERE IsDeleted = 0 AND Id = @MelodyId";
+            var query = @"UPDATE dbo.Melodies
+                        SET Name = @Name, Description = @Description, FileName = @FileName,
+                        IsUserCreated = @IsUserCreated, DateModified = @DateModified
+                        WHERE IsDeleted = 0 AND Id = @MelodyId";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "MelodyId",
                     Value = melody.Id,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "Name",
                     Value = melody.Name,
                     SqlDbType = SqlDbType.VarChar,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "Description",
                     Value = string.IsNullOrWhiteSpace(melody.Description)
@@ -328,22 +228,22 @@ namespace InstaMelody.Data
                         : (object)melody.Description,
                     SqlDbType = SqlDbType.Text,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "FileName",
                     Value = melody.FileName,
                     SqlDbType = SqlDbType.VarChar,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "IsUserCreated",
                     Value = melody.IsUserCreated,
                     SqlDbType = SqlDbType.Bit,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "DateModified",
                     Value = melody.DateCreated > DateTime.MinValue
@@ -351,14 +251,12 @@ namespace InstaMelody.Data
                         : DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
+            ExecuteNonQuery(query, parameters.ToArray());
 
-            }
-
-            return this.GetMelodyById(melody.Id);
+            return GetMelodyById(melody.Id);
         }
 
         /// <summary>
@@ -367,35 +265,32 @@ namespace InstaMelody.Data
         /// <param name="melodyId">The melody identifier.</param>
         public void DeleteMelody(int melodyId)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE dbo.Melodies
-                                    SET IsDeleted = 1, DateModified = @DateModified
-                                    WHERE IsDeleted = 0 AND Id = @MelodyId";
+            var query = @"UPDATE dbo.Melodies
+                        SET IsDeleted = 1, DateModified = @DateModified
+                        WHERE IsDeleted = 0 AND Id = @MelodyId";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "MelodyId",
                     Value = melodyId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "DateModified",
                     Value = DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            ExecuteNonQuery(query, parameters.ToArray());
 
-            this.DeleteMelodyCategoriesByMelodyId(melodyId);
-            this.DeleteMelodyFileGroupsByMelodyId(melodyId);
+            DeleteMelodyCategoriesByMelodyId(melodyId);
+            DeleteMelodyFileGroupsByMelodyId(melodyId);
         }
 
         #endregion Melodies
@@ -410,31 +305,29 @@ namespace InstaMelody.Data
         /// <exception cref="System.Data.DataException">Failed to create a new Melody Category.</exception>
         public MelodyCategory CreateMelodyCategory(MelodyCategory melodyCategory)
         {
-            using (var conn = new SqlConnection(ConnString))
+            var query = @"INSERT INTO dbo.MelodyCategories
+                        (MelodyId, CategoryId, DateCreated)
+                        VALUES (@MelodyId, @CategoryId, @DateCreated)
+
+                        SELECT SCOPE_IDENTITY() AS [SCOPE_IDENTITY];";
+
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"INSERT INTO dbo.MelodyCategories
-                                    (MelodyId, CategoryId, DateCreated)
-                                    VALUES (@MelodyId, @CategoryId, @DateCreated)
-
-                                    SELECT SCOPE_IDENTITY() AS [SCOPE_IDENTITY];";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "MelodyId",
                     Value = melodyCategory.MelodyId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "CategoryId",
                     Value = melodyCategory.CategoryId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "DateCreated",
                     Value = melodyCategory.DateCreated > DateTime.MinValue
@@ -442,14 +335,13 @@ namespace InstaMelody.Data
                         : DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                var obj = cmd.ExecuteScalar();
-                if (!Convert.IsDBNull(obj))
-                {
-                    return this.GetMelodyCategoryById(Convert.ToInt32(obj));
                 }
+            };
+
+            var obj = ExecuteScalar(query, parameters.ToArray());
+            if (!Convert.IsDBNull(obj))
+            {
+                return GetMelodyCategoryById(Convert.ToInt32(obj));
             }
 
             throw new DataException("Failed to create a new Melody Category.");
@@ -462,38 +354,21 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public MelodyCategory GetMelodyCategoryById(int melodyCategoryId)
         {
-            MelodyCategory result = null;
+            var query = @"SELECT TOP 1 * FROM dbo.MelodyCategories
+                        WHERE IsDeleted = 0 AND Id = @MelodyCategoryId";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT TOP 1 * FROM dbo.MelodyCategories
-                                    WHERE IsDeleted = 0 AND Id = @MelodyCategoryId";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "MelodyCategoryId",
                     Value = melodyCategoryId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            result = new MelodyCategory();
-                            result = result.ParseFromDataReader(reader);
-                        }
-                    }
                 }
-            }
+            };
 
-            return result;
+            return GetRecord<MelodyCategory>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -503,40 +378,21 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public IList<MelodyCategory> GetMelodyCategoriesByMelodyId(int melodyId)
         {
-            List<MelodyCategory> results = null;
+            var query = @"SELECT * FROM dbo.MelodyCategories
+                        WHERE IsDeleted = 0 AND MelodyId = @MelodyId";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT * FROM dbo.MelodyCategories
-                                    WHERE IsDeleted = 0 AND MelodyId = @MelodyId";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "MelodyId",
                     Value = melodyId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        results = new List<MelodyCategory>();
-                        while (reader.Read())
-                        {
-                            var result = new MelodyCategory();
-                            result = result.ParseFromDataReader(reader);
-                            results.Add(result);
-                        }
-                    }
                 }
-            }
+            };
 
-            return results;
+            return GetRecordSet<MelodyCategory>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -546,40 +402,21 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public IList<MelodyCategory> GetMelodyCategoriesByCategoryId(int categoryId)
         {
-            List<MelodyCategory> results = null;
+            var query = @"SELECT * FROM dbo.MelodyCategories
+                        WHERE IsDeleted = 0 AND CategoryId = @CategoryId";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT * FROM dbo.MelodyCategories
-                                    WHERE IsDeleted = 0 AND CategoryId = @CategoryId";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "CategoryId",
                     Value = categoryId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        results = new List<MelodyCategory>();
-                        while (reader.Read())
-                        {
-                            var result = new MelodyCategory();
-                            result = result.ParseFromDataReader(reader);
-                            results.Add(result);
-                        }
-                    }
                 }
-            }
+            };
 
-            return results;
+            return GetRecordSet<MelodyCategory>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -588,25 +425,22 @@ namespace InstaMelody.Data
         /// <param name="melodyId">The melody identifier.</param>
         private void DeleteMelodyCategoriesByMelodyId(int melodyId)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE dbo.MelodyCategories
-                                    SET IsDeleted = 1
-                                    WHERE IsDeleted = 0 AND MelodyId = @MelodyId";
+            var query = @"UPDATE dbo.MelodyCategories
+                        SET IsDeleted = 1
+                        WHERE IsDeleted = 0 AND MelodyId = @MelodyId";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "MelodyId",
                     Value = melodyId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            ExecuteNonQuery(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -615,25 +449,22 @@ namespace InstaMelody.Data
         /// <param name="categoryId">The category identifier.</param>
         internal void DeleteMelodyCategoriesByCategoryId(int categoryId)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE dbo.MelodyCategories
-                                    SET IsDeleted = 1
-                                    WHERE IsDeleted = 0 AND CategoryId = @CategoryId";
+            var query = @"UPDATE dbo.MelodyCategories
+                        SET IsDeleted = 1
+                        WHERE IsDeleted = 0 AND CategoryId = @CategoryId";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "CategoryId",
                     Value = categoryId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            ExecuteNonQuery(query, parameters.ToArray());
         }
 
         #endregion MelodyCategories
@@ -648,31 +479,29 @@ namespace InstaMelody.Data
         /// <exception cref="System.Data.DataException">Failed to create a new Melody File Group.</exception>
         public MelodyFileGroup CreateMelodyFileGroup(MelodyFileGroup melodyFileGroup)
         {
-            using (var conn = new SqlConnection(ConnString))
+            var query = @"INSERT INTO dbo.MelodyFileGroups
+                        (MelodyId, FileGroupId, DateCreated)
+                        VALUES (@MelodyId, @FileGroupId, @DateCreated)
+
+                        SELECT SCOPE_IDENTITY() AS [SCOPE_IDENTITY];";
+
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"INSERT INTO dbo.MelodyFileGroups
-                                    (MelodyId, FileGroupId, DateCreated)
-                                    VALUES (@MelodyId, @FileGroupId, @DateCreated)
-
-                                    SELECT SCOPE_IDENTITY() AS [SCOPE_IDENTITY];";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "MelodyId",
                     Value = melodyFileGroup.MelodyId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "FileGroupId",
                     Value = melodyFileGroup.FileGroupId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "DateCreated",
                     Value = melodyFileGroup.DateCreated > DateTime.MinValue
@@ -680,14 +509,13 @@ namespace InstaMelody.Data
                         : DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                var obj = cmd.ExecuteScalar();
-                if (!Convert.IsDBNull(obj))
-                {
-                    return this.GetMelodyFileGroupById(Convert.ToInt32(obj));
                 }
+            };
+
+            var obj = ExecuteScalar(query, parameters.ToArray());
+            if (!Convert.IsDBNull(obj))
+            {
+                return GetMelodyFileGroupById(Convert.ToInt32(obj));
             }
 
             throw new DataException("Failed to create a new Melody File Group.");
@@ -700,38 +528,21 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public MelodyFileGroup GetMelodyFileGroupById(int melodyFileGroupId)
         {
-            MelodyFileGroup result = null;
+            var query = @"SELECT TOP 1 * FROM dbo.MelodyFileGroups
+                        WHERE IsDeleted = 0 AND Id = @MelodyFileGroupId";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT TOP 1 * FROM dbo.MelodyFileGroups
-                                    WHERE IsDeleted = 0 AND Id = @MelodyFileGroupId";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "MelodyFileGroupId",
                     Value = melodyFileGroupId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            result = new MelodyFileGroup();
-                            result = result.ParseFromDataReader(reader);
-                        }
-                    }
                 }
-            }
+            };
 
-            return result;
+            return GetRecord<MelodyFileGroup>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -741,40 +552,21 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public IList<MelodyFileGroup> GetMelodyFileGroupsByMelodyId(int melodyId)
         {
-            List<MelodyFileGroup> results = null;
+            var query = @"SELECT * FROM dbo.MelodyFileGroups
+                        WHERE IsDeleted = 0 AND MelodyId = @MelodyId";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT * FROM dbo.MelodyFileGroups
-                                    WHERE IsDeleted = 0 AND MelodyId = @MelodyId";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "MelodyId",
                     Value = melodyId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        results = new List<MelodyFileGroup>();
-                        while (reader.Read())
-                        {
-                            var result = new MelodyFileGroup();
-                            result = result.ParseFromDataReader(reader);
-                            results.Add(result);
-                        }
-                    }
                 }
-            }
+            };
 
-            return results;
+            return GetRecordSet<MelodyFileGroup>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -784,40 +576,21 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public IList<MelodyFileGroup> GetMelodyFileGroupsByFileGroupId(int fileGroupId)
         {
-            List<MelodyFileGroup> results = null;
+            var query = @"SELECT * FROM dbo.MelodyFileGroups
+                        WHERE IsDeleted = 0 AND FileGroupId = @FileGroupId";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT * FROM dbo.MelodyFileGroups
-                                    WHERE IsDeleted = 0 AND FileGroupId = @FileGroupId";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "FileGroupId",
                     Value = fileGroupId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        results = new List<MelodyFileGroup>();
-                        while (reader.Read())
-                        {
-                            var result = new MelodyFileGroup();
-                            result = result.ParseFromDataReader(reader);
-                            results.Add(result);
-                        }
-                    }
                 }
-            }
+            };
 
-            return results;
+            return GetRecordSet<MelodyFileGroup>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -826,25 +599,22 @@ namespace InstaMelody.Data
         /// <param name="melodyId">The melody identifier.</param>
         private void DeleteMelodyFileGroupsByMelodyId(int melodyId)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE dbo.MelodyFileGroups
-                                    SET IsDeleted = 1
-                                    WHERE IsDeleted = 0 AND MelodyId = @MelodyId";
+            var query = @"UPDATE dbo.MelodyFileGroups
+                        SET IsDeleted = 1
+                        WHERE IsDeleted = 0 AND MelodyId = @MelodyId";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "MelodyId",
                     Value = melodyId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            ExecuteNonQuery(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -853,25 +623,22 @@ namespace InstaMelody.Data
         /// <param name="fileGroupId">The file group identifier.</param>
         internal void DeleteMelodyFileGroupsByFileGroupId(int fileGroupId)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE dbo.MelodyFileGroups
-                                    SET IsDeleted = 1
-                                    WHERE IsDeleted = 0 AND FileGroupId = @FileGroupId";
+            var query = @"UPDATE dbo.MelodyFileGroups
+                        SET IsDeleted = 1
+                        WHERE IsDeleted = 0 AND FileGroupId = @FileGroupId";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "FileGroupId",
                     Value = fileGroupId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            ExecuteNonQuery(query, parameters.ToArray());
         }
 
         #endregion MelodyFileGroups

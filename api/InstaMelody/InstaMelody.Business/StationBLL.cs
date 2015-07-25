@@ -10,6 +10,7 @@ using InstaMelody.Model.Enums;
 
 namespace InstaMelody.Business
 {
+    // TODO: Test StationMessage functions
     public class StationBLL
     {
         #region Public Methods
@@ -324,7 +325,8 @@ namespace InstaMelody.Business
                 DeleteStationImage((int)foundStation.StationImageId);
             }
 
-            // TODO: delete station messages
+            // delete station messages
+            DeleteStationMessages(foundStation);
         }
 
         /// <summary>
@@ -617,5 +619,385 @@ namespace InstaMelody.Business
         }
 
         #endregion Private Methods
+
+        /// <summary>
+        /// Sends the message to station.
+        /// </summary>
+        /// <param name="station">The station.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="sessionToken">The session token.</param>
+        /// <returns></returns>
+        public object SendMessageToStation(Station station, Message message, Guid sessionToken)
+        {
+            var sessionUser = Utilities.GetUserBySession(sessionToken);
+
+            return CreateStationMessage(station, message, sessionUser, isPrivateMessage: true);
+        }
+
+        /// <summary>
+        /// Sends the post to station.
+        /// </summary>
+        /// <param name="station">The station.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="sessionToken">The session token.</param>
+        /// <returns></returns>
+        public object SendPostToStation(Station station, Message message, Guid sessionToken)
+        {
+            var sessionUser = Utilities.GetUserBySession(sessionToken);
+
+            return CreateStationMessage(station, message, sessionUser, isPrivateMessage: false);
+        }
+
+        /// <summary>
+        /// Gets the station messages.
+        /// </summary>
+        /// <param name="station">The station.</param>
+        /// <param name="sessionToken">The session token.</param>
+        /// <returns></returns>
+        public IList<StationMessage> GetStationMessages(Station station, Guid sessionToken)
+        {
+            var sessionUser = Utilities.GetUserBySession(sessionToken);
+
+            return GetStationMessages(station, sessionUser, getPrivateMessages: true);
+        }
+
+        /// <summary>
+        /// Gets the station posts.
+        /// </summary>
+        /// <param name="station">The station.</param>
+        /// <param name="sessionToken">The session token.</param>
+        /// <returns></returns>
+        public IList<StationMessage> GetStationPosts(Station station, Guid sessionToken)
+        {
+            var sessionUser = Utilities.GetUserBySession(sessionToken);
+
+            return GetStationMessages(station, sessionUser, getPrivateMessages: false);
+        }
+
+        /// <summary>
+        /// Replies to stationmessage.
+        /// </summary>
+        /// <param name="stationMessage">The station message.</param>
+        /// <param name="newMessage">The new message.</param>
+        /// <param name="sessionToken">The session token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException">
+        /// Cannot find the requested Station.
+        /// or
+        /// Could not find the requested Station Message.
+        /// </exception>
+        /// <exception cref="System.UnauthorizedAccessException">This User does not have acces to Reply to this Post.</exception>
+        public object ReplyToStationmessage(StationMessage stationMessage, Message newMessage, Guid sessionToken)
+        {
+            var sessionUser = Utilities.GetUserBySession(sessionToken);
+
+            // get station
+            var foundStation = TryGetStation(new Station { Id = stationMessage.StationId });
+            if (foundStation == null)
+            {
+                throw new ArgumentException("Cannot find the requested Station.");
+            }
+
+            // get station message
+            var dal = new StationMessages();
+            var foundMessage = dal.GetStationMessageById(stationMessage.Id);
+            if (foundMessage == null)
+            {
+                throw new ArgumentException("Could not find the requested Station Message.");
+            }
+
+            // validate user follows station
+            var stationDal = new Stations();
+            var userIsFollower = stationDal.DoesUserFollowStation(sessionUser.Id, foundStation.Id);
+            if (foundMessage.IsPrivate || !userIsFollower)
+            {
+                throw new UnauthorizedAccessException("This User does not have acces to Reply to this Post.");
+            }
+
+            return CreateStationMessage(foundStation, newMessage, sessionUser, foundMessage.IsPrivate, foundMessage.Id);
+        }
+
+        /// <summary>
+        /// Deletes the station message.
+        /// </summary>
+        /// <param name="stationMessage">The station message.</param>
+        /// <param name="sessionToken">The session token.</param>
+        /// <exception cref="System.ArgumentException">Cannot find the requested Station.</exception>
+        public void DeleteStationMessage(StationMessage stationMessage, Guid sessionToken)
+        {
+            var sessionUser = Utilities.GetUserBySession(sessionToken);
+
+            // get station
+            var foundStation = TryGetStation(new Station { Id = stationMessage.StationId });
+            if (foundStation == null)
+            {
+                throw new ArgumentException("Cannot find the requested Station.");
+            }
+
+            // get message
+            var dal = new StationMessages();
+            var foundMessage = dal.GetStationMessageById(stationMessage.Id);
+            if (foundMessage == null)
+            {
+                throw new ArgumentException("Could not find the requested Station Message.");
+            }
+
+            // validate session user owns station or the message
+            if (!foundStation.UserId.Equals(sessionUser.Id) 
+                || (!foundMessage.SenderId.Equals(sessionUser.Id) && !foundMessage.IsPrivate))
+            {
+                throw new UnauthorizedAccessException(
+                    string.Format("User with Token: {0} does not have access to delete the requested Station Message.",
+                        sessionToken));
+            }
+
+            dal.DeleteStationMessage(stationMessage.Id);
+        }
+
+        /// <summary>
+        /// Likses the station message.
+        /// </summary>
+        /// <param name="stationMessage">The station message.</param>
+        /// <param name="sessionToken">The session token.</param>
+        /// <returns></returns>
+        public StationMessage LiksStationMessage(StationMessage stationMessage, Guid sessionToken)
+        {
+            var sessionUser = Utilities.GetUserBySession(sessionToken);
+
+            return LikeUnlikeStationMessage(stationMessage, sessionUser, isUserLike: true);
+        }
+
+        /// <summary>
+        /// Unlikses the station message.
+        /// </summary>
+        /// <param name="stationMessage">The station message.</param>
+        /// <param name="sessionToken">The session token.</param>
+        /// <returns></returns>
+        public StationMessage UnliksStationMessage(StationMessage stationMessage, Guid sessionToken)
+        {
+            var sessionUser = Utilities.GetUserBySession(sessionToken);
+
+            return LikeUnlikeStationMessage(stationMessage, sessionUser, isUserLike: false);
+        }
+
+        /// <summary>
+        /// Creates the station message.
+        /// </summary>
+        /// <param name="station">The station.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="sender">The sender.</param>
+        /// <param name="isPrivateMessage">if set to <c>true</c> [is private message].</param>
+        /// <param name="parentMessageId">The parent message identifier.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException">Cannot find the requested Station.</exception>
+        /// <exception cref="System.UnauthorizedAccessException">Cannot Post to a Station of which the requestor is not the owner.</exception>
+        /// <exception cref="System.Data.DataException">Failed to create a new Message.</exception>
+        private object CreateStationMessage(Station station, Message message, User sender, bool isPrivateMessage, int? parentMessageId = null)
+        {
+            // get station
+            var foundStation = TryGetStation(station);
+            if (foundStation == null)
+            {
+                throw new ArgumentException("Cannot find the requested Station.");
+            }
+
+            // validate session user owns station
+            if (!isPrivateMessage && !foundStation.UserId.Equals(sender.Id))
+            {
+                throw new UnauthorizedAccessException("Cannot Post to a Station of which the requestor is not the owner.");
+            }
+
+            // create message
+            var messageBll = new MessageBLL();
+            var newMessage = messageBll.CreateMessage(message, sender);
+            if (newMessage == null || newMessage.Item1 == null)
+            {
+                throw new DataException("Failed to create a new Message.");
+            }
+
+            var createdMessage = newMessage.Item1;
+
+            // create station message
+            var dal = new StationMessages();
+            var createdStationMessage = dal.CreateStationMessage(new StationMessage
+            {
+                IsPrivate = isPrivateMessage,
+                ParentId = parentMessageId,
+                MessageId = createdMessage.Id,
+                StationId = foundStation.Id,
+                SenderId = sender.Id,
+                DateCreated = DateTime.UtcNow
+            });
+            createdStationMessage.Message = createdMessage;
+
+            // return created message
+            if (newMessage.Item2 != null)
+            {
+                return new ApiStationMessageFileUpload
+                {
+                    StationMessage = createdStationMessage,
+                    FileUploadToken = newMessage.Item2
+                };
+            }
+            return createdStationMessage;
+        }
+
+        /// <summary>
+        /// Gets the station messages.
+        /// </summary>
+        /// <param name="station">The station.</param>
+        /// <param name="requestor">The requestor.</param>
+        /// <param name="getPrivateMessages">if set to <c>true</c> [get private messages].</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException">Cannot find the requested Station.</exception>
+        /// <exception cref="System.UnauthorizedAccessException">Cannot get Messages for a Station of which the requestor is not the owner.</exception>
+        private IList<StationMessage> GetStationMessages(Station station, User requestor, bool getPrivateMessages)
+        {
+            // get station
+            var foundStation = TryGetStation(station);
+            if (foundStation == null)
+            {
+                throw new ArgumentException("Cannot find the requested Station.");
+            }
+
+            // validate session user owns station
+            if (getPrivateMessages && !foundStation.UserId.Equals(requestor.Id))
+            {
+                throw new UnauthorizedAccessException("Cannot get Messages for a Station of which the requestor is not the owner.");
+            }
+
+            // return all message threads for station
+            var dal = new StationMessages();
+            var messageBll = new MessageBLL();
+            var messages = dal.GetMessagesByStationId(foundStation.Id, getPrivateMessages);
+            foreach (var stationMessage in messages)
+            {
+                stationMessage.Replies = FindStationMessageReplies(stationMessage);
+                stationMessage.Likes = FindStationMessageLikes(stationMessage);
+                stationMessage.Message = messageBll.GetMessage(new Message { Id = stationMessage.MessageId });
+            }
+
+            return messages;
+        }
+
+        /// <summary>
+        /// Likes the unlike station message.
+        /// </summary>
+        /// <param name="stationMessage">The station message.</param>
+        /// <param name="requestor">The requestor.</param>
+        /// <param name="isUserLike">if set to <c>true</c> [is user like].</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException">
+        /// Cannot find the requested Station.
+        /// or
+        /// Cannot find requested Station Message.
+        /// </exception>
+        /// <exception cref="System.UnauthorizedAccessException">This User does not have acces to Like this Post.</exception>
+        private StationMessage LikeUnlikeStationMessage(StationMessage stationMessage, User requestor, bool isUserLike)
+        {
+            // get station
+            var foundStation = TryGetStation(new Station { Id = stationMessage.StationId });
+            if (foundStation == null)
+            {
+                throw new ArgumentException("Cannot find the requested Station.");
+            }
+
+            // get station message
+            var dal = new StationMessages();
+            var foundStationMessage = dal.GetStationMessageById(stationMessage.Id);
+            if (foundStationMessage == null)
+            {
+                throw new ArgumentException("Cannot find requested Station Message.");
+            }
+
+            // validate user follows station
+            var stationDal = new Stations();
+            var userIsFollower = stationDal.DoesUserFollowStation(requestor.Id, foundStation.Id);
+            if (foundStationMessage.IsPrivate || !userIsFollower)
+            {
+                throw new UnauthorizedAccessException("This User does not have acces to Like this Post.");
+            }
+
+            // like/unlike post
+            if (isUserLike)
+            {
+                dal.LikeStationMessage(foundStationMessage.Id, requestor.Id);
+            }
+            else
+            {
+                dal.UnlikeStationMessage(foundStationMessage.Id, requestor.Id);
+            }
+
+            return FindStationMessage(foundStationMessage);
+
+        }
+
+        /// <summary>
+        /// Finds the station message.
+        /// </summary>
+        /// <param name="stationMessage">The station message.</param>
+        /// <returns></returns>
+        private StationMessage FindStationMessage(StationMessage stationMessage)
+        {
+            var dal = new StationMessages();
+            var foundMessage = dal.GetStationMessageById(stationMessage.Id);
+
+            foundMessage.Likes = FindStationMessageLikes(foundMessage);
+            foundMessage.Replies = FindStationMessageReplies(foundMessage);
+
+            var messageBll = new MessageBLL();
+            foundMessage.Message = messageBll.GetMessage(new Message {Id = foundMessage.MessageId});
+
+
+            return foundMessage;
+        }
+
+        /// <summary>
+        /// Finds the station message replies.
+        /// </summary>
+        /// <param name="stationMessage">The station message.</param>
+        /// <returns></returns>
+        private IList<StationMessage> FindStationMessageReplies(StationMessage stationMessage)
+        {
+            var dal = new StationMessages();
+
+            var replies = dal.GetRepliesByStationMessageId(stationMessage.Id);
+            if (replies == null || !replies.Any())
+            {
+                return null;
+            }
+
+            var messageBll = new MessageBLL();
+
+            foreach (var message in replies)
+            {
+                message.Likes = FindStationMessageLikes(message);
+                message.Message = messageBll.GetMessage(new Message {Id = message.MessageId});
+                message.Replies = FindStationMessageReplies(message);
+            }
+
+            return replies;
+        }
+
+        /// <summary>
+        /// Finds the station message likes.
+        /// </summary>
+        /// <param name="stationMessage">The station message.</param>
+        /// <returns></returns>
+        private IList<StationMessageUserLike> FindStationMessageLikes(StationMessage stationMessage)
+        {
+            var dal = new StationMessages();
+            return dal.GetLikesByStationMessageId(stationMessage.Id);
+        }
+
+        /// <summary>
+        /// Deletes the station messages.
+        /// </summary>
+        /// <param name="station">The station.</param>
+        private void DeleteStationMessages(Station station)
+        {
+            var dal = new StationMessages();
+            dal.DeleteStationMessagesByStationId(station.Id);
+        }
     }
 }

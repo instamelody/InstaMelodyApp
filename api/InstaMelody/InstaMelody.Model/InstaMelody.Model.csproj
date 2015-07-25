@@ -48,6 +48,7 @@
     <Compile Include="ApiModels\ApiMessage.cs" />
     <Compile Include="ApiModels\ApiRequest.cs" />
     <Compile Include="ApiModels\ApiStationFileUpload.cs" />
+    <Compile Include="ApiModels\ApiStationMessageFileUpload.cs" />
     <Compile Include="ApiModels\ApiTime.cs" />
     <Compile Include="ApiModels\ApiToken.cs" />
     <Compile Include="ApiModels\ApiUserFileUpload.cs" />

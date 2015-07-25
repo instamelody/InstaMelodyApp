@@ -519,6 +519,44 @@ namespace InstaMelody.Data
         }
 
         /// <summary>
+        /// Doeses the user follow station.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="stationId">The station identifier.</param>
+        /// <returns></returns>
+        public bool DoesUserFollowStation(Guid userId, int stationId)
+        {
+            var query = @"SELECT COUNT(*) FROM dbo.StationFollowers
+                        WHERE IsDeleted = 0 AND StationId = @StationId
+                        AND UserId = @UserId";
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "StationId",
+                    Value = stationId,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "UserId",
+                    Value = userId,
+                    SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                }
+            };
+
+            var obj = ExecuteScalar(query, parameters.ToArray());
+            if (!Convert.IsDBNull(obj) && Convert.ToBoolean(obj))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Gets the followers by station identifier.
         /// </summary>
         /// <param name="stationId">The station identifier.</param>

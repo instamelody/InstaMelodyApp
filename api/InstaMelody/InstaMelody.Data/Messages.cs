@@ -6,7 +6,6 @@ using InstaMelody.Model;
 
 namespace InstaMelody.Data
 {
-    // TODO: refactor DAL
     public class Messages : DataAccess
     {
         /// <summary>
@@ -18,22 +17,20 @@ namespace InstaMelody.Data
         {
             message.Id = Guid.NewGuid();
 
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"INSERT INTO dbo.Messages
-                                    (Id, ParentId, Description, MediaType, DateCreated)
-                                    VALUES (@MessageId, @ParentId, @Description, @MediaType, @DateCreated)";
+            var query = @"INSERT INTO dbo.Messages
+                        (Id, ParentId, Description, MediaType, DateCreated)
+                        VALUES (@MessageId, @ParentId, @Description, @MediaType, @DateCreated)";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "MessageId",
                     Value = message.Id,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "ParentId",
                     Value = (message.ParentId.Equals(default(Guid)) || message.ParentId == null)
@@ -41,22 +38,22 @@ namespace InstaMelody.Data
                         : (object)message.ParentId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "Description",
                     Value = (object)message.Description ?? DBNull.Value,
                     SqlDbType = SqlDbType.Text,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "MediaType",
                     Value = message.MediaType.ToString(),
                     SqlDbType = SqlDbType.VarChar,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "DateCreated",
                     Value = message.DateCreated > DateTime.MinValue 
@@ -64,13 +61,12 @@ namespace InstaMelody.Data
                         : DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            ExecuteNonQuery(query, parameters.ToArray());
 
-            return this.GetMessageById(message.Id);
+            return GetMessageById(message.Id);
         }
 
         /// <summary>
@@ -80,39 +76,21 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public Message GetMessageById(Guid messageId)
         {
-            Message result = null;
+            var query = @"SELECT TOP 1 * FROM dbo.Messages
+                        WHERE Id = @MessageId AND IsDeleted = 0";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT TOP 1 * FROM dbo.Messages
-                                    WHERE Id = @MessageId AND IsDeleted = 0";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "MessageId",
                     Value = messageId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            result = new Message();
-                            result = result.ParseFromDataReader(reader);
-                        }
-                    }
                 }
-            }
+            };
 
-            return result;
+            return GetRecord<Message>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -122,39 +100,21 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public Message GetTopLevelMessageById(Guid messageId)
         {
-            Message result = null;
+            var query = @"SELECT TOP 1 * FROM dbo.Messages
+                        WHERE Id = @MessageId AND IsDeleted = 0 AND ParentId IS NULL";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT TOP 1 * FROM dbo.Messages
-                                    WHERE Id = @MessageId AND IsDeleted = 0 AND ParentId IS NULL";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "MessageId",
                     Value = messageId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            result = new Message();
-                            result = result.ParseFromDataReader(reader);
-                        }
-                    }
                 }
-            }
+            };
 
-            return result;
+            return GetRecord<Message>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -164,42 +124,21 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public IList<Message> GetMessagesByParentMessageId(Guid parentMessageId)
         {
-            List<Message> results = null;
+            var query = @"SELECT * FROM dbo.Messages
+                        WHERE ParentId = @ParentId AND IsDeleted = 0";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT * FROM dbo.Messages
-                                    WHERE ParentId = @ParentId AND IsDeleted = 0";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "ParentId",
                     Value = parentMessageId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        results = new List<Message>();
-
-                        while (reader.Read())
-                        {
-                            var result = new Message();
-                            result = result.ParseFromDataReader(reader);
-                            results.Add(result);
-                        }
-                    }
                 }
-            }
+            };
 
-            return results;
+            return GetRecordSet<Message>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -209,38 +148,35 @@ namespace InstaMelody.Data
         /// <exception cref="System.Data.DataException"></exception>
         public void MarkMessagAsRead(Guid messageId)
         {
-            var message = this.GetMessageById(messageId);
+            var message = GetMessageById(messageId);
             if (message == null)
             {
                 throw new DataException();
             }
 
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE dbo.Messages
-                                    SET IsRead = 1, DateRead = @DateRead
-                                    WHERE Id = @MessageId AND IsDeleted = 0";
+            var query = @"UPDATE dbo.Messages
+                        SET IsRead = 1, DateRead = @DateRead
+                        WHERE Id = @MessageId AND IsDeleted = 0";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "MessageId",
                     Value = message.Id,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "DateRead",
                     Value = DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            ExecuteNonQuery(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -249,25 +185,22 @@ namespace InstaMelody.Data
         /// <param name="messageId">The message identifier.</param>
         public void DeleteMessage(Guid messageId)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE dbo.Messages
-                                    SET IsDeleted = 1
-                                    WHERE Id = @MessageId AND IsDeleted = 0";
+            var query = @"UPDATE dbo.Messages
+                        SET IsDeleted = 1
+                        WHERE Id = @MessageId AND IsDeleted = 0";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "MessageId",
                     Value = messageId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            ExecuteNonQuery(query, parameters.ToArray());
         }
 
         #region MessageImages
@@ -279,39 +212,21 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public MessageImage GetImageByMessageId(Guid messageId)
         {
-            MessageImage result = null;
+            var query = @"SELECT TOP 1 * FROM dbo.MessageImages
+                        WHERE MessageId = @MessageId AND IsDeleted = 0";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT TOP 1 * FROM dbo.MessageImages
-                                    WHERE MessageId = @MessageId AND IsDeleted = 0";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "MessageId",
                     Value = messageId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            result = new MessageImage();
-                            result = result.ParseFromDataReader(reader);
-                        }
-                    }
                 }
-            }
+            };
 
-            return result;
+            return GetRecord<MessageImage>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -322,41 +237,38 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public MessageImage AddMessageImage(Guid messageId, int imageId)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"INSERT INTO dbo.MessageImages
-                                    (MessageId, ImageId, DateCreated, IsDeleted)
-                                    VALUES (@MessageId, @ImageId, @DateCreated, 0)";
+            var query = @"INSERT INTO dbo.MessageImages
+                        (MessageId, ImageId, DateCreated, IsDeleted)
+                        VALUES (@MessageId, @ImageId, @DateCreated, 0)";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "MessageId",
                     Value = messageId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "ImageId",
                     Value = imageId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "DateCreated",
                     Value = DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            ExecuteNonQuery(query, parameters.ToArray());
 
-            return this.GetImageByMessageId(messageId);
+            return GetImageByMessageId(messageId);
         }
 
         /// <summary>
@@ -365,25 +277,22 @@ namespace InstaMelody.Data
         /// <param name="messageId">The message identifier.</param>
         public void DeleteMessageImageByMessageId(Guid messageId)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE dbo.MessageImages
-                                    SET IsDeleted = 1
-                                    WHERE MessageId = @MessageId";
+            var query = @"UPDATE dbo.MessageImages
+                        SET IsDeleted = 1
+                        WHERE MessageId = @MessageId";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "MessageId",
                     Value = messageId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            ExecuteNonQuery(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -392,25 +301,22 @@ namespace InstaMelody.Data
         /// <param name="imageId">The image identifier.</param>
         public void DeleteMessageImageByImageId(int imageId)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE dbo.MessageImages
-                                    SET IsDeleted = 1
-                                    WHERE ImageId = @ImageId";
+            var query = @"UPDATE dbo.MessageImages
+                        SET IsDeleted = 1
+                        WHERE ImageId = @ImageId";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "ImageId",
                     Value = imageId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            ExecuteNonQuery(query, parameters.ToArray());
         }
 
         #endregion MessageImages
@@ -424,39 +330,21 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public MessageVideo GetVideoByMessageId(Guid messageId)
         {
-            MessageVideo result = null;
+            var query = @"SELECT TOP 1 * FROM dbo.MessageVideos
+                        WHERE MessageId = @MessageId AND IsDeleted = 0";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT TOP 1 * FROM dbo.MessageVideos
-                                    WHERE MessageId = @MessageId AND IsDeleted = 0";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "MessageId",
                     Value = messageId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            result = new MessageVideo();
-                            result = result.ParseFromDataReader(reader);
-                        }
-                    }
                 }
-            }
+            };
 
-            return result;
+            return GetRecord<MessageVideo>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -467,41 +355,38 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public MessageVideo AddMessageVideo(Guid messageId, int videoId)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"INSERT INTO dbo.MessageVideos
-                                    (MessageId, VideoId, DateCreated, IsDeleted)
-                                    VALUES (@MessageId, @VideoId, @DateCreated, 0)";
+            var query = @"INSERT INTO dbo.MessageVideos
+                        (MessageId, VideoId, DateCreated, IsDeleted)
+                        VALUES (@MessageId, @VideoId, @DateCreated, 0)";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "MessageId",
                     Value = messageId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "VideoId",
                     Value = videoId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "DateCreated",
                     Value = DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            ExecuteNonQuery(query, parameters.ToArray());
 
-            return this.GetVideoByMessageId(messageId);
+            return GetVideoByMessageId(messageId);
         }
 
         /// <summary>
@@ -510,25 +395,22 @@ namespace InstaMelody.Data
         /// <param name="messageId">The message identifier.</param>
         public void DeleteMessageVideoByMessageId(Guid messageId)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE dbo.MessageVideos
-                                    SET IsDeleted = 1
-                                    WHERE MessageId = @MessageId";
+            var query = @"UPDATE dbo.MessageVideos
+                        SET IsDeleted = 1
+                        WHERE MessageId = @MessageId";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "MessageId",
                     Value = messageId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            ExecuteNonQuery(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -537,25 +419,22 @@ namespace InstaMelody.Data
         /// <param name="videoId">The video identifier.</param>
         public void DeleteMessageVideoByVideoId(int videoId)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE dbo.MessageVideos
-                                    SET IsDeleted = 1
-                                    WHERE VideoId = @VideoId";
+            var query = @"UPDATE dbo.MessageVideos
+                        SET IsDeleted = 1
+                        WHERE VideoId = @VideoId";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "VideoId",
                     Value = videoId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            ExecuteNonQuery(query, parameters.ToArray());
         }
 
         #endregion MessageVideos
@@ -570,41 +449,38 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public MessageMelody AddMessageMelody(Guid messageId, Guid userMelodyId)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"INSERT INTO dbo.MessageMelodies
-                                    (MessageId, UserMelodyId, DateCreated, IsDeleted)
-                                    VALUES (@MessageId, @UserMelodyId, @DateCreated, 0)";
+            var query = @"INSERT INTO dbo.MessageMelodies
+                        (MessageId, UserMelodyId, DateCreated, IsDeleted)
+                        VALUES (@MessageId, @UserMelodyId, @DateCreated, 0)";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "MessageId",
                     Value = messageId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "UserMelodyId",
                     Value = userMelodyId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "DateCreated",
                     Value = DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            ExecuteNonQuery(query, parameters.ToArray());
 
-            return this.GetMessageMelodyByMessageId(messageId);
+            return GetMessageMelodyByMessageId(messageId);
         }
 
         /// <summary>
@@ -614,39 +490,21 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public MessageMelody GetMessageMelodyByMessageId(Guid messageId)
         {
-            MessageMelody result = null;
+            var query = @"SELECT TOP 1 * FROM dbo.MessageMelodies
+                        WHERE MessageId = @MessageId AND IsDeleted = 0";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT TOP 1 * FROM dbo.MessageMelodies
-                                    WHERE MessageId = @MessageId AND IsDeleted = 0";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "MessageId",
                     Value = messageId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            result = new MessageMelody();
-                            result = result.ParseFromDataReader(reader);
-                        }
-                    }
                 }
-            }
+            };
 
-            return result;
+            return GetRecord<MessageMelody>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -655,25 +513,22 @@ namespace InstaMelody.Data
         /// <param name="userMelodyId">The user melody identifier.</param>
         public void DeleteMessageMelodyByMelodyId(Guid userMelodyId)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE dbo.MessageMelodies
-                                    SET IsDeleted = 1
-                                    WHERE UserMelodyId = @UserMelodyId";
+            var query = @"UPDATE dbo.MessageMelodies
+                        SET IsDeleted = 1
+                        WHERE UserMelodyId = @UserMelodyId";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "UserMelodyId",
                     Value = userMelodyId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            ExecuteNonQuery(query, parameters.ToArray());
         }
 
         #endregion MessageMelodies

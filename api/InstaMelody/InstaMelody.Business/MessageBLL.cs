@@ -546,74 +546,6 @@ namespace InstaMelody.Business
         }
 
         /// <summary>
-        /// Creates the message.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <param name="sender">The sender.</param>
-        /// <returns></returns>
-        /// <exception cref="System.Data.DataException">Cannot create a NULL Message.
-        /// or
-        /// UserId is not valid.</exception>
-        private Tuple<Message, FileUploadToken> CreateMessage(Message message, User sender)
-        {
-            if (message == null)
-            {
-                throw new DataException("Cannot create a NULL Message.");
-            }
-            if (sender.Id.Equals(default(Guid)))
-            {
-                throw new DataException("UserId is not valid.");
-            }
-
-            // create message
-            var dal = new Messages();
-            var addedMessage = dal.AddMessage(message);
-
-            FileUploadToken addedToken = null;
-            var fileUploadToken = new FileUploadToken
-            {
-                UserId = sender.Id,
-                DateCreated = DateTime.UtcNow
-            };
-
-            // create attachment
-            if (message.Image != null)
-            {
-                var newImage = this.CreateMessageImage(addedMessage.Id, message.Image);
-                addedMessage.Image = newImage.Image;
-
-                fileUploadToken.MediaType = FileUploadTypeEnum.MessageImage;
-                fileUploadToken.FileName = addedMessage.Image.FileName;
-            }
-            else if (message.Video != null)
-            {
-                var newVideo = this.CreateMessageVideo(addedMessage.Id, message.Video);
-                addedMessage.Video = newVideo.Video;
-
-                fileUploadToken.MediaType = FileUploadTypeEnum.MessageVideo;
-                fileUploadToken.FileName = addedMessage.Video.FileName;
-            }
-            else if (message.UserMelody != null)
-            {
-                var melodyBll = new MelodyBLL();
-                var createdFileUpload = melodyBll.CreateUserMelody(message.UserMelody, sender);
-
-                this.CreateMessageMelody(addedMessage.Id, createdFileUpload.UserMelody);
-
-                addedMessage.UserMelody = createdFileUpload.UserMelody;
-                fileUploadToken = createdFileUpload.FileUploadToken;
-            }
-
-            if (!fileUploadToken.MediaType.Equals(FileUploadTypeEnum.Unknown))
-            {
-                var fileBll = new FileBLL();
-                addedToken = fileBll.CreateToken(fileUploadToken);
-            }
-
-            return new Tuple<Message, FileUploadToken>(addedMessage, addedToken);
-        }
-
-        /// <summary>
         /// Creates the message image.
         /// </summary>
         /// <param name="messageId">The message identifier.</param>
@@ -686,6 +618,97 @@ namespace InstaMelody.Business
         #endregion Private Methods
         
         #region Internal Methods
+
+        /// <summary>
+        /// Creates the message.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="sender">The sender.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Data.DataException">Cannot create a NULL Message.
+        /// or
+        /// UserId is not valid.</exception>
+        internal Tuple<Message, FileUploadToken> CreateMessage(Message message, User sender)
+        {
+            if (message == null)
+            {
+                throw new DataException("Cannot create a NULL Message.");
+            }
+            if (sender.Id.Equals(default(Guid)))
+            {
+                throw new DataException("UserId is not valid.");
+            }
+
+            // create message
+            var dal = new Messages();
+            var addedMessage = dal.AddMessage(message);
+
+            FileUploadToken addedToken = null;
+            var fileUploadToken = new FileUploadToken
+            {
+                UserId = sender.Id,
+                DateCreated = DateTime.UtcNow
+            };
+
+            // create attachment
+            if (message.Image != null)
+            {
+                var newImage = this.CreateMessageImage(addedMessage.Id, message.Image);
+                addedMessage.Image = newImage.Image;
+
+                fileUploadToken.MediaType = FileUploadTypeEnum.MessageImage;
+                fileUploadToken.FileName = addedMessage.Image.FileName;
+            }
+            else if (message.Video != null)
+            {
+                var newVideo = this.CreateMessageVideo(addedMessage.Id, message.Video);
+                addedMessage.Video = newVideo.Video;
+
+                fileUploadToken.MediaType = FileUploadTypeEnum.MessageVideo;
+                fileUploadToken.FileName = addedMessage.Video.FileName;
+            }
+            else if (message.UserMelody != null)
+            {
+                var melodyBll = new MelodyBLL();
+                var createdFileUpload = melodyBll.CreateUserMelody(message.UserMelody, sender);
+
+                this.CreateMessageMelody(addedMessage.Id, createdFileUpload.UserMelody);
+
+                addedMessage.UserMelody = createdFileUpload.UserMelody;
+                fileUploadToken = createdFileUpload.FileUploadToken;
+            }
+
+            if (!fileUploadToken.MediaType.Equals(FileUploadTypeEnum.Unknown))
+            {
+                var fileBll = new FileBLL();
+                addedToken = fileBll.CreateToken(fileUploadToken);
+            }
+
+            return new Tuple<Message, FileUploadToken>(addedMessage, addedToken);
+        }
+
+        /// <summary>
+        /// Gets the message.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <returns></returns>
+        internal Message GetMessage(Message message)
+        {
+            var dal = new Messages();
+            var foundMessage = dal.GetMessageById(message.Id);
+
+            return foundMessage;
+        }
+
+        /// <summary>
+        /// Deletes the message.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        internal void DeleteMessage(Message message)
+        {
+            var dal = new Messages();
+            dal.DeleteMessage(message.Id);
+        }
 
         /// <summary>
         /// Deletes the message image.

@@ -12,8 +12,6 @@ namespace InstaMelody.Model
 
         public DateTime DateCreated { get; set; }
 
-        public DateTime DateModified { get; set; }
-
         public bool IsDeleted { get; set; }
 
         #region RelationshipProperties

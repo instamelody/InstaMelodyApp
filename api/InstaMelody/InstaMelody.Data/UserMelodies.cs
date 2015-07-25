@@ -6,7 +6,6 @@ using InstaMelody.Model;
 
 namespace InstaMelody.Data
 {
-    // TODO: refactor DAL
     public class UserMelodies : DataAccess
     {
         #region UserMelodies
@@ -20,36 +19,34 @@ namespace InstaMelody.Data
         {
             var userMelodyId = Guid.NewGuid();
 
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"INSERT INTO dbo.UserMelodies
-                                    (Id, Name, UserId, DateCreated)
-                                    VALUES (@UserMelodyId, @Name, @UserId, @DateCreated)";
+            var query = @"INSERT INTO dbo.UserMelodies
+                        (Id, Name, UserId, DateCreated)
+                        VALUES (@UserMelodyId, @Name, @UserId, @DateCreated)";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "UserMelodyId",
                     Value = userMelodyId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "UserId",
                     Value = userMelody.UserId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "Name",
                     Value = userMelody.Name,
                     SqlDbType = SqlDbType.VarChar,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "DateCreated",
                     Value = userMelody.DateCreated > DateTime.MinValue
@@ -57,13 +54,12 @@ namespace InstaMelody.Data
                         : DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            ExecuteNonQuery(query, parameters.ToArray());
 
-            return this.GetUserMelodyById(userMelodyId);
+            return GetUserMelodyById(userMelodyId);
         }
 
         /// <summary>
@@ -74,42 +70,26 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public UserMelody GetUserMelodyById(Guid userMelodyId, bool showDeleted = false)
         {
-            UserMelody result = null;
+            var query = @"SELECT TOP 1 * FROM dbo.UserMelodies
+                        WHERE Id = @UserMelodyId";
 
-            using (var conn = new SqlConnection(ConnString))
+            if (!showDeleted)
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT TOP 1 * FROM dbo.UserMelodies
-                                    WHERE Id = @UserMelodyId";
-                if (!showDeleted)
-                {
-                    cmd.CommandText += @" AND IsDeleted = 0";
-                }
+                query += @" AND IsDeleted = 0";
+            }
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "UserMelodyId",
                     Value = userMelodyId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            result = new UserMelody();
-                            result = result.ParseFromDataReader(reader);
-                        }
-                    }
                 }
-            }
+            };
 
-            return result;
+            return GetRecord<UserMelody>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -119,41 +99,24 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public UserMelody GetUserMelodyByMelodyId(int melodyId)
         {
-            UserMelody result = null;
+            var query = @"SELECT TOP 1 m.* FROM dbo.UserMelodies m
+                        JOIN dbo.UserMelodyParts p
+                        ON p.UserMelodyId = m.Id
+                        WHERE p.IsDeleted = 0 AND m.IsDeleted = 0
+                        AND p.MelodyId = @MelodyId";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT TOP 1 m.* FROM dbo.UserMelodies m
-                                    JOIN dbo.UserMelodyParts p
-                                    ON p.UserMelodyId = m.Id
-                                    WHERE p.IsDeleted = 0 AND m.IsDeleted = 0
-                                        AND p.MelodyId = @MelodyId";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "MelodyId",
                     Value = melodyId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            result = new UserMelody();
-                            result = result.ParseFromDataReader(reader);
-                        }
-                    }
                 }
-            }
+            };
 
-            return result;
+            return GetRecord<UserMelody>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -163,40 +126,21 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public IList<UserMelody> GetUserMelodiesByUserId(Guid userId)
         {
-            List<UserMelody> results = null;
+            var query = @"SELECT * FROM dbo.UserMelodies
+                        WHERE IsDeleted = 0 AND UserId = @UserId";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT * FROM dbo.UserMelodies
-                                    WHERE IsDeleted = 0 AND UserId = @UserId";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "UserId",
                     Value = userId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        results = new List<UserMelody>();
-                        while (reader.Read())
-                        {
-                            var result = new UserMelody();
-                            result = result.ParseFromDataReader(reader);
-                            results.Add(result);
-                        }
-                    }
                 }
-            }
+            };
 
-            return results;
+            return GetRecordSet<UserMelody>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -208,50 +152,34 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public UserMelody GetUserMelodyByUserIdAndName(Guid userId, string name, bool showDeleted = false)
         {
-            UserMelody result = null;
+            var query = @"SELECT TOP 1 * FROM dbo.UserMelodies
+                        WHERE UserId = @UserId
+                        AND Name = @Name";
 
-            using (var conn = new SqlConnection(ConnString))
+            if (!showDeleted)
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT TOP 1 * FROM dbo.UserMelodies
-                                    WHERE UserId = @UserId
-                                        AND Name = @Name";
-                if (!showDeleted)
-                {
-                    cmd.CommandText += @" AND IsDeleted = 0";
-                }
+                query += @" AND IsDeleted = 0";
+            }
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "UserId",
                     Value = userId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "Name",
                     Value = name,
                     SqlDbType = SqlDbType.VarChar,
                     Direction = ParameterDirection.Input
-                });
+                },
+            };
 
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            result = new UserMelody();
-                            result = result.ParseFromDataReader(reader);
-                        }
-                    }
-                }
-            }
-
-            return result;
+            return GetRecord<UserMelody>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -260,27 +188,24 @@ namespace InstaMelody.Data
         /// <param name="userMelodyId">The user melody identifier.</param>
         public void DeleteUserMelody(Guid userMelodyId)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE dbo.UserMelodies
-                                    SET IsDeleted = 1
-                                    WHERE IsDeleted = 0 AND Id = @UserMelodyId";
+            var query = @"UPDATE dbo.UserMelodies
+                        SET IsDeleted = 1
+                        WHERE IsDeleted = 0 AND Id = @UserMelodyId";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "UserMelodyId",
                     Value = userMelodyId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            ExecuteNonQuery(query, parameters.ToArray());
 
-            this.DeletePartsByUserMelodyId(userMelodyId);
+            DeletePartsByUserMelodyId(userMelodyId);
         }
 
         #endregion UserMelodies
@@ -296,44 +221,41 @@ namespace InstaMelody.Data
         /// <exception cref="System.Data.DataException">Failed to create a new User Melody Part.</exception>
         public UserMelodyPart CreateUserMelodyPart(Guid userMelodyId, int melodyId)
         {
-            using (var conn = new SqlConnection(ConnString))
+            var query = @"INSERT INTO dbo.UserMelodyParts
+                        (UserMelodyId, MelodyId, DateCreated)
+                        VALUES (@UserMelodyId, @MelodyId, @DateCreated)
+
+                        SELECT SCOPE_IDENTITY() AS [SCOPE_IDENTITY];";
+
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"INSERT INTO dbo.UserMelodyParts
-                                    (UserMelodyId, MelodyId, DateCreated)
-                                    VALUES (@UserMelodyId, @MelodyId, @DateCreated)
-
-                                    SELECT SCOPE_IDENTITY() AS [SCOPE_IDENTITY];";
-
-                cmd.Parameters.Add(new SqlParameter
+                    new SqlParameter
                 {
                     ParameterName = "UserMelodyId",
                     Value = userMelodyId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "MelodyId",
                     Value = melodyId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "DateCreated",
                     Value = DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
-                });
+                },
+            };
 
-                conn.Open();
-                var obj = cmd.ExecuteScalar();
-                if (!Convert.IsDBNull(obj))
-                {
-                    return this.GetUserMelodyPartById(Convert.ToInt32(obj));
-                }
+            var obj = ExecuteScalar(query, parameters.ToArray());
+            if (!Convert.IsDBNull(obj))
+            {
+                return GetUserMelodyPartById(Convert.ToInt32(obj));
             }
 
             throw new DataException("Failed to create a new User Melody Part.");
@@ -346,38 +268,21 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public UserMelodyPart GetUserMelodyPartById(int melodyPartId)
         {
-            UserMelodyPart result = null;
+            var query = @"SELECT TOP 1 * FROM dbo.UserMelodyParts
+                        WHERE IsDeleted = 0 AND Id = @MelodyPartId";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT TOP 1 * FROM dbo.UserMelodyParts
-                                    WHERE IsDeleted = 0 AND Id = @MelodyPartId";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "MelodyPartId",
                     Value = melodyPartId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            result = new UserMelodyPart();
-                            result = result.ParseFromDataReader(reader);
-                        }
-                    }
                 }
-            }
+            };
 
-            return result;
+            return GetRecord<UserMelodyPart>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -387,43 +292,24 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public IList<Melody> GetPartsByUserMelodyId(Guid userMelodyId)
         {
-            List<Melody> results = null;
+            var query = @"SELECT m.* FROM dbo.Melodies m
+                        JOIN dbo.UserMelodyParts p
+                        ON m.Id = p.MelodyId
+                        WHERE m.IsDeleted = 0 AND p.IsDeleted = 0
+                        AND p.UserMelodyId = @UserMelodyId";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT m.* FROM dbo.Melodies m
-                                    JOIN dbo.UserMelodyParts p
-                                    ON m.Id = p.MelodyId
-                                    WHERE m.IsDeleted = 0 AND p.IsDeleted = 0
-                                        AND p.UserMelodyId = @UserMelodyId";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "UserMelodyId",
                     Value = userMelodyId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        results = new List<Melody>();
-                        while (reader.Read())
-                        {
-                            var result = new Melody();
-                            result = result.ParseFromDataReader(reader);
-                            results.Add(result);
-                        }
-                    }
                 }
-            }
+            };
 
-            return results;
+            return GetRecordSet<Melody>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -432,25 +318,22 @@ namespace InstaMelody.Data
         /// <param name="userMelodyId">The user melody identifier.</param>
         private void DeletePartsByUserMelodyId(Guid userMelodyId)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE dbo.UserMelodyParts
-                                    SET IsDeleted = 1
-                                    WHERE IsDeleted = 0 AND UserMelodyId = @UserMelodyId";
+            var query = @"UPDATE dbo.UserMelodyParts
+                        SET IsDeleted = 1
+                        WHERE IsDeleted = 0 AND UserMelodyId = @UserMelodyId";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
                 {
                     ParameterName = "UserMelodyId",
                     Value = userMelodyId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            ExecuteNonQuery(query, parameters.ToArray());
         }
 
         #endregion UserMelodyParts

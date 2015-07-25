@@ -14,7 +14,7 @@ namespace InstaMelody.Data
         /// The connection string.
         /// </value>
         /// <exception cref="System.Exception"></exception>
-        protected string ConnString
+        private static string ConnString
         {
             get
             {
@@ -144,7 +144,7 @@ namespace InstaMelody.Data
         /// <typeparam name="T"></typeparam>
         /// <param name="reader">The reader.</param>
         /// <returns></returns>
-        private static T ParseFromDataReader<T>(SqlDataReader reader)
+        private static T ParseFromDataReader<T>(IDataRecord reader)
         {
             var type = typeof(T);
             var instance = Activator.CreateInstance<T>();

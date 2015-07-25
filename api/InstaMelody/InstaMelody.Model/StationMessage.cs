@@ -11,15 +11,19 @@ namespace InstaMelody.Model
 
         public Guid MessageId { get; set; }
 
+        public Guid SenderId { get; set; }
+
+        public int? ParentId { get; set; }
+
         public bool IsPrivate { get; set; }
 
         public DateTime DateCreated { get; set; }
 
-        public DateTime DateModified { get; set; }
-
         public bool IsDeleted { get; set; }
 
         #region RelationshipProperties
+
+        public IList<StationMessage> Replies { get; set; } 
 
         public Message Message { get; set; }
 
