@@ -1,13 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Collections.Generic;
-
 using InstaMelody.Model;
 
 namespace InstaMelody.Data
 {
-    // TODO: refactor DAL
     public class UserSessions : DataAccess
     {
         /// <summary>
@@ -17,38 +15,20 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public IList<UserSession> FindByUserId(Guid userId)
         {
-            var results = new List<UserSession>();
+            var query = @"SELECT * FROM dbo.UserSessions WHERE UserId = @UserId";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>()
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT * FROM dbo.UserSessions WHERE UserId = @UserId";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "UserId",
                     Value = userId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            var result = new UserSession();
-                            result = result.ParseFromDataReader(reader);
-                            results.Add(result);
-                        }
-                    }
                 }
-            }
+            };
 
-            return results;
+            return GetRecordSet<UserSession>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -58,39 +38,21 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public IList<UserSession> FindActiveSessionsByUserId(Guid userId)
         {
-            var results = new List<UserSession>();
+            var query = @"SELECT * FROM dbo.UserSessions
+                        WHERE UserId = @UserId AND IsDeleted = 0";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>()
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT * FROM dbo.UserSessions
-                                    WHERE UserId = @UserId AND IsDeleted = 0";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "UserId",
                     Value = userId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            var result = new UserSession();
-                            result = result.ParseFromDataReader(reader);
-                            results.Add(result);
-                        }
-                    }
                 }
-            }
+            };
 
-            return results;
+            return GetRecordSet<UserSession>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -98,44 +60,31 @@ namespace InstaMelody.Data
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <returns></returns>
-        public int EndAllSessionsByUserId(Guid userId)
+        public void EndAllSessionsByUserId(Guid userId)
         {
-            var sessions = this.FindActiveSessionsByUserId(userId);
-            var count = 0;
+            var query = @"UPDATE dbo.UserSessions
+                        SET IsDeleted = 1, LastActivity = @LastActivity
+                        WHERE UserId = @UserId AND IsDeleted = 0";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>()
             {
-                conn.Open();
-                foreach (var session in sessions)
+                new SqlParameter
                 {
-                    var cmd = conn.CreateCommand();
-                    cmd.CommandType = CommandType.Text;
-                    cmd.CommandText = @"UPDATE dbo.UserSessions
-                                    SET IsDeleted = 1, LastActivity = @LastActivity
-                                    WHERE UserId = @UserId AND IsDeleted = 0";
-
-                    cmd.Parameters.Add(new SqlParameter
-                    {
-                        ParameterName = "LastActivity",
-                        Value = DateTime.UtcNow,
-                        SqlDbType = SqlDbType.DateTime,
-                        Direction = ParameterDirection.Input
-                    });
-                    cmd.Parameters.Add(new SqlParameter
-                    {
-                        ParameterName = "UserId",
-                        Value = session.UserId,
-                        SqlDbType = SqlDbType.UniqueIdentifier,
-                        Direction = ParameterDirection.Input
-                    });
-
-                    cmd.ExecuteNonQuery();
-
-                    count++;
+                    ParameterName = "LastActivity",
+                    Value = DateTime.UtcNow,
+                    SqlDbType = SqlDbType.DateTime,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "UserId",
+                    Value = userId,
+                    SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
                 }
-            }
+            };
 
-            return count;
+            ExecuteNonQuery(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -144,32 +93,29 @@ namespace InstaMelody.Data
         /// <param name="token">The token.</param>
         public void EndSession(Guid token)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE dbo.UserSessions
-                                SET IsDeleted = 1, LastActivity = @LastActivity
-                                WHERE Token = @Token AND IsDeleted = 0";
+            var query = @"UPDATE dbo.UserSessions
+                        SET IsDeleted = 1, LastActivity = @LastActivity
+                        WHERE Token = @Token AND IsDeleted = 0";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>()
+            {
+                new SqlParameter
                 {
                     ParameterName = "LastActivity",
                     Value = DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "Token",
                     Value = token,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            ExecuteNonQuery(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -179,37 +125,21 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public UserSession FindByToken(Guid token)
         {
-            var result = new UserSession();
+            var query = @"SELECT TOP 1 * FROM dbo.UserSessions
+                        WHERE Token = @Token AND IsDeleted = 0";
 
-            using (var conn = new SqlConnection(ConnString))
+            var parameters = new List<SqlParameter>()
             {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT TOP 1 * FROM dbo.UserSessions
-                                    WHERE Token = @Token AND IsDeleted = 0";
-
-                cmd.Parameters.Add(new SqlParameter
+                new SqlParameter
                 {
                     ParameterName = "Token",
                     Value = token,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    if (!reader.IsClosed && reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            result = result.ParseFromDataReader(reader);
-                        }
-                    }
                 }
-            }
+            };
 
-            return result;
+            return GetRecord<UserSession>(query, parameters.ToArray());
         }
 
         /// <summary>
@@ -221,45 +151,42 @@ namespace InstaMelody.Data
         {
             session.Token = Guid.NewGuid();
 
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"INSERT INTO dbo.UserSessions (Token, UserId, LastActivity, DateCreated, IsDeleted)
-                                    VALUES(@Token, @UserId, @LastActivity, @DateCreated, 0)";
+            var query = @"INSERT INTO dbo.UserSessions (Token, UserId, LastActivity, DateCreated, IsDeleted)
+                        VALUES(@Token, @UserId, @LastActivity, @DateCreated, 0)";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>()
+            {
+                new SqlParameter
                 {
                     ParameterName = "Token",
                     Value = session.Token,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "UserId",
                     Value = session.UserId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "LastActivity",
                     Value = session.LastActivity > DateTime.MinValue ? session.LastActivity : DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "DateCreated",
                     Value = session.DateCreated > DateTime.MinValue ? session.DateCreated : DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+            ExecuteNonQuery(query, parameters.ToArray());
 
             return session.Token;
         }
@@ -271,33 +198,31 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public UserSession UpdateSessionActivity(Guid token)
         {
-            using (var conn = new SqlConnection(ConnString))
-            {
-                var cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE dbo.UserSessions
+            var query = @"UPDATE dbo.UserSessions
                                     SET LastActivity = @LastActivity
                                     WHERE Token = @Token AND IsDeleted = 0";
 
-                cmd.Parameters.Add(new SqlParameter
+            var parameters = new List<SqlParameter>()
+            {
+                new SqlParameter
                 {
                     ParameterName = "LastActivity",
                     Value = DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
-                });
-                cmd.Parameters.Add(new SqlParameter
+                },
+                new SqlParameter
                 {
                     ParameterName = "Token",
                     Value = token,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
-                });
+                }
+            };
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
-            return this.FindByToken(token);
+            ExecuteNonQuery(query, parameters.ToArray());
+
+            return FindByToken(token);
         }
 
         /// <summary>

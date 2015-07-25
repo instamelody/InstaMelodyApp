@@ -328,9 +328,12 @@ CREATE TABLE dbo.StationMessages
 	MessageId UNIQUEIDENTIFIER NOT NULL,
 	CONSTRAINT FK_StationMessages_MessageId FOREIGN KEY (MessageId)
 		REFERENCES Messages (Id),
+	SenderId UNIQUEIDENTIFIER NULL,
+	CONSTRAINT FK_StationMessages_SenderId FOREIGN KEY (SenderId)
+		REFERENCES Users (Id),
+	ParentId int NULL,
 	IsPrivate bit NOT NULL DEFAULT 0,
 	DateCreated datetime NOT NULL,
-	DateModified datetime NOT NULL,
 	IsDeleted bit NOT NULL DEFAULT 0)
 GO
 
@@ -343,7 +346,6 @@ CREATE TABLE dbo.StationMessageUserLikes
 	CONSTRAINT FK_StationMessageUserLikes_UserId FOREIGN KEY (UserId)
 		REFERENCES Users (Id),
 	DateCreated datetime NOT NULL,
-	DateModified datetime NOT NULL,
 	IsDeleted bit NOT NULL DEFAULT 0)
 GO
 

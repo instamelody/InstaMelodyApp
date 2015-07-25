@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.ComponentModel.DataAnnotations;
 
 namespace InstaMelody.Model
@@ -105,50 +104,6 @@ namespace InstaMelody.Model
         public IList<User> Friends { get; set; }
 
         #endregion Relationship Properties
-
-        /// <summary>
-        /// Parses from data reader.
-        /// </summary>
-        /// <param name="dataReader">The data reader.</param>
-        /// <returns></returns>
-        public User ParseFromDataReader(SqlDataReader dataReader)
-        {
-            this.Id = (Guid)dataReader["Id"];
-            if (dataReader["UserImageId"] is DBNull)
-            {
-                this.UserImageId = null;
-            }
-            else
-            {
-                this.UserImageId = Convert.ToInt32(dataReader["UserImageId"]);
-            }
-            this.EmailAddress = Convert.ToString(dataReader["EmailAddress"]);
-            this.DisplayName = Convert.ToString(dataReader["DisplayName"]);
-            this.FirstName = Convert.ToString(dataReader["FirstName"]);
-            this.LastName = Convert.ToString(dataReader["LastName"]);
-            this.PhoneNumber = Convert.ToString(dataReader["PhoneNumber"]);
-            this.HashSalt = Convert.ToString(dataReader["HashSalt"]);
-            this.Password = Convert.ToString(dataReader["Password"]);
-            this.TwitterUsername = Convert.ToString(dataReader["TwitterUsername"]);
-            this.TwitterUserId = Convert.ToString(dataReader["TwitterUserId"]);
-            this.TwitterToken = Convert.ToString(dataReader["TwitterToken"]);
-            this.TwitterSecret = Convert.ToString(dataReader["TwitterSecret"]);
-            this.FacebookUserId = Convert.ToString(dataReader["FacebookUserId"]);
-            this.FacebookToken = Convert.ToString(dataReader["FacebookToken"]);
-            this.LastLoginSuccess = dataReader["LastLoginSuccess"] is DBNull
-                ? new DateTime()
-                : Convert.ToDateTime(dataReader["LastLoginSuccess"]);
-            this.LastLoginFailure = dataReader["LastLoginFailure"] is DBNull
-                ? new DateTime()
-                : Convert.ToDateTime(dataReader["LastLoginFailure"]);
-            this.NumberLoginFailures = Convert.ToInt32(dataReader["NumberLoginFailures"]);
-            this.IsLocked = Convert.ToBoolean(dataReader["IsLocked"]);
-            this.DateCreated = Convert.ToDateTime(dataReader["DateCreated"]);
-            this.DateModified = Convert.ToDateTime(dataReader["DateModified"]);
-            this.IsDeleted = Convert.ToBoolean(dataReader["IsDeleted"]);
-
-            return this;
-        }
 
         /// <summary>
         /// Strips the sensitive information.

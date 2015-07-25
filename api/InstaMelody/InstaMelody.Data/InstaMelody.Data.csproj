@@ -54,6 +54,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="StationMessages.cs" />
     <Compile Include="Stations.cs" />
     <Compile Include="UserFriends.cs" />
     <Compile Include="UserLoops.cs" />
