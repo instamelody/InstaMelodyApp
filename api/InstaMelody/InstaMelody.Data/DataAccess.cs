@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using InstaMelody.Model.Enums;
 
 namespace InstaMelody.Data
 {
@@ -158,9 +159,22 @@ namespace InstaMelody.Data
                     var name = property.Name;
                     var propType = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
 
+
                     if (propType == typeof(TimeSpan))
                     {
                         value = (reader[name] == DBNull.Value) ? null : (object)TimeSpan.FromTicks(Convert.ToInt64(reader[name]));
+                    }
+                    else if (propType == typeof(FileUploadTypeEnum))
+                    {
+                        value = Enum.Parse(typeof(FileUploadTypeEnum), Convert.ToString(reader[name]));
+                    }
+                    else if (propType == typeof(LoopEffectsEnum))
+                    {
+                        value = Enum.Parse(typeof(LoopEffectsEnum), Convert.ToString(reader[name]));
+                    }
+                    else if (propType == typeof(MediaTypeEnum))
+                    {
+                        value = Enum.Parse(typeof(MediaTypeEnum), Convert.ToString(reader[name]));
                     }
                     else
                     {

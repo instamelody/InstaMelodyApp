@@ -221,6 +221,56 @@
         /// </summary>
         public const string RouteFollowers = "Followers";
 
+        /// <summary>
+        /// The route post
+        /// </summary>
+        public const string RoutePost = "Post";
+
+        /// <summary>
+        /// The route posts
+        /// </summary>
+        public const string RoutePosts = "Posts";
+
+        /// <summary>
+        /// The route message
+        /// </summary>
+        public const string RouteMessage = "Message";
+
+        /// <summary>
+        /// The route messages
+        /// </summary>
+        public const string RouteMessages = "Messages";
+
+        /// <summary>
+        /// The route like message
+        /// </summary>
+        public const string RouteLikeMessage = "Post/Like";
+
+        /// <summary>
+        /// The route unlike message
+        /// </summary>
+        public const string RouteUnlikeMessage = "Post/Unlike";
+
+        /// <summary>
+        /// The route reply post
+        /// </summary>
+        public const string RouteReplyPost = "Post/Reply";
+
+        /// <summary>
+        /// The route reply message
+        /// </summary>
+        public const string RouteReplyMessage = "Message/Reply";
+
+        /// <summary>
+        /// The route delete post
+        /// </summary>
+        public const string RouteDeletePost = "Post/Delete";
+
+        /// <summary>
+        /// The route delete message
+        /// </summary>
+        public const string RouteDeleteMessage = "Message/Delete";
+
         #endregion Stations Routes
 
         #region File Upload Routes

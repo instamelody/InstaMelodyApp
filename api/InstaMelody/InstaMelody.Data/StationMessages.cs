@@ -141,6 +141,38 @@ namespace InstaMelody.Data
         }
 
         /// <summary>
+        /// Gets the top level messages by station identifier.
+        /// </summary>
+        /// <param name="stationId">The station identifier.</param>
+        /// <param name="isPrivate">if set to <c>true</c> [is private].</param>
+        /// <returns></returns>
+        public IList<StationMessage> GetTopLevelMessagesByStationId(int stationId, bool isPrivate)
+        {
+            var query = @"SELECT * FROM dbo.StationMessages
+                        WHERE StationId = @StationId AND IsPrivate = @IsPrivate AND ParentId IS NULL AND IsDeleted = 0";
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "StationId",
+                    Value = stationId,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "IsPrivate",
+                    Value = isPrivate,
+                    SqlDbType = SqlDbType.Bit,
+                    Direction = ParameterDirection.Input
+                }
+            };
+
+            return GetRecordSet<StationMessage>(query, parameters.ToArray());
+        }
+
+        /// <summary>
         /// Gets the replies by station message identifier.
         /// </summary>
         /// <param name="stationMessageId">The station message identifier.</param>
@@ -215,6 +247,44 @@ namespace InstaMelody.Data
         #endregion Station Messages
 
         #region Station Message User Likes
+
+        /// <summary>
+        /// Doeses the user like message.
+        /// </summary>
+        /// <param name="stationMessageId">The station message identifier.</param>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns></returns>
+        public bool DoesUserLikeMessage(int stationMessageId, Guid userId)
+        {
+            var query = @"SELECT COUNT(*) FROM dbo.StationMessageUserLikes
+                        WHERE StationMessageId = @StationMessageId AND UserId = @UserId
+                        AND IsDeleted = 0";
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "StationMessageId",
+                    Value = stationMessageId,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "UserId",
+                    Value = userId,
+                    SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                }
+            };
+
+            var obj = ExecuteScalar(query, parameters.ToArray());
+            if (!Convert.IsDBNull(obj) && Convert.ToInt32(obj) > 0)
+            {
+                return true;
+            }
+            return false;
+        }
 
         /// <summary>
         /// Likes the station message.

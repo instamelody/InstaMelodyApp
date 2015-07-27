@@ -35,6 +35,8 @@ namespace InstaMelody.Model.ApiModels
 
         public Station Station { get; set; }
 
+        public StationMessage StationMessage { get; set; }
+
         #endregion Relationship Properties
     }
 }

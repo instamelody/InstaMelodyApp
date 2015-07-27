@@ -641,6 +641,14 @@ namespace InstaMelody.Business
 
             // create message
             var dal = new Messages();
+
+            if (message.Image != null)
+                message.MediaType = MediaTypeEnum.Image;
+            else if (message.Video != null)
+                message.MediaType = MediaTypeEnum.Video;
+            else if (message.UserMelody != null)
+                message.MediaType = MediaTypeEnum.Melody;
+
             var addedMessage = dal.AddMessage(message);
 
             FileUploadToken addedToken = null;
@@ -653,7 +661,7 @@ namespace InstaMelody.Business
             // create attachment
             if (message.Image != null)
             {
-                var newImage = this.CreateMessageImage(addedMessage.Id, message.Image);
+                var newImage = CreateMessageImage(addedMessage.Id, message.Image);
                 addedMessage.Image = newImage.Image;
 
                 fileUploadToken.MediaType = FileUploadTypeEnum.MessageImage;
@@ -661,7 +669,7 @@ namespace InstaMelody.Business
             }
             else if (message.Video != null)
             {
-                var newVideo = this.CreateMessageVideo(addedMessage.Id, message.Video);
+                var newVideo = CreateMessageVideo(addedMessage.Id, message.Video);
                 addedMessage.Video = newVideo.Video;
 
                 fileUploadToken.MediaType = FileUploadTypeEnum.MessageVideo;
@@ -670,12 +678,22 @@ namespace InstaMelody.Business
             else if (message.UserMelody != null)
             {
                 var melodyBll = new MelodyBLL();
-                var createdFileUpload = melodyBll.CreateUserMelody(message.UserMelody, sender);
+                try
+                {
+                    var foundMelody = melodyBll.GetUserMelody(message.UserMelody);
+                    addedMessage.UserMelody = foundMelody;
 
-                this.CreateMessageMelody(addedMessage.Id, createdFileUpload.UserMelody);
+                    CreateMessageMelody(addedMessage.Id, foundMelody);
+                }
+                catch (Exception)
+                {
+                    var createdFileUpload = melodyBll.CreateUserMelody(message.UserMelody, sender);
 
-                addedMessage.UserMelody = createdFileUpload.UserMelody;
-                fileUploadToken = createdFileUpload.FileUploadToken;
+                    CreateMessageMelody(addedMessage.Id, createdFileUpload.UserMelody);
+
+                    addedMessage.UserMelody = createdFileUpload.UserMelody;
+                    return new Tuple<Message, FileUploadToken>(addedMessage, createdFileUpload.FileUploadToken);
+                }
             }
 
             if (!fileUploadToken.MediaType.Equals(FileUploadTypeEnum.Unknown))

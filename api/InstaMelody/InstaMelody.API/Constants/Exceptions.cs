@@ -142,6 +142,41 @@
         /// </summary>
         public const string FailedGetStationFollowers = "Failed to get followers list for Station: {0}.";
 
+        /// <summary>
+        /// The failed send message
+        /// </summary>
+        public const string FailedSendMessage = "Failed to send a Message to Station: {0}.";
+
+        /// <summary>
+        /// The failed create post
+        /// </summary>
+        public const string FailedCreatePost = "Failed to create a Post for Station: {0}.";
+
+        /// <summary>
+        /// The failed get station posts
+        /// </summary>
+        public const string FailedGetStationPosts = "Failed to get the Posts for Station: {0}.";
+
+        /// <summary>
+        /// The failed get station messages
+        /// </summary>
+        public const string FailedGetStationMessages = "Failed to get the Messages for Station: {0}.";
+
+        /// <summary>
+        /// The failed reply station message
+        /// </summary>
+        public const string FailedReplyStationMessage = "Failed to create a reply for Message/Post: {0}.";
+
+        /// <summary>
+        /// The failed like post
+        /// </summary>
+        public const string FailedLikePost = "Failed to Like the Post: {0}.";
+
+        /// <summary>
+        /// The failed unlike post
+        /// </summary>
+        public const string FailedUnlikePost = "Failed to Unlike the Post: {0}.";
+
         #endregion Stations Exceptions
 
         #region Messages Exceptions
