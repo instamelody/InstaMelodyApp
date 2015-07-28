@@ -62,7 +62,7 @@ namespace InstaMelody.API.Controllers
                         string.Format("Create Category - Category Id: {0}, Token: {1}", request.Category.Id, request.Token), 
                         LogLevel.Trace);
 
-                    var bll = new CategoryBLL();
+                    var bll = new CategoryBll();
                     var result = bll.AddCategory(request.Category, request.Token);
 
                     response = this.Request.CreateResponse(HttpStatusCode.OK, result);
@@ -82,7 +82,6 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
                 }
             }
             else
@@ -114,7 +113,7 @@ namespace InstaMelody.API.Controllers
                         string.Format("Update Category - Category Id: {0}, Token: {1}", request.Category.Id, request.Token),
                         LogLevel.Trace);
 
-                    var bll = new CategoryBLL();
+                    var bll = new CategoryBll();
                     var result = bll.UpdateCategory(request.Category, request.Token);
 
                     if (result == null || result.Id.Equals(default(int)))
@@ -143,7 +142,6 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
                 }
             }
             else
@@ -175,7 +173,7 @@ namespace InstaMelody.API.Controllers
                         string.Format("Delete Category - Category Id: {0}, Token: {1}", request.Category.Id, request.Token),
                         LogLevel.Trace);
 
-                    var bll = new CategoryBLL();
+                    var bll = new CategoryBll();
                     bll.DeleteCategory(request.Category, request.Token);
 
                     response = this.Request.CreateResponse(HttpStatusCode.Accepted);
@@ -196,7 +194,6 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
                 }
             }
             else
@@ -220,7 +217,7 @@ namespace InstaMelody.API.Controllers
 
             try
             {
-                var bll = new CategoryBLL();
+                var bll = new CategoryBll();
                 var results = bll.GetAllCategories();
                 if (results == null || !results.Any())
                 {
@@ -241,7 +238,6 @@ namespace InstaMelody.API.Controllers
                 {
                     response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                 }
-                response.ReasonPhrase = exc.Message;
             }
             
 
@@ -274,7 +270,7 @@ namespace InstaMelody.API.Controllers
             }
             else
             {
-                var bll = new CategoryBLL();
+                var bll = new CategoryBll();
                 var results = bll.GetChildCategories(new Category
                 {
                     Id = _categoryId

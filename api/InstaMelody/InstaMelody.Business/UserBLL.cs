@@ -6,14 +6,16 @@ using System.Text;
 
 using InstaMelody.Business.Properties;
 using InstaMelody.Data;
+using InstaMelody.Infrastructure;
 using InstaMelody.Model;
 using InstaMelody.Model.ApiModels;
 using InstaMelody.Model.Enums;
+using NLog;
 using ModelUtilities = InstaMelody.Model.Utilities;
 
 namespace InstaMelody.Business
 {
-    public class UserBLL
+    public class UserBll
     {
         #region Public Methods
 
@@ -26,20 +28,18 @@ namespace InstaMelody.Business
         /// <exception cref="System.UnauthorizedAccessException"></exception>
         public User FindUser(User user, Guid sessionToken)
         {
-            User foundUser = null;
-
             try
             {
                 Utilities.GetUserBySession(sessionToken);
             }
             catch (Exception)
             {
+                InstaMelodyLogger.Log(string.Format("Could not find a valid session. Token: {0}.", sessionToken), LogLevel.Error);
                 throw new UnauthorizedAccessException(string.Format("Could not find a valid session for Session: {0}.", sessionToken));
             }
 
-            foundUser = this.FindUser(user);
-
-            return this.GetUserWithImage(foundUser);
+            var foundUser = FindUser(user);
+            return GetUserWithImage(foundUser);
         }
 
         /// <summary>
@@ -61,32 +61,34 @@ namespace InstaMelody.Business
             }
             catch (Exception)
             {
+                InstaMelodyLogger.Log(string.Format("Could not find a valid session. Token: {0}.", sessionToken), LogLevel.Error);
                 throw new UnauthorizedAccessException(string.Format("Could not find a valid session for Session: {0}.", sessionToken));
             }
 
             if (!user.Id.Equals(default(Guid)))
             {
-                foundUser = this.GetUserById(user.Id, sessionToken);
+                foundUser = GetUserById(user.Id, sessionToken);
             }
             else if (!string.IsNullOrWhiteSpace(user.DisplayName))
             {
-                foundUser = this.GetUserByDisplayName(user.DisplayName);
+                foundUser = GetUserByDisplayName(user.DisplayName);
             }
             else if (!string.IsNullOrWhiteSpace(user.EmailAddress))
             {
-                foundUser = this.GetUserByEmailAddress(user.EmailAddress);
+                foundUser = GetUserByEmailAddress(user.EmailAddress);
             }
 
             if (foundUser != null && !foundUser.Id.Equals(sessionUser.Id))
             {
+                var userDetail = string.IsNullOrWhiteSpace(user.DisplayName) ? user.EmailAddress : user.DisplayName;
+                InstaMelodyLogger.Log(
+                    string.Format("User: {0} cannot retrieve user info for another User: {1}", 
+                        sessionUser.Id, userDetail), LogLevel.Error);
                 throw new UnauthorizedAccessException(
-                    string.Format("User: {0} cannot retrieve user info for User: {1}", sessionUser.Id, 
-                    user.Id.Equals(default(Guid)) 
-                    ? (string.IsNullOrWhiteSpace(user.DisplayName) ? user.EmailAddress : user.DisplayName) 
-                    : user.Id.ToString()));
+                    string.Format("User: {0} cannot retrieve user info for another User: {1}", sessionUser.Id, userDetail));
             }
 
-            return this.GetUserWithImage(foundUser);
+            return GetUserWithImage(foundUser);
         }
 
         /// <summary>
@@ -100,16 +102,20 @@ namespace InstaMelody.Business
         /// <exception cref="System.Data.DataException"></exception>
         public User GetUserById(Guid userId, Guid sessionToken)
         {
-            var auth = new AuthenticationBLL();
+            var auth = new AuthenticationBll();
             var session = auth.GetSession(sessionToken);
             if (session.Token.Equals(default(Guid)) || session.IsDeleted.Equals(true))
             {
+                InstaMelodyLogger.Log(string.Format("Could not find a valid session. Token: {0}.", sessionToken), LogLevel.Error);
                 throw new UnauthorizedAccessException(string.Format("Invalid Session Token: {0}.", sessionToken));
             }
 
             var requestor = Utilities.GetUserBySession(sessionToken);
             if (requestor == null || !requestor.Id.Equals(userId))
             {
+                InstaMelodyLogger.Log(
+                    string.Format("User is not authorized to get another User's data. Token: {0}, Requested User Id: {1}", 
+                        sessionToken, userId), LogLevel.Error);
                 throw new UnauthorizedAccessException(
                     string.Format("User with session token {0} is not authorized to get the requested User's data.", session.Token));
             }
@@ -125,10 +131,13 @@ namespace InstaMelody.Business
             }
             catch (Exception)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Error getting User. User Id: {0}, Token: {1}", 
+                        userId, sessionToken), LogLevel.Error);
                 throw new DataException(string.Format("Error getting user ID {0}.", userId));
             }
 
-            return this.GetUserWithImage(result) ?? new User();
+            return GetUserWithImage(result) ?? new User();
         }
 
         /// <summary>
@@ -144,7 +153,7 @@ namespace InstaMelody.Business
             // remove sensitive information
             user = user.StripSensitiveInfo();
 
-            return this.GetUserWithImage(user);
+            return GetUserWithImage(user);
         }
 
         /// <summary>
@@ -160,7 +169,7 @@ namespace InstaMelody.Business
             // remove sensitive information
             user = user.StripSensitiveInfo();
 
-            return this.GetUserWithImage(user);
+            return GetUserWithImage(user);
         }
 
         /// <summary>
@@ -192,16 +201,22 @@ namespace InstaMelody.Business
             // check password is not empty
             if (string.IsNullOrWhiteSpace(newUser.Password))
             {
-                throw new ArgumentException("A password is required to create a new user");
+                InstaMelodyLogger.Log(
+                    string.Format("A password is required to create a new User. Display Name: {0}, Email: {1}", 
+                        newUser.DisplayName, newUser.EmailAddress), LogLevel.Error);
+                throw new ArgumentException("A password is required to create a new User.");
             }
 
-            User userExisting = null;
+            User userExisting;
             // check for matching user by display name
             if (!string.IsNullOrWhiteSpace(newUser.DisplayName))
             {
-                userExisting = this.GetUserByDisplayName(newUser.DisplayName);
+                userExisting = GetUserByDisplayName(newUser.DisplayName);
                 if (userExisting.Id != default(Guid))
                 {
+                    InstaMelodyLogger.Log(
+                        string.Format("Tried to create User with an existing display name. Display Name: {0}",
+                            newUser.DisplayName), LogLevel.Error);
                     throw new DataException(string.Format("User name {0} is not available.", newUser.DisplayName));
                 }
             }
@@ -209,9 +224,12 @@ namespace InstaMelody.Business
             // check for matching user by email
             if (!string.IsNullOrWhiteSpace(newUser.EmailAddress))
             {
-                userExisting = this.GetUserByEmailAddress(newUser.EmailAddress);
+                userExisting = GetUserByEmailAddress(newUser.EmailAddress);
                 if (userExisting.Id != default(Guid))
                 {
+                    InstaMelodyLogger.Log(
+                        string.Format("Tried to create User with an existing email. Email: {0}",
+                            newUser.EmailAddress), LogLevel.Error);
                     throw new DataException(string.Format("The email address {0} is already in use.", newUser.EmailAddress));
                 }
             }
@@ -220,7 +238,7 @@ namespace InstaMelody.Business
             var userCopy = newUser.Clone();
 
             // generate a random salt string for hashing the password
-            var auth = new AuthenticationBLL();
+            var auth = new AuthenticationBll();
             userCopy.HashSalt = auth.GenerateSalt(Settings.Default.SaltLength);
             userCopy.Password = auth.HashSaltedPassword(userCopy.HashSalt, userCopy.Password);
 
@@ -235,20 +253,26 @@ namespace InstaMelody.Business
             // add user to db & retrieve record
             var dal = new Users();
             var addedUserGuid = dal.AddUser(userCopy);
-            if (addedUserGuid == null || addedUserGuid == default(Guid))
+            if (addedUserGuid == default(Guid))
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Error adding User. Display Name: {0}, Email: {1}",
+                        newUser.DisplayName, newUser.EmailAddress), LogLevel.Error);
                 throw new Exception(string.Format("Error adding user: {0}", newUser.DisplayName));
             }
             var addedUser = dal.FindById(addedUserGuid);
             if (addedUser == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Error adding User. Display Name: {0}, Email: {1}",
+                        newUser.DisplayName, newUser.EmailAddress), LogLevel.Error);
                 throw new Exception(string.Format("Error adding user: {0}", newUser.DisplayName));
             }
 
             // remove sensitive information
             addedUser = addedUser.StripSensitiveInfo();
 
-            return this.GetUserWithImage(addedUser);
+            return GetUserWithImage(addedUser);
         }
 
         /// <summary>
@@ -263,18 +287,22 @@ namespace InstaMelody.Business
         /// </exception>
         public User UpdateUser(User userToUpdate, Guid sessionToken)
         {
-            var auth = new AuthenticationBLL();
+            var auth = new AuthenticationBll();
             var session = auth.GetSession(sessionToken);
             if (session.Token.Equals(default(Guid)) || session.IsDeleted.Equals(true))
             {
+                InstaMelodyLogger.Log(string.Format("Could not find a valid session. Token: {0}.", sessionToken), LogLevel.Error);
                 throw new UnauthorizedAccessException(string.Format("Invalid Session Token: {0}.", sessionToken));
             }
 
             var sessionUser = Utilities.GetUserBySession(sessionToken);
             if (sessionUser == null || !sessionUser.Id.Equals(userToUpdate.Id))
             {
+                InstaMelodyLogger.Log(
+                    string.Format("User is not authorized to update User's data. Token: {0}, User Id: {1}", 
+                        session.Token, userToUpdate.Id), LogLevel.Error);
                 throw new UnauthorizedAccessException(
-                    string.Format("User with session token {0} is not authorized to update this User's data.", session.Token));
+                    string.Format("User with session token {0} is not authorized to update User's data.", session.Token));
             }
 
             // check for validation errors
@@ -293,15 +321,21 @@ namespace InstaMelody.Business
             if (!userToUpdate.DisplayName.Equals(sessionUser.DisplayName)
                 || !userToUpdate.EmailAddress.Equals(sessionUser.EmailAddress))
             {
-                var userExisting = this.GetUserByDisplayName(userToUpdate.DisplayName);
+                var userExisting = GetUserByDisplayName(userToUpdate.DisplayName);
                 if (!userExisting.Id.Equals(default(Guid)) && !userExisting.Id.Equals(userToUpdate.Id))
                 {
+                    InstaMelodyLogger.Log(
+                        string.Format("Tried to update User with an existing display name. Display Name: {0}",
+                            userToUpdate.DisplayName), LogLevel.Error);
                     throw new DataException(string.Format("User name {0} is not available.", userToUpdate.DisplayName));
                 }
 
-                userExisting = this.GetUserByEmailAddress(userToUpdate.EmailAddress);
+                userExisting = GetUserByEmailAddress(userToUpdate.EmailAddress);
                 if (!userExisting.Id.Equals(default(Guid)) && !userExisting.Id.Equals(userToUpdate.Id))
                 {
+                    InstaMelodyLogger.Log(
+                        string.Format("Tried to update User with an existing email. Email: {0}",
+                            userToUpdate.EmailAddress), LogLevel.Error);
                     throw new DataException(string.Format("The email address {0} is already in use.", userToUpdate.EmailAddress));
                 }
             }
@@ -314,12 +348,15 @@ namespace InstaMelody.Business
             var updatedUser = dal.UpdateUser(sessionUser.Id, userCopy);
             if (updatedUser == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Faled to update User. User Id: {0}", 
+                        sessionUser.Id), LogLevel.Error);
                 throw new DataException(string.Format("Could not update User: {0}", sessionUser.Id));
             }
 
             // remove sensitive information
             updatedUser = updatedUser.StripSensitiveInfo();
-            return this.GetUserWithImage(updatedUser);
+            return GetUserWithImage(updatedUser);
         }
 
         /// <summary>
@@ -337,23 +374,30 @@ namespace InstaMelody.Business
             }
             catch (Exception)
             {
+                InstaMelodyLogger.Log(string.Format("Could not find a valid session. Token: {0}.", sessionToken), LogLevel.Error);
                 throw new UnauthorizedAccessException(string.Format("Could not find a valid session for Session: {0}.", sessionToken));
             }
 
             if (newImage == null
                 || string.IsNullOrWhiteSpace(newImage.FileName))
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Image not provided. Failed to Update User Image. User Id: {0}", 
+                        userToUpdate.Id), LogLevel.Error);
                 throw new ArgumentException("Image not provided.");
             }
 
             // find user profile
-            var existingUser = this.FindUser(userToUpdate);
+            var existingUser = FindUser(userToUpdate);
             if (existingUser == null || existingUser.Id.Equals(default(Guid)))
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Failed to Update User Image. Could not find User. User Id: {0}",
+                        userToUpdate.Id), LogLevel.Error);
                 throw new ArgumentException("Could not find user.");
             }
 
-            var imageBll = new FileBLL();
+            var imageBll = new FileBll();
 
             // delete existing profile image
             if (existingUser.UserImageId != null && !existingUser.UserImageId.Equals(default(int)))
@@ -369,11 +413,11 @@ namespace InstaMelody.Business
             existingUser.UserImageId = addedImage.Id;
 
             // update user with image id
-            var updatedUser = this.UpdateUserProfileImage(existingUser, sessionToken);
+            var updatedUser = UpdateUserProfileImage(existingUser, sessionToken);
             updatedUser.Image = addedImage;
 
             // create file upload token
-            var uploadBll = new FileBLL();
+            var uploadBll = new FileBll();
             var uploadToken = uploadBll.CreateToken(new FileUploadToken
             {
                 UserId = updatedUser.Id,
@@ -405,17 +449,24 @@ namespace InstaMelody.Business
             }
             catch (Exception)
             {
+                InstaMelodyLogger.Log(string.Format("Could not find a valid session. Token: {0}.", sessionToken), LogLevel.Error);
                 throw new UnauthorizedAccessException(string.Format("Could not find a valid session for Session: {0}.", sessionToken));
             }
 
-            var foundUser = this.FindUser(user);
+            var foundUser = FindUser(user);
             if (foundUser == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("User not found. User Id: {0}",
+                        user.Id), LogLevel.Error);
                 throw new DataException("User not found.");
             }
 
-            if (sessionUser == null || !sessionUser.Id.Equals(foundUser.Id))
+            if (!sessionUser.Id.Equals(foundUser.Id))
             {
+                InstaMelodyLogger.Log(
+                    string.Format("User tried to delete another User's profile. User Id: {0}, Session User Id: {1}",
+                        foundUser.Id, sessionUser.Id), LogLevel.Error);
                 throw new UnauthorizedAccessException("A user can only delete their own profile.");
             }
 
@@ -427,13 +478,13 @@ namespace InstaMelody.Business
             foundUser = foundUser.StripSensitiveInfo();
 
             // end and delete all sessions
-            var auth = new AuthenticationBLL();
+            var auth = new AuthenticationBll();
             auth.DeleteAllUserSessions(foundUser.Id);
 
             // delete profile image
             if (foundUser.UserImageId != null)
             {
-                var imageBll = new FileBLL();
+                var imageBll = new FileBll();
                 imageBll.DeleteImage(new Image
                 {
                     Id = (int)foundUser.UserImageId
@@ -462,6 +513,7 @@ namespace InstaMelody.Business
             }
             catch (Exception)
             {
+                InstaMelodyLogger.Log(string.Format("Could not find a valid session. Token: {0}.", sessionToken), LogLevel.Error);
                 throw new UnauthorizedAccessException(string.Format("Could not find a valid session for Session: {0}.", sessionToken));
             }
 
@@ -470,13 +522,17 @@ namespace InstaMelody.Business
                     && string.IsNullOrWhiteSpace(friend.DisplayName)
                     && string.IsNullOrWhiteSpace(friend.EmailAddress)))
             {
+                InstaMelodyLogger.Log(string.Format("No friend information provided. Token: {0}", sessionToken), LogLevel.Error);
                 throw new DataException("No friend information provided.");
             }
 
             // try to request friend by id, email, or display name
-            var requestedFriend = this.FindUser(friend);
+            var requestedFriend = FindUser(friend);
             if (requestedFriend == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Could not find requested friend in database. Token: {0}, Friend Id: {1}, Friend Display Name: {2}, Friend Email: {3}", 
+                        sessionToken, friend.Id, friend.DisplayName, friend.EmailAddress), LogLevel.Error);
                 throw new DataException("Could not find requested friend in database.");
             }
 
@@ -506,6 +562,7 @@ namespace InstaMelody.Business
             }
             catch (Exception)
             {
+                InstaMelodyLogger.Log(string.Format("Could not find a valid session. Token: {0}.", sessionToken), LogLevel.Error);
                 throw new UnauthorizedAccessException(string.Format("Could not find a valid session for Session: {0}.", sessionToken));
             }
 
@@ -514,13 +571,19 @@ namespace InstaMelody.Business
                     && string.IsNullOrWhiteSpace(requestor.DisplayName)
                     && string.IsNullOrWhiteSpace(requestor.EmailAddress)))
             {
+                InstaMelodyLogger.Log(
+                    string.Format("No friend information provided to approve. Token: {0}.",
+                        sessionToken), LogLevel.Error);
                 throw new DataException("No friend information provided to approve.");
             }
 
             // try to request friend by id, email, or display name
-            var requestingFriend = this.FindUser(requestor);
+            var requestingFriend = FindUser(requestor);
             if (requestingFriend == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Could not find requested friend in database. Token: {0}, Friend Id: {1}, Friend Display Name: {2}, Friend Email: {3}",
+                        sessionToken, requestor.Id, requestor.DisplayName, requestor.EmailAddress), LogLevel.Error);
                 throw new DataException("Could not find requested friend in database.");
             }
 
@@ -532,11 +595,14 @@ namespace InstaMelody.Business
             }
             else
             {
-                throw new DataException(string.Format("User: {0} not authorized to execute this request.", sessionUser.Id));
+                InstaMelodyLogger.Log(
+                    string.Format("User not authorized to approve friend request. User Id: {0}, Friend Id: {1}", 
+                        sessionUser.Id, requestingFriend.Id), LogLevel.Error);
+                throw new DataException(string.Format("User: {0} not authorized to execute request.", sessionUser.Id));
             }
 
             requestingFriend = requestingFriend.StripSensitiveInfoForFriends();
-            return this.GetUserWithImage(requestingFriend);
+            return GetUserWithImage(requestingFriend);
         }
 
         /// <summary>
@@ -558,6 +624,7 @@ namespace InstaMelody.Business
             }
             catch (Exception)
             {
+                InstaMelodyLogger.Log(string.Format("Could not find a valid session. Token: {0}.", sessionToken), LogLevel.Error);
                 throw new UnauthorizedAccessException(string.Format("Could not find a valid session for Session: {0}.", sessionToken));
             }
 
@@ -566,13 +633,19 @@ namespace InstaMelody.Business
                     && string.IsNullOrWhiteSpace(requestor.DisplayName)
                     && string.IsNullOrWhiteSpace(requestor.EmailAddress)))
             {
+                InstaMelodyLogger.Log(
+                    string.Format("No friend information provided to deny. Token: {0}.", 
+                        sessionToken), LogLevel.Error);
                 throw new DataException("No friend information provided to deny.");
             }
 
             // try to request friend by id, email, or display name
-            var requestingFriend = this.FindUser(requestor);
+            var requestingFriend = FindUser(requestor);
             if (requestingFriend == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Could not find requested friend in database. Token: {0}, Friend Id: {1}, Friend Display Name: {2}, Friend Email: {3}",
+                        sessionToken, requestor.Id, requestor.DisplayName, requestor.EmailAddress), LogLevel.Error);
                 throw new DataException("Could not find requested friend in database.");
             }
 
@@ -584,7 +657,10 @@ namespace InstaMelody.Business
             }
             else
             {
-                throw new DataException(string.Format("User: {0} not authorized to execute this request.", sessionUser.Id));
+                InstaMelodyLogger.Log(
+                    string.Format("User not authorized to deny friend request. User Id: {0}, Friend Id: {1}",
+                        sessionUser.Id, requestingFriend.Id), LogLevel.Error);
+                throw new DataException(string.Format("User: {0} not authorized to execute request.", sessionUser.Id));
             }
 
             return requestingFriend.DisplayName;
@@ -609,6 +685,7 @@ namespace InstaMelody.Business
             }
             catch (Exception)
             {
+                InstaMelodyLogger.Log(string.Format("Could not find a valid session. Token: {0}", sessionToken), LogLevel.Error);
                 throw new UnauthorizedAccessException(string.Format("Could not find a valid session for Session: {0}.", sessionToken));
             }
 
@@ -617,13 +694,17 @@ namespace InstaMelody.Business
                     && string.IsNullOrWhiteSpace(friend.DisplayName)
                     && string.IsNullOrWhiteSpace(friend.EmailAddress)))
             {
+                InstaMelodyLogger.Log(string.Format("No friend information provided to delete. Token: {0}", sessionToken), LogLevel.Error);
                 throw new DataException("No friend information provided to delete.");
             }
 
             // try to request friend by id, email, or display name
-            User requestingFriend = this.FindUser(friend);
+            User requestingFriend = FindUser(friend);
             if (requestingFriend == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Could not find requested friend in database. Token: {0}, Friend Id: {1}, Friend Display Name: {2}, Friend Email: {3}",
+                        sessionToken, friend.Id, friend.DisplayName, friend.EmailAddress), LogLevel.Error);
                 throw new DataException("Could not find requested friend in database.");
             }
 
@@ -650,6 +731,7 @@ namespace InstaMelody.Business
             }
             catch (Exception)
             {
+                InstaMelodyLogger.Log(string.Format("Could not find a valid session. Token: {0}.", sessionToken), LogLevel.Error);
                 throw new UnauthorizedAccessException(string.Format("Could not find a valid session for Session: {0}.", sessionToken));
             }
 
@@ -657,6 +739,7 @@ namespace InstaMelody.Business
             var friends = dal.GetUserFriends(sessionUser.Id);
             if (friends == null || !friends.Any())
             {
+                InstaMelodyLogger.Log(string.Format("Could not find friends for User: {0}", sessionUser.Id), LogLevel.Error);
                 throw new DataException(string.Format("Could not find friends for User: {0}", sessionUser.Id));
             }
 
@@ -665,7 +748,7 @@ namespace InstaMelody.Business
                 friend.StripSensitiveInfoForFriends();
             }
 
-            return this.GetUsersWithImages(friends);
+            return GetUsersWithImages(friends);
         }
 
         /// <summary>
@@ -684,6 +767,7 @@ namespace InstaMelody.Business
             }
             catch (Exception)
             {
+                InstaMelodyLogger.Log(string.Format("Could not find a valid session. Token: {0}.", sessionToken), LogLevel.Error);
                 throw new UnauthorizedAccessException(string.Format("Could not find a valid session for Session: {0}.", sessionToken));
             }
 
@@ -691,6 +775,7 @@ namespace InstaMelody.Business
             var friends = dal.GetPendingFriends(sessionUser.Id);
             if (friends == null || !friends.Any())
             {
+                InstaMelodyLogger.Log(string.Format("Could not find pending friends for User: {0}", sessionUser.Id), LogLevel.Error);
                 throw new DataException(string.Format("Could not find pending friends for User: {0}", sessionUser.Id));
             }
 
@@ -699,7 +784,7 @@ namespace InstaMelody.Business
                 friend.StripSensitiveInfoForFriends();
             }
 
-            return this.GetUsersWithImages(friends);
+            return GetUsersWithImages(friends);
         }
 
         #endregion Public Methods
@@ -710,18 +795,22 @@ namespace InstaMelody.Business
         /// Updates the user image.
         /// </summary>
         /// <param name="userToUpdate">The user to update.</param>
-        /// <param name="image">The image.</param>
         /// <param name="sessionToken">The session token.</param>
         /// <returns></returns>
-        /// <exception cref="System.UnauthorizedAccessException">
+        /// <exception cref="UnauthorizedAccessException">
         /// </exception>
+        /// <exception cref="DataException"></exception>
+        /// <exception cref="System.UnauthorizedAccessException"></exception>
         /// <exception cref="System.Data.DataException"></exception>
         private User UpdateUserProfileImage(User userToUpdate, Guid sessionToken)
         {
-            var auth = new AuthenticationBLL();
+            var auth = new AuthenticationBll();
             var session = auth.GetSession(sessionToken);
             if (session.Token.Equals(default(Guid)) || session.IsDeleted.Equals(true))
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Invalid Session. Token: {0}", 
+                        sessionToken), LogLevel.Error);
                 throw new UnauthorizedAccessException(string.Format("Invalid Session Token: {0}.", sessionToken));
             }
 
@@ -732,24 +821,33 @@ namespace InstaMelody.Business
             }
             catch (Exception)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Could not find a valid session. Session Token: {0}.", 
+                        sessionToken), LogLevel.Error);
                 throw new UnauthorizedAccessException(string.Format("Could not find a valid session for Session: {0}.", sessionToken));
             }
             if (sessionUser == null || !sessionUser.Id.Equals(userToUpdate.Id))
             {
+                InstaMelodyLogger.Log(
+                    string.Format("User is not authorized to update another User's data. Token: {0},  Other User Id: {1}", 
+                        session.Token, userToUpdate.Id), LogLevel.Error);
                 throw new UnauthorizedAccessException(
-                    string.Format("User with session token {0} is not authorized to update User {1}'s data.", session.Token, userToUpdate.Id));
+                    string.Format("User with session token {0} is not authorized to update this User's data.", session.Token));
             }
 
             var dal = new Users();
             var updatedUser = dal.UpdateUserProfileImage(sessionUser.Id, userToUpdate.UserImageId);
             if (updatedUser == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Could not update profile image. User Id: {0}", 
+                        sessionUser.Id), LogLevel.Error);
                 throw new DataException(string.Format("Could not update profile image for User: {0}", sessionUser.Id));
             }
 
             // remove sensitive information
             updatedUser = updatedUser.StripSensitiveInfo();
-            return this.GetUserWithImage(updatedUser);
+            return GetUserWithImage(updatedUser);
         }
 
         /// <summary>
@@ -761,7 +859,7 @@ namespace InstaMelody.Business
         {
             if (user.UserImageId != null && !user.UserImageId.Equals(default(int)))
             {
-                var imageBll = new FileBLL();
+                var imageBll = new FileBll();
                 var image = imageBll.GetImage(new Image
                 {
                     Id = (int)user.UserImageId
@@ -785,7 +883,7 @@ namespace InstaMelody.Business
 
             if (users != null && users.Any())
             {
-                results = users.Select(this.GetUserWithImage).ToList();
+                results = users.Select(GetUserWithImage).ToList();
             }
 
             return results;
@@ -804,7 +902,11 @@ namespace InstaMelody.Business
         {
             var dal = new Users();
             var user = dal.FindById(userId);
-            if (user == null) throw new ArgumentException("User cannot be found.");
+            if (user == null)
+            {
+                InstaMelodyLogger.Log(string.Format("User cannot be found. User Id: {0}", userId), LogLevel.Error);
+                throw new ArgumentException("User cannot be found.");
+            }
 
             dal.UpdateUserProfileImage(userId, null);
         }
@@ -826,11 +928,11 @@ namespace InstaMelody.Business
 
             if (foundUser == null && !string.IsNullOrWhiteSpace(user.DisplayName))
             {
-                foundUser = this.GetUserByDisplayName(user.DisplayName);
+                foundUser = GetUserByDisplayName(user.DisplayName);
             }
             else if (foundUser == null && !string.IsNullOrWhiteSpace(user.EmailAddress))
             {
-                foundUser = this.GetUserByEmailAddress(user.EmailAddress);
+                foundUser = GetUserByEmailAddress(user.EmailAddress);
             }
 
             return foundUser;

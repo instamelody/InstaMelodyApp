@@ -34,6 +34,11 @@
         /// </summary>
         public const string FailedUpdatePassword = "Failed to update the User password.";
 
+        /// <summary>
+        /// The failed reset password
+        /// </summary>
+        public const string FailedResetPassword = "Failed to reset the User password.";
+
         #endregion Authentication Exceptions
 
         #region Users Exceptions

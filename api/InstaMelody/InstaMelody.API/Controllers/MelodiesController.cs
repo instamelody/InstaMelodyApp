@@ -82,7 +82,7 @@ namespace InstaMelody.API.Controllers
                         string.Format("Get Melodies - Token: {0}", _token),
                         LogLevel.Trace);
 
-                    var bll = new MelodyBLL();
+                    var bll = new MelodyBll();
 
                     object result;
                     if (!_groupId.Equals(default(int)) || !string.IsNullOrWhiteSpace(groupName))
@@ -121,7 +121,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
+                    
                 }
             }
 
@@ -162,7 +162,7 @@ namespace InstaMelody.API.Controllers
                         string.Format("Get User Melodies - Token: {0}, MelodyId: {1}", _token, _melodyId),
                         LogLevel.Trace);
 
-                    var bll = new MelodyBLL();
+                    var bll = new MelodyBll();
                     object result;
 
                     if (_melodyId.Equals(default(Guid)))
@@ -197,7 +197,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
+                    
                 }
             }
 
@@ -226,7 +226,7 @@ namespace InstaMelody.API.Controllers
                             request.Token),
                         LogLevel.Trace);
 
-                    var bll = new MelodyBLL();
+                    var bll = new MelodyBll();
                     var result = bll.CreateUserMelody(request.UserMelody, request.Token);
 
                     if (result == null)
@@ -252,7 +252,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
+                    
                 }
             }
             else
@@ -286,7 +286,7 @@ namespace InstaMelody.API.Controllers
                             request.UserMelody.Id),
                         LogLevel.Trace);
 
-                    var bll = new MelodyBLL();
+                    var bll = new MelodyBll();
                     bll.DeleteUserMelody(request.UserMelody, request.Token);
 
                     response = this.Request.CreateResponse(HttpStatusCode.Accepted);
@@ -305,7 +305,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
+                    
                 }
             }
             else
@@ -357,7 +357,7 @@ namespace InstaMelody.API.Controllers
                         string.Format("Get User Loop - Token: {0}, MelodyId: {1}", _token, _loopId),
                         LogLevel.Trace);
 
-                    var bll = new MelodyBLL();
+                    var bll = new MelodyBll();
                     object result;
 
                     if (_loopId.Equals(default(Guid)) 
@@ -399,7 +399,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
+                    
                 }
             }
 
@@ -427,7 +427,7 @@ namespace InstaMelody.API.Controllers
                             request.Token),
                         LogLevel.Trace);
 
-                    var bll = new MelodyBLL();
+                    var bll = new MelodyBll();
                     var result = bll.CreateLoop(request.Loop, request.Token);
 
                     if (result == null)
@@ -489,7 +489,7 @@ namespace InstaMelody.API.Controllers
                             loop),
                         LogLevel.Trace);
 
-                    var bll = new MelodyBLL();
+                    var bll = new MelodyBll();
                     var result = bll.AttachPartToLoop(request.Loop, request.LoopPart, request.Token);
 
                     if (result == null)
@@ -542,7 +542,7 @@ namespace InstaMelody.API.Controllers
             {
                 try
                 {
-                    var bll = new MelodyBLL();
+                    var bll = new MelodyBll();
                     if (request.UserMelody != null)
                     {
                         var part = request.UserMelody.Id.Equals(default(Guid))

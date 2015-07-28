@@ -4,13 +4,15 @@ using System.Data;
 using System.Linq;
 using InstaMelody.Business.Properties;
 using InstaMelody.Data;
+using InstaMelody.Infrastructure;
 using InstaMelody.Model;
 using InstaMelody.Model.ApiModels;
 using InstaMelody.Model.Enums;
+using NLog;
 
 namespace InstaMelody.Business
 {
-    public class MessageBLL
+    public class MessageBll
     {
         #region Public Methods
 
@@ -30,11 +32,14 @@ namespace InstaMelody.Business
             var sessionUser = Utilities.GetUserBySession(sessionToken);
 
             // check requested user is friends with session user if setting is set
-            var userBll = new UserBLL();
+            var userBll = new UserBll();
             var foundFriend = userBll.FindUser(friend);
             if (Settings.Default.UsersCanOnlyMessageFriends 
                 && !Utilities.AreUsersFriends(sessionUser.Id, foundFriend.Id))
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Only Friends of the authenticated User can be added to a Chat. User Id: {0}, Requested User Id: {1}, Token: {2}",
+                        sessionUser.Id, foundFriend.Id, sessionToken), LogLevel.Error);
                 throw new UnauthorizedAccessException("Only Friends of the authenticated User can be added to a Chat.");
             }
 
@@ -43,6 +48,9 @@ namespace InstaMelody.Business
             var newChat = dal.CreateChat();
             if (newChat == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Failed to create Chat. User Id: {0}, Requested User Id: {1}, Token: {2}", 
+                        sessionUser.Id, foundFriend.Id, sessionToken), LogLevel.Error);
                 throw new DataException("Failed to create Chat.");
             }
 
@@ -59,7 +67,7 @@ namespace InstaMelody.Business
             });
 
             // create chat message
-            var chatMessage = this.CreateChatMessage(newChat, sessionUser, message);
+            var chatMessage = CreateChatMessage(newChat, sessionUser, message);
 
             // TODO: send push notification to requested user
 
@@ -68,12 +76,12 @@ namespace InstaMelody.Business
             {
                 return new ApiChatFileUpload
                 {
-                    Chat = this.GetChat(newChat),
+                    Chat = GetChat(newChat),
                     FileUploadToken = chatMessage.Item2
                 };
             }
 
-            return this.GetChat(newChat);
+            return GetChat(newChat);
         }
 
         /// <summary>
@@ -88,30 +96,36 @@ namespace InstaMelody.Business
         public object StartChat(IList<User> users, Message message, Guid sessionToken)
         {
             var sessionUser = Utilities.GetUserBySession(sessionToken);
-            var userBll = new UserBLL();
+            var userBll = new UserBll();
 
             // create chat
             var dal = new Chats();
             var newChat = dal.CreateChat();
             if (newChat == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Failed to create Chat. User Id: {0}, Token: {1}",
+                        sessionUser.Id, sessionToken), LogLevel.Error);
                 throw new DataException("Failed to create Chat.");
             }
 
             // add users to chat
             foreach (var user in users)
             {
-                var foundFriend = userBll.FindUser(user);
+                var foundUser = userBll.FindUser(user);
                 if (Settings.Default.UsersCanOnlyMessageFriends
-                    && !Utilities.AreUsersFriends(sessionUser.Id, foundFriend.Id))
+                    && !Utilities.AreUsersFriends(sessionUser.Id, foundUser.Id))
                 {
                     dal.DeleteChat(newChat.Id);
+                    InstaMelodyLogger.Log(
+                        string.Format("Only Friends of the authenticated User can be added to a Chat. User Id: {0}, Requested User Id: {1}, Token: {2}",
+                            sessionUser.Id, foundUser.Id, sessionToken), LogLevel.Error);
                     throw new UnauthorizedAccessException("Only Friends of the authenticated User can be added to a Chat.");
                 }
                 dal.AddUserToChat(new ChatUser
                 {
                     ChatId = newChat.Id,
-                    UserId = foundFriend.Id
+                    UserId = foundUser.Id
                 });
             }
             dal.AddUserToChat(new ChatUser
@@ -121,7 +135,7 @@ namespace InstaMelody.Business
             });
 
             // create chat message
-            var chatMessage = this.CreateChatMessage(newChat, sessionUser, message);
+            var chatMessage = CreateChatMessage(newChat, sessionUser, message);
 
             // TODO: send push notification to requested user
 
@@ -130,12 +144,12 @@ namespace InstaMelody.Business
             {
                 return new ApiChatFileUpload
                 {
-                    Chat = this.GetChat(newChat),
+                    Chat = GetChat(newChat),
                     FileUploadToken = chatMessage.Item2
                 };
             }
 
-            return this.GetChat(newChat);
+            return GetChat(newChat);
         }
 
         /// <summary>
@@ -153,10 +167,11 @@ namespace InstaMelody.Business
 
             if (chat.Id.Equals(default(Guid)))
             {
+                InstaMelodyLogger.Log("No valid Chat Id provided.", LogLevel.Error);
                 throw new ArgumentException("No valid Chat Id provided.");
             }
 
-            return this.GetChat(chat);
+            return GetChat(chat);
         }
 
         /// <summary>
@@ -174,16 +189,20 @@ namespace InstaMelody.Business
             var sessionUser = Utilities.GetUserBySession(sessionToken);
 
             // check requested user is friends with session user if setting is set
-            var userBll = new UserBLL();
-            var foundFriend = userBll.FindUser(requestedUser);
+            var userBll = new UserBll();
+            var foundUser = userBll.FindUser(requestedUser);
             if (Settings.Default.UsersCanOnlyMessageFriends
-                && !Utilities.AreUsersFriends(sessionUser.Id, foundFriend.Id))
+                && !Utilities.AreUsersFriends(sessionUser.Id, foundUser.Id))
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Only Friends of the authenticated User can be added to a Chat. User Id:{0}, Requested User Id:{1}, Token: {2}",
+                        sessionUser.Id, foundUser.Id, sessionToken), LogLevel.Error);
                 throw new UnauthorizedAccessException("Only Friends of the authenticated User can be added to a Chat.");
             }
 
             if (chat.Id.Equals(default(Guid)))
             {
+                InstaMelodyLogger.Log("No valid Chat Id provided.", LogLevel.Error);
                 throw new ArgumentException("No valid Chat Id provided.");
             }
 
@@ -194,12 +213,12 @@ namespace InstaMelody.Business
             dal.AddUserToChat(new ChatUser
             {
                 ChatId = foundChat.Id,
-                UserId = foundFriend.Id
+                UserId = foundUser.Id
             });
 
             // TODO: send push notifications to all users in chat
 
-            return this.GetChat(foundChat);
+            return GetChat(foundChat);
         }
 
         /// <summary>
@@ -209,23 +228,35 @@ namespace InstaMelody.Business
         /// <param name="message">The message.</param>
         /// <param name="sessionToken">The session token.</param>
         /// <returns></returns>
-        /// <exception cref="System.UnauthorizedAccessException">Cannot send a message to a Chat that this User is not a member of.</exception>
+        /// <exception cref="ArgumentException">Cannot find requested Chat.</exception>
+        /// <exception cref="UnauthorizedAccessException">Cannot send a message to a Chat that User is not a member of.</exception>
         public object SendChatMessage(Chat chat, Message message, Guid sessionToken)
         {
             // check token
             var sessionUser = Utilities.GetUserBySession(sessionToken);
 
             var dal = new Chats();
+            var foundChat = dal.GetChatById(chat.Id);
+            if (foundChat == null)
+            {
+                InstaMelodyLogger.Log(
+                    string.Format("Cannot find requested Chat. Chat Id: {0}, User Id: {1}, Token: {2}",
+                        chat.Id, sessionUser.Id, sessionToken), LogLevel.Error);
+                throw new ArgumentException("Cannot find requested Chat.");
+            }
 
             // check user is part of chat
-            var chatUsers = dal.GetUsersInChat(chat.Id);
+            var chatUsers = dal.GetUsersInChat(foundChat.Id);
             if (!chatUsers.Any(u => u.UserId.Equals(sessionUser.Id)))
             {
-                throw new UnauthorizedAccessException("Cannot send a message to a Chat that this User is not a member of.");
+                InstaMelodyLogger.Log(
+                    string.Format("Cannot send a message to a Chat that User is not a member of. Chat Id: {0}, User Id: {1}, Token: {2}",
+                        foundChat.Id, sessionUser.Id, sessionToken), LogLevel.Error);
+                throw new UnauthorizedAccessException("Cannot send a message to a Chat that User is not a member of.");
             }
 
             // create message
-            var chatMessage = this.CreateChatMessage(chat, sessionUser, message);
+            var chatMessage = CreateChatMessage(chat, sessionUser, message);
 
             // TODO: send push notification to all users in chat
 
@@ -259,7 +290,7 @@ namespace InstaMelody.Business
             var chats = dal.GetChatsByUserId(sessionUser.Id);
             if (chats != null && chats.Any())
             {
-                results = chats.Select(this.GetChat).ToList();
+                results = chats.Select(GetChat).ToList();
             }
 
             // return all chats
@@ -288,6 +319,9 @@ namespace InstaMelody.Business
             var chatUsers = dal.GetUsersInChat(chat.Id);
             if (!chatUsers.Any(c => c.UserId.Equals(sessionUser.Id)))
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Cannot remove User from a Chat they do not belong to. Chat Id: {0}, User Id: {1}, Token: {2}", 
+                        chat.Id, sessionUser.Id, sessionToken), LogLevel.Error);
                 throw new UnauthorizedAccessException("Cannot remove User from a Chat they do not belong to.");
             }
 
@@ -312,25 +346,21 @@ namespace InstaMelody.Business
         {
             var dal = new Chats();
 
-            //// check user is part of chat
-            //var chatUsers = dal.GetUsersInChat(chat.Id);
-            //if (!chatUsers.Any(c => c.UserId.Equals(sessionUser.Id)))
-            //{
-            //    throw new UnauthorizedAccessException("Cannot get a chat that this User is not a member of.");
-            //}
-
             // get chat
             var foundChat = dal.GetChatById(chat.Id);
             if (foundChat == null)
             {
-                throw new DataException("Could not find the requested Chat, Id {0}.");
+                InstaMelodyLogger.Log(
+                    string.Format("Could not find the requested Chat. Chat Id: {0}", 
+                        chat.Id), LogLevel.Error);
+                throw new DataException(string.Format("Could not find the requested Chat, Id {0}.", chat.Id));
             }
 
             foundChat.Users = new List<User>();
             foundChat.Messages = new List<ChatMessage>();
 
             // get chat users
-            var users = this.GetUsersByChat(foundChat);
+            var users = GetUsersByChat(foundChat);
             foreach (var user in users)
             {
                 foundChat.Users.Add(user.StripSensitiveInfoForFriends());
@@ -340,7 +370,7 @@ namespace InstaMelody.Business
             var messages = dal.GetMessagesByChat(foundChat.Id);
             foreach (var message in messages)
             {
-                var messageRecord = this.GetMessageByChatMessage(message);
+                var messageRecord = GetMessageByChatMessage(message);
                 if (messageRecord != null)
                 {
                     message.Message = messageRecord;
@@ -368,7 +398,7 @@ namespace InstaMelody.Business
                 var dal = new Chats();
                 var users = dal.GetUsersInChat(chat.Id);
 
-                var userBll = new UserBLL();
+                var userBll = new UserBll();
                 foreach (var chatUser in users)
                 {
                     var user = userBll.FindUser(new User { Id = chatUser.UserId });
@@ -398,13 +428,13 @@ namespace InstaMelody.Business
             switch (foundMessage.MediaType)
             {
                 case MediaTypeEnum.Image:
-                    foundMessage.Image = this.GetMessageImage(foundMessage);
+                    foundMessage.Image = GetMessageImage(foundMessage);
                     break;
                 case MediaTypeEnum.Video:
-                    foundMessage.Video = this.GetMessageVideo(foundMessage);
+                    foundMessage.Video = GetMessageVideo(foundMessage);
                     break;
                 case MediaTypeEnum.Melody:
-                    foundMessage.UserMelody = this.GetMessageMelody(foundMessage);
+                    foundMessage.UserMelody = GetMessageMelody(foundMessage);
                     break;
             }
 
@@ -422,6 +452,7 @@ namespace InstaMelody.Business
         {
             if (message == null || message.Id.Equals(default(Guid)))
             {
+                InstaMelodyLogger.Log("Invalid Message - NULL or Default Id.", LogLevel.Error);
                 throw new ArgumentException("Invalid Message.");
             }
 
@@ -432,8 +463,6 @@ namespace InstaMelody.Business
             var messageImage  = dal.GetImageByMessageId(message.Id);
             if (messageImage != null)
             {
-                result = new Image();
-
                 var imgDal = new Images();
                 var image = imgDal.GetImageById(messageImage.Id);
                 if (image == null) return null;
@@ -456,6 +485,7 @@ namespace InstaMelody.Business
         {
             if (message == null || message.Id.Equals(default(Guid)))
             {
+                InstaMelodyLogger.Log("Invalid Message - NULL or Default Id.", LogLevel.Error);
                 throw new ArgumentException("Invalid Message.");
             }
             Video result = null;
@@ -465,8 +495,6 @@ namespace InstaMelody.Business
             var messageVideo = dal.GetVideoByMessageId(message.Id);
             if (messageVideo != null)
             {
-                result = new Video();
-
                 var vidDal = new Videos();
                 var video = vidDal.GetVideoById(messageVideo.Id);
                 if (video == null) return null;
@@ -489,6 +517,7 @@ namespace InstaMelody.Business
         {
             if (message == null || message.Id.Equals(default(Guid)))
             {
+                InstaMelodyLogger.Log("Invalid Message - NULL or Default Id.", LogLevel.Error);
                 throw new ArgumentException("Invalid Message.");
             }
             UserMelody result = null;
@@ -498,7 +527,7 @@ namespace InstaMelody.Business
             var messageMelody = dal.GetMessageMelodyByMessageId(message.Id);
             if (messageMelody != null)
             {
-                var melodyBll = new MelodyBLL();
+                var melodyBll = new MelodyBll();
                 var melody = melodyBll.GetUserMelody(new UserMelody { Id = messageMelody.UserMelodyId });
                 if (melody == null) return null;
                 
@@ -520,17 +549,21 @@ namespace InstaMelody.Business
             var dal = new Chats();
             if (chat.Id.Equals(default(Guid)))
             {
+                InstaMelodyLogger.Log("A valid Chat Id must be provided - Default Chat Guid.", LogLevel.Error);
                 throw new ArgumentException("A valid Chat Id must be provided.");
             }
 
             var foundChat = dal.GetChatById(chat.Id);
             if (foundChat == null)
             {
-                throw  new ArgumentException(string.Format("Chat Id {0} not found.", chat.Id));
+                InstaMelodyLogger.Log(
+                    string.Format("Chat not found. Chat Id: {0}, User Id: {1}", 
+                        chat.Id, sender.Id), LogLevel.Error);
+                throw new ArgumentException(string.Format("Chat Id {0} not found.", chat.Id));
             }
 
             // create message
-            var newMessage = this.CreateMessage(message, sender);
+            var newMessage = CreateMessage(message, sender);
 
             // create chat message
             var newChatMessage = dal.CreateChatMessage(new ChatMessage
@@ -555,7 +588,7 @@ namespace InstaMelody.Business
         private MessageImage CreateMessageImage(Guid messageId, Image image)
         {
             // create image
-            var fileBll = new FileBLL();
+            var fileBll = new FileBll();
             var addedImage = fileBll.AddImage(image);
 
             // create message image
@@ -563,6 +596,9 @@ namespace InstaMelody.Business
             var addedMessageImage = dal.AddMessageImage(messageId, addedImage.Id);
             if (addedMessageImage == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Failed to create a MessageImage record. Message Id: {0}, Image Id: {1}", 
+                        messageId, addedImage.Id), LogLevel.Error);
                 throw new DataException("Failed to create a MessageImage record.");
             }
 
@@ -583,7 +619,7 @@ namespace InstaMelody.Business
         private MessageVideo CreateMessageVideo(Guid messageId, Video video)
         {
             // create image
-            var fileBll = new FileBLL();
+            var fileBll = new FileBll();
             var addedVideo = fileBll.AddVideo(video);
 
             // create message image
@@ -591,6 +627,9 @@ namespace InstaMelody.Business
             var addedMessageVideo = dal.AddMessageVideo(messageId, addedVideo.Id);
             if (addedMessageVideo == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Failed to create a MessageVideo record. Message Id: {0}, Video Id: {1}",
+                        messageId, addedVideo.Id), LogLevel.Error);
                 throw new DataException("Failed to create a MessageVideo record.");
             }
 
@@ -599,20 +638,6 @@ namespace InstaMelody.Business
 
             // return message image
             return addedMessageVideo;
-        }
-
-        /// <summary>
-        /// Creates the message melody.
-        /// </summary>
-        /// <param name="messageId">The message identifier.</param>
-        /// <param name="melody">The melody.</param>
-        /// <returns></returns>
-        private MessageMelody CreateMessageMelody(Guid messageId, UserMelody melody)
-        {
-            var dal = new Messages();
-            var addedMelody = dal.AddMessageMelody(messageId, melody.Id);
-
-            return addedMelody;
         }
 
         #endregion Private Methods
@@ -625,18 +650,27 @@ namespace InstaMelody.Business
         /// <param name="message">The message.</param>
         /// <param name="sender">The sender.</param>
         /// <returns></returns>
-        /// <exception cref="System.Data.DataException">Cannot create a NULL Message.
+        /// <exception cref="ArgumentException">
+        /// UserId is not valid.
         /// or
-        /// UserId is not valid.</exception>
+        /// Cannot create a NULL Message.
+        /// </exception>
         internal Tuple<Message, FileUploadToken> CreateMessage(Message message, User sender)
         {
-            if (message == null)
-            {
-                throw new DataException("Cannot create a NULL Message.");
-            }
             if (sender.Id.Equals(default(Guid)))
             {
-                throw new DataException("UserId is not valid.");
+                InstaMelodyLogger.Log(
+                    string.Format("UserId is not valid. User Id: {0}",
+                        sender.Id), LogLevel.Error);
+                throw new ArgumentException("UserId is not valid.");
+            }
+
+            if (message == null)
+            {
+                InstaMelodyLogger.Log(
+                    string.Format("Cannot create a NULL Message. User Id: {0}", 
+                        sender.Id), LogLevel.Error);
+                throw new ArgumentException("Cannot create a NULL Message.");
             }
 
             // create message
@@ -677,19 +711,19 @@ namespace InstaMelody.Business
             }
             else if (message.UserMelody != null)
             {
-                var melodyBll = new MelodyBLL();
+                var melodyBll = new MelodyBll();
                 try
                 {
                     var foundMelody = melodyBll.GetUserMelody(message.UserMelody);
                     addedMessage.UserMelody = foundMelody;
 
-                    CreateMessageMelody(addedMessage.Id, foundMelody);
+                    dal.AddMessageMelody(addedMessage.Id, foundMelody.Id);
                 }
                 catch (Exception)
                 {
                     var createdFileUpload = melodyBll.CreateUserMelody(message.UserMelody, sender);
 
-                    CreateMessageMelody(addedMessage.Id, createdFileUpload.UserMelody);
+                    dal.AddMessageMelody(addedMessage.Id, createdFileUpload.UserMelody.Id);
 
                     addedMessage.UserMelody = createdFileUpload.UserMelody;
                     return new Tuple<Message, FileUploadToken>(addedMessage, createdFileUpload.FileUploadToken);
@@ -698,7 +732,7 @@ namespace InstaMelody.Business
 
             if (!fileUploadToken.MediaType.Equals(FileUploadTypeEnum.Unknown))
             {
-                var fileBll = new FileBLL();
+                var fileBll = new FileBll();
                 addedToken = fileBll.CreateToken(fileUploadToken);
             }
 

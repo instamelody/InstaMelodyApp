@@ -65,7 +65,7 @@ namespace InstaMelody.API.Controllers
                             request.EmailAddress ?? "NULL"),
                         LogLevel.Trace);
 
-                    var bll = new UserBLL();
+                    var bll = new UserBll();
                     var result = bll.AddNewUser(request);
 
                     if (result == null)
@@ -135,7 +135,7 @@ namespace InstaMelody.API.Controllers
                                userName ?? "NULL"),
                            LogLevel.Trace);
 
-                    var bll = new UserBLL();
+                    var bll = new UserBll();
                     Guid _userId;
                     Guid _token;
                     Guid.TryParse(token, out _token);
@@ -171,7 +171,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
+                    
                 }
             }
             
@@ -212,7 +212,7 @@ namespace InstaMelody.API.Controllers
                                userName ?? "NULL"),
                            LogLevel.Trace);
 
-                    var bll = new UserBLL();
+                    var bll = new UserBll();
 
                     Guid _token;
                     Guid.TryParse(token, out _token);
@@ -247,7 +247,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
+                    
                 }
             }
 
@@ -279,7 +279,7 @@ namespace InstaMelody.API.Controllers
                         return response;
                     }
 
-                    var bll = new UserBLL();
+                    var bll = new UserBll();
                     var result = bll.UpdateUser(request.User, request.Token);
 
                     if (result == null || result.Equals(default(User)))
@@ -301,7 +301,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
+                    
                 }
             }
             else
@@ -338,7 +338,7 @@ namespace InstaMelody.API.Controllers
                         return response;
                     }
 
-                    var bll = new UserBLL();
+                    var bll = new UserBll();
                     var result = bll.UpdateUserImage(request.User, request.User.Image ?? request.Image, request.Token);
 
                     if (result == null || result.Equals(default(User)))
@@ -360,7 +360,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
+                    
                 }
             }
             else
@@ -396,7 +396,7 @@ namespace InstaMelody.API.Controllers
                         return this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, Exceptions.FailedValidation);
                     }
 
-                    var bll = new UserBLL();
+                    var bll = new UserBll();
                     bll.DeleteUser(request.User, request.Token);
 
                     response = this.Request.CreateResponse(HttpStatusCode.Accepted);
@@ -415,7 +415,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
+                    
                 }
             }
             else
@@ -451,7 +451,7 @@ namespace InstaMelody.API.Controllers
                         return this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, Exceptions.FailedValidation);
                     }
 
-                    var bll = new UserBLL();
+                    var bll = new UserBll();
                     var friend = bll.RequestFriend(request.User, request.Token);
 
                     if (friend != null)
@@ -480,7 +480,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
+                    
                 }
             }
             else
@@ -516,7 +516,7 @@ namespace InstaMelody.API.Controllers
                         return this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, Exceptions.FailedValidation);
                     }
 
-                    var bll = new UserBLL();
+                    var bll = new UserBll();
                     var friend = bll.ApproveFriendRequest(request.User, request.Token);
 
                     if (friend != null)
@@ -545,7 +545,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
+                    
                 }
             }
             else
@@ -581,7 +581,7 @@ namespace InstaMelody.API.Controllers
                         return this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, Exceptions.FailedValidation);
                     }
 
-                    var bll = new UserBLL();
+                    var bll = new UserBll();
                     var friend = bll.DenyFriendRequest(request.User, request.Token);
 
                     if (!string.IsNullOrEmpty(friend))
@@ -610,7 +610,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
+                    
                 }
             }
             else
@@ -646,7 +646,7 @@ namespace InstaMelody.API.Controllers
                         return this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, Exceptions.FailedValidation);
                     }
 
-                    var bll = new UserBLL();
+                    var bll = new UserBll();
                     var friend = bll.DeleteFriend(request.User, request.Token);
 
                     if (!string.IsNullOrEmpty(friend))
@@ -675,7 +675,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
+                    
                 }
             }
             else
@@ -712,7 +712,7 @@ namespace InstaMelody.API.Controllers
             {
                 try
                 {
-                    var bll = new UserBLL();
+                    var bll = new UserBll();
 
                     Guid _token;
                     Guid.TryParse(token, out _token);
@@ -741,7 +741,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
+                    
                 }
             }
 
@@ -774,7 +774,7 @@ namespace InstaMelody.API.Controllers
             {
                 try
                 {
-                    var bll = new UserBLL();
+                    var bll = new UserBll();
 
                     Guid _token;
                     Guid.TryParse(token, out _token);
@@ -803,7 +803,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
+                    
                 }
             }
 

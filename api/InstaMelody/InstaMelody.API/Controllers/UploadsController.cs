@@ -40,7 +40,7 @@ namespace InstaMelody.API.Controllers
                            sessionToken, token),
                        LogLevel.Trace);
 
-                    var bll = new FileBLL();
+                    var bll = new FileBll();
                     var isUploadValid = bll.CanUploadFile(sessionToken, token);
 
                     if (isUploadValid)
@@ -110,7 +110,7 @@ namespace InstaMelody.API.Controllers
             var rootUrl = Request.RequestUri.AbsoluteUri.Replace(
                             Request.RequestUri.AbsolutePath, string.Empty);
 
-            var bll = new FileBLL();
+            var bll = new FileBll();
             var uploadMetadata = bll.GetTokenInfo(token);
             if (uploadMetadata == null) return null;
             

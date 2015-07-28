@@ -11,6 +11,5 @@ Z:\Documents\gits\instaMelody\api\InstaMelody\InstaMelody.Infrastructure\bin\Deb
 Z:\Documents\gits\instaMelody\api\InstaMelody\InstaMelody.Infrastructure\bin\Debug\InstaMelody.Infrastructure.pdb
 Z:\Documents\gits\instaMelody\api\InstaMelody\InstaMelody.Infrastructure\bin\Debug\NLog.dll
 Z:\Documents\gits\instaMelody\api\InstaMelody\InstaMelody.Infrastructure\bin\Debug\NLog.xml
-Z:\Documents\gits\instaMelody\api\InstaMelody\InstaMelody.Infrastructure\obj\Debug\InstaMelody.Infrastructure.csprojResolveAssemblyReference.cache
 Z:\Documents\gits\instaMelody\api\InstaMelody\InstaMelody.Infrastructure\obj\Debug\InstaMelody.Infrastructure.dll
 Z:\Documents\gits\instaMelody\api\InstaMelody\InstaMelody.Infrastructure\obj\Debug\InstaMelody.Infrastructure.pdb

@@ -2,12 +2,14 @@
 using System.Data;
 using InstaMelody.Business.Properties;
 using InstaMelody.Data;
+using InstaMelody.Infrastructure;
 using InstaMelody.Model;
 using InstaMelody.Model.Enums;
+using NLog;
 
 namespace InstaMelody.Business
 {
-    public class FileBLL
+    public class FileBll
     {
         /// <summary>
         /// Determines whether a file can be accepted to be uploaded.
@@ -23,28 +25,33 @@ namespace InstaMelody.Business
         /// File Upload Token does not belong to this User.</exception>
         public bool CanUploadFile(Guid sessionToken, Guid fileUploadToken)
         {
-            User sessionUser = null;
+            User sessionUser;
             try
             {
                 sessionUser = Utilities.GetUserBySession(sessionToken);
             }
             catch (Exception)
             {
-                this.ExpireToken(fileUploadToken);
+                ExpireToken(fileUploadToken);
                 throw;
             }
             
 
-            var token = this.GetTokenInfo(fileUploadToken);
+            var token = GetTokenInfo(fileUploadToken);
             if (token.IsExpired)
             {
-                this.ExpireToken(fileUploadToken);
+                ExpireToken(fileUploadToken);
+                InstaMelodyLogger.Log(
+                    string.Format("File Upload Token has expired. Session Token: {0}, Upload Token: {1}",
+                        sessionToken, fileUploadToken), LogLevel.Error);
                 throw new UnauthorizedAccessException("File Upload Token has expired.");
             }
 
             if (!sessionUser.Id.Equals(token.UserId))
             {
-                this.ExpireToken(fileUploadToken);
+                ExpireToken(fileUploadToken);
+                InstaMelodyLogger.Log(string.Format("File Upload Token does not belong to this User. Session Token: {0}, Upload Token: {1}",
+                        sessionToken, fileUploadToken), LogLevel.Error);
                 throw new UnauthorizedAccessException("File Upload Token does not belong to this User.");
             }
 
@@ -65,13 +72,8 @@ namespace InstaMelody.Business
         /// </exception>
         public bool IsValidUploadFileName(Guid fileUploadToken, string fileName)
         {
-            var token = this.GetTokenInfo(fileUploadToken);
-            if (token != null && token.FileName.Equals(fileName))
-            {
-                return true;
-            }
-
-            return false;
+            var token = GetTokenInfo(fileUploadToken);
+            return token != null && token.FileName.Equals(fileName);
         }
 
         /// <summary>
@@ -82,21 +84,25 @@ namespace InstaMelody.Business
         {
             var dal = new FileUploadTokens();
             var foundToken = dal.GetTokenDetails(token);
-            if (foundToken == null) throw new ArgumentException("Token cannot be found.");
+            if (foundToken == null)
+            {
+                InstaMelodyLogger.Log(string.Format("Token cannot be found. Token: {0}", token), LogLevel.Error);
+                throw new ArgumentException("Token cannot be found.");
+            }
 
             switch (foundToken.MediaType)
             {
                 case FileUploadTypeEnum.MessageImage:
-                    this.DeleteMessageImageRecords(foundToken.FileName);
+                    DeleteMessageImageRecords(foundToken.FileName);
                     break;
                 case FileUploadTypeEnum.MessageMelody:
-                    this.DeleteMessageMelodyRecords(foundToken.FileName);
+                    DeleteMessageMelodyRecords(foundToken.FileName);
                     break;
                 case FileUploadTypeEnum.MessageVideo:
-                    this.DeleteMessageVideoRecords(foundToken.FileName);
+                    DeleteMessageVideoRecords(foundToken.FileName);
                     break;
                 case FileUploadTypeEnum.UserImage:
-                    this.DeleteUserImageRecords(foundToken.UserId, foundToken.FileName);
+                    DeleteUserImageRecords(foundToken.UserId, foundToken.FileName);
                     break;
             }
         }
@@ -118,6 +124,9 @@ namespace InstaMelody.Business
                 || token.MediaType.Equals(default(FileUploadTypeEnum))
                 || token.MediaType.Equals(FileUploadTypeEnum.Unknown))
             {
+                InstaMelodyLogger.Log(
+                    string.Format("User Id, File Name, and Media Type must be defined to create a token. User Id: {0}, File Name: {1}, Media Type: {2}",
+                        token.UserId, token.FileName, token.MediaType), LogLevel.Error);
                 throw new ArgumentException("User Id, File Name, and Media Type must be defined to create a token.");
             }
 
@@ -126,6 +135,9 @@ namespace InstaMelody.Business
             var createdToken = dal.CreateToken(token.UserId, token.FileName, token.MediaType, expires);
             if (createdToken == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Failed to create a File Upload Token. User Id: {0}, File Name: {1}, Media Type: {2}",
+                        token.UserId, token.FileName, token.MediaType), LogLevel.Error);
                 throw new DataException("Failed to create a File Upload Token.");
             }
 
@@ -143,6 +155,7 @@ namespace InstaMelody.Business
         {
             if (token.Equals(default(Guid)))
             {
+                InstaMelodyLogger.Log("GetTokenInfo() token Guid is default.", LogLevel.Error);
                 throw new ArgumentException("A valid token Guid must be provided.");
             }
 
@@ -150,6 +163,7 @@ namespace InstaMelody.Business
             var foundToken = dal.GetTokenDetails(token);
             if (foundToken == null || foundToken.IsDeleted)
             {
+                InstaMelodyLogger.Log(string.Format("No valid token found. Token: {0}", token), LogLevel.Error);
                 throw new DataException(string.Format("No token found with Guid {0}.", token));
             }
 
@@ -178,7 +192,7 @@ namespace InstaMelody.Business
             var foundToken = dal.FindToken(userId, fileName, mediaType);
             if (foundToken != null)
             {
-                this.ExpireToken(foundToken.Token);
+                ExpireToken(foundToken.Token);
             }
         }
 
@@ -200,12 +214,16 @@ namespace InstaMelody.Business
         {
             if (string.IsNullOrWhiteSpace(image.FileName))
             {
-                throw new ArgumentException("Cannot create image with empty File Name.");
+                InstaMelodyLogger.Log("Cannot create Image with empty File Name.", LogLevel.Error);
+                throw new ArgumentException("Cannot create Image with empty File Name.");
             }
 
-            if (this.DoesImageExistWithFileName(image.FileName))
+            if (DoesImageExistWithFileName(image.FileName))
             {
-                throw new DataException("Cannot add new image with existing File Name.");
+                InstaMelodyLogger.Log(
+                    string.Format("Cannot add new Image with existing File Name. File Name: {0}", 
+                        image.FileName), LogLevel.Error);
+                throw new DataException("Cannot add new Image with existing File Name.");
             }
 
             var dal = new Images();
@@ -213,6 +231,9 @@ namespace InstaMelody.Business
             var createdImage = dal.CreateImage(image);
             if (createdImage == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Failed to create Image. File Name: {0}", 
+                        image.FileName), LogLevel.Error);
                 throw new DataException("Failed to create Image.");
             }
 
@@ -227,10 +248,11 @@ namespace InstaMelody.Business
         /// <exception cref="System.Data.DataException">No Image Id or File name provided</exception>
         public Image GetImage(Image image)
         {
-            Image result = null;
+            Image result;
 
             if (image.Id.Equals(default(int)) && string.IsNullOrWhiteSpace(image.FileName))
             {
+                InstaMelodyLogger.Log("No Image Id or File name provided. for GetImage()", LogLevel.Error);
                 throw new ArgumentException("No Image Id or File name provided.");
             }
 
@@ -259,9 +281,12 @@ namespace InstaMelody.Business
         public int DeleteImage(Image image)
         {
             var dal = new Images();
-            var foundImage = this.GetImage(image);
+            var foundImage = GetImage(image);
             if (foundImage == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Could not find image to delete. Image Id: {0}, File Name: {1}", 
+                        image.Id, image.FileName), LogLevel.Error);
                 throw new ArgumentException("Could not find image to delete.");
             }
 
@@ -270,6 +295,9 @@ namespace InstaMelody.Business
             var getImage = dal.GetImageById(foundImage.Id);
             if (getImage != null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Failed to delete image. Image Id: {0}", 
+                        foundImage.Id), LogLevel.Error);
                 throw new DataException("Failed to delete image.");
             }
 
@@ -308,12 +336,16 @@ namespace InstaMelody.Business
         {
             if (string.IsNullOrWhiteSpace(video.FileName))
             {
-                throw new ArgumentException("Cannot create video with empty File Name.");
+                InstaMelodyLogger.Log("Cannot create Video with empty File Name.", LogLevel.Error);
+                throw new ArgumentException("Cannot create Video with empty File Name.");
             }
 
-            if (this.DoesVideoExistWithFileName(video.FileName))
+            if (DoesVideoExistWithFileName(video.FileName))
             {
-                throw new DataException("Cannot add new video with existing File Name.");
+                InstaMelodyLogger.Log(
+                    string.Format("Cannot add new Video with existing File Name. File Name: {0}",
+                        video.FileName), LogLevel.Error);
+                throw new DataException("Cannot add new Video with existing File Name.");
             }
 
             var dal = new Videos();
@@ -321,7 +353,10 @@ namespace InstaMelody.Business
             var createdVideo = dal.CreateVideo(video);
             if (createdVideo == null)
             {
-                throw new DataException("Failed to create Image.");
+                InstaMelodyLogger.Log(
+                    string.Format("Failed to create Video. File Name: {0}",
+                        video.FileName), LogLevel.Error);
+                throw new DataException("Failed to create Video.");
             }
 
             return createdVideo;
@@ -335,10 +370,11 @@ namespace InstaMelody.Business
         /// <exception cref="System.ArgumentException">No Video Id or File name provided.</exception>
         public Video GetVideo(Video video)
         {
-            Video result = null;
+            Video result;
 
             if (video.Id.Equals(default(int)) && string.IsNullOrWhiteSpace(video.FileName))
             {
+                InstaMelodyLogger.Log("No Video Id or File name provided for GetVideo().", LogLevel.Error);
                 throw new ArgumentException("No Video Id or File name provided.");
             }
 
@@ -365,17 +401,23 @@ namespace InstaMelody.Business
         public int DeleteVideo(Video video)
         {
             var dal = new Videos();
-            var foundVideo = this.GetVideo(video);
+            var foundVideo = GetVideo(video);
             if (foundVideo == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Could not find video to delete. Video Id: {0}, File Name: {1}", 
+                        video.Id, video.FileName), LogLevel.Error);
                 throw new ArgumentException("Could not find video to delete.");
             }
 
             dal.DeleteVideo(foundVideo.Id);
 
-            var getImage = dal.GetVideoById(foundVideo.Id);
-            if (getImage != null)
+            var getVideo = dal.GetVideoById(foundVideo.Id);
+            if (getVideo != null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Failed to delete video. Video Id: {0}", 
+                        foundVideo.Id), LogLevel.Error);
                 throw new DataException("Failed to delete video.");
             }
 
@@ -405,13 +447,10 @@ namespace InstaMelody.Business
         private void DeleteUserImageRecords(Guid userId, string fileName)
         {
             // delete image record
-            this.DeleteImage(new Image
-            {
-                FileName = fileName
-            });
+            DeleteImage(new Image { FileName = fileName });
 
             // set userimageid column to null
-            var userBll = new UserBLL();
+            var userBll = new UserBll();
             userBll.DeleteUserImage(userId);
         }
 
@@ -422,13 +461,13 @@ namespace InstaMelody.Business
         private void DeleteMessageImageRecords(string fileName)
         {
             // delete image record
-            var deletedImgId = this.DeleteImage(new Image
+            var deletedImgId = DeleteImage(new Image
             {
                 FileName = fileName
             });
 
             // delete message image record
-            var messageBll = new MessageBLL();
+            var messageBll = new MessageBll();
             messageBll.DeleteMessageImage(deletedImgId);
         }
 
@@ -439,13 +478,13 @@ namespace InstaMelody.Business
         private void DeleteMessageVideoRecords(string fileName)
         {
             // delete video record
-            var deletedVideoId = this.DeleteVideo(new Video
+            var deletedVideoId = DeleteVideo(new Video
             {
                 FileName = fileName
             });
 
             // delete message image record
-            var messageBll = new MessageBLL();
+            var messageBll = new MessageBll();
             messageBll.DeleteMessageVideo(deletedVideoId);
         }
 
@@ -455,10 +494,10 @@ namespace InstaMelody.Business
         /// <param name="fileName">Name of the file.</param>
         private void DeleteMessageMelodyRecords(string fileName)
         {
-            var melodyBll = new MelodyBLL();
+            var melodyBll = new MelodyBll();
             var deletedUserMelodyGuid = melodyBll.DeleteUserMelodyByMelodyFileName(fileName);
 
-            var messageBll = new MessageBLL();
+            var messageBll = new MessageBll();
             messageBll.DeleteMessageUserMelody(deletedUserMelodyGuid);
         }
 

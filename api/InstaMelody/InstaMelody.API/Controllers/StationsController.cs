@@ -58,7 +58,7 @@ namespace InstaMelody.API.Controllers
                             request.Station.Name, request.Token),
                         LogLevel.Trace);
 
-                    var bll = new StationBLL();
+                    var bll = new StationBll();
                     var result = bll.CreateStation(request.Station, request.Token, request.Image, request.Categories);
                     if (result == null)
                     {
@@ -114,7 +114,7 @@ namespace InstaMelody.API.Controllers
                             request.Station.Id, request.Token),
                         LogLevel.Trace);
 
-                    var bll = new StationBLL();
+                    var bll = new StationBll();
                     var result = bll.UpdateStation(request.Station, request.Token, request.Image, request.Categories);
                     if (result == null)
                     {
@@ -174,7 +174,7 @@ namespace InstaMelody.API.Controllers
                             station, request.Token), 
                         LogLevel.Trace);
 
-                    var bll = new StationBLL();
+                    var bll = new StationBll();
                     bll.DeleteStation(request.Station, request.Token);
 
                     response = this.Request.CreateResponse(HttpStatusCode.Accepted);
@@ -227,7 +227,7 @@ namespace InstaMelody.API.Controllers
                             station, request.Token),
                         LogLevel.Trace);
 
-                    var bll = new StationBLL();
+                    var bll = new StationBll();
 
                     var result = bll.RemoveStationFromCategories(request.Station, request.Categories, request.Token);
                     if (result == null)
@@ -315,7 +315,7 @@ namespace InstaMelody.API.Controllers
                         string.Format("Get Stations - Token: {0}", _token),
                         LogLevel.Trace);
 
-                    var bll = new StationBLL();
+                    var bll = new StationBll();
                     object result;
 
                     if (!_stationId.Equals(default(int))
@@ -367,7 +367,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
+                    
                 }
             }
 
@@ -405,7 +405,7 @@ namespace InstaMelody.API.Controllers
                         string.Format("Get All Stations - Token: {0}", _token),
                         LogLevel.Trace);
 
-                    var bll = new StationBLL();
+                    var bll = new StationBll();
                     var result = bll.GetAllStations(_token);
 
                     if (result == null)
@@ -431,7 +431,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
+                    
                 }
             }
 
@@ -473,7 +473,7 @@ namespace InstaMelody.API.Controllers
                         string.Format("Get StationFollowers - Token: {0}, StationId: {1}", _token, _stationId),
                         LogLevel.Trace);
 
-                    var bll = new StationBLL();
+                    var bll = new StationBll();
                     var result = bll.GetStationFollowers(new Station {Id = _stationId}, _token);
 
                     if (result == null)
@@ -500,7 +500,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
+                    
                 }
             }
 
@@ -530,7 +530,7 @@ namespace InstaMelody.API.Controllers
                             station, request.Token),
                         LogLevel.Trace);
 
-                    var bll = new StationBLL();
+                    var bll = new StationBll();
 
                     var result = bll.FollowStation(request.Station, request.Token);
                     if (result == null)
@@ -591,7 +591,7 @@ namespace InstaMelody.API.Controllers
                             station, request.Token),
                         LogLevel.Trace);
 
-                    var bll = new StationBLL();
+                    var bll = new StationBll();
 
                     var result = bll.UnfollowStation(request.Station, request.Token);
                     if (result == null)
@@ -652,7 +652,7 @@ namespace InstaMelody.API.Controllers
                             station, request.Token),
                         LogLevel.Trace);
 
-                    var bll = new StationBLL();
+                    var bll = new StationBll();
 
                     var result = bll.SendPostToStation(request.Station, request.Message, request.Token);
                     if (result == null)
@@ -713,7 +713,7 @@ namespace InstaMelody.API.Controllers
                             station, request.Token),
                         LogLevel.Trace);
 
-                    var bll = new StationBLL();
+                    var bll = new StationBll();
 
                     var result = bll.SendMessageToStation(request.Station, request.Message, request.Token);
                     if (result == null)
@@ -772,7 +772,7 @@ namespace InstaMelody.API.Controllers
                             request.StationMessage.Id, request.Token),
                         LogLevel.Trace);
 
-                    var bll = new StationBLL();
+                    var bll = new StationBll();
 
                     var result = bll.ReplyToStationMessage(request.StationMessage, request.Message, request.Token);
                     if (result == null)
@@ -830,6 +830,10 @@ namespace InstaMelody.API.Controllers
             var stationId = nvc["id"];
             int.TryParse(stationId, out _stationId);
 
+            int _postId;
+            var postId = nvc["postId"];
+            int.TryParse(postId, out _postId);
+
             if (_token.Equals(default(Guid)))
             {
                 InstaMelodyLogger.Log("Received NULL GetStationPosts request", LogLevel.Trace);
@@ -845,8 +849,16 @@ namespace InstaMelody.API.Controllers
                         string.Format("Get Station Posts - Token: {0}, StationId: {1}", _token, _stationId),
                         LogLevel.Trace);
 
-                    var bll = new StationBLL();
-                    var result = bll.GetStationPosts(new Station {Id = _stationId}, _token);
+                    var bll = new StationBll();
+                    object result;
+                    if (_postId != default(int))
+                    {
+                        result = bll.GetStationMessage(new StationMessage { Id = _postId }, _token);
+                    }
+                    else
+                    {
+                        result = bll.GetStationPosts(new Station { Id = _stationId }, _token);
+                    }
 
                     if (result == null)
                     {
@@ -898,6 +910,10 @@ namespace InstaMelody.API.Controllers
             var stationId = nvc["id"];
             int.TryParse(stationId, out _stationId);
 
+            int _messageId;
+            var messageId = nvc["messageId"];
+            int.TryParse(messageId, out _messageId);
+
             if (_token.Equals(default(Guid)))
             {
                 InstaMelodyLogger.Log("Received NULL GetStationMessages request", LogLevel.Trace);
@@ -913,8 +929,16 @@ namespace InstaMelody.API.Controllers
                         string.Format("Get Station Messages - Token: {0}, StationId: {1}", _token, _stationId),
                         LogLevel.Trace);
 
-                    var bll = new StationBLL();
-                    var result = bll.GetStationMessages(new Station { Id = _stationId }, _token);
+                    var bll = new StationBll();
+                    object result;
+                    if (_messageId != default(int))
+                    {
+                        result = bll.GetStationMessage(new StationMessage { Id = _messageId }, _token);
+                    }
+                    else
+                    {
+                        result = bll.GetStationMessages(new Station { Id = _stationId }, _token);
+                    }
 
                     if (result == null)
                     {
@@ -966,7 +990,7 @@ namespace InstaMelody.API.Controllers
                             request.StationMessage.Id, request.Token),
                         LogLevel.Trace);
 
-                    var bll = new StationBLL();
+                    var bll = new StationBll();
 
                     var result = bll.LikeStationMessage(request.StationMessage, request.Token);
                     if (result == null)
@@ -1024,7 +1048,7 @@ namespace InstaMelody.API.Controllers
                             request.StationMessage.Id, request.Token),
                         LogLevel.Trace);
 
-                    var bll = new StationBLL();
+                    var bll = new StationBll();
 
                     var result = bll.UnlikeStationMessage(request.StationMessage, request.Token);
                     if (result == null)
@@ -1083,7 +1107,7 @@ namespace InstaMelody.API.Controllers
                             request.StationMessage.Id, request.Token),
                         LogLevel.Trace);
 
-                    var bll = new StationBLL();
+                    var bll = new StationBll();
                     bll.DeleteStationMessage(request.StationMessage, request.Token);
 
                     response = this.Request.CreateResponse(HttpStatusCode.Accepted);

@@ -4,13 +4,15 @@ using System.Data;
 using System.Linq;
 using InstaMelody.Business.Properties;
 using InstaMelody.Data;
+using InstaMelody.Infrastructure;
 using InstaMelody.Model;
 using InstaMelody.Model.ApiModels;
 using InstaMelody.Model.Enums;
+using NLog;
 
 namespace InstaMelody.Business
 {
-    public class MelodyBLL
+    public class MelodyBll
     {
         #region Public Methods
 
@@ -35,12 +37,12 @@ namespace InstaMelody.Business
                 result = dal.GetMelodyByFileName(melody.FileName);
             }
 
-            if (result == null)
-            {
-                throw new DataException("Could not find the requested melody.");
-            }
+            if (result != null) return GetFilePath(result);
 
-            return this.GetFilePath(result);
+            InstaMelodyLogger.Log(
+                string.Format("Could not find the requested melody. Id: {0}, File Name: {1}", 
+                    melody.Id, melody.FileName), LogLevel.Error);
+            throw new DataException("Could not find the requested melody.");
         }
 
         /// <summary>
@@ -52,12 +54,10 @@ namespace InstaMelody.Business
         {
             var dal = new Melodies();
             var results = dal.GetAllBaseMelodies();
-            if (results == null || !results.Any())
-            {
-                throw new DataException("No melodies found.");
-            }
+            if (results != null && results.Any()) return GetFilePaths(results);
 
-            return this.GetFilePaths(results);
+            InstaMelodyLogger.Log("No melodies found for GetBaseMelodies().", LogLevel.Error);
+            throw new DataException("No melodies found.");
         }
 
         /// <summary>
@@ -70,10 +70,13 @@ namespace InstaMelody.Business
         public IList<Melody> GetBaseMelodiesByCategory(Category category)
         {
             // get category
-            var catBll = new CategoryBLL();
+            var catBll = new CategoryBll();
             var foundCategory = catBll.GetCategory(category);
             if (foundCategory == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("A valid Category was not found. Category Id: {0}, Name: {1}",
+                        category.Id, category.Name), LogLevel.Error);
                 throw new ArgumentException("A valid Category was not found.");
             }
 
@@ -82,10 +85,13 @@ namespace InstaMelody.Business
             var results = dal.GetBaseMelodiesByCategoryId(foundCategory.Id);
             if (results == null || !results.Any())
             {
+                InstaMelodyLogger.Log(
+                    string.Format("No melodies found for Category. Category Id: {0}, Name: {1}",
+                        category.Id, category.Name), LogLevel.Error);
                 throw new DataException("No melodies found.");
             }
 
-            return this.GetFilePaths(results);
+            return GetFilePaths(results);
         }
 
         /// <summary>
@@ -100,6 +106,9 @@ namespace InstaMelody.Business
             if (fileGroup == null
                 || (string.IsNullOrWhiteSpace(fileGroup.Name) && fileGroup.Id.Equals(default(int))))
             {
+                InstaMelodyLogger.Log(
+                    "A valid File Group must be provided. File Group Name and Id undefined.", 
+                    LogLevel.Error);
                 throw new ArgumentException("A valid File Group must be provided.");
             }
 
@@ -118,10 +127,13 @@ namespace InstaMelody.Business
 
             if (result == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Failed to find the requested File Group. File Group Id: {0}, Name: {1}",
+                        fileGroup.Id, fileGroup.Name), LogLevel.Error);
                 throw new DataException("Failed to find the requested File Group.");
             }
 
-            result.Melodies = this.GetBaseMelodiesByFileGroup(result.Id);
+            result.Melodies = GetBaseMelodiesByFileGroup(result.Id);
 
             return result;
         }
@@ -137,12 +149,14 @@ namespace InstaMelody.Business
             var results = dal.GetFileGroups();
             if (results == null || !results.Any())
             {
+                InstaMelodyLogger.Log(
+                    "Failed to retrieve any File Groups for GetFileGroups().", LogLevel.Error);
                 throw new DataException("Failed to retrieve any File Groups.");
             }
 
             foreach (var fileGroup in results)
             {
-                fileGroup.Melodies = this.GetBaseMelodiesByFileGroup(fileGroup.Id);
+                fileGroup.Melodies = GetBaseMelodiesByFileGroup(fileGroup.Id);
             }
 
             return results;
@@ -162,13 +176,16 @@ namespace InstaMelody.Business
             var userMelodies = dal.GetUserMelodiesByUserId(sessionUser.Id);
             if (userMelodies == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Could not find any created Melodies for this User. User Id: {0}, Token: {1}", 
+                        sessionUser.Id, sessionToken), LogLevel.Error);
                 throw new DataException("Could not find any created Melodies for this User.");
             }
 
             // get parts of user melody
             foreach (var userMelody in userMelodies)
             {
-                userMelody.Parts = this.GetUserMelodyParts(userMelody.Id);
+                userMelody.Parts = GetUserMelodyParts(userMelody.Id);
             }
 
             return userMelodies;
@@ -185,7 +202,7 @@ namespace InstaMelody.Business
         {
             Utilities.GetUserBySession(sessionToken);
 
-            return this.GetUserMelody(melody);
+            return GetUserMelody(melody);
         }
 
         /// <summary>
@@ -200,7 +217,7 @@ namespace InstaMelody.Business
         {
             var sessionUser = Utilities.GetUserBySession(sessionToken);
 
-            return this.CreateUserMelody(userMelody, sessionUser);
+            return CreateUserMelody(userMelody, sessionUser);
         }
 
         /// <summary>
@@ -213,10 +230,13 @@ namespace InstaMelody.Business
         {
             var sessionUser = Utilities.GetUserBySession(sessionToken);
 
-            var foundMelody = this.GetUserMelody(melody);
+            var foundMelody = GetUserMelody(melody);
             if (!foundMelody.UserId.Equals(sessionUser.Id))
             {
-                throw new UnauthorizedAccessException("Requesting user is not authorized to delete this Melody.");
+                InstaMelodyLogger.Log(
+                    string.Format("Requesting User is not authorized to delete this Melody. User Id: {0}, Melody Id: {1}",
+                        sessionUser.Id, foundMelody.Id), LogLevel.Error);
+                throw new UnauthorizedAccessException("Requesting User is not authorized to delete this Melody.");
             }
 
             var dal = new UserMelodies();
@@ -229,7 +249,7 @@ namespace InstaMelody.Business
                 if (userCreatedMelodies.Any())
                 {
                     var mDal = new Melodies();
-                    var fileBll = new FileBLL();
+                    var fileBll = new FileBll();
                     foreach (var userMelody in userCreatedMelodies)
                     {
                         mDal.DeleteMelody(userMelody.Id);
@@ -258,12 +278,15 @@ namespace InstaMelody.Business
             var loops = dal.GetUserLoopsByUserId(sessionUser.Id);
             if (loops == null || !loops.Any())
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Could not find any created Loops beloging to this User. User Id: {0}", 
+                        sessionUser.Id), LogLevel.Error);
                 throw new DataException("Could not find any created Loops beloging to this User.");
             }
 
             foreach (var userLoop in loops)
             {
-                userLoop.Parts = this.GetUserLoopParts(userLoop.Id);
+                userLoop.Parts = GetUserLoopParts(userLoop.Id);
             }
 
             return loops;
@@ -278,8 +301,7 @@ namespace InstaMelody.Business
         public UserLoop GetLoop(UserLoop loop, Guid sessionToken)
         {
             Utilities.GetUserBySession(sessionToken);
-
-            return this.GetUserLoop(loop);
+            return GetUserLoop(loop);
         }
 
         /// <summary>
@@ -299,12 +321,18 @@ namespace InstaMelody.Business
             // check loop name
             if (string.IsNullOrWhiteSpace(loop.Name))
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Cannot create a new Loop without a Name. User Id: {0}", 
+                        sessionUser.Id), LogLevel.Error);
                 throw new ArgumentException("Cannot create a new Loop without a Name.");
             }
 
             var existing = dal.GetUserLoopByUserIdAndName(sessionUser.Id, loop.Name);
             if (existing != null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("The user has already created a Loop with a matching name. User Id: {0}, Loop Name: {1}",
+                        sessionUser.Id, loop.Name), LogLevel.Error);
                 throw new DataException(
                     string.Format("The user has already created a Loop with the name: {0}.",
                         existing.Name));
@@ -322,19 +350,19 @@ namespace InstaMelody.Business
             // create loop parts
             try
             {
-                var parts = this.CreateUserLoopParts(sessionUser, createdLoop.Id, loop.Parts);
+                var parts = CreateUserLoopParts(sessionUser, createdLoop.Id, loop.Parts);
 
                 var uploadTokens = (from tuple in parts where tuple.Item2 != null select tuple.Item2).ToList();
                 if (uploadTokens.Any())
                 {
                     return new ApiLoopFileUpload
                     {
-                        Loop = this.GetUserLoop(createdLoop),
+                        Loop = GetUserLoop(createdLoop),
                         FileUploadTokens = uploadTokens
                     };
                 }
 
-                return this.GetUserLoop(createdLoop);
+                return GetUserLoop(createdLoop);
             }
             catch (Exception)
             {
@@ -355,24 +383,24 @@ namespace InstaMelody.Business
             var sessionUser = Utilities.GetUserBySession(sessionToken);
 
             // get loop
-            var foundLoop = this.GetUserLoop(loop);
+            var foundLoop = GetUserLoop(loop);
 
             // create loop parts
             try
             {
-                var parts = this.CreateUserLoopParts(sessionUser, foundLoop.Id, new List<UserLoopPart> { newPart });
+                var parts = CreateUserLoopParts(sessionUser, foundLoop.Id, new List<UserLoopPart> { newPart });
 
                 var uploadTokens = (from tuple in parts where tuple.Item2 != null select tuple.Item2).ToList();
                 if (uploadTokens.Any())
                 {
                     return new ApiLoopFileUpload
                     {
-                        Loop = this.GetUserLoop(foundLoop),
+                        Loop = GetUserLoop(foundLoop),
                         FileUploadTokens = uploadTokens
                     };
                 }
 
-                return this.GetUserLoop(foundLoop);
+                return GetUserLoop(foundLoop);
             }
             catch (Exception)
             {
@@ -395,18 +423,24 @@ namespace InstaMelody.Business
         {
             var sessionUser = Utilities.GetUserBySession(sessionToken);
 
-            var foundLoop = this.GetUserLoop(loop);
+            var foundLoop = GetUserLoop(loop);
 
-            var foundUserMelody = this.GetUserMelody(part);
+            var foundUserMelody = GetUserMelody(part);
             if (!foundUserMelody.UserId.Equals(sessionUser.Id)
                 && !foundLoop.UserId.Equals(sessionUser.Id))
             {
-                throw new UnauthorizedAccessException("Requesting user is not authorized to delete this part of the Loop.");
+                InstaMelodyLogger.Log(
+                    string.Format("Requesting User is not authorized to delete this part of the Loop. User Id: {0}, Loop Owner Id: {1}, Loop Part Owner Id: {2}",
+                        sessionUser.Id, foundLoop.UserId, foundUserMelody.UserId), LogLevel.Error);
+                throw new UnauthorizedAccessException("Requesting User is not authorized to delete this part of the Loop.");
             }
 
             var foundPart = foundLoop.Parts.FirstOrDefault(p => p.UserMelodyId.Equals(foundUserMelody.Id));
             if (foundPart == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Could not find the requested part of the Loop to be deleted. User Id: {0}, Loop Id: {1}, User Melody Id: {2}",
+                        sessionUser.Id, foundLoop.Id, foundUserMelody.Id), LogLevel.Error);
                 throw new DataException(
                     string.Format("Could not find the requested part of Loop: {0} to be deleted.",
                         foundLoop.Id));
@@ -417,7 +451,7 @@ namespace InstaMelody.Business
 
             // TODO: reindex loop parts before returning result
 
-            return this.GetUserLoop(foundLoop);
+            return GetUserLoop(foundLoop);
         }
 
         /// <summary>
@@ -430,10 +464,13 @@ namespace InstaMelody.Business
         {
             var sessionUser = Utilities.GetUserBySession(sessionToken);
 
-            var foundLoop = this.GetUserLoop(loop);
+            var foundLoop = GetUserLoop(loop);
             if (!foundLoop.UserId.Equals(sessionUser.Id))
             {
-                throw new UnauthorizedAccessException("Requesting user is not authorized to delete this Loop.");
+                InstaMelodyLogger.Log(
+                    string.Format("Requesting User is not authorized to delete this Loop. User Id: {0}, Loop Id: {1}",
+                        sessionUser.Id, foundLoop.Id), LogLevel.Error);
+                throw new UnauthorizedAccessException("Requesting User is not authorized to delete this Loop.");
             }
 
             // delete user loop & parts (handled @ DAL)
@@ -459,10 +496,12 @@ namespace InstaMelody.Business
             var results = dal.GetBaseMelodiesByFileGroupId(fileGroupId);
             if (results == null || !results.Any())
             {
+                InstaMelodyLogger.Log(
+                    string.Format("No melodies found. File Group Id: {0}", fileGroupId), LogLevel.Error);
                 throw new DataException("No melodies found.");
             }
 
-            return this.GetFilePaths(results);
+            return GetFilePaths(results);
         }
 
         /// <summary>
@@ -478,8 +517,11 @@ namespace InstaMelody.Business
             var foundMelody = dal.GetMelodyByFileName(melody.FileName);
             if (foundMelody != null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("A Melody already exists with a matching File Name. File Name: {0}", 
+                        melody.FileName), LogLevel.Error);
                 throw new ArgumentException(
-                    string.Format("A melody already exists with the File Name: {0}.",
+                    string.Format("A Melody already exists with the File Name: {0}.",
                         melody.FileName));
             }
 
@@ -496,6 +538,9 @@ namespace InstaMelody.Business
 
             if (result == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Failed to create a new Melody. File Name: {0}", 
+                        melody.FileName), LogLevel.Error);
                 throw new DataException("Failed to create a new Melody.");
             }
 
@@ -512,7 +557,6 @@ namespace InstaMelody.Business
         {
             var dal = new UserMelodies();
             var result = dal.GetUserMelodyByUserIdAndName(userId, name);
-
             return (result != null);
         }
 
@@ -528,6 +572,9 @@ namespace InstaMelody.Business
             {
                 if (dal.GetMelodyById(melody.Id) == null)
                 {
+                    InstaMelodyLogger.Log(
+                        string.Format("The provided User Melody Part is not a valid Melody. Melody Id: {0}", 
+                            melody.Id), LogLevel.Error);
                     throw new ArgumentException(
                     string.Format("The provided User Melody Part: {0} is not a valid Melody.",
                         melody.Id));
@@ -547,10 +594,13 @@ namespace InstaMelody.Business
             var parts = userMelodyDal.GetPartsByUserMelodyId(userMelodyId);
             if (parts == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Could not find any parts for User Melody. User Melody Id: {0}", 
+                        userMelodyId), LogLevel.Error);
                 throw new DataException(string.Format("Could not find any parts for User Melody {0}.", userMelodyId));
             }
 
-            return this.GetFilePaths(parts);
+            return GetFilePaths(parts);
         }
 
         /// <summary>
@@ -599,11 +649,14 @@ namespace InstaMelody.Business
 
             if (result == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Could not find the requested Loop with the provided information. Loop Id: {0}, User Id: {1}, Loop Name: {2}",
+                        loop.Id, loop.UserId, loop.Name), LogLevel.Error);
                 throw new ArgumentException("Could not find the requested Loop with the provided information.");
             }
 
             // get user loop parts
-            result.Parts = this.GetUserLoopParts(result.Id);
+            result.Parts = GetUserLoopParts(result.Id);
 
             return result;
         }
@@ -627,7 +680,7 @@ namespace InstaMelody.Business
             foreach (var userLoopPart in results)
             {
                 userLoopPart.UserMelody = 
-                    this.GetUserMelody(new UserMelody
+                    GetUserMelody(new UserMelody
                     {
                         Id = userLoopPart.UserMelodyId
                     }, getDeletedMelodies: true);
@@ -649,15 +702,18 @@ namespace InstaMelody.Business
             object createdOrFoundMelody;
             try
             {
-                createdOrFoundMelody = this.GetUserMelody(userMelody);
+                createdOrFoundMelody = GetUserMelody(userMelody);
             }
             catch (Exception)
             {
-                createdOrFoundMelody = this.CreateUserMelody(userMelody, user);
+                createdOrFoundMelody = CreateUserMelody(userMelody, user);
             }
 
             if (createdOrFoundMelody == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Could not find or create a new Melody. Melody Id: {0}, Name: {1}", 
+                        userMelody.Id, userMelody.Name), LogLevel.Error);
                 throw new ArgumentException("Could not find or create a new Melody to attach to this Loop.");
             }
 
@@ -678,10 +734,9 @@ namespace InstaMelody.Business
             foreach (var part in parts)
             {
                 if (part.UserMelody == null)
-                {
-                    throw new ArgumentException("Each Part of a Loop must contain a new or existing Melody.");
-                }
-                var createdMelody = this.GetExistingOrCreateNewUserMelody(part.UserMelody, owner);
+                    continue;
+
+                var createdMelody = GetExistingOrCreateNewUserMelody(part.UserMelody, owner);
                 var upload = createdMelody as ApiUserMelodyFileUpload;
                 var melody = (upload != null)
                     ? upload.UserMelody
@@ -689,7 +744,7 @@ namespace InstaMelody.Business
                 var token = (upload != null)
                     ? upload.FileUploadToken
                     : null;
-                var createdPart = this.CreateUserLoopPart(loopId, melody.Id, part);
+                var createdPart = CreateUserLoopPart(loopId, melody.Id, part);
                 createdParts.Add(new Tuple<UserLoopPart, FileUploadToken>(createdPart, token));
             }
             return createdParts;
@@ -740,6 +795,9 @@ namespace InstaMelody.Business
             var createdPart = dal.CreateUserLoopPart(newPart);
             if (createdPart == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Failed to create User Loop part. Loop Id: {0}, User Melody Id: {1}",
+                        loopId, userMelodyId), LogLevel.Error);
                 throw new DataException("Failed to create User Loop part.");
             }
 
@@ -770,11 +828,14 @@ namespace InstaMelody.Business
 
             if (result == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Could not find the requested Melody with the provided information. Melody Id: {0}, Name: {1}, User Id: {2}",
+                        melody.Id, melody.Name, melody.UserId), LogLevel.Error);
                 throw new ArgumentException("Could not find the requested Melody with the provided information.");
             }
 
             // get parts of user melody
-            result.Parts = this.GetUserMelodyParts(result.Id);
+            result.Parts = GetUserMelodyParts(result.Id);
 
             return result;
         }
@@ -794,6 +855,9 @@ namespace InstaMelody.Business
             var melody = userMelody.Parts.FirstOrDefault(m => !string.IsNullOrWhiteSpace(m.FileName));
             if (melody == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Must provide a Melody part with a valid FileName to create a new User Melody. Sender Id: {0}", 
+                        sender.Id), LogLevel.Error);
                 throw new ArgumentException("Must provide a Melody part with a valid FileName to create a new User Melody.");
             }
 
@@ -809,19 +873,22 @@ namespace InstaMelody.Business
 
             // validate parts exist
             var parts = userMelody.Parts.Where(p => !p.Id.Equals(default(int))).ToList();
-            this.CheckMelodies(parts);
+            CheckMelodies(parts);
 
             // find existing user melody
-            var existing = this.UserMelodyExistsWithName(sender.Id, userMelody.Name);
+            var existing = UserMelodyExistsWithName(sender.Id, userMelody.Name);
             if (existing)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("A User-created Melody already exists with a matching name. Name: {0}, User Id: {1}", 
+                        userMelody.Name, sender.Id), LogLevel.Error);
                 throw new ArgumentException(
                     string.Format("A User-created Melody already exists with the name: {0}.",
                         userMelody.Name));
             }
 
             // create new melody
-            var createdMelody = this.CreateMelody(melody);
+            var createdMelody = CreateMelody(melody);
             parts.Add(createdMelody);
 
             // create user melody
@@ -838,10 +905,10 @@ namespace InstaMelody.Business
             {
                 dal.CreateUserMelodyPart(createdUserMelody.Id, part.Id);
             }
-            createdUserMelody.Parts = this.GetUserMelodyParts(createdUserMelody.Id);
+            createdUserMelody.Parts = GetUserMelodyParts(createdUserMelody.Id);
 
             // create file upload token
-            var fileBll = new FileBLL();
+            var fileBll = new FileBll();
             var createdToken = fileBll.CreateToken(new FileUploadToken
             {
                 UserId = sender.Id,
@@ -869,6 +936,9 @@ namespace InstaMelody.Business
             var melody = dal.GetMelodyByFileName(melodyFileName);
             if (melody == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Could not find a melody with the provided file name. File Name: {0}.", 
+                        melodyFileName), LogLevel.Error);
                 throw new ArgumentException(
                     string.Format("Could not find a melody with the provided file name: {0}.", 
                         melodyFileName));
@@ -879,6 +949,9 @@ namespace InstaMelody.Business
             var userMelody = userMelodyDal.GetUserMelodyByMelodyId(melody.Id);
             if (userMelody == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Could not find a User Melody that contained a Melody Part with the file name. File Name: {0}",
+                        melodyFileName), LogLevel.Error);
                 throw new DataException(
                     string.Format("Could not find a User Melody that contained a Melody Part with the file name: {0}",
                         melodyFileName));

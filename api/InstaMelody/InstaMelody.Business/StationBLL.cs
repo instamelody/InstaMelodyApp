@@ -4,13 +4,15 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using InstaMelody.Data;
+using InstaMelody.Infrastructure;
 using InstaMelody.Model;
 using InstaMelody.Model.ApiModels;
 using InstaMelody.Model.Enums;
+using NLog;
 
 namespace InstaMelody.Business
 {
-    public class StationBLL
+    public class StationBll
     {
         #region Public Methods
 
@@ -46,6 +48,9 @@ namespace InstaMelody.Business
             var foundStation = TryGetStation(clonedStation);
             if (foundStation != null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("A Station with the provided information already exists. Station Name: {0}, Station Owner Id: {1}",
+                        foundStation.Name, foundStation.UserId), LogLevel.Error);
                 throw new ArgumentException("A Station with the provided information already exists.");
             }
 
@@ -97,6 +102,9 @@ namespace InstaMelody.Business
             var foundStation = TryGetStation(station);
             if (foundStation == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Could not find requested Station. Station Id: {0}, Station Name: {1}", 
+                        station.Id, station.Name), LogLevel.Error);
                 throw new DataException("Could not find requested Station.");
             }
 
@@ -118,6 +126,7 @@ namespace InstaMelody.Business
 
             if (stations == null || !stations.Any())
             {
+                InstaMelodyLogger.Log("Cannot find any Stations.", LogLevel.Error);
                 throw new DataException("Cannot find requested Stations.");
             }
 
@@ -134,13 +143,16 @@ namespace InstaMelody.Business
         /// <exception cref="System.Data.DataException">Cannot find requested Stations.</exception>
         public IList<Station> GetStationsByUser(User user, Guid sessionToken)
         {
-            Utilities.GetUserBySession(sessionToken);
+            var sessionUser = Utilities.GetUserBySession(sessionToken);
 
-            var userBll = new UserBLL();
+            var userBll = new UserBll();
             var foundUser = userBll.FindUser(user);
 
             if (foundUser == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Cannot find User. User Id: {0}, User Name: {1}, Email: {2}, Requesting User: {3}",
+                        user.Id, user.DisplayName, user.EmailAddress, sessionUser.Id), LogLevel.Error);
                 throw new ArgumentException("Cannot find User.");
             }
 
@@ -149,6 +161,9 @@ namespace InstaMelody.Business
 
             if (stations == null || !stations.Any())
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Cannot find requested Stations for User. User Id: {0}", 
+                        foundUser.Id), LogLevel.Error);
                 throw new DataException("Cannot find requested Stations.");
             }
 
@@ -170,6 +185,9 @@ namespace InstaMelody.Business
 
             if (stations == null || !stations.Any())
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Cannot find requested Stations for User. User Id: {0}", 
+                        sessionUser.Id), LogLevel.Error);
                 throw new DataException("Cannot find requested Stations.");
             }
 
@@ -188,11 +206,14 @@ namespace InstaMelody.Business
         {
             Utilities.GetUserBySession(sessionToken);
 
-            var catBll = new CategoryBLL();
+            var catBll = new CategoryBll();
             var cat = catBll.GetCategory(category);
 
             if (cat == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Cannot find requested Category. Category Id: {0}, Name: {1}", 
+                        category.Id, category.Name), LogLevel.Error);
                 throw new ArgumentException("Cannot find requested Category.");
             }
 
@@ -201,6 +222,9 @@ namespace InstaMelody.Business
 
             if (stations == null || !stations.Any())
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Cannot find requested Stations. Category Id: {0}", 
+                        cat.Id), LogLevel.Error);
                 throw new DataException("Cannot find requested Stations.");
             }
 
@@ -241,11 +265,17 @@ namespace InstaMelody.Business
             var foundStation = dal.GetStationById(station.Id);
             if (foundStation == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Station not found. Station Id: {0}",
+                        station.Id), LogLevel.Error);
                 throw new ArgumentException("Station not found.");
             }
 
             if (!foundStation.UserId.Equals(sessionUser.Id))
             {
+                InstaMelodyLogger.Log(
+                    string.Format("User is not authroized to update Station. Station Id: {0}, User Id: {1}, Token: {2}",
+                        foundStation.Id, sessionUser.Id, sessionToken), LogLevel.Error);
                 throw new UnauthorizedAccessException(
                     string.Format("User with Token: {0} is not authroized to update Station Id: {1}.", 
                         sessionToken, foundStation.Id));
@@ -304,11 +334,17 @@ namespace InstaMelody.Business
             var foundStation = TryGetStation(station);
             if (foundStation == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Station not found. Station Id: {0}, Name: {1}",
+                        station.Id, station.Name), LogLevel.Error);
                 throw new ArgumentException("Station not found.");
             }
 
             if (!foundStation.UserId.Equals(sessionUser.Id))
             {
+                InstaMelodyLogger.Log(
+                    string.Format("User is not authorized to delete this Station. Station Id: {0}, User Id: {1}, Token: {2}", 
+                        foundStation.Id, sessionUser.Id, sessionToken), LogLevel.Error);
                 throw new UnauthorizedAccessException(
                     string.Format("User with Token: {0} is not authorized to delete this Station.",
                         sessionToken));
@@ -344,11 +380,17 @@ namespace InstaMelody.Business
             var foundStation = TryGetStation(station, sessionUser.Id);
             if (foundStation == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Station not found. Station Id: {0}, Name: {1}",
+                        station.Id, station.Name), LogLevel.Error);
                 throw new ArgumentException("Could not find a Station with the information provided.");
             }
 
             if (!foundStation.UserId.Equals(sessionUser.Id))
             {
+                InstaMelodyLogger.Log(
+                    string.Format("User is not authroized to update Station. Station Id: {0}, User Id: {1}, Token: {2}", 
+                        foundStation.Id, sessionUser.Id, sessionToken), LogLevel.Error);
                 throw new UnauthorizedAccessException(
                     string.Format("User with Token: {0} is not authroized to update Station Id: {1}.",
                         sessionToken, foundStation.Id));
@@ -356,7 +398,7 @@ namespace InstaMelody.Business
 
             var dal = new Stations();
 
-            var catBll = new CategoryBLL();
+            var catBll = new CategoryBll();
             foreach (var category in categories)
             {
                 try
@@ -390,6 +432,9 @@ namespace InstaMelody.Business
             var foundStation = TryGetStation(station);
             if (foundStation == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Station not found. Station Id: {0}, Name: {1}",
+                        station.Id, station.Name), LogLevel.Error);
                 throw new ArgumentException("Station not found.");
             }
 
@@ -413,6 +458,9 @@ namespace InstaMelody.Business
             var foundStation = TryGetStation(station);
             if (foundStation == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Station not found. Station Id: {0}, Name: {1}",
+                        station.Id, station.Name), LogLevel.Error);
                 throw new ArgumentException("Station not found.");
             }
 
@@ -436,6 +484,9 @@ namespace InstaMelody.Business
             var foundStation = TryGetStation(station);
             if (foundStation == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Station not found. Station Id: {0}, Name: {1}", 
+                        station.Id, station.Name), LogLevel.Error);
                 throw new ArgumentException("Station not found.");
             }
 
@@ -465,6 +516,9 @@ namespace InstaMelody.Business
             var foundStation = TryGetStation(station);
             if (foundStation == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Station not found. Station Id: {0}, Name: {1}",
+                        station.Id, station.Name), LogLevel.Error);
                 throw new ArgumentException("Cannot find the requested Station.");
             }
 
@@ -486,12 +540,18 @@ namespace InstaMelody.Business
             var foundStation = TryGetStation(station);
             if (foundStation == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Station not found. Station Id: {0}, Name: {1}",
+                        station.Id, station.Name), LogLevel.Error);
                 throw new ArgumentException("Cannot find the requested Station.");
             }
 
             // validate session user owns station
             if (!foundStation.UserId.Equals(sessionUser.Id))
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Cannot Post to a Station of which the requestor is not the owner. Station Id: {0}, User Id: {1}, Token: {2}", 
+                        foundStation.Id, sessionUser.Id, sessionToken), LogLevel.Error);
                 throw new UnauthorizedAccessException("Cannot Post to a Station of which the requestor is not the owner.");
             }
 
@@ -507,7 +567,6 @@ namespace InstaMelody.Business
         public IList<StationMessage> GetStationMessages(Station station, Guid sessionToken)
         {
             var sessionUser = Utilities.GetUserBySession(sessionToken);
-
             return GetStationMessages(station, sessionUser, getPrivateMessages: true);
         }
 
@@ -520,8 +579,19 @@ namespace InstaMelody.Business
         public IList<StationMessage> GetStationPosts(Station station, Guid sessionToken)
         {
             var sessionUser = Utilities.GetUserBySession(sessionToken);
-
             return GetStationMessages(station, sessionUser, getPrivateMessages: false);
+        }
+
+        /// <summary>
+        /// Gets the station message.
+        /// </summary>
+        /// <param name="stationMessage">The station message.</param>
+        /// <param name="sessionToken">The session token.</param>
+        /// <returns></returns>
+        public StationMessage GetStationMessage(StationMessage stationMessage, Guid sessionToken)
+        {
+            var sessionUser = Utilities.GetUserBySession(sessionToken);
+            return GetStationMessage(stationMessage, sessionUser);
         }
 
         /// <summary>
@@ -546,6 +616,9 @@ namespace InstaMelody.Business
             var foundMessage = dal.GetStationMessageById(stationMessage.Id);
             if (foundMessage == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Could not find the requested Station Message. Station Message Id: {0}, User Id: {1}, Token: {2}", 
+                        stationMessage.Id, sessionUser.Id, sessionToken), LogLevel.Error);
                 throw new ArgumentException("Could not find the requested Station Message.");
             }
 
@@ -553,6 +626,9 @@ namespace InstaMelody.Business
             var foundStation = TryGetStation(new Station { Id = foundMessage.StationId });
             if (foundStation == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Cannot find the requested Station. Station Id: {0}, User Id: {1}, Token: {2}", 
+                        foundMessage.StationId, sessionUser.Id, sessionToken), LogLevel.Error);
                 throw new ArgumentException("Cannot find the requested Station.");
             }
 
@@ -561,6 +637,9 @@ namespace InstaMelody.Business
             var userIsFollower = stationDal.DoesUserFollowStation(sessionUser.Id, foundStation.Id);
             if (foundMessage.IsPrivate || !userIsFollower)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("This User does not have acces to Reply to this Post. Station Message Id: {0}, User Id: {1}, Token: {2}",
+                        stationMessage.Id, sessionUser.Id, sessionToken), LogLevel.Error);
                 throw new UnauthorizedAccessException("This User does not have acces to Reply to this Post.");
             }
 
@@ -582,6 +661,9 @@ namespace InstaMelody.Business
             var foundMessage = dal.GetStationMessageById(stationMessage.Id);
             if (foundMessage == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Could not find the requested Station Message. Station Message Id: {0}", 
+                        stationMessage.Id), LogLevel.Error);
                 throw new ArgumentException("Could not find the requested Station Message.");
             }
 
@@ -589,6 +671,9 @@ namespace InstaMelody.Business
             var foundStation = TryGetStation(new Station { Id = foundMessage.StationId });
             if (foundStation == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Cannot find the requested Station. Station Id: {0}", 
+                        foundMessage.StationId), LogLevel.Error);
                 throw new ArgumentException("Cannot find the requested Station.");
             }
 
@@ -596,6 +681,9 @@ namespace InstaMelody.Business
             if ((!foundMessage.SenderId.Equals(sessionUser.Id) || foundMessage.IsPrivate) &&
                 !foundStation.UserId.Equals(sessionUser.Id))
             {
+                InstaMelodyLogger.Log(
+                    string.Format("User does not have access to delete the requested Station Message. Station Message Id: {0}, Requestor Id: {1}", 
+                        foundMessage.Id, sessionUser.Id), LogLevel.Error);
                 throw new UnauthorizedAccessException(
                     string.Format("User with Token: {0} does not have access to delete the requested Station Message.",
                         sessionToken));
@@ -645,6 +733,7 @@ namespace InstaMelody.Business
         {
             if (station == null)
             {
+                InstaMelodyLogger.Log("No station provided.", LogLevel.Error);
                 throw new ArgumentException("No station provided.");
             }
 
@@ -679,7 +768,7 @@ namespace InstaMelody.Business
             if (station.StationImageId != null
                 && !station.StationImageId.Equals(default(int)))
             {
-                var imageBll = new FileBLL();
+                var imageBll = new FileBll();
                 var image = imageBll.GetImage(new Image
                 {
                     Id = (int)station.StationImageId
@@ -714,7 +803,7 @@ namespace InstaMelody.Business
         /// <returns></returns>
         private IList<Category> AddStationCategories(int stationId, IList<Category> categories)
         {
-            var catBll = new CategoryBLL();
+            var catBll = new CategoryBll();
             var dal = new Stations();
             foreach (var category in categories)
             {
@@ -753,10 +842,11 @@ namespace InstaMelody.Business
         {
             if (image == null)
             {
+                InstaMelodyLogger.Log("Cannot Add or Update a Station Image with a NULL Image.", LogLevel.Error);
                 throw new ArgumentException("Cannot Add or Update a Station Image with a NULL Image.");
             }
 
-            var fileBll = new FileBLL();
+            var fileBll = new FileBll();
 
             // delete existing image
             if (station.StationImageId != null)
@@ -776,7 +866,7 @@ namespace InstaMelody.Business
             dal.UpdateStationImage(station.Id, addedImage.Id);
 
             // create file upload token
-            var uploadBll = new FileBLL();
+            var uploadBll = new FileBll();
             var uploadToken = uploadBll.CreateToken(new FileUploadToken
             {
                 UserId = station.UserId,
@@ -793,7 +883,7 @@ namespace InstaMelody.Business
         /// <param name="imageId">The image identifier.</param>
         private void DeleteStationImage(int imageId)
         {
-            var fileBll = new FileBLL();
+            var fileBll = new FileBll();
             fileBll.DeleteImage(new Image {Id = imageId});
         }
 
@@ -812,10 +902,13 @@ namespace InstaMelody.Business
         private object CreateStationMessage(Station station, Message message, User sender, bool isPrivateMessage, int? parentMessageId = null)
         {
             // create message
-            var messageBll = new MessageBLL();
+            var messageBll = new MessageBll();
             var newMessage = messageBll.CreateMessage(message, sender);
             if (newMessage == null || newMessage.Item1 == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Failed to create a new Message. Sender Id: {0}", sender.Id), 
+                        LogLevel.Error);
                 throw new DataException("Failed to create a new Message.");
             }
 
@@ -855,24 +948,31 @@ namespace InstaMelody.Business
         /// <returns></returns>
         /// <exception cref="System.ArgumentException">Cannot find the requested Station.</exception>
         /// <exception cref="System.UnauthorizedAccessException">Cannot get Messages for a Station of which the requestor is not the owner.</exception>
+        // ReSharper disable once UnusedParameter.Local
         private IList<StationMessage> GetStationMessages(Station station, User requestor, bool getPrivateMessages)
         {
             // get station
             var foundStation = TryGetStation(station);
             if (foundStation == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Station not found. Station Id: {0}, Name: {1}",
+                        station.Id, station.Name), LogLevel.Error);
                 throw new ArgumentException("Cannot find the requested Station.");
             }
 
             // validate session user owns station
             if (getPrivateMessages && !foundStation.UserId.Equals(requestor.Id))
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Cannot get Messages for a Station of which the requestor is not the owner. Station Id: {0}, Requestor Id: {1}",
+                        foundStation.Id, requestor.Id), LogLevel.Error);
                 throw new UnauthorizedAccessException("Cannot get Messages for a Station of which the requestor is not the owner.");
             }
 
             // return all message threads for station
             var dal = new StationMessages();
-            var messageBll = new MessageBLL();
+            var messageBll = new MessageBll();
             var messages = dal.GetTopLevelMessagesByStationId(foundStation.Id, getPrivateMessages);
             foreach (var stationMessage in messages)
             {
@@ -882,6 +982,59 @@ namespace InstaMelody.Business
             }
 
             return messages;
+        }
+
+        /// <summary>
+        /// Gets the station message.
+        /// </summary>
+        /// <param name="stationMessage">The station message.</param>
+        /// <param name="requestor">The requestor.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException">
+        /// Could not find the requested Message.
+        /// or
+        /// Cannot find the requested Station.
+        /// </exception>
+        /// <exception cref="UnauthorizedAccessException">Cannot get Message for a Station of which the requestor is not the owner.</exception>
+        // ReSharper disable once UnusedParameter.Local
+        private StationMessage GetStationMessage(StationMessage stationMessage, User requestor)
+        {
+            var dal = new StationMessages();
+            var messageBll = new MessageBll();
+            var foundMessage = dal.GetStationMessageById(stationMessage.Id);
+            if (foundMessage == null)
+            {
+                InstaMelodyLogger.Log(
+                    string.Format("Could not find the requested Message. Station Message Id: {0}", 
+                        stationMessage.Id), LogLevel.Error);
+                throw new ArgumentException("Could not find the requested Message.");
+            }
+
+            // get station
+            var foundStation = TryGetStation(new Station { Id = foundMessage.StationId });
+            if (foundStation == null)
+            {
+                InstaMelodyLogger.Log(
+                    string.Format("Station not found. Station Id: {0}",
+                        foundMessage.StationId), LogLevel.Error);
+                throw new ArgumentException("Cannot find the requested Station.");
+            }
+
+            // validate session user owns station or message
+            if ((!foundMessage.SenderId.Equals(requestor.Id) || foundMessage.IsPrivate) &&
+                !foundStation.UserId.Equals(requestor.Id))
+            {
+                InstaMelodyLogger.Log(
+                    string.Format("Cannot get Message for a Station of which the requestor is not the owner. Station Message Id: {0}, Requestor Id: {1}",
+                        foundMessage.Id, requestor.Id), LogLevel.Error);
+                throw new UnauthorizedAccessException("Cannot get Message for a Station of which the requestor is not the owner.");
+            }
+
+            foundMessage.Replies = FindStationMessageReplies(foundMessage);
+            foundMessage.Likes = FindStationMessageLikes(foundMessage);
+            foundMessage.Message = messageBll.GetMessage(new Message { Id = foundMessage.MessageId });
+
+            return foundMessage;
         }
 
         /// <summary>
@@ -904,10 +1057,16 @@ namespace InstaMelody.Business
             var foundStationMessage = dal.GetStationMessageById(stationMessage.Id);
             if (foundStationMessage == null)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("Cannot find requested Station Message. Station Message Id: {0}", 
+                        stationMessage.Id), LogLevel.Error);
                 throw new ArgumentException("Cannot find requested Station Message.");
             }
             if (foundStationMessage.IsPrivate)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("This User does not have acces to Like this Post. Station Message Id: {0}, Requestor Id: {1}",
+                        foundStationMessage.Id, requestor.Id), LogLevel.Error);
                 throw new UnauthorizedAccessException("This User does not have acces to Like this Post.");
             }
 
@@ -916,6 +1075,9 @@ namespace InstaMelody.Business
             var userIsFollower = stationDal.DoesUserFollowStation(requestor.Id, foundStationMessage.StationId);
             if (!userIsFollower)
             {
+                InstaMelodyLogger.Log(
+                    string.Format("This User cannot like Posts from a Station that they do not follow. Station Message Id: {0}, Requestor Id: {1}",
+                        foundStationMessage.Id, requestor.Id), LogLevel.Error);
                 throw new UnauthorizedAccessException("This User cannot like Posts from a Station that they do not follow.");
             }
 
@@ -946,7 +1108,7 @@ namespace InstaMelody.Business
             foundMessage.Likes = FindStationMessageLikes(foundMessage);
             foundMessage.Replies = FindStationMessageReplies(foundMessage);
 
-            var messageBll = new MessageBLL();
+            var messageBll = new MessageBll();
             foundMessage.Message = messageBll.GetMessage(new Message { Id = foundMessage.MessageId });
 
 
@@ -968,7 +1130,7 @@ namespace InstaMelody.Business
                 return null;
             }
 
-            var messageBll = new MessageBLL();
+            var messageBll = new MessageBll();
 
             foreach (var message in replies)
             {

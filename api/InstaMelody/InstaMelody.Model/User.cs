@@ -99,6 +99,8 @@ namespace InstaMelody.Model
 
         #region Relationship Properties
 
+        public string DeviceToken { get; set; }
+
         public Image Image { get; set; }
 
         public IList<User> Friends { get; set; }
@@ -113,6 +115,7 @@ namespace InstaMelody.Model
         {
             this.HashSalt = string.Empty;
             this.Password = string.Empty;
+            this.DeviceToken = string.Empty;
 
             return this;
         }
@@ -136,6 +139,7 @@ namespace InstaMelody.Model
             this.LastLoginSuccess = null;
             this.NumberLoginFailures = 0;
             this.IsLocked = false;
+            this.DeviceToken = string.Empty;
 
             return this;
         }

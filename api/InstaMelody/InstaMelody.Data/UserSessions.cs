@@ -36,7 +36,7 @@ namespace InstaMelody.Data
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <returns></returns>
-        public IList<UserSession> FindActiveSessionsByUserId(Guid userId)
+        public IList<UserSession> FindActiveSessions(Guid userId)
         {
             var query = @"SELECT * FROM dbo.UserSessions
                         WHERE UserId = @UserId AND IsDeleted = 0";
@@ -48,6 +48,30 @@ namespace InstaMelody.Data
                     ParameterName = "UserId",
                     Value = userId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                }
+            };
+
+            return GetRecordSet<UserSession>(query, parameters.ToArray());
+        }
+
+        /// <summary>
+        /// Finds the active sessions.
+        /// </summary>
+        /// <param name="deviceToken">The device token.</param>
+        /// <returns></returns>
+        public IList<UserSession> FindActiveSessions(string deviceToken)
+        {
+            var query = @"SELECT * FROM dbo.UserSessions
+                        WHERE DeviceToken = @DeviceToken AND IsDeleted = 0";
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "DeviceToken",
+                    Value = deviceToken,
+                    SqlDbType = SqlDbType.VarChar,
                     Direction = ParameterDirection.Input
                 }
             };
@@ -91,11 +115,12 @@ namespace InstaMelody.Data
         /// Ends the session by user identifier.
         /// </summary>
         /// <param name="token">The token.</param>
-        public void EndSession(Guid token)
+        /// <param name="deviceToken">The device token.</param>
+        public void EndSession(Guid token, string deviceToken)
         {
             var query = @"UPDATE dbo.UserSessions
                         SET IsDeleted = 1, LastActivity = @LastActivity
-                        WHERE Token = @Token AND IsDeleted = 0";
+                        WHERE Token = @Token AND DeviceToken = @DeviceToken AND IsDeleted = 0";
 
             var parameters = new List<SqlParameter>()
             {
@@ -110,6 +135,52 @@ namespace InstaMelody.Data
                 {
                     ParameterName = "Token",
                     Value = token,
+                    SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "DeviceToken",
+                    Value = deviceToken,
+                    SqlDbType = SqlDbType.VarChar,
+                    Direction = ParameterDirection.Input
+                }
+            };
+
+            ExecuteNonQuery(query, parameters.ToArray());
+        }
+
+        /// <summary>
+        /// Ends the session.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="token">The token.</param>
+        public void EndSession(Guid userId, Guid token)
+        {
+            var query = @"UPDATE dbo.UserSessions
+                        SET IsDeleted = 1, LastActivity = @LastActivity
+                        WHERE Token = @Token AND UserId = @UserId AND IsDeleted = 0";
+
+            var parameters = new List<SqlParameter>()
+            {
+                new SqlParameter
+                {
+                    ParameterName = "LastActivity",
+                    Value = DateTime.UtcNow,
+                    SqlDbType = SqlDbType.DateTime,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "Token",
+                    Value = token,
+                    SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "UserId",
+                    Value = userId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
                 }
@@ -151,8 +222,8 @@ namespace InstaMelody.Data
         {
             session.Token = Guid.NewGuid();
 
-            var query = @"INSERT INTO dbo.UserSessions (Token, UserId, LastActivity, DateCreated, IsDeleted)
-                        VALUES(@Token, @UserId, @LastActivity, @DateCreated, 0)";
+            var query = @"INSERT INTO dbo.UserSessions (Token, UserId, DeviceToken, LastActivity, DateCreated, IsDeleted)
+                        VALUES(@Token, @UserId, @DeviceToken, @LastActivity, @DateCreated, 0)";
 
             var parameters = new List<SqlParameter>()
             {
@@ -168,6 +239,13 @@ namespace InstaMelody.Data
                     ParameterName = "UserId",
                     Value = session.UserId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "DeviceToken",
+                    Value = session.DeviceToken,
+                    SqlDbType = SqlDbType.VarChar,
                     Direction = ParameterDirection.Input
                 },
                 new SqlParameter
@@ -229,12 +307,14 @@ namespace InstaMelody.Data
         /// Adds the session.
         /// </summary>
         /// <param name="userId">The user identifier.</param>
+        /// <param name="deviceToken">The device token.</param>
         /// <returns></returns>
-        public Guid AddSession(Guid userId)
+        public Guid AddSession(Guid userId, string deviceToken)
         {
             var session = new UserSession
             {
                 UserId = userId,
+                DeviceToken = deviceToken,
                 LastActivity = DateTime.UtcNow,
                 DateCreated = DateTime.UtcNow
             };

@@ -62,7 +62,7 @@ namespace InstaMelody.API.Controllers
                         string.Format("Create Chat - Token: {0}", request.Token),
                         LogLevel.Trace);
 
-                    var bll = new MessageBLL();
+                    var bll = new MessageBll();
 
                     object result = null;
                     if (request.Users != null)
@@ -97,7 +97,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
+                    
                 }
             }
             else
@@ -144,7 +144,7 @@ namespace InstaMelody.API.Controllers
                         string.Format("Get Chat - Token: {0}, Chat: {1}", _token, _chat),
                         LogLevel.Trace);
 
-                    var bll = new MessageBLL();
+                    var bll = new MessageBll();
                     var result = bll.GetChat(new Chat {Id = _chat}, _token);
 
                     if (result == null)
@@ -171,7 +171,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
+                    
                 }
             }
 
@@ -203,7 +203,7 @@ namespace InstaMelody.API.Controllers
                                 : request.User.Id.ToString()),
                         LogLevel.Trace);
 
-                    var bll = new MessageBLL();
+                    var bll = new MessageBll();
                     var result = bll.AddUserToChat(request.Chat, request.User, request.Token);
 
                     if (result == null)
@@ -229,7 +229,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
+                    
                 }
             }
             else
@@ -261,7 +261,7 @@ namespace InstaMelody.API.Controllers
                         string.Format("Send Chat Message - Chat: {0}, Token: {1}", request.Chat.Id, request.Token),
                         LogLevel.Trace);
 
-                    var bll = new MessageBLL();
+                    var bll = new MessageBll();
                     var result = bll.SendChatMessage(request.Chat, request.Message, request.Token);
 
                     if (result == null)
@@ -287,7 +287,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
+                    
                 }
             }
             else
@@ -329,7 +329,7 @@ namespace InstaMelody.API.Controllers
                         string.Format("Get User Chats - Token: {0}", _token),
                         LogLevel.Trace);
 
-                    var bll = new MessageBLL();
+                    var bll = new MessageBll();
                     var results = bll.GetAllUserChats(_token);
 
                     if (results == null || !results.Any())
@@ -356,7 +356,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
+                    
                 }
             }
 
@@ -383,7 +383,7 @@ namespace InstaMelody.API.Controllers
                         string.Format("Remove User From Chat - Chat: {0}, Token: {1}", request.Chat.Id, request.Token),
                         LogLevel.Trace);
 
-                    var bll = new MessageBLL();
+                    var bll = new MessageBll();
                     bll.RemoveUserFromChat(request.Chat, request.Token);
 
                     response = this.Request.CreateResponse(HttpStatusCode.Accepted);
@@ -402,7 +402,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
+                    
                 }
             }
             else

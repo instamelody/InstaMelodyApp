@@ -166,5 +166,14 @@ namespace InstaMelody.Business.Properties {
                 return ((global::System.TimeSpan)(this["LoopPartFirstStartDuration"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("localhost")]
+        public string SMTPMailHost {
+            get {
+                return ((string)(this["SMTPMailHost"]));
+            }
+        }
     }
 }

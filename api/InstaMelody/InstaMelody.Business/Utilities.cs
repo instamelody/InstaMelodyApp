@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Net.Mail;
 using InstaMelody.Business.Properties;
 using InstaMelody.Model;
 using InstaMelody.Data;
+using InstaMelody.Infrastructure;
 using InstaMelody.Model.Enums;
+using NLog;
 
 namespace InstaMelody.Business
 {
@@ -30,6 +33,7 @@ namespace InstaMelody.Business
                 if (findUser != null && !findUser.Id.Equals(default(Guid)))
                 {
                     result = findUser;
+                    result.DeviceToken = session.DeviceToken;
                     if (!includeSensitiveInfo)
                     {
                         result = result.StripSensitiveInfo();
@@ -37,12 +41,10 @@ namespace InstaMelody.Business
                 }
             }
 
-            if (result == null)
-            {
-                throw new UnauthorizedAccessException("Could not validate session.");
-            }
+            if (result != null) return result;
 
-            return result;
+            InstaMelodyLogger.Log(string.Format("Could not validate session. Session Token: {0}", sessionId), LogLevel.Error);
+            throw new UnauthorizedAccessException("Could not validate session.");
         }
 
         /// <summary>
@@ -133,6 +135,32 @@ namespace InstaMelody.Business
             return string.Format("{0}/{1}/{2}", 
                 Settings.Default.BaseFileUploadFolder,
                 mediaPath, fileName);
+        }
+
+        /// <summary>
+        /// Sends the email.
+        /// </summary>
+        /// <param name="toAddress">To address.</param>
+        /// <param name="fromAddress">From address.</param>
+        /// <param name="subject">The subject.</param>
+        /// <param name="body">The body.</param>
+        /// <param name="isHtml">if set to <c>true</c> [is HTML].</param>
+        public static void SendEmail(string toAddress, MailAddress fromAddress, string subject, string body, bool isHtml = true)
+        {
+            using (var message = new MailMessage())
+            {
+                message.To.Add(toAddress);
+                message.From = fromAddress;
+                message.Subject = subject;
+                message.IsBodyHtml = isHtml;
+                message.Body = body;
+
+                using (var cli = new SmtpClient())
+                {
+                    cli.Host = Settings.Default.SMTPMailHost;
+                    cli.Send(message);
+                }
+            }
         }
     }
 }

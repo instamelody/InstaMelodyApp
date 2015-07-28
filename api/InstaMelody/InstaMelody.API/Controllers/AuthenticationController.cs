@@ -60,13 +60,15 @@ namespace InstaMelody.API.Controllers
                 {
                     InstaMelodyLogger.Log(
                         string.Format(
-                            "Authentication request - User: {0}, Password: {1}.",
+                            "Authentication request - Display Name: {0}, Email Address: {1}, Password: {2}, Device Token: {3}",
                             request.DisplayName ?? "NULL",
-                            request.Password ?? "NULL"),
+                            request.EmailAddress ?? "NULL",
+                            request.Password ?? "NULL",
+                            request.DeviceToken),
                         LogLevel.Trace);
 
-                    var bll = new AuthenticationBLL();
-                    var result = bll.Authenticate(request.DisplayName, request.EmailAddress, request.Password);
+                    var bll = new AuthenticationBll();
+                    var result = bll.Authenticate(request.DisplayName, request.EmailAddress, request.Password, request.DeviceToken);
 
                     if (result.Token.Equals(default(Guid)))
                     {
@@ -91,7 +93,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
+                    
                 }
             }
             else
@@ -113,20 +115,22 @@ namespace InstaMelody.API.Controllers
         {
             HttpResponseMessage response;
 
-            NameValueCollection nvc = HttpUtility.ParseQueryString(Request.RequestUri.Query);
+            var nvc = HttpUtility.ParseQueryString(Request.RequestUri.Query);
 
             if (nvc.AllKeys.Any())
             {
                 try
                 {
+                    var id = nvc["id"];
                     var token = nvc["token"];
-                    var userId = nvc["id"];
+                    var deviceToken = nvc["deviceToken"];
 
                     InstaMelodyLogger.Log(
                         string.Format(
-                            "Auth Validation request - User: {0}, Token: {1}.",
-                            userId ?? "NULL",
-                            token ?? "NULL"),
+                            "Auth Validation request - User Id: {0}, Token: {1}, Device Token: {2}",
+                            id ?? "NULL",
+                            token ?? "NULL",
+                            deviceToken ?? "NULL"),
                         LogLevel.Trace);
 
                     if (token == null)
@@ -136,19 +140,22 @@ namespace InstaMelody.API.Controllers
                     else
                     {
                         var _token = new Guid();
-                        var _userId = new Guid();
                         Guid.TryParse(token, out _token);
-                        Guid.TryParse(userId, out _userId);
+
+                        var _userId = new Guid();
+                        Guid.TryParse(id, out _userId);
 
                         var sessionUser = Business.Utilities.GetUserBySession(_token);
-                        if (sessionUser == null || sessionUser.Id == default(Guid) || sessionUser.Id != _userId)
+                        if (sessionUser == null || sessionUser.Id == default(Guid))
                         {
                             response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, Exceptions.FailedValidation);
                         }
                         else
                         {
-                            var bll = new AuthenticationBLL();
-                            var result = bll.ValidateSession(_userId, _token);
+                            var bll = new AuthenticationBll();
+                            var result = string.IsNullOrWhiteSpace(deviceToken) 
+                                ? bll.ValidateSession(_userId, _token) 
+                                : bll.ValidateSession(_token, deviceToken);
 
                             if (result.Token.Equals(default(Guid)))
                             {
@@ -171,7 +178,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
+                    
                 }
             }
             else
@@ -200,13 +207,18 @@ namespace InstaMelody.API.Controllers
                 {
                     InstaMelodyLogger.Log(
                         string.Format(
-                            "End Session - User: {0}, Token: {1}.",
-                            request.UserId.ToString() ?? "NULL",
-                            request.Token.ToString() ?? "NULL"),
+                            "End Session - User Id: {0}, Token: {1}, Device Token: {2}",
+                            request.UserId,
+                            request.Token,
+                            request.DeviceToken),
                         LogLevel.Trace);
 
-                    var bll = new AuthenticationBLL();
-                    bll.EndSession(request.UserId, request.Token);
+                    var bll = new AuthenticationBll();
+
+                    if (!string.IsNullOrWhiteSpace(request.DeviceToken))
+                        bll.EndSession(request.Token, request.DeviceToken);
+                    else
+                        bll.EndSession(request.UserId, request.Token);
 
                     var result = new ApiMessage
                     {
@@ -229,7 +241,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
+                    
                 }
             }
             else
@@ -260,7 +272,7 @@ namespace InstaMelody.API.Controllers
                         string.Format("Update User Password - Token: {0}.", request.Token),
                         LogLevel.Trace);
 
-                    var bll = new AuthenticationBLL();
+                    var bll = new AuthenticationBll();
                     var result = bll.UpdatePassword(request.UserPassword, request.Token);
 
                     if (result == null)
@@ -286,7 +298,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
-                    response.ReasonPhrase = exc.Message;
+                    
                 }
             }
             else
@@ -298,12 +310,67 @@ namespace InstaMelody.API.Controllers
             return response;
         }
 
+        /// <summary>
+        /// Resets the user password.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
         [HttpPost]
         [Route(Routes.RouteResetPassword)]
         public HttpResponseMessage ResetUserPassword(ApiRequest request)
         {
-            // TODO: reset user password
-            throw new NotImplementedException();
+            HttpResponseMessage response;
+
+            if (request != null && request.User != null)
+            {
+                try
+                {
+                    var user = string.IsNullOrWhiteSpace(request.User.DisplayName)
+                        ? request.User.EmailAddress
+                        : request.User.DisplayName;
+                    InstaMelodyLogger.Log(
+                        string.Format("Reset User Password - User: {0}.", user),
+                        LogLevel.Trace);
+
+                    var bll = new AuthenticationBll();
+
+                    try
+                    {
+                        var u = bll.ResetPassword(request.User);
+                        response = this.Request.CreateResponse(HttpStatusCode.OK, new ApiMessage
+                        {
+                            Message = string.Format("An email has been sent to {0} with a temporary password.", u.EmailAddress)
+                        });
+                    }
+                    catch (Exception)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, Exceptions.FailedResetPassword);
+                    }
+                }
+                catch (Exception exc)
+                {
+                    if (exc is UnauthorizedAccessException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, exc.Message);
+                    }
+                    else if (exc is DataException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, exc.Message);
+                    }
+                    else
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
+                    }
+                    
+                }
+            }
+            else
+            {
+                InstaMelodyLogger.Log("Received NULL UpdatePassword request", LogLevel.Trace);
+                response = this.Request.CreateErrorResponse(HttpStatusCode.NoContent, Exceptions.NullUpdatePassword);
+            }
+
+            return response;
         }
     }
 }

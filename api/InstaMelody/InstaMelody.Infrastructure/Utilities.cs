@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -63,6 +65,63 @@ namespace InstaMelody.Infrastructure
             if (one == null && two == null) return false;
             if (one == null || two == null) return true;
             return !one.Equals(two);
+        }
+
+
+        /// <summary>
+        ///     The generate random integer.
+        /// </summary>
+        /// <returns>
+        ///     The <see cref="int" />.
+        /// </returns>
+        public static int GenerateRandomInt(int intSize)
+        {
+            var rand = RandomNumberGenerator.Create();
+
+            var source = new byte[intSize];
+            var result = new int[1];
+
+            rand.GetBytes(source);
+            Buffer.BlockCopy(source, 0, result, 0, intSize);
+
+            return result[0];
+        }
+
+        /// <summary>
+        /// The get bytes.
+        /// </summary>
+        /// <param name="inputString">The Input String.</param>
+        /// <returns>
+        /// The <see cref="byte" />.
+        /// </returns>
+        public static byte[] GetBytes(string inputString)
+        {
+            var bytes = new byte[inputString.Length * sizeof(char)];
+            Buffer.BlockCopy(inputString.ToCharArray(), 0, bytes, 0, bytes.Length);
+            return bytes;
+        }
+
+        /// <summary>
+        /// The byte array to string.
+        /// </summary>
+        /// <param name="bytes">
+        /// The bytes.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public static string ByteArrayToString(byte[] bytes)
+        {
+            var ndx = 0;
+            var result = string.Empty;
+
+            while (ndx < bytes.Length)
+            {
+                result += bytes[ndx].ToString(CultureInfo.InvariantCulture) + ",";
+                ndx++;
+            }
+
+            return result;
         }
     }
 }
