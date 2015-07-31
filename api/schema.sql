@@ -59,7 +59,7 @@ CREATE TABLE dbo.UserSessions
 	UserId UNIQUEIDENTIFIER NOT NULL,
 	CONSTRAINT FK_UserSessions_UserId FOREIGN KEY (UserId)
 		REFERENCES Users (Id),
-	DeviceToken varchar(255) NOT NULL,
+	DeviceToken varchar(64) NOT NULL,
 	LastActivity datetime NOT NULL,
 	DateCreated datetime NOT NULL,
 	IsDeleted bit NOT NULL DEFAULT 0)
