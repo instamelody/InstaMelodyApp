@@ -1,0 +1,70 @@
+//REQUEST - POST /v0.1/Station/Post/Like
+{
+  "Token": "D18AC064-F500-483F-992D-76C137730DEA",
+  "StationMessage":
+  {
+    "Id": 15
+  }
+}
+
+//RESPONSE - HTTP/1.1 200 OK
+{
+  "Id": 15,
+  "StationId": 1,
+  "MessageId": "3a28804e-1af7-4e75-a404-d23894d5a29b",
+  "SenderId": "5651a0ad-b934-4be8-88f2-c380f884adf5",
+  "ParentId": null,
+  "IsPrivate": false,
+  "DateCreated": "2015-07-27T20:50:43.26",
+  "IsDeleted": false,
+  "Replies": [
+    {
+      "Id": 16,
+      "StationId": 1,
+      "MessageId": "901814ec-c783-4e57-b4a9-a5e85b650f01",
+      "SenderId": "9697ee03-4179-4178-8118-b22cbfce15ad",
+      "ParentId": 15,
+      "IsPrivate": false,
+      "DateCreated": "2015-07-27T20:51:23.937",
+      "IsDeleted": false,
+      "Replies": null,
+      "Message": {
+        "Id": "901814ec-c783-4e57-b4a9-a5e85b650f01",
+        "ParentId": null,
+        "Description": "Test reply message from API.",
+        "MediaType": 0,
+        "IsRead": false,
+        "DateRead": null,
+        "DateCreated": "2015-07-27T20:51:23.78",
+        "IsDeleted": false,
+        "Image": null,
+        "UserMelody": null,
+        "Video": null
+      },
+      "Likes": null
+    }
+  ],
+  "Message": {
+    "Id": "3a28804e-1af7-4e75-a404-d23894d5a29b",
+    "ParentId": null,
+    "Description": "Test post from API.",
+    "MediaType": 0,
+    "IsRead": false,
+    "DateRead": null,
+    "DateCreated": "2015-07-27T20:50:43.087",
+    "IsDeleted": false,
+    "Image": null,
+    "UserMelody": null,
+    "Video": null
+  },
+  "Likes": [
+    {
+      "Id": 4,
+      "StationMessageId": 15,
+      "UserId": "9697ee03-4179-4178-8118-b22cbfce15ad",
+      "DateCreated": "2015-07-27T21:01:51.403",
+      "IsDeleted": false,
+      "User": null
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+// EXAMPLE B - Create a new Chat Message containing an Image (Video requests are same format)
+
+// REQUEST - POST /v0.1/Chat/Message
+{
+  "Token" : "9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e",
+  "Chat": 
+  {
+    "Id" : "ebcb1743-7378-4d7d-96c5-5403cc51a07e"
+  },
+  "Message":
+  {
+    "Description" : "Test Message 2",
+    "Image" : 
+    {
+      "FileName":  "testimage.jpg"
+    }
+  }
+}
+
+// RESPONSE - HTTP/1.1 200 OK
+{
+  "Chat":
+  {
+    "Id": 7,
+    "ChatId": "ebcb1743-7378-4d7d-96c5-5403cc51a07e",
+    "MessageId": "6bc30a9c-ea0a-4e75-ac25-c120f920f63a",
+    "SenderId": "5651a0ad-b934-4be8-88f2-c380f884adf5",
+    "DateCreated": "2015-07-07T17:39:43.543",
+    "IsDeleted": false,
+    "Message": 
+    {
+      "Id": "6bc30a9c-ea0a-4e75-ac25-c120f920f63a",
+      "ParentId": null,
+      "Description": "Test Message 2",
+      "MediaType": 0,
+      "IsRead": false,
+      "DateRead": "0001-01-01T00:00:00",
+      "DateCreated": "2015-07-07T17:39:43.513",
+      "IsDeleted": false,
+      "Image": 
+      {
+        "Id": 2,
+        "FileName": "testimage.jpg",
+        "DateCreated": "2015-07-07T16:56:57.807",
+        "IsDeleted": false,
+        "FilePath": null
+      },
+      "UserMelody": null,
+      "Video": null
+    }
+  },
+  "FileUploadToken": 
+  {
+    "Token": "cb9ec546-45eb-4de9-b628-97fc9da7053d",
+    "UserId": "9697ee03-4179-4178-8118-b22cbfce15ad",
+    "FileName": "testuserapi.m4a",
+    "MediaType": 2,
+    "DateExpires": "2015-07-06T23:50:37.85",
+    "DateCreated": "2015-07-06T23:40:37.85",
+    "IsDeleted": false,
+    "IsExpired": false
+  }
+}

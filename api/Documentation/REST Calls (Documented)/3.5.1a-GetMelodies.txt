@@ -1,0 +1,50 @@
+// EXAMPLE A - Get All Melodies
+
+// REQUEST - GET /v0.1/Melody?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e
+
+// RESPONSE - HTTP/1.1 200 OK
+[
+    {
+        "Id": 1,
+        "Name": "Test Group",
+        "DateCreated": "2015-07-06T00:00:00",
+        "DateModified": "2015-07-06T00:00:00",
+        "IsDeleted": false,
+        "Melodies": 
+        [
+            {
+                "Id": 1,
+                "IsUserCreated": false,
+                "Name": "01 Bass",
+                "Description": "",
+                "FileName": "01 Bass.wav",
+                "DateCreated": "2015-07-06T00:00:00",
+                "DateModified": "2015-07-06T00:00:00",
+                "IsDeleted": false,
+                "FilePath": "Uploads/Melodies/01 Bass.wav"
+            },
+            {
+                "Id": 2,
+                "IsUserCreated": false,
+                "Name": "01 Drums",
+                "Description": "",
+                "FileName": "01 Drums.wav",
+                "DateCreated": "2015-07-06T00:00:00",
+                "DateModified": "2015-07-06T00:00:00",
+                "IsDeleted": false,
+                "FilePath": "Uploads/Melodies/01 Drums.wav"
+            },
+            {
+                "Id": 3,
+                "IsUserCreated": false,
+                "Name": "01 Melody",
+                "Description": "",
+                "FileName": "01 Melody.wav",
+                "DateCreated": "2015-07-06T00:00:00",
+                "DateModified": "2015-07-06T00:00:00",
+                "IsDeleted": false,
+                "FilePath": "Uploads/Melodies/01 Melody.wav"
+            }
+        ]
+    }
+]

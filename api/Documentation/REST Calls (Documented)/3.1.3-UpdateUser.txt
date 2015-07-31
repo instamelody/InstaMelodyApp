@@ -1,0 +1,40 @@
+// REQUEST - POST /v0.1/User/Update
+{
+    "Token" : "9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e",
+    "User" :
+    {
+        "EmailAddress" : "test@testy.com",
+        "DisplayName" : "testaccount123",
+        "FirstName" : "test",
+        "LastName" : "account",
+        "PhoneNumber" : "123-555-1234",
+    }
+}
+
+// RESPONSE - HTTP/1.1 200 OK
+{
+    "Id": "5651a0ad-b934-4be8-88f2-c380f884adf5",
+    "UserImageId": null,
+    "EmailAddress": "test@testy.com",
+    "DisplayName": "testaccount123",
+    "FirstName": "test",
+    "LastName": "account",
+    "PhoneNumber": "123-555-1234",
+    "HashSalt": "",
+    "Password": "",
+    "TwitterUsername": "",
+    "TwitterUserId": "",
+    "TwitterToken": "",
+    "TwitterSecret": "",
+    "FacebookUserId": "",
+    "FacebookToken": "",
+    "LastLoginSuccess": "2015-07-07T15:05:42.447",
+    "LastLoginFailure": "0001-01-01T00:00:00",
+    "NumberLoginFailures": 0,
+    "IsLocked": false,
+    "DateCreated": "2015-07-07T15:04:08.337",
+    "DateModified": "2015-07-07T15:25:09.52",
+    "IsDeleted": false,
+    "Image": null,
+    "Friends": null
+}

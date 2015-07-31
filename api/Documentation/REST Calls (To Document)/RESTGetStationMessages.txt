@@ -1,0 +1,105 @@
+//REQUEST - GET /v0.1/Station/Messages?id=1&token=9D0AB021-FCF8-4EC3-B6E3-BB1D0D03B12E
+
+//RESPONSE - HTTP/1.1 200 OK
+[
+  {
+    "Id": 1,
+    "StationId": 1,
+    "MessageId": "a12b1265-c63c-4e1f-b434-4f68cd2d4ec4",
+    "SenderId": "9697ee03-4179-4178-8118-b22cbfce15ad",
+    "ParentId": null,
+    "IsPrivate": true,
+    "DateCreated": "2015-07-27T16:57:09.343",
+    "IsDeleted": false,
+    "Replies": null,
+    "Message": {
+      "Id": "a12b1265-c63c-4e1f-b434-4f68cd2d4ec4",
+      "ParentId": null,
+      "Description": "Test message to a station.",
+      "MediaType": 0,
+      "IsRead": false,
+      "DateRead": null,
+      "DateCreated": "2015-07-27T16:56:54.82",
+      "IsDeleted": false,
+      "Image": null,
+      "UserMelody": null,
+      "Video": null
+    },
+    "Likes": null
+  },
+  {
+    "Id": 12,
+    "StationId": 1,
+    "MessageId": "a2d6ddb3-1d0d-4265-bf7f-0700fcfcf53a",
+    "SenderId": "9697ee03-4179-4178-8118-b22cbfce15ad",
+    "ParentId": null,
+    "IsPrivate": true,
+    "DateCreated": "2015-07-27T20:48:55.147",
+    "IsDeleted": false,
+    "Replies": null,
+    "Message": {
+      "Id": "a2d6ddb3-1d0d-4265-bf7f-0700fcfcf53a",
+      "ParentId": null,
+      "Description": "Test post from API.",
+      "MediaType": 0,
+      "IsRead": false,
+      "DateRead": null,
+      "DateCreated": "2015-07-27T20:48:54.987",
+      "IsDeleted": false,
+      "Image": null,
+      "UserMelody": null,
+      "Video": null
+    },
+    "Likes": null
+  },
+  {
+    "Id": 13,
+    "StationId": 1,
+    "MessageId": "c5660585-eca3-4051-b2db-f82ec4703b0c",
+    "SenderId": "9697ee03-4179-4178-8118-b22cbfce15ad",
+    "ParentId": null,
+    "IsPrivate": true,
+    "DateCreated": "2015-07-27T20:49:17.39",
+    "IsDeleted": false,
+    "Replies": null,
+    "Message": {
+      "Id": "c5660585-eca3-4051-b2db-f82ec4703b0c",
+      "ParentId": null,
+      "Description": "Test post from API.",
+      "MediaType": 0,
+      "IsRead": false,
+      "DateRead": null,
+      "DateCreated": "2015-07-27T20:49:17.227",
+      "IsDeleted": false,
+      "Image": null,
+      "UserMelody": null,
+      "Video": null
+    },
+    "Likes": null
+  },
+  {
+    "Id": 14,
+    "StationId": 1,
+    "MessageId": "36b41f50-9cc7-4ec2-aa92-c0a1b1804710",
+    "SenderId": "5651a0ad-b934-4be8-88f2-c380f884adf5",
+    "ParentId": null,
+    "IsPrivate": true,
+    "DateCreated": "2015-07-27T20:49:48.757",
+    "IsDeleted": false,
+    "Replies": null,
+    "Message": {
+      "Id": "36b41f50-9cc7-4ec2-aa92-c0a1b1804710",
+      "ParentId": null,
+      "Description": "Test post from API.",
+      "MediaType": 0,
+      "IsRead": false,
+      "DateRead": null,
+      "DateCreated": "2015-07-27T20:49:48.61",
+      "IsDeleted": false,
+      "Image": null,
+      "UserMelody": null,
+      "Video": null
+    },
+    "Likes": null
+  }
+]

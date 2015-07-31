@@ -1,0 +1,45 @@
+//REQUSET - POST /v0.1/Station/New
+{
+	"Token": "9D0AB021-FCF8-4EC3-B6E3-BB1D0D03B12E",
+	"Station":
+	{
+		"Name": "Test Station 1"
+	},
+	"Image":
+	{
+		"FileName": "stationtestimage.jpg"
+	}
+}
+
+//RESPONSE - HTTP/1.1 200 OK
+{
+  "Station": {
+    "Id": 3,
+    "UserId": "5651a0ad-b934-4be8-88f2-c380f884adf5",
+    "StationImageId": 2,
+    "Name": "Test Station 2",
+    "DateCreated": "2015-07-21T18:17:07.857",
+    "DateModified": "2015-07-21T18:17:07.857",
+    "IsDeleted": false,
+    "Image": {
+      "Id": 2,
+      "FileName": "stationtestimage.jpg",
+      "DateCreated": "2015-07-21T18:17:15.897",
+      "IsDeleted": false,
+      "FilePath": null
+    },
+    "Messages": null,
+    "Followers": null,
+    "Categories": null
+  },
+  "FileUploadToken": {
+    "Token": "9096c0d9-6443-4e55-95af-6e5da000d8ff",
+    "UserId": "5651a0ad-b934-4be8-88f2-c380f884adf5",
+    "FileName": "stationtestimage.jpg",
+    "MediaType": 0,
+    "DateExpires": "2015-07-21T18:27:19.263",
+    "DateCreated": "2015-07-21T18:17:19.267",
+    "IsDeleted": false,
+    "IsExpired": false
+  }
+}

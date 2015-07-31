@@ -1,0 +1,10 @@
+// REQUEST - POST /v0.1/Upload/{Session Token}/{File Upload Token}
+
+// RESPONSE - HTTP/1.1 200 Accepted
+[
+	{
+		"Name" : "testfile.m4a",
+		"Path" : "path/to/file/testfile.m4a",
+		"Size" : "33"
+	}
+]

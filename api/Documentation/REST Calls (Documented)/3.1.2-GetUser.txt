@@ -1,0 +1,29 @@
+// REQUEST - GET /v0.1/User?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&id=5651a0ad-b934-4be8-88f2-c380f884adf5
+// REQUEST - GET /v0.1/User?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&emailAddress=test@testy.com
+// REQUEST - GET /v0.1/User?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&displayName=testeraccount
+
+// RESPONSE - HTTP/1.1 200 OK
+{
+    "Id": "5651a0ad-b934-4be8-88f2-c380f884adf5",
+    "EmailAddress": "test@testy.com",
+    "DisplayName": "testeraccount",
+    "FirstName": "testy",
+    "LastName": "testerson",
+    "PhoneNumber": "123-555-1234",
+    "HashSalt": "",
+    "Password": "",
+    "TwitterUsername": "",
+    "TwitterUserId": "",
+    "TwitterToken": "",
+    "TwitterSecret": "",
+    "FacebookUserId": "",
+    "FacebookToken": "",
+    "LastLoginSuccess": "2015-06-19T23:36:15.33",
+    "LastLoginFailure": "0001-01-01T00:00:00",
+    "NumberLoginFailures": 0,
+    "IsLocked": false,
+    "UserImage": "",
+    "DateCreated": "2015-06-19T23:35:50.7",
+    "DateModified": "2015-06-19T23:35:50.7",
+    "IsDeleted": false
+}

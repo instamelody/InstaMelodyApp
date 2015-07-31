@@ -1,0 +1,66 @@
+//REQUEST - POST /v0.1/Station/Update
+{
+	"Token": "9D0AB021-FCF8-4EC3-B6E3-BB1D0D03B12E",
+	"Station":
+	{
+	    "Id": "5",
+		"Name": "Updated Station"
+	},
+	"Image":
+	{
+		"FileName": "stationtestimage6.jpg"
+	}
+}
+
+//RESPONSE - HTTP/1.1 200 OK
+{
+  "Station": {
+    "Id": 5,
+    "UserId": "5651a0ad-b934-4be8-88f2-c380f884adf5",
+    "StationImageId": 6,
+    "Name": "Updated Station",
+    "DateCreated": "2015-07-21T19:03:12.48",
+    "DateModified": "2015-07-21T19:21:16.91",
+    "IsDeleted": false,
+    "Image": {
+      "Id": 6,
+      "FileName": "stationtestimage6.jpg",
+      "DateCreated": "2015-07-21T19:21:17.243",
+      "IsDeleted": false,
+      "FilePath": null
+    },
+    ,
+    "Categories": [
+      {
+        "Id": 1,
+        "ParentId": null,
+        "Name": "Test Category",
+        "DateCreated": "2015-07-06T00:00:00",
+        "DateModified": "2015-07-06T00:00:00",
+        "IsDeleted": false,
+        "Children": null
+      },
+      {
+        "Id": 2,
+        "ParentId": 1,
+        "Name": "test 2",
+        "DateCreated": "2015-01-01T00:00:00",
+        "DateModified": "2015-01-01T00:00:00",
+        "IsDeleted": false,
+        "Children": null
+      }
+    ],
+    "Followers": null,
+    "Messages": null
+  },
+  "FileUploadToken": {
+    "Token": "4fda35f4-fe33-45e8-bbec-2db7f1b847a6",
+    "UserId": "5651a0ad-b934-4be8-88f2-c380f884adf5",
+    "FileName": "stationtestimage6.jpg",
+    "MediaType": 0,
+    "DateExpires": "2015-07-21T19:31:17.497",
+    "DateCreated": "2015-07-21T19:21:17.497",
+    "IsDeleted": false,
+    "IsExpired": false
+  }
+}

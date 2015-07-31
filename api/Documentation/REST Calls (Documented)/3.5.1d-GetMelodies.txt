@@ -1,0 +1,20 @@
+// EXAMPLE D - Get a Specific Melody
+
+// REQUEST - GET /v0.1/Melody?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&id=1
+
+// - OR -
+
+// REQUEST - GET /v0.1/Melody?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&fileName=01 Bass.wav
+
+// RESPONSE - HTTP/1.1 200 OK
+{
+    "Id": 1,
+    "IsUserCreated": false,
+    "Name": "01 Bass",
+    "Description": "",
+    "FileName": "01 Bass.wav",
+    "DateCreated": "2015-07-06T00:00:00",
+    "DateModified": "2015-07-06T00:00:00",
+    "IsDeleted": false,
+    "FilePath": "Uploads/Melodies/01 Bass.wav"
+}

@@ -1,0 +1,28 @@
+//REQUEST - GET /v0.1/Station/Messages?messageId=1&token=9D0AB021-FCF8-4EC3-B6E3-BB1D0D03B12E
+
+//RESPONSE - HTTP/1.1 200 OK
+{
+  "Id": 1,
+  "StationId": 1,
+  "MessageId": "a12b1265-c63c-4e1f-b434-4f68cd2d4ec4",
+  "SenderId": "9697ee03-4179-4178-8118-b22cbfce15ad",
+  "ParentId": null,
+  "IsPrivate": true,
+  "DateCreated": "2015-07-27T16:57:09.343",
+  "IsDeleted": false,
+  "Replies": null,
+  "Message": {
+    "Id": "a12b1265-c63c-4e1f-b434-4f68cd2d4ec4",
+    "ParentId": null,
+    "Description": "Test message to a station.",
+    "MediaType": 0,
+    "IsRead": false,
+    "DateRead": null,
+    "DateCreated": "2015-07-27T16:56:54.82",
+    "IsDeleted": false,
+    "Image": null,
+    "UserMelody": null,
+    "Video": null
+  },
+  "Likes": null
+}

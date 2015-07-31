@@ -1,0 +1,125 @@
+// REQUEST - POST /v0.1/Message/Chat/User
+{
+    "Token" : "9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e",
+    "Chat": 
+    {
+        "Id" : "ebcb1743-7378-4d7d-96c5-5403cc51a07e"
+    },
+    "User" :
+    {
+        "EmailAddress": "test2@test2.com"
+    }
+}
+
+// RESPONSE - HTTP/1.1 200 OK
+{
+    "Id": "ebcb1743-7378-4d7d-96c5-5403cc51a07e",
+    "DateCreated": "2015-07-07T17:23:35.3",
+    "DateModified": "2015-07-07T17:23:35.453",
+    "IsDeleted": false,
+    "Messages": 
+    [
+        {
+            "Id": 5,
+            "ChatId": "ebcb1743-7378-4d7d-96c5-5403cc51a07e",
+            "MessageId": "713d9487-910b-4026-9252-8eb5cca1e50f",
+            "SenderId": "5651a0ad-b934-4be8-88f2-c380f884adf5",
+            "DateCreated": "2015-07-07T17:23:35.43",
+            "IsDeleted": false,
+            "Message": {
+                "Id": "713d9487-910b-4026-9252-8eb5cca1e50f",
+                "ParentId": null,
+                "Description": "Hello",
+                "MediaType": 0,
+                "IsRead": false,
+                "DateRead": "0001-01-01T00:00:00",
+                "DateCreated": "2015-07-07T17:23:35.41",
+                "IsDeleted": false,
+                "Image": null,
+                "UserMelody": null,
+                "Video": null
+            }
+        }
+    ],
+    "Users": 
+    [
+        {
+            "Id": "cbca4d41-42ca-45ab-8aaf-262a0a59d677",
+            "UserImageId": null,
+            "EmailAddress": "test2@test2.com",
+            "DisplayName": "testaccount2",
+            "FirstName": "test2",
+            "LastName": "est2",
+            "PhoneNumber": "",
+            "HashSalt": "",
+            "Password": "",
+            "TwitterUsername": "",
+            "TwitterUserId": "",
+            "TwitterToken": "",
+            "TwitterSecret": "",
+            "FacebookUserId": "",
+            "FacebookToken": "",
+            "LastLoginSuccess": null,
+            "LastLoginFailure": null,
+            "NumberLoginFailures": 0,
+            "IsLocked": false,
+            "DateCreated": "2015-07-07T15:51:19.803",
+            "DateModified": "2015-07-07T16:33:30.497",
+            "IsDeleted": false,
+            "Image": null,
+            "Friends": null
+        },
+        {
+            "Id": "5651a0ad-b934-4be8-88f2-c380f884adf5",
+            "UserImageId": 1,
+            "EmailAddress": "test@testy.com",
+            "DisplayName": "testaccount123",
+            "FirstName": "test",
+            "LastName": "account",
+            "PhoneNumber": "",
+            "HashSalt": "",
+            "Password": "",
+            "TwitterUsername": "",
+            "TwitterUserId": "",
+            "TwitterToken": "",
+            "TwitterSecret": "",
+            "FacebookUserId": "",
+            "FacebookToken": "",
+            "LastLoginSuccess": null,
+            "LastLoginFailure": null,
+            "NumberLoginFailures": 0,
+            "IsLocked": false,
+            "DateCreated": "2015-07-07T15:04:08.337",
+            "DateModified": "2015-07-07T15:32:00.757",
+            "IsDeleted": false,
+            "Image": null,
+            "Friends": null
+        },
+        {
+            "Id": "cbca4d41-42ca-45ab-8aaf-262a0a59d677",
+            "UserImageId": null,
+            "EmailAddress": "test2@test2.com",
+            "DisplayName": "testaccount2",
+            "FirstName": "test2",
+            "LastName": "est2",
+            "PhoneNumber": "",
+            "HashSalt": "",
+            "Password": "",
+            "TwitterUsername": "",
+            "TwitterUserId": "",
+            "TwitterToken": "",
+            "TwitterSecret": "",
+            "FacebookUserId": "",
+            "FacebookToken": "",
+            "LastLoginSuccess": null,
+            "LastLoginFailure": null,
+            "NumberLoginFailures": 0,
+            "IsLocked": false,
+            "DateCreated": "2015-07-07T15:51:19.803",
+            "DateModified": "2015-07-07T16:33:30.497",
+            "IsDeleted": false,
+            "Image": null,
+            "Friends": null
+        }
+    ]
+}

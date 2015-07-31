@@ -1,0 +1,115 @@
+// EXAMPLE B - Get All User Melodies for the requesting User
+
+// REQUEST - GET /v0.1/Melody/User?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e
+
+// RESPONSE - HTTP/1.1 200 OK
+[
+    {
+        "Id": "f90537fd-2c62-488c-b87b-9f4c18820807",
+        "Name": "Test",
+        "UserId": "9697ee03-4179-4178-8118-b22cbfce15ad",
+        "DateCreated": "2015-07-06T20:11:08.757",
+        "IsDeleted": false,
+        "Parts": 
+        [
+            {
+                "Id": 1,
+                "IsUserCreated": false,
+                "Name": "01 Bass",
+                "Description": "",
+                "FileName": "01 Bass.wav",
+                "DateCreated": "2015-07-06T00:00:00",
+                "DateModified": "2015-07-06T00:00:00",
+                "IsDeleted": false,
+                "FilePath": "Uploads/Melodies/01 Bass.wav"
+            },
+            {
+                "Id": 2,
+                "IsUserCreated": false,
+                "Name": "01 Drums",
+                "Description": "",
+                "FileName": "01 Drums.wav",
+                "DateCreated": "2015-07-06T00:00:00",
+                "DateModified": "2015-07-06T00:00:00",
+                "IsDeleted": false,
+                "FilePath": "Uploads/Melodies/01 Drums.wav"
+            },
+            {
+                "Id": 3,
+                "IsUserCreated": false,
+                "Name": "01 Melody",
+                "Description": "",
+                "FileName": "01 Melody.wav",
+                "DateCreated": "2015-07-06T00:00:00",
+                "DateModified": "2015-07-06T00:00:00",
+                "IsDeleted": false,
+                "FilePath": "Uploads/Melodies/01 Melody.wav"
+            },
+            {
+                "Id": 6,
+                "IsUserCreated": true,
+                "Name": "Test1",
+                "Description": "Optional description",
+                "FileName": "testMelody1.m4a",
+                "DateCreated": "2015-07-06T20:11:08.757",
+                "DateModified": "2015-07-06T20:11:08.757",
+                "IsDeleted": false,
+                "FilePath": "Uploads/Melodies/testMelody1.m4a"
+            }
+        ]
+    },
+    {
+        "Id": "091569e3-2b8f-4fdb-810f-6844524b0bff",
+        "Name": "Test2",
+        "UserId": "9697ee03-4179-4178-8118-b22cbfce15ad",
+        "DateCreated": "2015-07-06T20:11:08.757",
+        "IsDeleted": false,
+        "Parts": 
+        [
+            {
+                "Id": 1,
+                "IsUserCreated": false,
+                "Name": "01 Bass",
+                "Description": "",
+                "FileName": "01 Bass.wav",
+                "DateCreated": "2015-07-06T00:00:00",
+                "DateModified": "2015-07-06T00:00:00",
+                "IsDeleted": false,
+                "FilePath": "Uploads/Melodies/01 Bass.wav"
+            },
+            {
+                "Id": 2,
+                "IsUserCreated": false,
+                "Name": "01 Drums",
+                "Description": "",
+                "FileName": "01 Drums.wav",
+                "DateCreated": "2015-07-06T00:00:00",
+                "DateModified": "2015-07-06T00:00:00",
+                "IsDeleted": false,
+                "FilePath": "Uploads/Melodies/01 Drums.wav"
+            },
+            {
+                "Id": 3,
+                "IsUserCreated": false,
+                "Name": "01 Melody",
+                "Description": "",
+                "FileName": "01 Melody.wav",
+                "DateCreated": "2015-07-06T00:00:00",
+                "DateModified": "2015-07-06T00:00:00",
+                "IsDeleted": false,
+                "FilePath": "Uploads/Melodies/01 Melody.wav"
+            },
+            {
+                "Id": 7,
+                "IsUserCreated": true,
+                "Name": "Test2",
+                "Description": "Optional description",
+                "FileName": "testMelody2.m4a",
+                "DateCreated": "2015-07-06T20:11:08.757",
+                "DateModified": "2015-07-06T20:11:08.757",
+                "IsDeleted": false,
+                "FilePath": "Uploads/Melodies/testMelody2.m4a"
+            }
+        ]
+    }
+]

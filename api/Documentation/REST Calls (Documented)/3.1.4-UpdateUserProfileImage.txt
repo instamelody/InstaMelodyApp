@@ -1,0 +1,55 @@
+// REQUEST - POST /v0.1/User/Update/Image
+{
+    "Token" : "9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e",
+    "Image" :
+    {
+        "FileName" : "thisismyimagename.jpg"
+    }
+}
+
+// RESPONSE - HTTP/1.1 200 OK
+{
+    "User": {
+        "Id": "5651a0ad-b934-4be8-88f2-c380f884adf5",
+        "UserImageId": 1,
+        "EmailAddress": "test@testy.com",
+        "DisplayName": "testaccount123",
+        "FirstName": "test",
+        "LastName": "account",
+        "PhoneNumber": "123-555-1234",
+        "HashSalt": "",
+        "Password": "",
+        "TwitterUsername": "",
+        "TwitterUserId": "",
+        "TwitterToken": "",
+        "TwitterSecret": "",
+        "FacebookUserId": "",
+        "FacebookToken": "",
+        "LastLoginSuccess": "2015-07-07T15:05:42.447",
+        "LastLoginFailure": "0001-01-01T00:00:00",
+        "NumberLoginFailures": 0,
+        "IsLocked": false,
+        "DateCreated": "2015-07-07T15:04:08.337",
+        "DateModified": "2015-07-07T15:32:00.757",
+        "IsDeleted": false,
+        "Image": {
+            "Id": 1,
+            "FileName": "thisismyimagename.jpg",
+            "DateCreated": "2015-07-07T15:31:57.807",
+            "IsDeleted": false,
+            "FilePath": null
+        },
+        "Friends": null
+    },
+    "FileUploadToken": {
+        "Token": "9b23efe7-34db-4473-a41d-9afcdfe5a45e",
+        "UserId": "5651a0ad-b934-4be8-88f2-c380f884adf5",
+        "FileName": "thisismyimagename.jpg",
+        "MediaType": 1,
+        "DateExpires": "2015-07-07T15:42:00.793",
+        "DateCreated": "2015-07-07T15:32:00.797",
+        "IsDeleted": false,
+        "IsExpired": false
+    }
+}
+

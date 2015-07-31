@@ -1,0 +1,97 @@
+// REQUEST - POST /v0.1/Melody/New
+// - OR - 
+// REQUEST - PUT /v0.1/Melody/New
+{
+    "Token" : "9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e ",
+    "UserMelody" :
+    {
+        "Parts" : 
+        [
+            {
+                "Id" : 1
+            },
+            {
+                "Id" : 2
+            },
+            {
+                "Id" : 3
+            },
+            {
+                "Name" : "Test API Melody",
+                "FileName" : "testuserapi.m4a",
+                "Description" : "This is a non-required field"
+            }
+        ]
+    }
+}
+
+
+// RESPONSE - HTTP/1.1 200 OK
+{
+    "UserMelody": 
+    {
+        "Id": "094f1caf-6402-4ce0-bf93-a907a6799ffd",
+        "Name": "Test API Melody",
+        "UserId": "9697ee03-4179-4178-8118-b22cbfce15ad",
+        "DateCreated": "2015-07-06T23:40:37.743",
+        "IsDeleted": false,
+        "Parts": 
+        [
+            {
+                "Id": 1,
+                "IsUserCreated": false,
+                "Name": "01 Bass",
+                "Description": "",
+                "FileName": "01 Bass.wav",
+                "DateCreated": "2015-07-06T00:00:00",
+                "DateModified": "2015-07-06T00:00:00",
+                "IsDeleted": false,
+                "FilePath": "Uploads/Melodies/01 Bass.wav"
+            },
+            {
+                "Id": 2,
+                "IsUserCreated": false,
+                "Name": "01 Drums",
+                "Description": "",
+                "FileName": "01 Drums.wav",
+                "DateCreated": "2015-07-06T00:00:00",
+                "DateModified": "2015-07-06T00:00:00",
+                "IsDeleted": false,
+                "FilePath": "Uploads/Melodies/01 Drums.wav"
+            },
+            {
+                "Id": 3,
+                "IsUserCreated": false,
+                "Name": "01 Melody",
+                "Description": "",
+                "FileName": "01 Melody.wav",
+                "DateCreated": "2015-07-06T00:00:00",
+                "DateModified": "2015-07-06T00:00:00",
+                "IsDeleted": false,
+                "FilePath": "Uploads/Melodies/01 Melody.wav"
+            },
+            {
+                "Id": 8,
+                "IsUserCreated": true,
+                "Name": "Test API Melody",
+                "Description": "This is a non-required field",
+                "FileName": "testuserapi.m4a",
+                "DateCreated": "2015-07-06T23:40:37.717",
+                "DateModified": "2015-07-06T23:40:37.717",
+                "IsDeleted": false,
+                "FilePath": "Uploads/Melodies/testuserapi.m4a"
+            }
+        ]
+    },
+    "FileUploadToken": 
+    {
+        "Token": "cb9ec546-45eb-4de9-b628-97fc9da7053d",
+        "UserId": "9697ee03-4179-4178-8118-b22cbfce15ad",
+        "FileName": "testuserapi.m4a",
+        "MediaType": 2,
+        "DateExpires": "2015-07-06T23:50:37.85",
+        "DateCreated": "2015-07-06T23:40:37.85",
+        "IsDeleted": false,
+        "IsExpired": false
+    }
+}

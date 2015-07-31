@@ -1,0 +1,10 @@
+//REQUEST - POST /v0.1/Station/Delete
+{
+	"Token": "9D0AB021-FCF8-4EC3-B6E3-BB1D0D03B12E",
+	"Station":
+	{
+		"Id": "3"
+	}
+}
+
+//RESPONSE - HTTP/1.1 202 Accepted

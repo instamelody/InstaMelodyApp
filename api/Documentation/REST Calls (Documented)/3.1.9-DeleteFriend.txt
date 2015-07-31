@@ -1,0 +1,1 @@
+// REQUEST - POST /v0.1/User/Friend/Delete{  	"Token" : "4a51960e-6e46-49ae-921b-ea0d5e247bfb",  	"User" :  	{		"EmailAddress": "test@testy.com",  	}}// RESPONSE - HTTP/1.1 200 OK{    "Message": "Requested friend testaccount123 was deleted."}

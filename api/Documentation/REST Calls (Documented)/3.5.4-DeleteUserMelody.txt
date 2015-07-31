@@ -1,0 +1,10 @@
+// REQUEST - POST /v0.1/Melody/Delete
+{
+    "Token" : "D18AC064-F500-483F-992D-76C137730DEA",
+    "UserMelody" :
+    {
+            "Id": "094f1caf-6402-4ce0-bf93-a907a6799ffd",
+    }
+}
+
+// RESPONSE - HTTP/1.1 202 Accepted
