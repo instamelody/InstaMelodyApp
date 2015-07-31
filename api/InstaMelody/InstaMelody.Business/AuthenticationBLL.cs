@@ -372,14 +372,12 @@ namespace InstaMelody.Business
             var dal = new Users();
             dal.LockUserAccount(user.Id);
 
-            ResetPassword(user);
-
             InstaMelodyLogger.Log(
                 string.Format("User account has been locked due to {0} concecutive failed login attempt. User Id: {1}",
                     Settings.Default.MaxFailedLogins, user.Id), LogLevel.Error);
 
             throw new UnauthorizedAccessException(
-                string.Format("User account has been locked due to {0} concecutive failed login attempts. An email will be sent to the User with a temporary password.", 
+                string.Format("User account has been locked due to {0} concecutive failed login attempts. Please request a new password.", 
                     Settings.Default.MaxFailedLogins));
         }
 

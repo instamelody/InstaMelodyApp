@@ -130,11 +130,8 @@ namespace InstaMelody.Model
             this.HashSalt = string.Empty;
             this.Password = string.Empty;
             this.FacebookToken = string.Empty;
-            this.FacebookUserId = string.Empty;
             this.TwitterSecret = string.Empty;
             this.TwitterToken = string.Empty;
-            this.TwitterUserId = string.Empty;
-            this.TwitterUsername = string.Empty;
             this.LastLoginFailure = null;
             this.LastLoginSuccess = null;
             this.NumberLoginFailures = 0;

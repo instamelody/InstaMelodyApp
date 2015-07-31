@@ -207,6 +207,11 @@
         public const string FailedSendChatMessage = "Failed to send a new Chat Message.";
 
         /// <summary>
+        /// The failed get chat message
+        /// </summary>
+        public const string FailedGetChatMessage = "Failed to get a Chat Message for Chat: {0} with Id: {1}.";
+
+        /// <summary>
         /// The failed get chat
         /// </summary>
         public const string FailedGetChat = "Failed to get Chat with Id {0}.";

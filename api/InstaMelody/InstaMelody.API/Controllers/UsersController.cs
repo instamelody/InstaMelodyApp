@@ -270,7 +270,7 @@ namespace InstaMelody.API.Controllers
                 try
                 {
                     InstaMelodyLogger.Log(
-                        string.Format("Update User - User: {0}", request.User.Id),
+                        string.Format("Update User - Token: {0}", request.Token),
                         LogLevel.Trace);
 
                     if (request.Token.Equals(default(Guid)) || request.User == null)
@@ -339,9 +339,9 @@ namespace InstaMelody.API.Controllers
                     }
 
                     var bll = new UserBll();
-                    var result = bll.UpdateUserImage(request.User, request.User.Image ?? request.Image, request.Token);
+                    var result = bll.UpdateUserImage(request.User.Image ?? request.Image, request.Token);
 
-                    if (result == null || result.Equals(default(User)))
+                    if (result == null)
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, Exceptions.FailedUpdateUser);
                     }

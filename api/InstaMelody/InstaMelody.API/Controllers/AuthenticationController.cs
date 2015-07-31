@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -222,7 +221,7 @@ namespace InstaMelody.API.Controllers
 
                     var result = new ApiMessage
                     {
-                        Message = string.Format("User {0} successfully logged out.", request.UserId)
+                        Message = "User successfully logged out."
                     };
 
                     response = this.Request.CreateResponse(HttpStatusCode.OK, result);
@@ -317,17 +316,17 @@ namespace InstaMelody.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route(Routes.RouteResetPassword)]
-        public HttpResponseMessage ResetUserPassword(ApiRequest request)
+        public HttpResponseMessage ResetUserPassword(User request)
         {
             HttpResponseMessage response;
 
-            if (request != null && request.User != null)
+            if (request != null)
             {
                 try
                 {
-                    var user = string.IsNullOrWhiteSpace(request.User.DisplayName)
-                        ? request.User.EmailAddress
-                        : request.User.DisplayName;
+                    var user = string.IsNullOrWhiteSpace(request.DisplayName)
+                        ? request.EmailAddress
+                        : request.DisplayName;
                     InstaMelodyLogger.Log(
                         string.Format("Reset User Password - User: {0}.", user),
                         LogLevel.Trace);
@@ -336,7 +335,7 @@ namespace InstaMelody.API.Controllers
 
                     try
                     {
-                        var u = bll.ResetPassword(request.User);
+                        var u = bll.ResetPassword(request);
                         response = this.Request.CreateResponse(HttpStatusCode.OK, new ApiMessage
                         {
                             Message = string.Format("An email has been sent to {0} with a temporary password.", u.EmailAddress)

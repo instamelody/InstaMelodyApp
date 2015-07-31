@@ -244,7 +244,9 @@ namespace InstaMelody.Data
                 new SqlParameter
                 {
                     ParameterName = "DeviceToken",
-                    Value = session.DeviceToken,
+                    Value = string.IsNullOrWhiteSpace(session.DeviceToken)
+                        ? DBNull.Value
+                        : (object)session.DeviceToken,
                     SqlDbType = SqlDbType.VarChar,
                     Direction = ParameterDirection.Input
                 },

@@ -70,6 +70,7 @@ namespace InstaMelody.Business
             var chatMessage = CreateChatMessage(newChat, sessionUser, message);
 
             // TODO: send push notification to requested user
+            Utilities.SendPushNotification(foundFriend.Id);
 
             // return chat & file upload token (if necessary)
             if (chatMessage.Item2 != null)
@@ -110,6 +111,7 @@ namespace InstaMelody.Business
             }
 
             // add users to chat
+            var foundUserIds = new List<Guid>();
             foreach (var user in users)
             {
                 var foundUser = userBll.FindUser(user);
@@ -122,6 +124,7 @@ namespace InstaMelody.Business
                             sessionUser.Id, foundUser.Id, sessionToken), LogLevel.Error);
                     throw new UnauthorizedAccessException("Only Friends of the authenticated User can be added to a Chat.");
                 }
+                foundUserIds.Add(foundUser.Id);
                 dal.AddUserToChat(new ChatUser
                 {
                     ChatId = newChat.Id,
@@ -138,6 +141,7 @@ namespace InstaMelody.Business
             var chatMessage = CreateChatMessage(newChat, sessionUser, message);
 
             // TODO: send push notification to requested user
+            Utilities.SendPushNotification(foundUserIds);
 
             // return chat & file upload token (if necessary)
             if (chatMessage.Item2 != null)
@@ -217,6 +221,9 @@ namespace InstaMelody.Business
             });
 
             // TODO: send push notifications to all users in chat
+            var users = dal.GetUsersInChat(chat.Id);
+            var userIds = users.Select(u => u.UserId);
+            Utilities.SendPushNotification(userIds.ToList());
 
             return GetChat(foundChat);
         }
@@ -259,6 +266,8 @@ namespace InstaMelody.Business
             var chatMessage = CreateChatMessage(chat, sessionUser, message);
 
             // TODO: send push notification to all users in chat
+            var userIds = chatUsers.Select(u => u.UserId).Where(i => !i.Equals(sessionUser.Id));
+            Utilities.SendPushNotification(userIds.ToList());
 
             // return new chat message
             if (chatMessage.Item2 != null)
@@ -271,6 +280,51 @@ namespace InstaMelody.Business
             }
 
             return chatMessage.Item1;
+        }
+
+        /// <summary>
+        /// Gets the chat message.
+        /// </summary>
+        /// <param name="chat">The chat.</param>
+        /// <param name="chatMessage">The chat message.</param>
+        /// <param name="sessionToken">The session token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException">
+        /// Cannot find requested Chat.
+        /// or
+        /// Cannot find requested Chat Message.
+        /// </exception>
+        public ChatMessage GetChatMessage(Chat chat, ChatMessage chatMessage, Guid sessionToken)
+        {
+            var sessionUser = Utilities.GetUserBySession(sessionToken);
+
+            var dal = new Chats();
+            var foundChat = dal.GetChatById(chat.Id);
+            if (foundChat == null)
+            {
+                InstaMelodyLogger.Log(
+                    string.Format("Cannot find requested Chat. Chat Id: {0}, User Id: {1}, Token: {2}",
+                        chat.Id, sessionUser.Id, sessionToken), LogLevel.Error);
+                throw new ArgumentException("Cannot find requested Chat.");
+            }
+
+            var message = dal.GetChatMessageById(chatMessage.Id);
+            if (message == null)
+            {
+                InstaMelodyLogger.Log(
+                    string.Format("Cannot find requested Chat Message. Chat Id: {0}, Message Id: {1}, User Id: {2}, Token: {3}",
+                        chat.Id, chatMessage.Id, sessionUser.Id, sessionToken), LogLevel.Error);
+                throw new ArgumentException("Cannot find requested Chat Message.");
+            }
+
+            var messageRecord = GetMessageByChatMessage(message);
+            if (messageRecord != null)
+            {
+                message.Message = messageRecord;
+                foundChat.Messages.Add(message);
+            }
+
+            return message;
         }
 
         /// <summary>
@@ -327,7 +381,9 @@ namespace InstaMelody.Business
 
             dal.DeleteChatUser(chat.Id, sessionUser.Id);
 
-            // TODO: send push notification to other chat users
+            // TODO: send push notification to all users in chat
+            var userIds = chatUsers.Select(u => u.UserId).Where(i => !i.Equals(sessionUser.Id));
+            Utilities.SendPushNotification(userIds.ToList());
         }
 
         #endregion User Chats

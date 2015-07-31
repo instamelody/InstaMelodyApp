@@ -23,7 +23,7 @@ namespace InstaMelody.Model
 
         #region Relationship Properties
 
-        public IList<Category> Children { get; set; } 
+        public List<Category> Children { get; set; } 
 
         #endregion Relationship Properties
     }

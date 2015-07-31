@@ -45,36 +45,32 @@ namespace InstaMelody.API.Controllers
 
                     if (isUploadValid)
                     {
-                        var uploadMetadata = bll.GetTokenInfo(token);
-                        if (uploadMetadata != null)
+                        if (!Request.Content.IsMimeMultipartContent("form-data"))
                         {
-                            if (!Request.Content.IsMimeMultipartContent("form-data"))
+                            return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.FailedFileUpload);
+                        }
+
+                        var results = new List<ApiFile>();
+                        var provider = await this.Request.Content.ReadAsMultipartAsync(new InMemoryMultipartFormDataStreamProvider());
+                        var files = provider.Files;
+                        foreach (var file in files)
+                        {
+                            var uploadedFile = await this.TryUploadFile(file, token);
+                            if (uploadedFile != null)
                             {
+                                results.Add(uploadedFile);
+                                bll.ExpireToken(token);
+                            }
+                            else
+                            {
+                                bll.DeleteAssociatedFileInfo(token);
+                                bll.ExpireToken(token);
+
                                 return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.FailedFileUpload);
                             }
-
-                            var results = new List<ApiFile>();
-                            var provider = await this.Request.Content.ReadAsMultipartAsync(new InMemoryMultipartFormDataStreamProvider());
-                            var files = provider.Files;
-                            foreach (var file in files)
-                            {
-                                var uploadedFile = await this.TryUploadFile(file, token);
-                                if (uploadedFile != null)
-                                {
-                                    results.Add(uploadedFile);
-                                    bll.ExpireToken(token);
-                                }
-                                else
-                                {
-                                    bll.DeleteAssociatedFileInfo(token);
-                                    bll.ExpireToken(token);
-
-                                    return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.FailedFileUpload);
-                                }
-                            }
-
-                            return this.Request.CreateResponse(HttpStatusCode.OK, results);
                         }
+
+                        return this.Request.CreateResponse(HttpStatusCode.OK, results);
                     }
 
                     return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.FailedFileUpload);
@@ -139,8 +135,7 @@ namespace InstaMelody.API.Controllers
                 }
             }
             if (fileName == null 
-                || !fileName.Equals(uploadMetadata.FileName) 
-                || !bll.IsValidUploadFileName(token, fileName)) return null;
+                || !fileName.Equals(uploadMetadata.FileName)) return null;
 
             // save the file
             var uploadPathFile = string.Format("{0}/{1}", path, uploadMetadata.FileName);

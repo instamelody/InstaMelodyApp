@@ -287,26 +287,12 @@ namespace InstaMelody.Business
         /// </exception>
         public User UpdateUser(User userToUpdate, Guid sessionToken)
         {
-            var auth = new AuthenticationBll();
-            var session = auth.GetSession(sessionToken);
-            if (session.Token.Equals(default(Guid)) || session.IsDeleted.Equals(true))
-            {
-                InstaMelodyLogger.Log(string.Format("Could not find a valid session. Token: {0}.", sessionToken), LogLevel.Error);
-                throw new UnauthorizedAccessException(string.Format("Invalid Session Token: {0}.", sessionToken));
-            }
-
             var sessionUser = Utilities.GetUserBySession(sessionToken);
-            if (sessionUser == null || !sessionUser.Id.Equals(userToUpdate.Id))
-            {
-                InstaMelodyLogger.Log(
-                    string.Format("User is not authorized to update User's data. Token: {0}, User Id: {1}", 
-                        session.Token, userToUpdate.Id), LogLevel.Error);
-                throw new UnauthorizedAccessException(
-                    string.Format("User with session token {0} is not authorized to update User's data.", session.Token));
-            }
+
+            var unifiedUserData = Utilities.UpdateUserObject(sessionUser, withUserObject: userToUpdate);
 
             // check for validation errors
-            var validationErrors = ModelUtilities.Validate(userToUpdate, ignorePassword: true).ToList();
+            var validationErrors = ModelUtilities.Validate(unifiedUserData, ignorePassword: true).ToList();
             if (validationErrors.Any())
             {
                 var sb = new StringBuilder();
@@ -318,34 +304,27 @@ namespace InstaMelody.Business
             }
 
             // check to make sure updated user name or email address is not taken
-            if (!userToUpdate.DisplayName.Equals(sessionUser.DisplayName)
-                || !userToUpdate.EmailAddress.Equals(sessionUser.EmailAddress))
+            var userExisting = GetUserByDisplayName(unifiedUserData.DisplayName);
+            if (userExisting != null && !userExisting.Id.Equals(unifiedUserData.Id))
             {
-                var userExisting = GetUserByDisplayName(userToUpdate.DisplayName);
-                if (!userExisting.Id.Equals(default(Guid)) && !userExisting.Id.Equals(userToUpdate.Id))
-                {
-                    InstaMelodyLogger.Log(
-                        string.Format("Tried to update User with an existing display name. Display Name: {0}",
-                            userToUpdate.DisplayName), LogLevel.Error);
-                    throw new DataException(string.Format("User name {0} is not available.", userToUpdate.DisplayName));
-                }
-
-                userExisting = GetUserByEmailAddress(userToUpdate.EmailAddress);
-                if (!userExisting.Id.Equals(default(Guid)) && !userExisting.Id.Equals(userToUpdate.Id))
-                {
-                    InstaMelodyLogger.Log(
-                        string.Format("Tried to update User with an existing email. Email: {0}",
-                            userToUpdate.EmailAddress), LogLevel.Error);
-                    throw new DataException(string.Format("The email address {0} is already in use.", userToUpdate.EmailAddress));
-                }
+                InstaMelodyLogger.Log(
+                    string.Format("Tried to update User with an existing display name. Display Name: {0}",
+                        unifiedUserData.DisplayName), LogLevel.Error);
+                throw new DataException(string.Format("User name {0} is not available.", unifiedUserData.DisplayName));
             }
 
-            // make a copy of the User object so we aren't editing the input argument
-            var userCopy = userToUpdate.Clone();
+            userExisting = GetUserByEmailAddress(unifiedUserData.EmailAddress);
+            if (userExisting != null && !userExisting.Id.Equals(unifiedUserData.Id))
+            {
+                InstaMelodyLogger.Log(
+                    string.Format("Tried to update User with an existing email. Email: {0}",
+                        unifiedUserData.EmailAddress), LogLevel.Error);
+                throw new DataException(string.Format("The email address {0} is already in use.", unifiedUserData.EmailAddress));
+            }
 
             var dal = new Users();
-            userCopy.DateModified = DateTime.UtcNow;
-            var updatedUser = dal.UpdateUser(sessionUser.Id, userCopy);
+            unifiedUserData.DateModified = DateTime.UtcNow;
+            var updatedUser = dal.UpdateUser(sessionUser.Id, unifiedUserData);
             if (updatedUser == null)
             {
                 InstaMelodyLogger.Log(
@@ -362,15 +341,21 @@ namespace InstaMelody.Business
         /// <summary>
         /// Updates the user image.
         /// </summary>
-        /// <param name="userToUpdate">The user to update.</param>
         /// <param name="newImage">The new image.</param>
         /// <param name="sessionToken">The session token.</param>
         /// <returns></returns>
-        public ApiUserFileUpload UpdateUserImage(User userToUpdate, Image newImage, Guid sessionToken)
+        /// <exception cref="System.UnauthorizedAccessException"></exception>
+        /// <exception cref="System.ArgumentException">
+        /// Image not provided.
+        /// or
+        /// Could not find user.
+        /// </exception>
+        public ApiUserFileUpload UpdateUserImage(Image newImage, Guid sessionToken)
         {
+            User sessionUser;
             try
             {
-                 Utilities.GetUserBySession(sessionToken);
+                sessionUser = Utilities.GetUserBySession(sessionToken);
             }
             catch (Exception)
             {
@@ -382,38 +367,29 @@ namespace InstaMelody.Business
                 || string.IsNullOrWhiteSpace(newImage.FileName))
             {
                 InstaMelodyLogger.Log(
-                    string.Format("Image not provided. Failed to Update User Image. User Id: {0}", 
-                        userToUpdate.Id), LogLevel.Error);
+                    string.Format("Image not provided. Failed to Update User Image. User Id: {0}",
+                        sessionUser.Id), LogLevel.Error);
                 throw new ArgumentException("Image not provided.");
             }
 
-            // find user profile
-            var existingUser = FindUser(userToUpdate);
-            if (existingUser == null || existingUser.Id.Equals(default(Guid)))
-            {
-                InstaMelodyLogger.Log(
-                    string.Format("Failed to Update User Image. Could not find User. User Id: {0}",
-                        userToUpdate.Id), LogLevel.Error);
-                throw new ArgumentException("Could not find user.");
-            }
-
-            var imageBll = new FileBll();
+            var userToUpdate = sessionUser.Clone();
 
             // delete existing profile image
-            if (existingUser.UserImageId != null && !existingUser.UserImageId.Equals(default(int)))
+            var imageBll = new FileBll();
+            if (userToUpdate.UserImageId != null && !userToUpdate.UserImageId.Equals(default(int)))
             {
                 imageBll.DeleteImage(new Image
                 {
-                    Id = (int)existingUser.UserImageId
+                    Id = (int)userToUpdate.UserImageId
                 });
             }
 
             // add new image
             var addedImage = imageBll.AddImage(newImage);
-            existingUser.UserImageId = addedImage.Id;
+            userToUpdate.UserImageId = addedImage.Id;
 
             // update user with image id
-            var updatedUser = UpdateUserProfileImage(existingUser, sessionToken);
+            var updatedUser = UpdateUserProfileImage(userToUpdate);
             updatedUser.Image = addedImage;
 
             // create file upload token
@@ -539,6 +515,9 @@ namespace InstaMelody.Business
             // make friend request
             var friendDal = new UserFriends();
             friendDal.RequestFriend(sessionUser.Id, requestedFriend.Id);
+
+            // TODO: send push notification to friend
+            Utilities.SendPushNotification(requestedFriend.Id);
 
             return requestedFriend.DisplayName;
         }
@@ -795,54 +774,22 @@ namespace InstaMelody.Business
         /// Updates the user image.
         /// </summary>
         /// <param name="userToUpdate">The user to update.</param>
-        /// <param name="sessionToken">The session token.</param>
         /// <returns></returns>
         /// <exception cref="UnauthorizedAccessException">
         /// </exception>
         /// <exception cref="DataException"></exception>
         /// <exception cref="System.UnauthorizedAccessException"></exception>
         /// <exception cref="System.Data.DataException"></exception>
-        private User UpdateUserProfileImage(User userToUpdate, Guid sessionToken)
+        private User UpdateUserProfileImage(User userToUpdate)
         {
-            var auth = new AuthenticationBll();
-            var session = auth.GetSession(sessionToken);
-            if (session.Token.Equals(default(Guid)) || session.IsDeleted.Equals(true))
-            {
-                InstaMelodyLogger.Log(
-                    string.Format("Invalid Session. Token: {0}", 
-                        sessionToken), LogLevel.Error);
-                throw new UnauthorizedAccessException(string.Format("Invalid Session Token: {0}.", sessionToken));
-            }
-
-            User sessionUser;
-            try
-            {
-                sessionUser = Utilities.GetUserBySession(sessionToken);
-            }
-            catch (Exception)
-            {
-                InstaMelodyLogger.Log(
-                    string.Format("Could not find a valid session. Session Token: {0}.", 
-                        sessionToken), LogLevel.Error);
-                throw new UnauthorizedAccessException(string.Format("Could not find a valid session for Session: {0}.", sessionToken));
-            }
-            if (sessionUser == null || !sessionUser.Id.Equals(userToUpdate.Id))
-            {
-                InstaMelodyLogger.Log(
-                    string.Format("User is not authorized to update another User's data. Token: {0},  Other User Id: {1}", 
-                        session.Token, userToUpdate.Id), LogLevel.Error);
-                throw new UnauthorizedAccessException(
-                    string.Format("User with session token {0} is not authorized to update this User's data.", session.Token));
-            }
-
             var dal = new Users();
-            var updatedUser = dal.UpdateUserProfileImage(sessionUser.Id, userToUpdate.UserImageId);
+            var updatedUser = dal.UpdateUserProfileImage(userToUpdate.Id, userToUpdate.UserImageId);
             if (updatedUser == null)
             {
                 InstaMelodyLogger.Log(
-                    string.Format("Could not update profile image. User Id: {0}", 
-                        sessionUser.Id), LogLevel.Error);
-                throw new DataException(string.Format("Could not update profile image for User: {0}", sessionUser.Id));
+                    string.Format("Could not update profile image. User Id: {0}",
+                        userToUpdate.Id), LogLevel.Error);
+                throw new DataException(string.Format("Could not update profile image for User: {0}", userToUpdate.Id));
             }
 
             // remove sensitive information

@@ -33,7 +33,7 @@ namespace InstaMelody.Business
 
             foreach (var category in parents)
             {
-                category.Children = GetChildCategoriesById(category.Id);
+                category.Children = GetChildCategoriesById(category.Id).ToList();
                 categories.Add(category);
             }
 
@@ -224,14 +224,14 @@ namespace InstaMelody.Business
 
             var dal = new Categories();
             var results = dal.GetChildCategories(categoryId);
-            if (results.Any())
+            if (results != null && results.Any())
             {
                 children.AddRange(results);
             }
 
             foreach (var category in children)
             {
-                category.Children = GetChildCategoriesById(category.Id);
+                category.Children = GetChildCategoriesById(category.Id).ToList();
             }
 
             return children;

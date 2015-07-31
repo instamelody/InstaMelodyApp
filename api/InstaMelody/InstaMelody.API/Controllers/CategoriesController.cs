@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Net;
@@ -219,6 +220,7 @@ namespace InstaMelody.API.Controllers
             {
                 var bll = new CategoryBll();
                 var results = bll.GetAllCategories();
+
                 if (results == null || !results.Any())
                 {
                     response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.FailedFindCategories);

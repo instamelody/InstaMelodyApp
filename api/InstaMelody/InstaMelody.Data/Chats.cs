@@ -106,6 +106,30 @@ namespace InstaMelody.Data
         }
 
         /// <summary>
+        /// Gets the chat message by identifier.
+        /// </summary>
+        /// <param name="chatMessageId">The chat message identifier.</param>
+        /// <returns></returns>
+        public ChatMessage GetChatMessageById(int chatMessageId)
+        {
+            var query = @"SELECT TOP 1 * FROM dbo.ChatMessages
+                        WHERE IsDeleted = 0 AND Id = @ChatMessageId";
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "ChatMessageId",
+                    Value = chatMessageId,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                }
+            };
+
+            return GetRecord<ChatMessage>(query, parameters.ToArray());
+        }
+
+        /// <summary>
         /// Adds the user to chat.
         /// </summary>
         /// <param name="user">The user.</param>
@@ -235,6 +259,8 @@ namespace InstaMelody.Data
             return GetRecordSet<ChatMessage>(query, parameters.ToArray());
         }
 
+        
+
         /// <summary>
         /// Gets the users in chat.
         /// </summary>
@@ -330,30 +356,6 @@ namespace InstaMelody.Data
         #endregion Public Methods
 
         #region Private Methods
-
-        /// <summary>
-        /// Gets the chat message by identifier.
-        /// </summary>
-        /// <param name="chatMessageId">The chat message identifier.</param>
-        /// <returns></returns>
-        private ChatMessage GetChatMessageById(int chatMessageId)
-        {
-            var query = @"SELECT TOP 1 * FROM dbo.ChatMessages
-                        WHERE IsDeleted = 0 AND Id = @ChatMessageId";
-
-            var parameters = new List<SqlParameter>
-            {
-                new SqlParameter
-                {
-                    ParameterName = "ChatMessageId",
-                    Value = chatMessageId,
-                    SqlDbType = SqlDbType.Int,
-                    Direction = ParameterDirection.Input
-                }
-            };
-
-            return GetRecord<ChatMessage>(query, parameters.ToArray());
-        }
 
         /// <summary>
         /// Gets the chat user by identifier.

@@ -82,3 +82,7 @@ Z:\Documents\gits\instaMelody\api\InstaMelody\InstaMelody.API\bin\InstaMelody.Da
 Z:\Documents\gits\instaMelody\api\InstaMelody\InstaMelody.API\obj\Debug\InstaMelody.API.csprojResolveAssemblyReference.cache
 Z:\Documents\gits\instaMelody\api\InstaMelody\InstaMelody.API\obj\Debug\InstaMelody.API.dll
 Z:\Documents\gits\instaMelody\api\InstaMelody\InstaMelody.API\obj\Debug\InstaMelody.API.pdb
+Z:\Documents\gits\instaMelody\api\InstaMelody\InstaMelody.API\bin\PushSharp.Apple.dll
+Z:\Documents\gits\instaMelody\api\InstaMelody\InstaMelody.API\bin\PushSharp.Core.dll
+Z:\Documents\gits\instaMelody\api\InstaMelody\InstaMelody.API\bin\PushSharp.Apple.pdb
+Z:\Documents\gits\instaMelody\api\InstaMelody\InstaMelody.API\bin\PushSharp.Core.pdb

@@ -300,6 +300,79 @@ namespace InstaMelody.API.Controllers
         }
 
         /// <summary>
+        /// Gets the chat message.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route(Routes.RouteChatMessage)]
+        public HttpResponseMessage GetChatMessage()
+        {
+            HttpResponseMessage response;
+
+            var nvc = HttpUtility.ParseQueryString(Request.RequestUri.Query);
+
+            Guid _token;
+            var token = nvc["token"];
+            Guid.TryParse(token, out _token);
+
+            Guid _chatId;
+            var chatId = nvc["chatId"];
+            Guid.TryParse(chatId, out _chatId);
+
+            int _messageId;
+            var messageId = nvc["messageId"];
+            int.TryParse(messageId, out _messageId);
+
+            if (_token.Equals(default(Guid)))
+            {
+                InstaMelodyLogger.Log("Received NULL GetChatMessage request", LogLevel.Trace);
+                response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, Exceptions.FailedAuthentication);
+            }
+            else
+            {
+                try
+                {
+                    // Log call
+                    InstaMelodyLogger.Log(
+                        string.Format("Get Chat Message - Token: {0}, Chat: {1}, Message Id: {2}", 
+                            _token, _chatId, _messageId),
+                        LogLevel.Trace);
+
+                    var bll = new MessageBll();
+                    var results = bll.GetChatMessage(new Chat {Id = _chatId}, new ChatMessage {Id = _messageId}, _token);
+
+                    if (results == null)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest,
+                            string.Format(Exceptions.FailedGetChatMessage, _chatId, _messageId));
+                    }
+                    else
+                    {
+                        response = this.Request.CreateResponse(HttpStatusCode.OK, results);
+                    }
+                }
+                catch (Exception exc)
+                {
+                    if (exc is UnauthorizedAccessException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, exc.Message);
+                    }
+                    else if (exc is DataException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, exc.Message);
+                    }
+                    else
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
+                    }
+
+                }
+            }
+
+            return response;
+        }
+
+        /// <summary>
         /// Gets the user chats.
         /// </summary>
         /// <returns></returns>

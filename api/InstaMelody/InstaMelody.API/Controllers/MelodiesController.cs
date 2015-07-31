@@ -64,6 +64,10 @@ namespace InstaMelody.API.Controllers
             var groupId = nvc["groupId"];
             int.TryParse(groupId, out _groupId);
 
+            int _catId;
+            var catId = nvc["categoryId"];
+            int.TryParse(catId, out _catId);
+
             var fileName = nvc["fileName"];
             var groupName = nvc["groupName"];
 
@@ -87,11 +91,15 @@ namespace InstaMelody.API.Controllers
                     object result;
                     if (!_groupId.Equals(default(int)) || !string.IsNullOrWhiteSpace(groupName))
                     {
-                        result = bll.GetFileGroup(new FileGroup { Id = _groupId, Name = groupName });
+                        result = bll.GetFileGroup(new FileGroup {Id = _groupId, Name = groupName});
+                    }
+                    else if (!_catId.Equals(default(int)))
+                    {
+                        result = bll.GetBaseMelodiesByCategory(new Category {Id = _catId});
                     }
                     else if (!_id.Equals(default(int)) || !string.IsNullOrWhiteSpace(fileName))
                     {
-                        result = bll.GetBaseMelody(new Melody { Id = _id, FileName = fileName });
+                        result = bll.GetBaseMelody(new Melody {Id = _id, FileName = fileName});
                     }
                     else
                     {
