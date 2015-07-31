@@ -517,7 +517,7 @@ namespace InstaMelody.Business
             friendDal.RequestFriend(sessionUser.Id, requestedFriend.Id);
 
             // TODO: send push notification to friend
-            Utilities.SendPushNotification(requestedFriend.Id);
+            //Utilities.SendPushNotification(requestedFriend.Id);
 
             return requestedFriend.DisplayName;
         }

@@ -44,6 +44,7 @@ namespace InstaMelody.API.Controllers
         /// <param name="request">The request.</param>
         /// <returns></returns>
         [HttpPost]
+        [HttpPut]
         [Route(Routes.RouteNew)]
         public HttpResponseMessage CreateStation(ApiRequest request)
         {
@@ -298,6 +299,10 @@ namespace InstaMelody.API.Controllers
             var categoryId = nvc["categoryId"];
             int.TryParse(categoryId, out _categoryId);
 
+            int _categoryParentId;
+            var categoryParentId = nvc["categoryParentId"];
+            int.TryParse(categoryParentId, out _categoryParentId);
+
             var categoryName = nvc["category"];
 
             if (_token.Equals(default(Guid)))
@@ -336,7 +341,7 @@ namespace InstaMelody.API.Controllers
                         || !string.IsNullOrWhiteSpace(categoryName))
                     {
                         // get stations by category info
-                        result = bll.GetStationsByCategory(new Category { Id = _categoryId, Name = categoryName }, _token);
+                        result = bll.GetStationsByCategory(new Category { Id = _categoryId, Name = categoryName, ParentId = _categoryParentId }, _token);
                     }
                     else
                     {

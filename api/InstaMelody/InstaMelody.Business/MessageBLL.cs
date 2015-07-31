@@ -70,7 +70,7 @@ namespace InstaMelody.Business
             var chatMessage = CreateChatMessage(newChat, sessionUser, message);
 
             // TODO: send push notification to requested user
-            Utilities.SendPushNotification(foundFriend.Id);
+            //Utilities.SendPushNotification(foundFriend.Id);
 
             // return chat & file upload token (if necessary)
             if (chatMessage.Item2 != null)
@@ -141,7 +141,7 @@ namespace InstaMelody.Business
             var chatMessage = CreateChatMessage(newChat, sessionUser, message);
 
             // TODO: send push notification to requested user
-            Utilities.SendPushNotification(foundUserIds);
+            //Utilities.SendPushNotification(foundUserIds);
 
             // return chat & file upload token (if necessary)
             if (chatMessage.Item2 != null)
@@ -223,7 +223,7 @@ namespace InstaMelody.Business
             // TODO: send push notifications to all users in chat
             var users = dal.GetUsersInChat(chat.Id);
             var userIds = users.Select(u => u.UserId);
-            Utilities.SendPushNotification(userIds.ToList());
+            //Utilities.SendPushNotification(userIds.ToList());
 
             return GetChat(foundChat);
         }
@@ -267,7 +267,7 @@ namespace InstaMelody.Business
 
             // TODO: send push notification to all users in chat
             var userIds = chatUsers.Select(u => u.UserId).Where(i => !i.Equals(sessionUser.Id));
-            Utilities.SendPushNotification(userIds.ToList());
+            //Utilities.SendPushNotification(userIds.ToList());
 
             // return new chat message
             if (chatMessage.Item2 != null)
@@ -383,7 +383,7 @@ namespace InstaMelody.Business
 
             // TODO: send push notification to all users in chat
             var userIds = chatUsers.Select(u => u.UserId).Where(i => !i.Equals(sessionUser.Id));
-            Utilities.SendPushNotification(userIds.ToList());
+            //Utilities.SendPushNotification(userIds.ToList());
         }
 
         #endregion User Chats

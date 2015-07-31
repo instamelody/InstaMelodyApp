@@ -495,7 +495,7 @@ namespace InstaMelody.Business
             var followers = dal.GetFollowersByStationId(foundStation.Id);
             foreach (var follower in followers)
             {
-                follower.StripSensitiveInfo();
+                follower.StripSensitiveInfoForFriends();
             }
 
             return followers;
