@@ -1,0 +1,12 @@
+// EXAMPLE A - Delete UserLoop
+
+// REQUEST - POST /v0.1/Melody/Loop/Delete
+{
+	"Token": "9D0AB021-FCF8-4EC3-B6E3-BB1D0D03B12E",
+	"Loop":
+	{
+		"Id": "35c4da6e-fd05-40b0-8394-68d7abb6f5fb"
+	}
+}
+
+// RESPONSE - HTTP/1.1 202 Accepted

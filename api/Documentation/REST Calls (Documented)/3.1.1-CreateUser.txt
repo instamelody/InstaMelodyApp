@@ -1,4 +1,7 @@
 // REQUEST - POST /v0.1/User/New
+
+// - OR -
+
 // REQUEST - PUT /v0.1/User/New
 {
     "EmailAddress" : "test@testy.com",

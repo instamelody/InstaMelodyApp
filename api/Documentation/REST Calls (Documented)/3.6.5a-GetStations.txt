@@ -1,0 +1,20 @@
+// EXAMPLE A - Get Stations By Station Info
+
+// REQUEST - GET /v0.1/Station/?token=BF310686-2DC9-4333-BC21-AB38812FC11A&name=Test Station&userId=5651a0ad-b934-4be8-88f2-c380f884adf5
+// - OR -
+// REQUEST - GET /v0.1/Station/?token=BF310686-2DC9-4333-BC21-AB38812FC11A&stationId=1
+
+//RESPONSE - HTTP/1.1 200 OK
+{
+  "Id": 1,
+  "UserId": "5651a0ad-b934-4be8-88f2-c380f884adf5",
+  "StationImageId": null,
+  "Name": "Test Station",
+  "DateCreated": "2015-07-20T00:00:00",
+  "DateModified": "2015-07-20T00:00:00",
+  "IsDeleted": false,
+  "Image": null,
+  "Categories": null,
+  "Followers": null,
+  "Messages": null
+}

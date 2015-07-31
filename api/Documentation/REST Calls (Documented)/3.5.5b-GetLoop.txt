@@ -1,0 +1,85 @@
+// EXAMPLE B - Get Loop by Name and UserId
+
+// REQUEST - GET /v0.1/Melody/Loop?token=9D0AB021-FCF8-4EC3-B6E3-BB1D0D03B12E&userId=5651a0ad-b934-4be8-88f2-c380f884adf5&name=Test Loop
+
+// RESPONSE - HTTP/1.1 200 OK
+{
+  "Id": "45731948-041c-4417-b96b-a54c0f332cf6",
+  "Name": "Test Loop",
+  "UserId": "5651a0ad-b934-4be8-88f2-c380f884adf5",
+  "DateCreated": "2015-07-17T16:40:29.66",
+  "DateModified": "2015-07-17T16:40:29.66",
+  "IsDeleted": false,
+  "Parts": 
+  [
+    {
+      "Id": 4,
+      "UserLoopId": "45731948-041c-4417-b96b-a54c0f332cf6",
+      "UserMelodyId": "79e0b7af-6e39-4c93-b260-666f5de2c3c7",
+      "OrderIndex": 1,
+      "StartTime": "00:00:00",
+      "StartEffect": 0,
+      "StartEffectDuration": "00:00:00",
+      "EndTime": null,
+      "EndEffect": 0,
+      "EndEffectDuration": "00:00:00",
+      "DateCreated": "2015-07-17T16:40:29.75",
+      "IsDeleted": false,
+      "UserMelody": 
+      {
+        "Id": "79e0b7af-6e39-4c93-b260-666f5de2c3c7",
+        "Name": "Test API Melody",
+        "UserId": "5651a0ad-b934-4be8-88f2-c380f884adf5",
+        "DateCreated": "2015-07-08T17:47:32.063",
+        "IsDeleted": false,
+        "Parts": 
+        [
+          {
+            "Id": 1,
+            "IsUserCreated": false,
+            "Name": "01 Bass",
+            "Description": "",
+            "FileName": "01 Bass.wav",
+            "DateCreated": "2015-07-06T00:00:00",
+            "DateModified": "2015-07-06T00:00:00",
+            "IsDeleted": false,
+            "FilePath": "Uploads/Melodies/01 Bass.wav"
+          },
+          {
+            "Id": 2,
+            "IsUserCreated": false,
+            "Name": "01 Drums",
+            "Description": "",
+            "FileName": "01 Drums.wav",
+            "DateCreated": "2015-07-06T00:00:00",
+            "DateModified": "2015-07-06T00:00:00",
+            "IsDeleted": false,
+            "FilePath": "Uploads/Melodies/01 Drums.wav"
+          },
+          {
+            "Id": 3,
+            "IsUserCreated": false,
+            "Name": "01 Melody",
+            "Description": "",
+            "FileName": "01 Melody.wav",
+            "DateCreated": "2015-07-06T00:00:00",
+            "DateModified": "2015-07-06T00:00:00",
+            "IsDeleted": false,
+            "FilePath": "Uploads/Melodies/01 Melody.wav"
+          },
+          {
+            "Id": 16,
+            "IsUserCreated": true,
+            "Name": "Test API Melody",
+            "Description": "This is a non-required field",
+            "FileName": "sample.m4a",
+            "DateCreated": "2015-07-08T17:47:32.043",
+            "DateModified": "2015-07-08T17:47:32.043",
+            "IsDeleted": false,
+            "FilePath": "Uploads/Melodies/sample.m4a"
+          }
+        ]
+      }
+    }
+  ]
+}

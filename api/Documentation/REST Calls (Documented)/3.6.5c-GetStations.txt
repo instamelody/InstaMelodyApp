@@ -1,7 +1,10 @@
-//REQUEST - GET /v0.1/Station/?token=BF310686-2DC9-4333-BC21-AB38812FC11A&categoryId=2
-//REQUEST - GET /v0.1/Station/?token=BF310686-2DC9-4333-BC21-AB38812FC11A&categoryId=2
+// EXAMPLE C - Get Stations By Category Info
 
-//RESPONSE - HTTP/1.1 200 OK
+// REQUEST - GET /v0.1/Station/?token=BF310686-2DC9-4333-BC21-AB38812FC11A&categoryId=2
+// - OR -
+// REQUEST - GET /v0.1/Station/?token=BF310686-2DC9-4333-BC21-AB38812FC11A&category=test 2&categoryParentId=1
+
+// RESPONSE - HTTP/1.1 200 OK
 [
   {
     "Id": 5,
@@ -11,14 +14,16 @@
     "DateCreated": "2015-07-21T19:03:12.48",
     "DateModified": "2015-07-21T19:30:20.287",
     "IsDeleted": false,
-    "Image": {
+    "Image": 
+    {
       "Id": 8,
       "FileName": "stationtestimage1.jpg",
       "DateCreated": "2015-07-21T19:30:20.22",
       "IsDeleted": false,
       "FilePath": null
     },
-    "Categories": [
+    "Categories": 
+    [
       {
         "Id": 1,
         "ParentId": null,

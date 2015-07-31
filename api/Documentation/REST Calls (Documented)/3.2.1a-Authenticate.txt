@@ -1,0 +1,1 @@
+// EXAMPLE A - Authenticate User Using Email Address And Password// REQUEST - POST /v0.1/Auth/User{	"EmailAddress" : "test@testy.com",	"Password" : "TestPW",}// RESPONSE - HTTP/1.1 200 OK{    "Token": "9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e"}

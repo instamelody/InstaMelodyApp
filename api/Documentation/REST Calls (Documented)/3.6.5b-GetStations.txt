@@ -1,4 +1,10 @@
-//REQUEST - GET /v0.1/Station/All?token=D18AC064-F500-483F-992D-76C137730DEA
+// EXAMPLE B - Get Stations By User Info
+
+// REQUEST - GET /v0.1/Station/?token=BF310686-2DC9-4333-BC21-AB38812FC11A&userId=5651a0ad-b934-4be8-88f2-c380f884adf5
+// - OR -
+// REQUEST - GET /v0.1/Station/?token=BF310686-2DC9-4333-BC21-AB38812FC11A&email=test@testy.com
+// - OR -
+// REQUEST - GET /v0.1/Station/?token=BF310686-2DC9-4333-BC21-AB38812FC11A&displayName=testaccount123
 
 //RESPONSE - HTTP/1.1 200 OK
 [
@@ -36,7 +42,8 @@
     "DateCreated": "2015-07-21T19:03:12.48",
     "DateModified": "2015-07-21T19:30:20.287",
     "IsDeleted": false,
-    "Image": {
+    "Image": 
+    {
       "Id": 8,
       "FileName": "stationtestimage1.jpg",
       "DateCreated": "2015-07-21T19:30:20.22",

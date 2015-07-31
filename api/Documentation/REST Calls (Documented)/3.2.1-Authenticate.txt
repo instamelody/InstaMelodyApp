@@ -1,11 +1,0 @@
-// REQUEST - POST /v0.1/Auth/User{	"EmailAddress" : "test@testy.com",	"Password" : "TestPW",}
-
-// - OR - {	"DisplayName" : "testeraccount",	"Password" : "TestPW",}
-
-// - OR - 
-
-{	"EmailAddress" : "test@testy.com",	"Password" : "TestPW",
-	“DeviceToken” : "FE66489F304DC75B8D6E8200DFF8A456E8DAEACEC428B427E9518741C92C6660"}
-
-// - OR - {	"DisplayName" : "testeraccount",	"Password" : "TestPW",	"DeviceToken" : "FE66489F304DC75B8D6E8200DFF8A456E8DAEACEC428B427E9518741C92C6660",}
-// RESPONSE - HTTP/1.1 200 OK{    "Token": "9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e"}

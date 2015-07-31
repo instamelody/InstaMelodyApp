@@ -1,0 +1,12 @@
+// EXAMPLE B - Authenticate User Using Display Name And Password
+
+// REQUEST - POST /v0.1/Auth/User
+{
+	"DisplayName" : "testeraccount",
+	"Password" : "TestPW",
+}
+
+// RESPONSE - HTTP/1.1 200 OK
+{
+    "Token": "9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e"
+}

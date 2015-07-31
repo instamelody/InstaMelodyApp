@@ -1,8 +1,6 @@
-//REQUEST - GET /v0.1/Station/?token=BF310686-2DC9-4333-BC21-AB38812FC11A&userId=5651a0ad-b934-4be8-88f2-c380f884adf5
-//REQUEST - GET /v0.1/Station/?token=BF310686-2DC9-4333-BC21-AB38812FC11A&email=test@testy.com
-//REQUEST - GET /v0.1/Station/?token=BF310686-2DC9-4333-BC21-AB38812FC11A&displayName=testaccount123
+// REQUEST - GET /v0.1/Station/Followers?token=D18AC064-F500-483F-992D-76C137730DEA&id=5
 
-//RESPONSE - HTTP/1.1 200 OK
+// RESPONSE - HTTP/1.1 200 OK
 [
   {
     "Id": 1,
@@ -38,7 +36,8 @@
     "DateCreated": "2015-07-21T19:03:12.48",
     "DateModified": "2015-07-21T19:30:20.287",
     "IsDeleted": false,
-    "Image": {
+    "Image": 
+    {
       "Id": 8,
       "FileName": "stationtestimage1.jpg",
       "DateCreated": "2015-07-21T19:30:20.22",

@@ -1,36 +1,49 @@
-//REQUEST - POST /v0.1/Station/Update
+// EXAMPLE C - Create A New Station With An Image And Categories
+
+// REQUSET - POST /v0.1/Station/New
 {
 	"Token": "9D0AB021-FCF8-4EC3-B6E3-BB1D0D03B12E",
 	"Station":
 	{
-	    "Id": "5",
-		"Name": "Updated Station"
+		"Name": "Test Station 4"
 	},
 	"Image":
 	{
-		"FileName": "stationtestimage6.jpg"
-	}
+		"FileName": "stationtestimage2.jpg"
+	},
+	"Categories": 
+	[
+	    {
+	        "Name": "Test Category",
+	        "ParentId": 0
+	    },
+	    {
+	        "Id": "2"
+	    }
+    ]
 }
 
 //RESPONSE - HTTP/1.1 200 OK
 {
-  "Station": {
+  "Station": 
+  {
     "Id": 5,
     "UserId": "5651a0ad-b934-4be8-88f2-c380f884adf5",
-    "StationImageId": 6,
-    "Name": "Updated Station",
+    "StationImageId": null,
+    "Name": "Test Station 4",
     "DateCreated": "2015-07-21T19:03:12.48",
-    "DateModified": "2015-07-21T19:21:16.91",
+    "DateModified": "2015-07-21T19:03:12.48",
     "IsDeleted": false,
-    "Image": {
-      "Id": 6,
-      "FileName": "stationtestimage6.jpg",
-      "DateCreated": "2015-07-21T19:21:17.243",
+    "Image": 
+    {
+      "Id": 4,
+      "FileName": "stationtestimage2.jpg",
+      "DateCreated": "2015-07-21T19:04:06.307",
       "IsDeleted": false,
       "FilePath": null
     },
-    ,
-    "Categories": [
+    "Categories": 
+    [
       {
         "Id": 1,
         "ParentId": null,
@@ -53,13 +66,14 @@
     "Followers": null,
     "Messages": null
   },
-  "FileUploadToken": {
-    "Token": "4fda35f4-fe33-45e8-bbec-2db7f1b847a6",
+  "FileUploadToken": 
+  {
+    "Token": "44e3ec7c-c0dd-4cdb-860a-634815e49493",
     "UserId": "5651a0ad-b934-4be8-88f2-c380f884adf5",
-    "FileName": "stationtestimage6.jpg",
+    "FileName": "stationtestimage2.jpg",
     "MediaType": 0,
-    "DateExpires": "2015-07-21T19:31:17.497",
-    "DateCreated": "2015-07-21T19:21:17.497",
+    "DateExpires": "2015-07-21T19:14:10.38",
+    "DateCreated": "2015-07-21T19:04:10.38",
     "IsDeleted": false,
     "IsExpired": false
   }
