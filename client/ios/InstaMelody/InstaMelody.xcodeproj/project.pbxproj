@@ -549,7 +549,7 @@
 				TargetAttributes = {
 					8707F9AE1B446F57004B4C20 = {
 						CreatedOnToolsVersion = 6.3.2;
-						DevelopmentTeam = AQYXU46U4D;
+						DevelopmentTeam = CXVS93WJ5B;
 					};
 					8707F9CA1B446F57004B4C20 = {
 						CreatedOnToolsVersion = 6.3.2;
@@ -789,12 +789,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = InstaMelody/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3c88ba93-2ea6-4f5d-859a-27e92a5e9e92";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -802,12 +802,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = InstaMelody/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3c88ba93-2ea6-4f5d-859a-27e92a5e9e92";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
