@@ -48,6 +48,14 @@
 }
 
 - (IBAction)signIn:(id)sender {
+    
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UINavigationController *nc = [sb instantiateViewControllerWithIdentifier:@"SignInNavController"];
+    [self presentViewController:nc animated:YES completion:nil];
+    
+    
+    /*
+    
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Welcome" message:@"Please log in" preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *loginAction = [UIAlertAction actionWithTitle:@"Log in" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         if (alert.textFields.count > 2) {
@@ -99,6 +107,7 @@
     [alert addAction:loginAction];
     
     [self presentViewController:alert animated:YES completion:nil];
+     */
     
 }
 

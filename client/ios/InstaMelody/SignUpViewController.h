@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CreateUserViewController : UIViewController
+@interface SignUpViewController : UIViewController
 
 
 @property IBOutlet UITextField * usernameField;

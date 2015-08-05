@@ -6,14 +6,14 @@
 //
 //
 
-#import "CreateUserViewController.h"
+#import "SignUpViewController.h"
 #import "AFHTTPRequestOperationManager.h"
 
-@interface CreateUserViewController ()
+@interface SignUpViewController ()
 
 @end
 
-@implementation CreateUserViewController
+@implementation SignUpViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];

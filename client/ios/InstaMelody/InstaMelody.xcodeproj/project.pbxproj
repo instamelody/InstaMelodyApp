@@ -14,7 +14,7 @@
 		8707F9C31B446F57004B4C20 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8707F9C21B446F57004B4C20 /* Images.xcassets */; };
 		8707F9C61B446F57004B4C20 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8707F9C41B446F57004B4C20 /* LaunchScreen.xib */; };
 		8707F9D21B446F57004B4C20 /* InstaMelodyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8707F9D11B446F57004B4C20 /* InstaMelodyTests.m */; };
-		8707F9DD1B4475E9004B4C20 /* CreateUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8707F9DC1B4475E9004B4C20 /* CreateUserViewController.m */; };
+		8707F9DD1B4475E9004B4C20 /* SignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8707F9DC1B4475E9004B4C20 /* SignUpViewController.m */; };
 		8707F9F21B4476BD004B4C20 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8707F9E01B4476BC004B4C20 /* AFHTTPRequestOperation.m */; };
 		8707F9F31B4476BD004B4C20 /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8707F9E21B4476BC004B4C20 /* AFHTTPRequestOperationManager.m */; };
 		8707F9F41B4476BD004B4C20 /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8707F9E41B4476BC004B4C20 /* AFHTTPSessionManager.m */; };
@@ -99,8 +99,8 @@
 		8707F9CB1B446F57004B4C20 /* InstaMelodyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InstaMelodyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8707F9D01B446F57004B4C20 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8707F9D11B446F57004B4C20 /* InstaMelodyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InstaMelodyTests.m; sourceTree = "<group>"; };
-		8707F9DB1B4475E9004B4C20 /* CreateUserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CreateUserViewController.h; path = InstaMelody.xcodeproj/../CreateUserViewController.h; sourceTree = SOURCE_ROOT; };
-		8707F9DC1B4475E9004B4C20 /* CreateUserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CreateUserViewController.m; path = InstaMelody.xcodeproj/../CreateUserViewController.m; sourceTree = SOURCE_ROOT; };
+		8707F9DB1B4475E9004B4C20 /* SignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpViewController.h; sourceTree = SOURCE_ROOT; };
+		8707F9DC1B4475E9004B4C20 /* SignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpViewController.m; sourceTree = SOURCE_ROOT; };
 		8707F9DF1B4476BC004B4C20 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
 		8707F9E01B4476BC004B4C20 /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
 		8707F9E11B4476BC004B4C20 /* AFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperationManager.h; sourceTree = "<group>"; };
@@ -259,23 +259,20 @@
 		8707F9B11B446F57004B4C20 /* InstaMelody */ = {
 			isa = PBXGroup;
 			children = (
-				87DA195D1B72872A00941DCE /* SignInViewController.h */,
-				87DA195E1B72872A00941DCE /* SignInViewController.m */,
+				87175C641B4AE03700C042E4 /* JSQSystemSoundPlayer */,
+				874C87C11B4ADB3B0069A041 /* JSQMessagesViewController */,
+				8707F9DE1B4476BC004B4C20 /* AFNetworking */,
 				87175C691B4AE08E00C042E4 /* NSUserDefaults+DemoSettings.h */,
 				87175C6A1B4AE08E00C042E4 /* NSUserDefaults+DemoSettings.m */,
-				87175C641B4AE03700C042E4 /* JSQSystemSoundPlayer */,
 				87175C541B4ADF9E00C042E4 /* DemoMessagesViewController.h */,
 				87175C551B4ADF9E00C042E4 /* DemoMessagesViewController.m */,
 				87175C561B4ADF9E00C042E4 /* DemoModelData.h */,
 				87175C571B4ADF9E00C042E4 /* DemoModelData.m */,
-				874C87C11B4ADB3B0069A041 /* JSQMessagesViewController */,
-				8707F9DE1B4476BC004B4C20 /* AFNetworking */,
 				8707F9B61B446F57004B4C20 /* AppDelegate.h */,
 				8707F9B71B446F57004B4C20 /* AppDelegate.m */,
+				8737469F1B729C2B0006F2A9 /* login process */,
 				8707F9B91B446F57004B4C20 /* FirstViewController.h */,
 				8707F9BA1B446F57004B4C20 /* FirstViewController.m */,
-				8707F9DB1B4475E9004B4C20 /* CreateUserViewController.h */,
-				8707F9DC1B4475E9004B4C20 /* CreateUserViewController.m */,
 				87175C511B4ADCEA00C042E4 /* ChatsTableViewController.h */,
 				87175C521B4ADCEA00C042E4 /* ChatsTableViewController.m */,
 				8707F9BF1B446F57004B4C20 /* Main.storyboard */,
@@ -354,6 +351,17 @@
 				87175C671B4AE03700C042E4 /* JSQSystemSoundPlayer.m */,
 			);
 			path = Classes;
+			sourceTree = "<group>";
+		};
+		8737469F1B729C2B0006F2A9 /* login process */ = {
+			isa = PBXGroup;
+			children = (
+				87DA195D1B72872A00941DCE /* SignInViewController.h */,
+				87DA195E1B72872A00941DCE /* SignInViewController.m */,
+				8707F9DB1B4475E9004B4C20 /* SignUpViewController.h */,
+				8707F9DC1B4475E9004B4C20 /* SignUpViewController.m */,
+			);
+			name = "login process";
 			sourceTree = "<group>";
 		};
 		874C87C11B4ADB3B0069A041 /* JSQMessagesViewController */ = {
@@ -651,7 +659,7 @@
 				874C88281B4ADB3B0069A041 /* JSQMessagesViewController.m in Sources */,
 				87175C6B1B4AE08E00C042E4 /* NSUserDefaults+DemoSettings.m in Sources */,
 				874C88351B4ADB3B0069A041 /* JSQMessagesAvatarImage.m in Sources */,
-				8707F9DD1B4475E9004B4C20 /* CreateUserViewController.m in Sources */,
+				8707F9DD1B4475E9004B4C20 /* SignUpViewController.m in Sources */,
 				874C88401B4ADB3B0069A041 /* JSQMessagesComposerTextView.m in Sources */,
 				874C88271B4ADB3B0069A041 /* JSQMessagesKeyboardController.m in Sources */,
 				874C883E1B4ADB3B0069A041 /* JSQMessagesCollectionViewCellOutgoing.m in Sources */,
