@@ -25,7 +25,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Connect with Melody" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="kId-c2-rCX">
-                    <rect key="frame" x="20" y="209" width="440" height="43"/>
+                    <rect key="frame" x="20" y="204" width="440" height="43"/>
                     <animations/>
                     <constraints>
                         <constraint firstAttribute="height" constant="43" id="WGS-VN-BfA"/>
@@ -35,13 +35,13 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="InstaMelodyCircle" translatesAutoresizingMaskIntoConstraints="NO" id="IX7-eH-QpC">
-                    <rect key="frame" x="167" y="45" width="147" height="148"/>
+                    <rect key="frame" x="203.5" y="120" width="74" height="74"/>
                     <animations/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="148" id="0A8-8u-sDY">
+                        <constraint firstAttribute="height" constant="74" id="0A8-8u-sDY">
                             <variation key="heightClass=regular-widthClass=compact" constant="74"/>
                         </constraint>
-                        <constraint firstAttribute="width" constant="147" id="XeS-BX-HeE">
+                        <constraint firstAttribute="width" constant="74" id="XeS-BX-HeE">
                             <variation key="heightClass=regular-widthClass=compact" constant="74"/>
                         </constraint>
                     </constraints>
@@ -62,7 +62,7 @@
                 <constraint firstAttribute="bottom" secondItem="gTD-Ff-3UJ" secondAttribute="bottom" id="1Dk-Am-bwQ"/>
                 <constraint firstItem="gTD-Ff-3UJ" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="7L0-rr-hvm"/>
                 <constraint firstItem="8ie-xW-0ye" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="CZK-o5-BYi"/>
-                <constraint firstItem="kId-c2-rCX" firstAttribute="top" secondItem="IX7-eH-QpC" secondAttribute="bottom" constant="16" id="NvS-l4-4Us">
+                <constraint firstItem="kId-c2-rCX" firstAttribute="top" secondItem="IX7-eH-QpC" secondAttribute="bottom" constant="10" id="NvS-l4-4Us">
                     <variation key="heightClass=regular-widthClass=compact" constant="10"/>
                 </constraint>
                 <constraint firstAttribute="centerX" secondItem="IX7-eH-QpC" secondAttribute="centerX" id="O6t-7b-BEY"/>
@@ -73,7 +73,7 @@
                 <constraint firstAttribute="centerX" secondItem="MB1-UK-2og" secondAttribute="centerX" id="glv-Pa-YGt"/>
                 <constraint firstAttribute="trailing" secondItem="gTD-Ff-3UJ" secondAttribute="trailing" id="hcg-Id-Zdm"/>
                 <constraint firstAttribute="trailing" secondItem="kId-c2-rCX" secondAttribute="trailing" constant="20" id="rck-Kd-mZ1"/>
-                <constraint firstItem="IX7-eH-QpC" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="45" id="syz-g2-yE1">
+                <constraint firstItem="IX7-eH-QpC" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="120" id="syz-g2-yE1">
                     <variation key="heightClass=regular-widthClass=compact" constant="120"/>
                 </constraint>
                 <constraint firstItem="8ie-xW-0ye" firstAttribute="top" secondItem="MB1-UK-2og" secondAttribute="bottom" constant="24" id="uvn-wR-ikB"/>
