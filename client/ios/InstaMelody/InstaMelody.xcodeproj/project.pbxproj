@@ -218,6 +218,7 @@
 		874C881E1B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JSQMessagesTypingIndicatorFooterView.xib; sourceTree = "<group>"; };
 		87DA195D1B72872A00941DCE /* SignInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignInViewController.h; sourceTree = SOURCE_ROOT; };
 		87DA195E1B72872A00941DCE /* SignInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignInViewController.m; sourceTree = SOURCE_ROOT; };
+		87EAC92D1B74183D00935178 /* constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = constants.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -268,6 +269,7 @@
 				87175C551B4ADF9E00C042E4 /* DemoMessagesViewController.m */,
 				87175C561B4ADF9E00C042E4 /* DemoModelData.h */,
 				87175C571B4ADF9E00C042E4 /* DemoModelData.m */,
+				87EAC92D1B74183D00935178 /* constants.h */,
 				8707F9B61B446F57004B4C20 /* AppDelegate.h */,
 				8707F9B71B446F57004B4C20 /* AppDelegate.m */,
 				8737469F1B729C2B0006F2A9 /* login process */,
@@ -562,7 +564,7 @@
 				TargetAttributes = {
 					8707F9AE1B446F57004B4C20 = {
 						CreatedOnToolsVersion = 6.3.2;
-						DevelopmentTeam = CXVS93WJ5B;
+						DevelopmentTeam = AQYXU46U4D;
 					};
 					8707F9CA1B446F57004B4C20 = {
 						CreatedOnToolsVersion = 6.3.2;

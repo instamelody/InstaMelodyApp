@@ -8,6 +8,7 @@
 
 #import "SignInViewController.h"
 #import "AFHTTPRequestOperationManager.h"
+#import "constants.h"
 
 @interface SignInViewController ()
 
@@ -37,17 +38,31 @@
 
 -(IBAction)signIn:(id)sender {
     
+    NSString *deviceToken =  [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"];
+    
     if (![self.userField.text isEqualToString:@""] && ![self.passField.text isEqualToString:@""] ) {
-        NSDictionary *parameters = @{@"DisplayName": self.userField.text, @"Password": self.passField.text};
+        
+        
+        
+        NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"DisplayName": self.userField.text, @"Password": self.passField.text}];
+        
+        if (deviceToken != nil) {
+            [parameters setObject:deviceToken forKey:@"DeviceToken"];
+        }
+        
+        NSString *requestUrl = [NSString stringWithFormat:@"%@/Auth/User", BASE_URL];
+        
+        //add 64 char string
         
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         
-        [manager POST:@"http://104.130.230.164/api/v0.1/Auth/User" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"JSON: %@", responseObject);
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"You are now logged in" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [alertView show];
             
-            NSDictionary *responseDict = (NSDictionary *)responseObject;
+            NSDictionary *responseDict =
+            (NSDictionary *)responseObject;
             [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"Token"] forKey:@"authToken"];
             [[NSUserDefaults standardUserDefaults] synchronize];
             

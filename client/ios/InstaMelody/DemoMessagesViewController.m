@@ -427,7 +427,7 @@
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
     /**
-     *  This logic should be consistent with what you return from `heightForCellTopLabelAtIndexPath:`
+     *  This logic should be consistent with what you return from `heightForCellTopLabelAtIndexPath:
      *  The other label text delegate methods should follow a similar pattern.
      *
      *  Show a timestamp for every 3rd message

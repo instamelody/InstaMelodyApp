@@ -36,6 +36,10 @@
     NSLog(@"Did Register for Remote Notifications with Device Token (%@)", deviceToken);
     NSString *tokenString = [[NSString alloc] initWithData:deviceToken encoding:NSUTF8StringEncoding];
     NSLog(@"human readable token = %@", tokenString);
+    
+    [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"deviceToken"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {

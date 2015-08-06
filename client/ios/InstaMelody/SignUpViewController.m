@@ -8,6 +8,7 @@
 
 #import "SignUpViewController.h"
 #import "AFHTTPRequestOperationManager.h"
+#import "constants.h"
 
 @interface SignUpViewController ()
 
@@ -49,7 +50,9 @@
          [[AFHTTPRequestSerializer serializer] requestWithMethod:@"POST" URLString:URLString parameters:parameters];
          */
         
-        [manager POST:@"http://104.130.230.164/api/v0.1/user/new" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSString *requestUrl = [NSString stringWithFormat:@"%@/User/New", BASE_URL];
+        
+        [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"JSON: %@", responseObject);
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"You are now a user" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [alertView show];
@@ -58,7 +61,11 @@
             [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"Token"] forKey:@"authToken"];
             [[NSUserDefaults standardUserDefaults] synchronize];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            NSLog(@"Error: %@", error);
+            //NSLog(@"Error: %@", error);
+            
+            NSString* ErrorResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
+            NSLog(@"%@",ErrorResponse);
+            
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:error.description delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [alertView show];
         }];
