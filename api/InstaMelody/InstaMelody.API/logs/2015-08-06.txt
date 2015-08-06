@@ -1,0 +1,2 @@
+2015-08-06 11:48:52.0168|ERROR|InstaMelody.Infrastructure.InstaMelodyLogger|Failure sending email. To: jdennis86@gmail.com, From: noreply@instamelody.com, Subject: InstaMelody Test Email, Body: This is a test email from the API.
+2015-08-06 11:49:22.1564|ERROR|InstaMelody.Infrastructure.InstaMelodyLogger|Failure sending email. To: jdennis86@gmail.com, From: noreply@instamelody.com, Subject: InstaMelody Test Email, Body: This is a test email from the API.

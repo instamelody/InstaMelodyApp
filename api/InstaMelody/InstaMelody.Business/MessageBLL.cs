@@ -5,6 +5,7 @@ using System.Linq;
 using InstaMelody.Business.Properties;
 using InstaMelody.Data;
 using InstaMelody.Infrastructure;
+using InstaMelody.Infrastructure.Enums;
 using InstaMelody.Model;
 using InstaMelody.Model.ApiModels;
 using InstaMelody.Model.Enums;
@@ -69,8 +70,8 @@ namespace InstaMelody.Business
             // create chat message
             var chatMessage = CreateChatMessage(newChat, sessionUser, message);
 
-            // TODO: send push notification to requested user
-            //Utilities.SendPushNotification(foundFriend.Id);
+            // send push notification to requested user
+            Utilities.SendPushNotification(foundFriend.Id, APNSTypeEnum.ChatCreated, newChat.Id);
 
             // return chat & file upload token (if necessary)
             if (chatMessage.Item2 != null)
@@ -140,8 +141,8 @@ namespace InstaMelody.Business
             // create chat message
             var chatMessage = CreateChatMessage(newChat, sessionUser, message);
 
-            // TODO: send push notification to requested user
-            //Utilities.SendPushNotification(foundUserIds);
+            // send push notification to requested user
+            Utilities.SendPushNotification(foundUserIds, APNSTypeEnum.ChatCreated, newChat.Id);
 
             // return chat & file upload token (if necessary)
             if (chatMessage.Item2 != null)
@@ -220,10 +221,10 @@ namespace InstaMelody.Business
                 UserId = foundUser.Id
             });
 
-            // TODO: send push notifications to all users in chat
+            // send push notifications to all users in chat
             var users = dal.GetUsersInChat(chat.Id);
             var userIds = users.Select(u => u.UserId);
-            //Utilities.SendPushNotification(userIds.ToList());
+            Utilities.SendPushNotification(userIds.ToList(), APNSTypeEnum.ChatNewUser, foundChat.Id);
 
             return GetChat(foundChat);
         }
@@ -265,9 +266,9 @@ namespace InstaMelody.Business
             // create message
             var chatMessage = CreateChatMessage(chat, sessionUser, message);
 
-            // TODO: send push notification to all users in chat
+            // send push notification to all users in chat
             var userIds = chatUsers.Select(u => u.UserId).Where(i => !i.Equals(sessionUser.Id));
-            //Utilities.SendPushNotification(userIds.ToList());
+            Utilities.SendPushNotification(userIds.ToList(), APNSTypeEnum.ChatNewMessage, chatMessage.Item1.ChatId, chatMessage.Item1.Id);
 
             // return new chat message
             if (chatMessage.Item2 != null)
@@ -381,9 +382,9 @@ namespace InstaMelody.Business
 
             dal.DeleteChatUser(chat.Id, sessionUser.Id);
 
-            // TODO: send push notification to all users in chat
+            // send push notification to all users in chat
             var userIds = chatUsers.Select(u => u.UserId).Where(i => !i.Equals(sessionUser.Id));
-            //Utilities.SendPushNotification(userIds.ToList());
+            Utilities.SendPushNotification(userIds.ToList(), APNSTypeEnum.ChatRemoveUser, chat.Id);
         }
 
         #endregion User Chats

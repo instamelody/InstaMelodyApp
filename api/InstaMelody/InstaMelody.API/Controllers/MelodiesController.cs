@@ -91,19 +91,19 @@ namespace InstaMelody.API.Controllers
                     object result;
                     if (!_groupId.Equals(default(int)) || !string.IsNullOrWhiteSpace(groupName))
                     {
-                        result = bll.GetFileGroup(new FileGroup {Id = _groupId, Name = groupName});
+                        result = bll.GetFileGroup(new FileGroup {Id = _groupId, Name = groupName}, _token);
                     }
                     else if (!_catId.Equals(default(int)))
                     {
-                        result = bll.GetBaseMelodiesByCategory(new Category {Id = _catId});
+                        result = bll.GetBaseMelodiesByCategory(new Category {Id = _catId}, _token);
                     }
                     else if (!_id.Equals(default(int)) || !string.IsNullOrWhiteSpace(fileName))
                     {
-                        result = bll.GetBaseMelody(new Melody {Id = _id, FileName = fileName});
+                        result = bll.GetBaseMelody(new Melody {Id = _id, FileName = fileName}, _token);
                     }
                     else
                     {
-                        result = bll.GetFileGroups();
+                        result = bll.GetFileGroups(_token);
                     }
 
                     if (result == null)

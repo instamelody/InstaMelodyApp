@@ -1,6 +1,6 @@
 // EXAMPLE D - Add 1 Friend to a Chat with a Message containing a new UserMelody
 
-// REQUEST - POST /v0.1/Message/Chat
+// REQUEST - POST https://api.instamelody.com/v1.0/Message/Chat
 {
     "Token" : "9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e",
     "User" :
@@ -31,7 +31,9 @@
             ]
         }
     }
-}// RESPONSE - HTTP/1.1 200 OK
+}
+
+// RESPONSE - HTTP/1.1 200 OK
 {
     "Chat":
     {

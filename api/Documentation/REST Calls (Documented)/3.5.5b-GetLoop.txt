@@ -1,6 +1,6 @@
 // EXAMPLE B - Get Loop by Name and UserId
 
-// REQUEST - GET /v0.1/Melody/Loop?token=9D0AB021-FCF8-4EC3-B6E3-BB1D0D03B12E&userId=5651a0ad-b934-4be8-88f2-c380f884adf5&name=Test Loop
+// REQUEST - GET https://api.instamelody.com/v1.0/Melody/Loop?token=9D0AB021-FCF8-4EC3-B6E3-BB1D0D03B12E&userId=5651a0ad-b934-4be8-88f2-c380f884adf5&name=Test Loop
 
 // RESPONSE - HTTP/1.1 200 OK
 {

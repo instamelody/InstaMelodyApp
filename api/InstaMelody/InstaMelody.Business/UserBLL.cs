@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 
 using InstaMelody.Business.Properties;
 using InstaMelody.Data;
 using InstaMelody.Infrastructure;
+using InstaMelody.Infrastructure.Enums;
 using InstaMelody.Model;
 using InstaMelody.Model.ApiModels;
 using InstaMelody.Model.Enums;
@@ -272,6 +274,8 @@ namespace InstaMelody.Business
             // remove sensitive information
             addedUser = addedUser.StripSensitiveInfo();
 
+            SendNewUserEmail(addedUser);
+
             return GetUserWithImage(addedUser);
         }
 
@@ -516,8 +520,8 @@ namespace InstaMelody.Business
             var friendDal = new UserFriends();
             friendDal.RequestFriend(sessionUser.Id, requestedFriend.Id);
 
-            // TODO: send push notification to friend
-            //Utilities.SendPushNotification(requestedFriend.Id);
+            // send push notification to friend
+            Utilities.SendPushNotification(requestedFriend.Id, APNSTypeEnum.FriendRequest, sessionUser.Id);
 
             return requestedFriend.DisplayName;
         }
@@ -834,6 +838,55 @@ namespace InstaMelody.Business
             }
 
             return results;
+        }
+
+        /// <summary>
+        /// Sends the new user email.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <exception cref="System.Exception">
+        /// Failed to send Welcome Email.
+        /// or
+        /// Failed to send Welcome Email.
+        /// </exception>
+        private void SendNewUserEmail(User user)
+        {
+            if (string.IsNullOrWhiteSpace(user.EmailAddress))
+            {
+                InstaMelodyLogger.Log(
+                    string.Format("Failed to send Welcome Email - no email address. User Id: {0}, Display Name: {1}",
+                        user.Id, user.DisplayName),
+                    LogLevel.Fatal);
+
+                return;
+            }
+
+            var name = string.IsNullOrWhiteSpace(user.FirstName) ? user.DisplayName : user.FirstName;
+            name = string.IsNullOrWhiteSpace(name) ? user.EmailAddress.Split('@')[0] : name;
+
+            var sb = new StringBuilder();
+            sb.AppendLine(string.Format("Greetings {0},", name));
+            sb.AppendLine("");
+            sb.AppendLine("Welcome to InstaMelody!");
+            sb.AppendLine("");
+            sb.AppendLine("Sincerely,");
+            sb.AppendLine("The InstaMelody Team");
+
+            try
+            {
+                Utilities.SendEmail(
+                    user.EmailAddress,
+                    new MailAddress("noreply@instamelody.com", "InstaMelody"),
+                    "Welcome to InstaMelody!",
+                    sb.ToString().Replace("\n", "<br />"));
+            }
+            catch (Exception)
+            {
+                InstaMelodyLogger.Log(
+                    string.Format("Failed to send Welcome Email. Email Address: {0}, Email Body: {1}",
+                        user.EmailAddress, sb),
+                    LogLevel.Fatal);
+            }
         }
 
         #endregion Private Methods

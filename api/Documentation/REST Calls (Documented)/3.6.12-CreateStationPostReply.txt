@@ -1,0 +1,42 @@
+// REQUEST - POST https://api.instamelody.com/v1.0/Station/Post/Reply
+// - OR 
+// REQUEST - POST https://api.instamelody.com/v1.0/Station/Message/Reply
+{
+  "Token": "D18AC064-F500-483F-992D-76C137730DEA",
+  "StationMessage":
+  {
+    "Id": 15
+  },
+  "Message":
+  {
+    "Description": "Test reply message from API."
+  }
+}
+
+// RESPONSE - HTTP/1.1 200 OK
+{
+  "Id": 16,
+  "StationId": 1,
+  "MessageId": "901814ec-c783-4e57-b4a9-a5e85b650f01",
+  "SenderId": "9697ee03-4179-4178-8118-b22cbfce15ad",
+  "ParentId": 15,
+  "IsPrivate": false,
+  "DateCreated": "2015-07-27T20:51:23.937",
+  "IsDeleted": false,
+  "Replies": null,
+  "Message": 
+  {
+    "Id": "901814ec-c783-4e57-b4a9-a5e85b650f01",
+    "ParentId": null,
+    "Description": "Test reply message from API.",
+    "MediaType": 0,
+    "IsRead": false,
+    "DateRead": null,
+    "DateCreated": "2015-07-27T20:51:23.78",
+    "IsDeleted": false,
+    "Image": null,
+    "UserMelody": null,
+    "Video": null
+  },
+  "Likes": null
+}

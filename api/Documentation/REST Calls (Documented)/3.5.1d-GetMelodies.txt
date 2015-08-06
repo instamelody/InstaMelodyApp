@@ -1,10 +1,10 @@
 // EXAMPLE D - Get a Specific Melody
 
-// REQUEST - GET /v0.1/Melody?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&id=1
+// REQUEST - GET https://api.instamelody.com/v1.0/Melody?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&id=1
 
 // - OR -
 
-// REQUEST - GET /v0.1/Melody?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&fileName=01 Bass.wav
+// REQUEST - GET https://api.instamelody.com/v1.0/Melody?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&fileName=01 Bass.wav
 
 // RESPONSE - HTTP/1.1 200 OK
 {

@@ -640,6 +640,7 @@ namespace InstaMelody.API.Controllers
         /// <param name="request">The request.</param>
         /// <returns></returns>
         [HttpPost]
+        [HttpPut]
         [Route(Routes.RoutePost)]
         public HttpResponseMessage CreateStationPost(ApiRequest request)
         {
@@ -701,6 +702,7 @@ namespace InstaMelody.API.Controllers
         /// <param name="request">The request.</param>
         /// <returns></returns>
         [HttpPost]
+        [HttpPut]
         [Route(Routes.RouteMessage)]
         public HttpResponseMessage CreateStationMessage(ApiRequest request)
         {

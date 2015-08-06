@@ -95,6 +95,7 @@ GO
 CREATE TABLE dbo.FileGroups
 	(Id int IDENTITY(1,1) PRIMARY KEY,
 	Name varchar(128) NOT NULL,
+	IsLockedContent bit NOT NULL DEFAULT 0,
 	DateCreated datetime NOT NULL,
 	DateModified datetime NOT NULL,
 	IsDeleted bit NOT NULL DEFAULT 0)
@@ -353,3 +354,40 @@ GO
 -- -- END STATIONS
 
 -- END Tables
+
+-- START SProcs
+
+CREATE PROCEDURE ReindexUserMelodyParts
+	@loopId UniqueIdentifier
+AS
+
+	DECLARE @currentIndex int = 1
+	DECLARE @rowOrderIndex int
+	DECLARE @rowId int
+	DECLARE @count int
+
+	SELECT * INTO #mytemp 
+	FROM dbo.UserLoopParts 
+	WHERE IsDeleted = 0 AND UserLoopId = @loopId 
+	ORDER BY OrderIndex
+
+	WHILE (1=1)
+	BEGIN
+		SELECT @count = COUNT(*) FROM #mytemp
+		IF (@count = 0)
+		BEGIN
+			break
+		END
+		SELECT TOP 1 @rowOrderIndex = OrderIndex, @rowId = Id FROM #mytemp
+		IF (@currentIndex < @rowOrderIndex)
+		BEGIN
+			UPDATE dbo.UserLoopParts SET OrderIndex = @currentIndex WHERE Id = @rowId
+		END
+		SET @currentIndex = @currentIndex + 1
+		DELETE FROM #mytemp WHERE Id = @rowId
+	END
+	DROP TABLE #mytemp
+
+GO
+
+-- END SProcs

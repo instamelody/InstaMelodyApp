@@ -1,8 +1,8 @@
 // EXAMPLE C - Get Stations By Category Info
 
-// REQUEST - GET /v0.1/Station/?token=BF310686-2DC9-4333-BC21-AB38812FC11A&categoryId=2
+// REQUEST - GET https://api.instamelody.com/v1.0/Station/?token=BF310686-2DC9-4333-BC21-AB38812FC11A&categoryId=2
 // - OR -
-// REQUEST - GET /v0.1/Station/?token=BF310686-2DC9-4333-BC21-AB38812FC11A&category=test 2&categoryParentId=1
+// REQUEST - GET https://api.instamelody.com/v1.0/Station/?token=BF310686-2DC9-4333-BC21-AB38812FC11A&category=test 2&categoryParentId=1
 
 // RESPONSE - HTTP/1.1 200 OK
 [

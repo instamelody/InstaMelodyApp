@@ -1073,7 +1073,7 @@ namespace InstaMelody.Business
             // validate user follows station
             var stationDal = new Stations();
             var userIsFollower = stationDal.DoesUserFollowStation(requestor.Id, foundStationMessage.StationId);
-            if (!userIsFollower)
+            if (!userIsFollower && isUserLike)
             {
                 InstaMelodyLogger.Log(
                     string.Format("This User cannot like Posts from a Station that they do not follow. Station Message Id: {0}, Requestor Id: {1}",

@@ -1,6 +1,6 @@
 // EXAMPLE C - Authenticate User Using Email Address And Password With DeviceToken
 
-// REQUEST - POST /v0.1/Auth/User
+// REQUEST - POST https://api.instamelody.com/v1.0/Auth/User
 {
 	"EmailAddress" : "test@testy.com",
 	"Password" : "TestPW",

@@ -1,4 +1,4 @@
-// REQUEST - GET /v0.1/Station/Followers?token=D18AC064-F500-483F-992D-76C137730DEA&id=5
+// REQUEST - GET https://api.instamelody.com/v1.0/Station/Followers?token=D18AC064-F500-483F-992D-76C137730DEA&id=5
 
 // RESPONSE - HTTP/1.1 200 OK
 [

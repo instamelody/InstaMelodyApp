@@ -1,4 +1,4 @@
-// REQUEST - POST /v0.1/Upload/{Session Token}/{File Upload Token}
+// REQUEST - POST https://api.instamelody.com/v1.0/Upload/{Session Token}/{File Upload Token}
 
 // RESPONSE - HTTP/1.1 200 Accepted
 [

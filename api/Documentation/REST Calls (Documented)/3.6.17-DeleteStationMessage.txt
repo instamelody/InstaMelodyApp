@@ -1,0 +1,12 @@
+// REQUEST - POST https://api.instamelody.com/v1.0/Station/Post/Delete
+// - OR -
+// REQUEST - POST https://api.instamelody.com/v1.0/Station/Message/Delete
+{
+  "Token": "9D0AB021-FCF8-4EC3-B6E3-BB1D0D03B12E",
+  "StationMessage":
+  {
+    "Id": 15
+  }
+}
+
+//RESPONSE - HTTP/1.1 202 Accepted

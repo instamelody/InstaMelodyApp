@@ -1,6 +1,6 @@
 // EXAMPLE B - Delete Part From UserLoop
 
-// REQUEST - POST /v0.1/Melody/Loop/Delete
+// REQUEST - POST https://api.instamelody.com/v1.0/Melody/Loop/Delete
 {
 	"Token": "9D0AB021-FCF8-4EC3-B6E3-BB1D0D03B12E",
 	"Loop":

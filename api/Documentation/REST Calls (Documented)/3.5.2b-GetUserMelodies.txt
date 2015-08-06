@@ -1,6 +1,6 @@
 // EXAMPLE B - Get All User Melodies for the requesting User
 
-// REQUEST - GET /v0.1/Melody/User?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e
+// REQUEST - GET https://api.instamelody.com/v1.0/Melody/User?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e
 
 // RESPONSE - HTTP/1.1 200 OK
 [
