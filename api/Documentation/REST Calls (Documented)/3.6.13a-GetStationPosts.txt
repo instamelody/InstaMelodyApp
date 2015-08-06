@@ -1,0 +1,31 @@
+// EXAMPLE A - Get A Station Post by the StationMessage Id
+
+// REQUEST - GET https://api.instamelody.com/v1.0/Station/Posts?postId=2&token=D18AC064-F500-483F-992D-76C137730DEA
+
+// RESPONSE - HTTP/1.1 200 OK
+{
+  "Id": 2,
+  "StationId": 1,
+  "MessageId": "adaf3fa3-abc8-4abb-8358-fe7f2019ae7a",
+  "SenderId": "5651a0ad-b934-4be8-88f2-c380f884adf5",
+  "ParentId": null,
+  "IsPrivate": false,
+  "DateCreated": "2015-07-27T16:58:43.177",
+  "IsDeleted": false,
+  "Replies": null,
+  "Message": 
+  {
+    "Id": "adaf3fa3-abc8-4abb-8358-fe7f2019ae7a",
+    "ParentId": null,
+    "Description": "Test message to a station.",
+    "MediaType": 0,
+    "IsRead": false,
+    "DateRead": null,
+    "DateCreated": "2015-07-27T16:58:43.177",
+    "IsDeleted": false,
+    "Image": null,
+    "UserMelody": null,
+    "Video": null
+  },
+  "Likes": null
+}

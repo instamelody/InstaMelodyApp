@@ -15,7 +15,7 @@ namespace InstaMelody.Data
         /// The connection string.
         /// </value>
         /// <exception cref="System.Exception"></exception>
-        private static string ConnString
+        public static string ConnString
         {
             get
             {
@@ -43,6 +43,29 @@ namespace InstaMelody.Data
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = queryString;
                 cmd.Parameters.AddRange(parameters);
+
+                conn.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        /// <summary>
+        /// Executes the no return sproc.
+        /// </summary>
+        /// <param name="sprocName">Name of the sproc.</param>
+        /// <param name="parameters">The parameters.</param>
+        protected void ExecuteNoReturnSproc(string sprocName, Dictionary<string, object> parameters)
+        {
+            using (var conn = new SqlConnection(ConnString))
+            {
+                var cmd = conn.CreateCommand();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = sprocName;
+
+                foreach (var parameter in parameters)
+                {
+                    cmd.Parameters.AddWithValue(parameter.Key, parameter.Value);
+                }
 
                 conn.Open();
                 cmd.ExecuteNonQuery();

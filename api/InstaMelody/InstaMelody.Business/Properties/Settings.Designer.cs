@@ -169,10 +169,46 @@ namespace InstaMelody.Business.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("localhost")]
+        [global::System.Configuration.DefaultSettingValueAttribute("104.130.230.164")]
         public string SMTPMailHost {
             get {
                 return ((string)(this["SMTPMailHost"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("InstaMelodyDev.p12")]
+        public string APNSDevCertificate {
+            get {
+                return ((string)(this["APNSDevCertificate"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("InstaMelodyDev.p12")]
+        public string APNSProdCertificate {
+            get {
+                return ((string)(this["APNSProdCertificate"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("insta")]
+        public string APNSDevCertPassword {
+            get {
+                return ((string)(this["APNSDevCertPassword"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("insta")]
+        public string APNSProdCertPassword {
+            get {
+                return ((string)(this["APNSProdCertPassword"]));
             }
         }
     }

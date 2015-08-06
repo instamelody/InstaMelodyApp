@@ -7,6 +7,7 @@ using InstaMelody.Business.Properties;
 using InstaMelody.Model;
 using InstaMelody.Data;
 using InstaMelody.Infrastructure;
+using InstaMelody.Infrastructure.Enums;
 using InstaMelody.Model.Enums;
 using PushSharp;
 using PushSharp.Apple;
@@ -203,23 +204,50 @@ namespace InstaMelody.Business
         /// <param name="isHtml">if set to <c>true</c> [is HTML].</param>
         public static void SendEmail(string toAddress, MailAddress fromAddress, string subject, string body, bool isHtml = true)
         {
-            using (var message = new MailMessage())
+            try
             {
-                message.To.Add(toAddress);
-                message.From = fromAddress;
-                message.Subject = subject;
-                message.IsBodyHtml = isHtml;
-                message.Body = body;
-
-                using (var cli = new SmtpClient())
+                using (var message = new MailMessage())
                 {
-                    cli.Host = Settings.Default.SMTPMailHost;
-                    cli.Send(message);
+                    message.To.Add(toAddress);
+                    message.From = fromAddress;
+                    message.Subject = subject;
+                    message.IsBodyHtml = isHtml;
+                    message.Body = body;
+
+                    using (var cli = new SmtpClient())
+                    {
+                        cli.Host = Settings.Default.SMTPMailHost;
+                        cli.Port = 25;
+                        cli.EnableSsl = false;
+                        cli.DeliveryMethod = SmtpDeliveryMethod.Network;
+                        cli.Send(message);
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                InstaMelodyLogger.Log(
+                    string.Format("Failure sending email. To: {0}, From: {1}, Subject: {2}, Body: {3}, Host: {4}",
+                        toAddress, fromAddress.Address, subject, body, Settings.Default.SMTPMailHost), 
+                    LogLevel.Error);
+                throw;
             }
         }
 
-        public static void SendPushNotification(Guid userId)
+        /// <summary>
+        /// Sends the push notification.
+        /// </summary>
+        /// <param name="deviceToken">The device token.</param>
+        public static void SendPushNotification(string deviceToken)
+        {
+            SendApplePushNotification(deviceToken);
+        }
+
+        /// <summary>
+        /// Sends the push notification.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        public static void SendPushNotification(Guid userId, APNSTypeEnum type, params object[] data)
         {
             var token = GetDeviceTokens(new List<Guid> {userId});
             if (token == null || !token.Any())
@@ -227,18 +255,29 @@ namespace InstaMelody.Business
                 return;
             }
 
-            SendApplePushNotification(token.First());
+            var key = Infrastructure.Utilities.GetApnsTypeString(type);
+            SendApplePushNotification(token.First(), key, data);
         }
 
-        public static void SendPushNotification(IList<Guid> userIds)
+        /// <summary>
+        /// Sends the push notification.
+        /// </summary>
+        /// <param name="userIds">The user ids.</param>
+        public static void SendPushNotification(IList<Guid> userIds, APNSTypeEnum type, params object[] data)
         {
             var tokens = GetDeviceTokens(userIds);
+            var key = Infrastructure.Utilities.GetApnsTypeString(type);
             foreach (var token in tokens)
             {
-                SendApplePushNotification(token);
+                SendApplePushNotification(token, key, data);
             }
         }
 
+        /// <summary>
+        /// Gets the device tokens.
+        /// </summary>
+        /// <param name="userIds">The user ids.</param>
+        /// <returns></returns>
         private static IList<string> GetDeviceTokens(IEnumerable<Guid> userIds)
         {
             var results = new List<string>();
@@ -263,9 +302,14 @@ namespace InstaMelody.Business
 
         #region APNS Private Methods
 
-        private static void SendApplePushNotification(string deviceToken)
+        /// <summary>
+        /// Sends the apple push notification.
+        /// </summary>
+        /// <param name="deviceToken">The device token.</param>
+        /// <param name="key">The key.</param>
+        /// <param name="values">The values.</param>
+        private static void SendApplePushNotification(string deviceToken, string key, params object[] values)
         {
-            // TODO: setup push notifications
             var push = new PushBroker();
 
             //Wire up the events for all the services that the broker registers
@@ -285,30 +329,55 @@ namespace InstaMelody.Business
             // IMPORTANT: Make sure you use the right Push certificate.  Apple allows you to generate one for connecting to Sandbox,
             //   and one for connecting to Production.  You must use the right one, to match the provisioning profile you build your
             //   app with!
-            // TODO: setup certificates and add to project. Call certificates here
+
 #if DEBUG
-
+            var appleCert = File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Settings.Default.APNSDevCertificate));
+            push.RegisterAppleService(new ApplePushChannelSettings(appleCert, Settings.Default.APNSDevCertPassword));
 #else
-
+            var appleCert = File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Settings.Default.APNSProdCertificate));
+            push.RegisterAppleService(new ApplePushChannelSettings(appleCert, Settings.Default.APNSProdCertPassword));
 #endif
-            var appleCert = File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../../Resources/PushSharp.Apns.Sandbox.p12"));
-            //IMPORTANT: If you are using a Development provisioning Profile, you must use the Sandbox push notification server 
-            //  (so you would leave the first arg in the ctor of ApplePushChannelSettings as 'false')
-            //  If you are using an AdHoc or AppStore provisioning profile, you must use the Production push notification server
-            //  (so you would change the first arg in the ctor of ApplePushChannelSettings to 'true')
-            // TODO: get certificate password and setup in BLL settings file
-            push.RegisterAppleService(new ApplePushChannelSettings(appleCert, "CERTIFICATE PASSWORD HERE")); //Extension method
+
             //Fluent construction of an iOS notification
             //IMPORTANT: For iOS you MUST MUST MUST use your own DeviceToken here that gets generated within your iOS app itself when the Application Delegate
             //  for registered for remote notifications is called, and the device token is passed back to you
-            // TODO: setup push notification to send correct data
             push.QueueNotification(new AppleNotification()
                                        .ForDeviceToken(deviceToken)
-                                       .WithAlert("Hello World!")
-                                       .WithBadge(7)
-                                       .WithSound("sound.caf"));
+                                       .WithCustomItem(key, values));
         }
 
+        /// <summary>
+        /// Sends the apple push notification.
+        /// </summary>
+        /// <param name="deviceToken">The device token.</param>
+        private static void SendApplePushNotification(string deviceToken)
+        {
+            var push = new PushBroker();
+            push.OnNotificationSent += NotificationSent;
+            push.OnChannelException += ChannelException;
+            push.OnServiceException += ServiceException;
+            push.OnNotificationFailed += NotificationFailed;
+            push.OnDeviceSubscriptionExpired += DeviceSubscriptionExpired;
+            push.OnChannelCreated += ChannelCreated;
+            push.OnChannelDestroyed += ChannelDestroyed;
+
+#if DEBUG
+            var appleCert = File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Settings.Default.APNSDevCertificate));
+            push.RegisterAppleService(new ApplePushChannelSettings(appleCert, Settings.Default.APNSDevCertPassword));
+#else
+            var appleCert = File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Settings.Default.APNSProdCertificate));
+            push.RegisterAppleService(new ApplePushChannelSettings(appleCert, Settings.Default.APNSProdCertPassword));
+#endif
+            push.QueueNotification(new AppleNotification()
+                                       .ForDeviceToken(deviceToken)
+                                       .WithAlert("Hello From InstaMelody API BLL!"));
+        }
+
+        /// <summary>
+        /// Notifications the sent.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="notification">The notification.</param>
         private static void NotificationSent(object sender, INotification notification)
         {
             InstaMelodyLogger.Log(
@@ -318,6 +387,12 @@ namespace InstaMelody.Business
                 LogLevel.Trace);
         }
 
+        /// <summary>
+        /// Notifications the failed.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="notification">The notification.</param>
+        /// <param name="notificationFailureException">The notification failure exception.</param>
         private static void NotificationFailed(object sender, INotification notification, Exception notificationFailureException)
         {
             InstaMelodyLogger.Log(
@@ -328,6 +403,12 @@ namespace InstaMelody.Business
                 LogLevel.Error);
         }
 
+        /// <summary>
+        /// Channels the exception.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="channel">The channel.</param>
+        /// <param name="exception">The exception.</param>
         private static void ChannelException(object sender, IPushChannel channel, Exception exception)
         {
             InstaMelodyLogger.Log(
@@ -337,6 +418,11 @@ namespace InstaMelody.Business
                 LogLevel.Error);
         }
 
+        /// <summary>
+        /// Services the exception.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="exception">The exception.</param>
         private static void ServiceException(object sender, Exception exception)
         {
             InstaMelodyLogger.Log(
@@ -346,6 +432,13 @@ namespace InstaMelody.Business
                 LogLevel.Error);
         }
 
+        /// <summary>
+        /// Devices the subscription expired.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="expiredDeviceSubscriptionId">The expired device subscription identifier.</param>
+        /// <param name="timestamp">The timestamp.</param>
+        /// <param name="notification">The notification.</param>
         private static void DeviceSubscriptionExpired(object sender, string expiredDeviceSubscriptionId, DateTime timestamp, INotification notification)
         {
             InstaMelodyLogger.Log(
@@ -353,10 +446,12 @@ namespace InstaMelody.Business
                     sender,
                     expiredDeviceSubscriptionId),
                 LogLevel.Error);
-
-            // TODO: delete device token from session
         }
 
+        /// <summary>
+        /// Channels the destroyed.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
         private static void ChannelDestroyed(object sender)
         {
             InstaMelodyLogger.Log(
@@ -365,12 +460,17 @@ namespace InstaMelody.Business
                 LogLevel.Error);
         }
 
+        /// <summary>
+        /// Channels the created.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="pushChannel">The push channel.</param>
         private static void ChannelCreated(object sender, IPushChannel pushChannel)
         {
             InstaMelodyLogger.Log(
                 string.Format("APNS Channel Created for: {0}",
                     sender),
-                LogLevel.Error);
+                LogLevel.Trace);
         } 
 
         #endregion APNS Private Methods

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Security.Cryptography;
-using System.Text;
-using System.Text.RegularExpressions;
+using InstaMelody.Infrastructure.Enums;
 
 namespace InstaMelody.Infrastructure
 {
@@ -122,6 +121,29 @@ namespace InstaMelody.Infrastructure
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Gets the apns string.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns></returns>
+        public static string GetApnsTypeString(APNSTypeEnum type)
+        {
+            switch (type)
+            {
+                case APNSTypeEnum.FriendRequest:
+                    return "friend-request";
+                case APNSTypeEnum.ChatCreated:
+                    return "new-chat";
+                case APNSTypeEnum.ChatNewMessage:
+                    return "new-chat-message";
+                case APNSTypeEnum.ChatNewUser:
+                case APNSTypeEnum.ChatRemoveUser:
+                    return "chat-user-added-removed";
+            }
+
+            return null;
         }
     }
 }

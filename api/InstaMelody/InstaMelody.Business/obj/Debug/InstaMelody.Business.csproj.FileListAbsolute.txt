@@ -32,3 +32,5 @@ Z:\Documents\gits\instaMelody\api\InstaMelody\InstaMelody.Business\bin\Debug\Pus
 Z:\Documents\gits\instaMelody\api\InstaMelody\InstaMelody.Business\bin\Debug\PushSharp.Core.dll
 Z:\Documents\gits\instaMelody\api\InstaMelody\InstaMelody.Business\bin\Debug\PushSharp.Apple.pdb
 Z:\Documents\gits\instaMelody\api\InstaMelody\InstaMelody.Business\bin\Debug\PushSharp.Core.pdb
+Z:\Documents\gits\instaMelody\api\InstaMelody\InstaMelody.Business\bin\Debug\Newtonsoft.Json.dll
+Z:\Documents\gits\instaMelody\api\InstaMelody\InstaMelody.Business\bin\Debug\Newtonsoft.Json.xml

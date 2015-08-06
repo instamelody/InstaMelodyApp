@@ -1,6 +1,6 @@
 // EXAMPLE C - Add 1 Friend to a Chat with a Message containing an Image (Video requests are same format)
 
-// REQUEST - POST /v0.1/Message/Chat
+// REQUEST - POST https://api.instamelody.com/v1.0/Message/Chat
 {
     "Token" : "9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e",
     "User" :
@@ -15,7 +15,9 @@
             "FileName":  "testimage.jpg"
         }
     }
-}// RESPONSE - HTTP/1.1 200 OK
+}
+
+// RESPONSE - HTTP/1.1 200 OK
 {
     "Chat":
     {

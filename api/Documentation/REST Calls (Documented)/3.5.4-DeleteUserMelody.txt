@@ -1,4 +1,4 @@
-// REQUEST - POST /v0.1/Melody/Delete
+// REQUEST - POST https://api.instamelody.com/v1.0/Melody/Delete
 {
     "Token" : "D18AC064-F500-483F-992D-76C137730DEA",
     "UserMelody" :

@@ -1,6 +1,6 @@
 // EXAMPLE B - Authenticate User Using Display Name And Password
 
-// REQUEST - POST /v0.1/Auth/User
+// REQUEST - POST https://api.instamelody.com/v1.0/Auth/User
 {
 	"DisplayName" : "testeraccount",
 	"Password" : "TestPW",

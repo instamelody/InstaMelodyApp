@@ -1,2 +1,1 @@
-// REQUEST - GET /v0.1/Category/Children?id=1
-// RESPONSE - HTTP/1.1 200 OK[    {        "Id": 2,        "ParentId": 1,        "Name": "test 2",        "DateCreated": "2015-01-01T00:00:00",        "DateModified": "2015-01-01T00:00:00",        "IsDeleted": false,        "Children": []    }]
+// REQUEST - GET https://api.instamelody.com/v1.0/Category/Children?id=1// RESPONSE - HTTP/1.1 200 OK[    {        "Id": 2,        "ParentId": 1,        "Name": "test 2",        "DateCreated": "2015-01-01T00:00:00",        "DateModified": "2015-01-01T00:00:00",        "IsDeleted": false,        "Children": []    }]

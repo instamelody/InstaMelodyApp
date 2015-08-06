@@ -1,5 +1,1 @@
-// REQUEST - GET /v0.1/Auth?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&id=5651a0ad-b934-4be8-88f2-c380f884adf5
-
-// - OR - 
-
-// REQUEST - GET /v0.1/Auth?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&deviceToken=FE66489F304DC75B8D6E8200DFF8A456E8DAEACEC428B427E9518741C92C6660// RESPONSE - HTTP/1.1 200 OK{    "Token": "9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e"}
+// REQUEST - GET https://api.instamelody.com/v1.0/Auth?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&id=5651a0ad-b934-4be8-88f2-c380f884adf5// - OR - // REQUEST - GET https://api.instamelody.com/v1.0/Auth?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&deviceToken=FE66489F304DC75B8D6E8200DFF8A456E8DAEACEC428B427E9518741C92C6660// RESPONSE - HTTP/1.1 200 OK{    "Token": "9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e"}

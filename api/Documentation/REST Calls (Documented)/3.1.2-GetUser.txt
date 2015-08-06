@@ -1,12 +1,12 @@
-// REQUEST - GET /v0.1/User?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&id=5651a0ad-b934-4be8-88f2-c380f884adf5
+// REQUEST - GET https://api.instamelody.com/v1.0/User?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&id=5651a0ad-b934-4be8-88f2-c380f884adf5
 
 // - OR - 
 
-// REQUEST - GET /v0.1/User?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&emailAddress=test@testy.com
+// REQUEST - GET https://api.instamelody.com/v1.0/User?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&emailAddress=test@testy.com
 
 // - OR - 
 
-// REQUEST - GET /v0.1/User?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&displayName=testeraccount
+// REQUEST - GET https://api.instamelody.com/v1.0/User?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&displayName=testeraccount
 
 // RESPONSE - HTTP/1.1 200 OK
 {

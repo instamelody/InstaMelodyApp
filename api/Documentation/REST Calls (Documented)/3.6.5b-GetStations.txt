@@ -1,10 +1,10 @@
 // EXAMPLE B - Get Stations By User Info
 
-// REQUEST - GET /v0.1/Station/?token=BF310686-2DC9-4333-BC21-AB38812FC11A&userId=5651a0ad-b934-4be8-88f2-c380f884adf5
+// REQUEST - GET https://api.instamelody.com/v1.0/Station/?token=BF310686-2DC9-4333-BC21-AB38812FC11A&userId=5651a0ad-b934-4be8-88f2-c380f884adf5
 // - OR -
-// REQUEST - GET /v0.1/Station/?token=BF310686-2DC9-4333-BC21-AB38812FC11A&email=test@testy.com
+// REQUEST - GET https://api.instamelody.com/v1.0/Station/?token=BF310686-2DC9-4333-BC21-AB38812FC11A&email=test@testy.com
 // - OR -
-// REQUEST - GET /v0.1/Station/?token=BF310686-2DC9-4333-BC21-AB38812FC11A&displayName=testaccount123
+// REQUEST - GET https://api.instamelody.com/v1.0/Station/?token=BF310686-2DC9-4333-BC21-AB38812FC11A&displayName=testaccount123
 
 //RESPONSE - HTTP/1.1 200 OK
 [

@@ -1,6 +1,6 @@
 // EXAMPLE D - Get Stations By User's Session Token
 
-// REQUEST - GET /v0.1/Station/?token=9D0AB021-FCF8-4EC3-B6E3-BB1D0D03B12E
+// REQUEST - GET https://api.instamelody.com/v1.0/Station/?token=9D0AB021-FCF8-4EC3-B6E3-BB1D0D03B12E
 
 // RESPONSE - HTTP/1.1 200 OK
 [

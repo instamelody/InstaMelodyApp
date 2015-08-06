@@ -1,10 +1,10 @@
 // EXAMPLE B - Get All Melodies by Group
 
-// REQUEST - GET /v0.1/Melody?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&groupId=1
+// REQUEST - GET https://api.instamelody.com/v1.0/Melody?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&groupId=1
 
 // - OR - 
 
-// REQUEST - GET /v0.1/Melody?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&groupName=Test Group
+// REQUEST - GET https://api.instamelody.com/v1.0/Melody?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&groupName=Test Group
 
 // RESPONSE - HTTP/1.1 200 OK
 {

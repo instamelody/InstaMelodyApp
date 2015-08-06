@@ -1,8 +1,8 @@
-// REQUEST - POST /v0.1/User/New
+// REQUEST - POST https://api.instamelody.com/v1.0/User/New
 
 // - OR -
 
-// REQUEST - PUT /v0.1/User/New
+// REQUEST - PUT https://api.instamelody.com/v1.0/User/New
 {
     "EmailAddress" : "test@testy.com",
     "DisplayName" : "testeraccount",

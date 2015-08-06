@@ -4,44 +4,44 @@
     {
         #region Route Prefixes
 
-        #region Version 0.1
+        #region Version 1.0
 
         /// <summary>
         /// The auth prefix.
         /// </summary>
-        public const string PrefixAuth01 = "v0.1/Auth";
+        public const string PrefixAuth01 = "v1.0/Auth";
 
         /// <summary>
         /// The user prefix.
         /// </summary>
-        public const string PrefixUser01 = "v0.1/User";
+        public const string PrefixUser01 = "v1.0/User";
 
         /// <summary>
         /// The station prefix.
         /// </summary>
-        public const string PrefixStation01 = "v0.1/Station";
+        public const string PrefixStation01 = "v1.0/Station";
 
         /// <summary>
         /// The category prefix.
         /// </summary>
-        public const string PrefixCategory01 = "v0.1/Category";
+        public const string PrefixCategory01 = "v1.0/Category";
 
         /// <summary>
         /// The message prefix.
         /// </summary>
-        public const string PrefixMessage01 = "v0.1/Message";
+        public const string PrefixMessage01 = "v1.0/Message";
 
         /// <summary>
         /// The melody prefix.
         /// </summary>
-        public const string PrefixMelody01 = "v0.1/Melody";
+        public const string PrefixMelody01 = "v1.0/Melody";
 
         /// <summary>
         /// The prefix upload01
         /// </summary>
-        public const string PrefixUpload01 = "v0.1/Upload";
+        public const string PrefixUpload01 = "v1.0/Upload";
 
-        #endregion Version 0.1
+        #endregion Version 1.0
 
         #endregion Route Prefixes
 

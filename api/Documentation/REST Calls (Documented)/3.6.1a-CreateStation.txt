@@ -1,6 +1,6 @@
 // EXAMPLE A - Create A New Station
 
-// REQUSET - POST /v0.1/Station/New
+// REQUSET - POST https://api.instamelody.com/v1.0/Station/New
 {
 	"Token": "9D0AB021-FCF8-4EC3-B6E3-BB1D0D03B12E",
 	"Station":

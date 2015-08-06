@@ -1,6 +1,6 @@
 // EXAMPLE A - Delete Station By Id
 
-// REQUEST - POST /v0.1/Station/Delete
+// REQUEST - POST https://api.instamelody.com/v1.0/Station/Delete
 {
 	"Token": "9D0AB021-FCF8-4EC3-B6E3-BB1D0D03B12E",
 	"Station":

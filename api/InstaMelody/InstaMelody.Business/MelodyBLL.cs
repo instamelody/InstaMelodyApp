@@ -20,10 +20,12 @@ namespace InstaMelody.Business
         /// Gets the base melody.
         /// </summary>
         /// <param name="melody">The melody.</param>
+        /// <param name="sessionToken">The session token.</param>
         /// <returns></returns>
         /// <exception cref="System.Data.DataException">Could not find the requested melody.</exception>
-        public Melody GetBaseMelody(Melody melody)
+        public Melody GetBaseMelody(Melody melody, Guid sessionToken)
         {
+            // TODO: check if user has access to get melodies
             var dal = new Melodies();
 
             Melody result = null;
@@ -64,11 +66,13 @@ namespace InstaMelody.Business
         /// Gets the base melodies by category.
         /// </summary>
         /// <param name="category">The category.</param>
+        /// <param name="sessionToken">The session token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentException">A valid Category was not found.</exception>
         /// <exception cref="System.Data.DataException">No melodies found.</exception>
-        public IList<Melody> GetBaseMelodiesByCategory(Category category)
+        public IList<Melody> GetBaseMelodiesByCategory(Category category, Guid sessionToken)
         {
+            // TODO: check if user has access to get melodies
             // get category
             var catBll = new CategoryBll();
             var foundCategory = catBll.GetCategory(category);
@@ -98,11 +102,13 @@ namespace InstaMelody.Business
         /// Gets the file group.
         /// </summary>
         /// <param name="fileGroup">The file group.</param>
+        /// <param name="sessionToken">The session token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentException">A valid File Group must be provided.</exception>
         /// <exception cref="System.Data.DataException">Failed to find the requested File Group.</exception>
-        public FileGroup GetFileGroup(FileGroup fileGroup)
+        public FileGroup GetFileGroup(FileGroup fileGroup, Guid sessionToken)
         {
+            // TODO: check if user has access to get melodies
             if (fileGroup == null
                 || (string.IsNullOrWhiteSpace(fileGroup.Name) && fileGroup.Id.Equals(default(int))))
             {
@@ -141,10 +147,12 @@ namespace InstaMelody.Business
         /// <summary>
         /// Gets the file groups.
         /// </summary>
+        /// <param name="sessionToken">The session token.</param>
         /// <returns></returns>
         /// <exception cref="System.Data.DataException">Failed to retrieve any File Groups.</exception>
-        public IList<FileGroup> GetFileGroups()
+        public IList<FileGroup> GetFileGroups(Guid sessionToken)
         {
+            // TODO: check if user has access to get melodies
             var dal = new FileGroups();
             var results = dal.GetFileGroups();
             if (results == null || !results.Any())
@@ -448,8 +456,6 @@ namespace InstaMelody.Business
 
             var dal = new UserLoops();
             dal.DeleteLoopPart(foundPart.Id);
-
-            // TODO: reindex loop parts before returning result
 
             return GetUserLoop(foundLoop);
         }

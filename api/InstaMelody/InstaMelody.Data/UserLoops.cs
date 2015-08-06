@@ -415,6 +415,7 @@ namespace InstaMelody.Data
             };
 
             ExecuteNonQuery(query, parameters.ToArray());
+            ReIndexPartsSproc(partId);
         }
 
         /// <summary>
@@ -439,6 +440,41 @@ namespace InstaMelody.Data
             };
 
             ExecuteNonQuery(query, parameters.ToArray());
+        }
+
+        /// <summary>
+        /// Re-indexes the non-deleted User Loop Parts.
+        /// </summary>
+        /// <param name="loopPartId">The loop part identifier.</param>
+        private void ReIndexPartsSproc(int loopPartId)
+        {
+            var query = @"SELECT TOP 1 UserLoopId FROM dbo.UserLoopParts WHERE Id = @UserLoopPartId";
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "UserLoopPartId",
+                    Value = loopPartId,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                }
+            };
+
+            var obj = ExecuteScalar(query, parameters.ToArray());
+            if (!Convert.IsDBNull(obj))
+            {
+                var loopId = (Guid) obj;
+
+                var query2 = @"ReindexUserMelodyParts";
+
+                var parameters2 = new Dictionary<string, object>
+                {
+                    {"loopId", loopId}
+                };
+
+                ExecuteNoReturnSproc(query2, parameters2);
+            }
         }
 
         #endregion UserLoopParts
