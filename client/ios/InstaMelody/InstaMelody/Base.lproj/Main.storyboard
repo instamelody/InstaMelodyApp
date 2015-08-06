@@ -473,8 +473,9 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="passField" destination="Gkr-3Y-ya9" id="tjE-pG-L6R"/>
                         <outlet property="passLabel" destination="v6U-Wm-ncJ" id="bBe-3e-8LV"/>
-                        <outlet property="userField" destination="Gkr-3Y-ya9" id="Hme-yN-myu"/>
+                        <outlet property="userField" destination="B5z-YV-mmj" id="OeD-yG-08r"/>
                         <outlet property="userLabel" destination="HVB-FF-mtE" id="LpH-XJ-Y9S"/>
                     </connections>
                 </viewController>
