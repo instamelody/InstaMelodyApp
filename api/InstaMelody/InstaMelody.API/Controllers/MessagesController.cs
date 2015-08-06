@@ -145,7 +145,16 @@ namespace InstaMelody.API.Controllers
                         LogLevel.Trace);
 
                     var bll = new MessageBll();
-                    var result = bll.GetChat(new Chat {Id = _chat}, _token);
+                    object result;
+
+                    if (_chat == default(Guid))
+                    {
+                        result = bll.GetAllUserChats(_token);
+                    }
+                    else
+                    {
+                        result = bll.GetChat(new Chat { Id = _chat }, _token);
+                    }
 
                     if (result == null)
                     {
@@ -366,70 +375,6 @@ namespace InstaMelody.API.Controllers
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
 
-                }
-            }
-
-            return response;
-        }
-
-        /// <summary>
-        /// Gets the user chats.
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [Route(Routes.RouteChatUser)]
-        public HttpResponseMessage GetUserChats()
-        {
-            HttpResponseMessage response;
-
-            var nvc = HttpUtility.ParseQueryString(Request.RequestUri.Query);
-
-            Guid _token;
-            var token = nvc["token"];
-            Guid.TryParse(token, out _token);
-
-            if (_token.Equals(default(Guid)))
-            {
-                InstaMelodyLogger.Log("Received NULL GetUserChats request", LogLevel.Trace);
-                response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, Exceptions.FailedAuthentication);
-            }
-            else
-            {
-                try
-                {
-                    // Log call
-                    InstaMelodyLogger.Log(
-                        string.Format("Get User Chats - Token: {0}", _token),
-                        LogLevel.Trace);
-
-                    var bll = new MessageBll();
-                    var results = bll.GetAllUserChats(_token);
-
-                    if (results == null || !results.Any())
-                    {
-                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest,
-                            Exceptions.FailedGetUserChats);
-                    }
-                    else
-                    {
-                        response = this.Request.CreateResponse(HttpStatusCode.OK, results);
-                    }
-                }
-                catch (Exception exc)
-                {
-                    if (exc is UnauthorizedAccessException)
-                    {
-                        response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, exc.Message);
-                    }
-                    else if (exc is DataException)
-                    {
-                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, exc.Message);
-                    }
-                    else
-                    {
-                        response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
-                    }
-                    
                 }
             }
 

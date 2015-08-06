@@ -247,6 +247,8 @@ namespace InstaMelody.Business
         /// Sends the push notification.
         /// </summary>
         /// <param name="userId">The user identifier.</param>
+        /// <param name="type">The type.</param>
+        /// <param name="data">The data.</param>
         public static void SendPushNotification(Guid userId, APNSTypeEnum type, params object[] data)
         {
             var token = GetDeviceTokens(new List<Guid> {userId});
@@ -263,6 +265,8 @@ namespace InstaMelody.Business
         /// Sends the push notification.
         /// </summary>
         /// <param name="userIds">The user ids.</param>
+        /// <param name="type">The type.</param>
+        /// <param name="data">The data.</param>
         public static void SendPushNotification(IList<Guid> userIds, APNSTypeEnum type, params object[] data)
         {
             var tokens = GetDeviceTokens(userIds);

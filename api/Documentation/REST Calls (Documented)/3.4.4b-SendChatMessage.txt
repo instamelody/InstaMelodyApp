@@ -1,6 +1,6 @@
 // EXAMPLE B - Create a new Chat Message containing an Image (Video requests are same format)
 
-// REQUEST - POST https://api.instamelody.com/v1.0/Chat/Message
+// REQUEST - POST https://api.instamelody.com/v1.0/Message/Chat/Message
 {
   "Token" : "9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e",
   "Chat": 

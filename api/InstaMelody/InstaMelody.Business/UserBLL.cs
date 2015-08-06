@@ -143,38 +143,6 @@ namespace InstaMelody.Business
         }
 
         /// <summary>
-        /// Gets the user by the display name.
-        /// </summary>
-        /// <param name="displayName">The display name.</param>
-        /// <returns></returns>
-        public User GetUserByDisplayName(string displayName)
-        {
-            var dal = new Users();
-            var user = dal.FindByDisplayName(displayName);
-
-            // remove sensitive information
-            user = user.StripSensitiveInfo();
-
-            return GetUserWithImage(user);
-        }
-
-        /// <summary>
-        /// Gets the user by email address.
-        /// </summary>
-        /// <param name="emailAddress">The email address.</param>
-        /// <returns></returns>
-        public User GetUserByEmailAddress(string emailAddress)
-        {
-            var dal = new Users();
-            var user = dal.FindByEmail(emailAddress);
-
-            // remove sensitive information
-            user = user.StripSensitiveInfo();
-
-            return GetUserWithImage(user);
-        }
-
-        /// <summary>
         /// Adds the user.
         /// </summary>
         /// <param name="newUser">The new user.</param>
@@ -773,6 +741,48 @@ namespace InstaMelody.Business
         #endregion Public Methods
         
         #region Private Methods
+
+        /// <summary>
+        /// Gets the user by the display name.
+        /// </summary>
+        /// <param name="displayName">The display name.</param>
+        /// <returns></returns>
+        private User GetUserByDisplayName(string displayName)
+        {
+            var dal = new Users();
+            var user = dal.FindByDisplayName(displayName);
+
+            if (user == null)
+            {
+                return new User();
+            }
+
+            // remove sensitive information
+            user = user.StripSensitiveInfo();
+
+            return GetUserWithImage(user);
+        }
+
+        /// <summary>
+        /// Gets the user by email address.
+        /// </summary>
+        /// <param name="emailAddress">The email address.</param>
+        /// <returns></returns>
+        private User GetUserByEmailAddress(string emailAddress)
+        {
+            var dal = new Users();
+            var user = dal.FindByEmail(emailAddress);
+
+            if (user == null)
+            {
+                return new User();
+            }
+
+            // remove sensitive information
+            user = user.StripSensitiveInfo();
+
+            return GetUserWithImage(user);
+        }
 
         /// <summary>
         /// Updates the user image.

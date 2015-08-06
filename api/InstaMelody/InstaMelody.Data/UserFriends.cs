@@ -63,7 +63,6 @@ namespace InstaMelody.Data
 
             var parameters = new List<SqlParameter>
             {
-                
                 new SqlParameter
                 {
                     ParameterName = "UserId",
@@ -80,7 +79,7 @@ namespace InstaMelody.Data
                 },
                 new SqlParameter
                 {
-                    ParameterName = "DateModified",
+                    ParameterName = "DateApproved",
                     Value = DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input

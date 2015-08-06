@@ -17,6 +17,7 @@
         "FirstName": "test",
         "LastName": "account",
         "PhoneNumber": "123-555-1234",
+        "IsFemale" : false,
         "HashSalt": "",
         "Password": "",
         "TwitterUsername": "",

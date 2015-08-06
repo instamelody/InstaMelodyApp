@@ -18,11 +18,11 @@ namespace InstaMelody.Data
         {
             user.Id = Guid.NewGuid();
 
-            var query = @"INSERT INTO dbo.Users (Id, UserImageId, EmailAddress, DisplayName, FirstName, LastName, PhoneNumber, 
+            var query = @"INSERT INTO dbo.Users (Id, UserImageId, EmailAddress, DisplayName, FirstName, LastName, PhoneNumber, IsFemale,
                         HashSalt, Password, TwitterUsername, TwitterUserId, TwitterToken, TwitterSecret, FacebookUserId, 
                         FacebookToken, LastLoginSuccess, LastLoginFailure, NumberLoginFailures, IsLocked,
                         DateCreated, DateModified, IsDeleted)
-                        VALUES(@UserId, @ImageId, @EmailAddress, @DisplayName, @FirstName, @LastName, @PhoneNumber, @HashSalt, @Password, 
+                        VALUES(@UserId, @ImageId, @EmailAddress, @DisplayName, @FirstName, @LastName, @PhoneNumber, @IsFemale, @HashSalt, @Password, 
                         @TwitterUsername, @TwitterUserId, @TwitterToken, @TwitterSecret, @FacebookUserId, @FacebookToken, 
                         @LastLoginSuccess, @LastLoginFailure, @NumberLoginFailures, @IsLocked, @DateCreated, @DateModified, 0)";
 
@@ -75,6 +75,13 @@ namespace InstaMelody.Data
                     ParameterName = "PhoneNumber",
                     Value = (object)user.PhoneNumber ?? DBNull.Value,
                     SqlDbType = SqlDbType.VarChar,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "IsFemale",
+                    Value = user.IsFemale,
+                    SqlDbType = SqlDbType.Bit,
                     Direction = ParameterDirection.Input
                 },
                 new SqlParameter
@@ -263,7 +270,7 @@ namespace InstaMelody.Data
         public User UpdateUser(Guid userId, User user)
         {
             var query = @"UPDATE dbo.Users SET EmailAddress = @EmailAddress, DisplayName = @DisplayName, 
-                    	FirstName = @FirstName, LastName = @LastName, PhoneNumber = @PhoneNumber, 
+                    	FirstName = @FirstName, LastName = @LastName, IsFemale = @IsFemale, PhoneNumber = @PhoneNumber, 
                     	TwitterUsername = @TwitterUsername, TwitterUserId = @TwitterUserId, 
                         TwitterToken = @TwitterToken, TwitterSecret = @TwitterSecret, 
                         FacebookUserId = @FacebookUserId, FacebookToken = @FacebookToken, 
@@ -305,6 +312,13 @@ namespace InstaMelody.Data
                     ParameterName = "LastName",
                     Value = (object)user.LastName ?? DBNull.Value,
                     SqlDbType = SqlDbType.VarChar,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "IsFemale",
+                    Value = user.IsFemale,
+                    SqlDbType = SqlDbType.Bit,
                     Direction = ParameterDirection.Input
                 },
                 new SqlParameter

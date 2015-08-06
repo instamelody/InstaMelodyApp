@@ -10,6 +10,7 @@
     "LastName" : "testerson",
     "PhoneNumber" : "123-555-1234",
     "Password" : "TestPW",
+    "IsFemale" : false
 }
 
 // RESPONSE - HTTP/1.1 200 OK
@@ -20,6 +21,7 @@
     "FirstName": "testy",
     "LastName": "testerson",
     "PhoneNumber": "123-555-1234",
+    "IsFemale" : false,
     "HashSalt": "",
     "Password": "",
     "TwitterUsername": "",

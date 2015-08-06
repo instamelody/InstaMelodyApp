@@ -23,6 +23,7 @@ CREATE TABLE dbo.Users
     FirstName varchar(64) NULL,
     LastName varchar(64) NULL,
     PhoneNumber varchar(28) NULL,
+    IsFemale bit NOT NULL DEFAULT 0,
     HashSalt varchar(64) NULL,
     Password varchar(255) NULL,
     IsSubscribed bit NOT NULL DEFAULT 0,
@@ -59,7 +60,7 @@ CREATE TABLE dbo.UserSessions
 	UserId UNIQUEIDENTIFIER NOT NULL,
 	CONSTRAINT FK_UserSessions_UserId FOREIGN KEY (UserId)
 		REFERENCES Users (Id),
-	DeviceToken varchar(64) NOT NULL,
+	DeviceToken varchar(64) NULL,
 	LastActivity datetime NOT NULL,
 	DateCreated datetime NOT NULL,
 	IsDeleted bit NOT NULL DEFAULT 0)

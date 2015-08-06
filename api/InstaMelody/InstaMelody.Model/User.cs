@@ -58,6 +58,8 @@ namespace InstaMelody.Model
         [StringLength(28, ErrorMessage = "Phone number cannot exceed 28 characters")]
         public string PhoneNumber { get; set; }
 
+        public bool IsFemale { get; set; }
+
         [StringLength(64, ErrorMessage = "Hash salt cannot exceed 64 characters")]
         public string HashSalt { get; set; }
 

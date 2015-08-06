@@ -33,10 +33,26 @@ namespace InstaMelody.API.Controllers
         [Route("PushNotification")]
         public HttpResponseMessage PushNotification()
         {
-            var token = "a6cf725b84e3de90cdabb63f3f05bbee8b953800ff767fa9ad56cd9a87bfd7f1";
-            Business.Utilities.SendPushNotification(token);
+            var nvc = HttpUtility.ParseQueryString(Request.RequestUri.Query);
+            var token = nvc["token"];
+            //a6cf725b84e3de90cdabb63f3f05bbee8b953800ff767fa9ad56cd9a87bfd7f1
 
-            return Request.CreateResponse(HttpStatusCode.Accepted);
+            if (string.IsNullOrEmpty(token))
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest,
+                    "Please provide a token URL parameter.");
+            }
+
+            try
+            {
+                Business.Utilities.SendPushNotification(token);
+                return Request.CreateResponse(HttpStatusCode.Accepted);
+            }
+            catch (Exception ex)
+            {
+                InstaMelodyLogger.Log(string.Format("Failure sending push notification: {0}, {1}", ex.InnerException, ex.InnerException.InnerException), LogLevel.Error);
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
         }
 
         [HttpGet]
