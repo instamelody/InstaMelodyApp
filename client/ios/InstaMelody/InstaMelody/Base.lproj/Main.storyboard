@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="15A178w" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Upz-he-51Z">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Upz-he-51Z">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -335,7 +335,6 @@
         <!--instaMelody-->
         <scene sceneID="Dg1-Sm-aN7">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="1kR-gV-spe" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="xSn-CF-ntb" customClass="HomeViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="EWk-BQ-F9s"/>
@@ -642,6 +641,7 @@
                         <outlet property="profileView" destination="BHt-nu-b7N" id="KKe-og-ZVe"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1kR-gV-spe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="812" y="85"/>
         </scene>
@@ -649,19 +649,64 @@
         <scene sceneID="whu-lG-pLZ">
             <objects>
                 <tableViewController id="vYc-MT-dDl" customClass="FriendsTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="JEW-Su-0BU">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="100" sectionHeaderHeight="22" sectionFooterHeight="22" id="JEW-Su-0BU">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="K2y-Q6-fT8">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FriendCell" rowHeight="100" id="K2y-Q6-fT8" customClass="FriendCell">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="K2y-Q6-fT8" id="szM-2O-Cvy">
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y0i-r9-LvI">
+                                            <rect key="frame" x="113" y="36" width="374" height="28"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="28" id="zbR-Fd-TL3"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nks-ZE-lUZ">
+                                            <rect key="frame" x="18" y="15" width="70" height="70"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="70" id="LEQ-zK-0CZ"/>
+                                                <constraint firstAttribute="height" constant="70" id="bef-ic-Maa"/>
+                                            </constraints>
+                                        </imageView>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kzH-gN-lCY">
+                                            <rect key="frame" x="512" y="15" width="70" height="70"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="70" id="Eag-cU-6Tv"/>
+                                                <constraint firstAttribute="width" constant="70" id="Jae-Eu-fb2"/>
+                                            </constraints>
+                                            <state key="normal" title="Approve">
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="approveFriend:" destination="vYc-MT-dDl" eventType="touchUpInside" id="gcZ-ZG-HRX"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
                                     <animations/>
+                                    <constraints>
+                                        <constraint firstItem="kzH-gN-lCY" firstAttribute="leading" secondItem="Y0i-r9-LvI" secondAttribute="trailing" constant="25" id="Ch7-4N-CfI"/>
+                                        <constraint firstAttribute="centerY" secondItem="nks-ZE-lUZ" secondAttribute="centerY" id="ZMz-a9-0pp"/>
+                                        <constraint firstAttribute="centerY" secondItem="kzH-gN-lCY" secondAttribute="centerY" id="cfP-fg-VEG"/>
+                                        <constraint firstAttribute="centerY" secondItem="Y0i-r9-LvI" secondAttribute="centerY" id="eey-ZS-nTS"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="kzH-gN-lCY" secondAttribute="trailing" constant="10" id="etC-rX-7UQ"/>
+                                        <constraint firstItem="Y0i-r9-LvI" firstAttribute="leading" secondItem="nks-ZE-lUZ" secondAttribute="trailing" constant="25" id="rhZ-4b-THb"/>
+                                        <constraint firstItem="nks-ZE-lUZ" firstAttribute="leading" secondItem="szM-2O-Cvy" secondAttribute="leadingMargin" constant="10" id="zu8-pi-Lxg"/>
+                                    </constraints>
                                 </tableViewCellContentView>
                                 <animations/>
+                                <connections>
+                                    <outlet property="approveButton" destination="kzH-gN-lCY" id="lZm-OC-TIv"/>
+                                    <outlet property="nameLabel" destination="Y0i-r9-LvI" id="3M8-zU-Ilm"/>
+                                    <outlet property="profileImageView" destination="nks-ZE-lUZ" id="qar-Zs-aar"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
