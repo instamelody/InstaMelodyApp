@@ -9,6 +9,7 @@
 #import "SignInViewController.h"
 #import "AFHTTPRequestOperationManager.h"
 #import "constants.h"
+#import "NSString+FontAwesome.h"
 
 @interface SignInViewController ()
 
@@ -19,6 +20,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    self.userLabel.font  = [UIFont fontWithName:kFontAwesomeFamilyName size:17];
+    self.passLabel.font  = [UIFont fontWithName:kFontAwesomeFamilyName size:17];
+    
+    self.userLabel.text =  [NSString fontAwesomeIconStringForEnum:FAUser];
+    self.passLabel.text =  [NSString fontAwesomeIconStringForEnum:FALock];
 }
 
 - (void)didReceiveMemoryWarning {
