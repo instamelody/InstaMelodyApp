@@ -243,7 +243,8 @@ namespace InstaMelody.Data
         public IList<ChatMessage> GetMessagesByChat(Guid chatId)
         {
             var query = @"SELECT * FROM dbo.ChatMessages
-                        WHERE ChatId = @ChatId AND IsDeleted = 0";
+                        WHERE ChatId = @ChatId AND IsDeleted = 0
+                        ORDER BY DateCreated DESC";
 
             var parameters = new List<SqlParameter>
             {
@@ -259,7 +260,65 @@ namespace InstaMelody.Data
             return GetRecordSet<ChatMessage>(query, parameters.ToArray());
         }
 
-        
+        /// <summary>
+        /// Gets the messages by chat.
+        /// </summary>
+        /// <param name="chatId">The chat identifier.</param>
+        /// <param name="limit">The limit.</param>
+        /// <returns></returns>
+        public IList<ChatMessage> GetMessagesByChat(Guid chatId, int limit)
+        {
+            var query = string.Format(@"SELECT TOP {0} * FROM dbo.ChatMessages
+                                        WHERE ChatId = @ChatId AND IsDeleted = 0
+                                        ORDER BY DateCreated DESC", limit);
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "ChatId",
+                    Value = chatId,
+                    SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                }
+            };
+
+            return GetRecordSet<ChatMessage>(query, parameters.ToArray());
+        }
+
+        /// <summary>
+        /// Gets the messages by chat.
+        /// </summary>
+        /// <param name="chatId">The chat identifier.</param>
+        /// <param name="limit">The limit.</param>
+        /// <param name="fromId">From identifier.</param>
+        /// <returns></returns>
+        public IList<ChatMessage> GetMessagesByChat(Guid chatId, int limit, int fromId)
+        {
+            var query = string.Format(@"SELECT TOP {0} * FROM dbo.ChatMessages
+                                        WHERE ChatId = @ChatId AND IsDeleted = 0 AND Id > @AfterId
+                                        ORDER BY DateCreated DESC", limit);
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "ChatId",
+                    Value = chatId,
+                    SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "AfterId",
+                    Value = fromId,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                }
+            };
+
+            return GetRecordSet<ChatMessage>(query, parameters.ToArray());
+        }
 
         /// <summary>
         /// Gets the users in chat.
