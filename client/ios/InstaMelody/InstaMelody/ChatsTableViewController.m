@@ -9,10 +9,13 @@
 #import "ChatsTableViewController.h"
 #import "AFHTTPRequestOperationManager.h"
 #import "DemoMessagesViewController.h"
+#import "constants.h"
+#import "ChatCell.h"
 
 @interface ChatsTableViewController ()
 
-@property NSArray *chatsArray;
+@property (nonatomic, strong) NSArray *chatsArray;
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
 @end
 
@@ -26,6 +29,18 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    UIImageView *tempImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"blurBlue"]];
+    [tempImageView setFrame:self.tableView.frame];
+    
+    self.tableView.backgroundView = tempImageView;
+    
+    [self refreshChats];
+    
+    //2015-07-07T16:52:02.217
+    
+    self.dateFormatter = [[NSDateFormatter alloc] init];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -45,15 +60,34 @@
     return [self.chatsArray count];
 }
 
-/*
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+ 
+    ChatCell *cell = (ChatCell *)[tableView dequeueReusableCellWithIdentifier:@"ChatCell" forIndexPath:indexPath];
+    
+    cell.profileImageView.layer.cornerRadius = cell.profileImageView.frame.size.height / 2;
+    cell.profileImageView.layer.masksToBounds = YES;
+    
+    cell.backgroundColor = [UIColor clearColor];
     
     // Configure the cell...
     
+    NSDictionary *chatDict = [self.chatsArray objectAtIndex:indexPath.row];
+    
+    NSArray *userArray = (NSArray *)[chatDict objectForKey:@"Users"];
+    
+    NSString *dateString = [chatDict objectForKey:@"DateModified"];
+    
+    cell.nameLabel.text = [chatDict objectForKey:@"Id"];
+    
+    
+    cell.descriptionLabel.text = [NSString stringWithFormat:@"%d users", userArray.count];
+    
+    cell.profileImageView.image = [UIImage imageNamed:@"Profile"];
+    
+    cell.timeLabel.text = [dateString substringToIndex:10];
+    
     return cell;
 }
-*/
 
 /*
 // Override to support conditional editing of the table view.
@@ -98,6 +132,42 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+#pragma mark - webservice actions
+
+- (void)refreshChats {
+    [self getUserChats];
+}
+
+- (void)getUserChats {
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/Message/Chat", BASE_URL];
+    
+    NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    
+    NSDictionary *parameters = @{@"token": token};
+    
+    [manager GET:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        
+        self.chatsArray = (NSArray *)responseObject;
+        
+        [self.tableView reloadData];
+        
+        //NSDictionary *responseDict = (NSDictionary *)responseObject;
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+        
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:error.description delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+    }];
+}
+
+#pragma mark - button actions
 
 
 - (IBAction)submit:(id)sender {
