@@ -38,6 +38,8 @@
 		872BB5981B74C438004CDBE7 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 872BB5901B74C438004CDBE7 /* FontAwesome.ttf */; };
 		872BB5991B74C438004CDBE7 /* UIFont+FontAwesome.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BB5921B74C438004CDBE7 /* UIFont+FontAwesome.m */; };
 		872BB59A1B74C438004CDBE7 /* UIImage+FontAwesome.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BB5941B74C438004CDBE7 /* UIImage+FontAwesome.m */; };
+		872BB5A01B74CAD1004CDBE7 /* AwesomeMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BB59D1B74CAD1004CDBE7 /* AwesomeMenu.m */; };
+		872BB5A11B74CAD1004CDBE7 /* AwesomeMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BB59F1B74CAD1004CDBE7 /* AwesomeMenuItem.m */; };
 		874C881F1B4ADB3B0069A041 /* JSQMessagesAssets.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 874C87C31B4ADB3B0069A041 /* JSQMessagesAssets.bundle */; };
 		874C88201B4ADB3B0069A041 /* JSQSystemSoundPlayer+JSQMessages.m in Sources */ = {isa = PBXBuildFile; fileRef = 874C87C61B4ADB3B0069A041 /* JSQSystemSoundPlayer+JSQMessages.m */; };
 		874C88211B4ADB3B0069A041 /* NSBundle+JSQMessages.m in Sources */ = {isa = PBXBuildFile; fileRef = 874C87C81B4ADB3B0069A041 /* NSBundle+JSQMessages.m */; };
@@ -157,6 +159,10 @@
 		872BB5921B74C438004CDBE7 /* UIFont+FontAwesome.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+FontAwesome.m"; sourceTree = "<group>"; };
 		872BB5931B74C438004CDBE7 /* UIImage+FontAwesome.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+FontAwesome.h"; sourceTree = "<group>"; };
 		872BB5941B74C438004CDBE7 /* UIImage+FontAwesome.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+FontAwesome.m"; sourceTree = "<group>"; };
+		872BB59C1B74CAD1004CDBE7 /* AwesomeMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AwesomeMenu.h; sourceTree = "<group>"; };
+		872BB59D1B74CAD1004CDBE7 /* AwesomeMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AwesomeMenu.m; sourceTree = "<group>"; };
+		872BB59E1B74CAD1004CDBE7 /* AwesomeMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AwesomeMenuItem.h; sourceTree = "<group>"; };
+		872BB59F1B74CAD1004CDBE7 /* AwesomeMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AwesomeMenuItem.m; sourceTree = "<group>"; };
 		874C87C31B4ADB3B0069A041 /* JSQMessagesAssets.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = JSQMessagesAssets.bundle; sourceTree = "<group>"; };
 		874C87C51B4ADB3B0069A041 /* JSQSystemSoundPlayer+JSQMessages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JSQSystemSoundPlayer+JSQMessages.h"; sourceTree = "<group>"; };
 		874C87C61B4ADB3B0069A041 /* JSQSystemSoundPlayer+JSQMessages.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JSQSystemSoundPlayer+JSQMessages.m"; sourceTree = "<group>"; };
@@ -291,6 +297,7 @@
 		8707F9B11B446F57004B4C20 /* InstaMelody */ = {
 			isa = PBXGroup;
 			children = (
+				872BB59B1B74CAD1004CDBE7 /* AwesomeMenu */,
 				872BB5891B74C438004CDBE7 /* FontAwesome */,
 				87175C641B4AE03700C042E4 /* JSQSystemSoundPlayer */,
 				874C87C11B4ADB3B0069A041 /* JSQMessagesViewController */,
@@ -420,6 +427,17 @@
 				872BB5901B74C438004CDBE7 /* FontAwesome.ttf */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		872BB59B1B74CAD1004CDBE7 /* AwesomeMenu */ = {
+			isa = PBXGroup;
+			children = (
+				872BB59C1B74CAD1004CDBE7 /* AwesomeMenu.h */,
+				872BB59D1B74CAD1004CDBE7 /* AwesomeMenu.m */,
+				872BB59E1B74CAD1004CDBE7 /* AwesomeMenuItem.h */,
+				872BB59F1B74CAD1004CDBE7 /* AwesomeMenuItem.m */,
+			);
+			path = AwesomeMenu;
 			sourceTree = "<group>";
 		};
 		8737469F1B729C2B0006F2A9 /* login process */ = {
@@ -693,7 +711,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				874C88381B4ADB3B0069A041 /* JSQVideoMediaItem.m in Sources */,
+				872BB5A11B74CAD1004CDBE7 /* AwesomeMenuItem.m in Sources */,
 				8707F9F71B4476BD004B4C20 /* AFURLConnectionOperation.m in Sources */,
+				872BB5A01B74CAD1004CDBE7 /* AwesomeMenu.m in Sources */,
 				872BB56E1B74BC36004CDBE7 /* ChatViewController.m in Sources */,
 				8707F9F21B4476BD004B4C20 /* AFHTTPRequestOperation.m in Sources */,
 				872BB59A1B74C438004CDBE7 /* UIImage+FontAwesome.m in Sources */,

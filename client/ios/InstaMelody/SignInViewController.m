@@ -9,7 +9,10 @@
 #import "SignInViewController.h"
 #import "AFHTTPRequestOperationManager.h"
 #import "constants.h"
+
 #import "NSString+FontAwesome.h"
+#import "FAImageView.h"
+#import "UIImage+FontAwesome.h"
 
 @interface SignInViewController ()
 

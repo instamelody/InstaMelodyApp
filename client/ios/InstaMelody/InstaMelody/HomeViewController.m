@@ -34,6 +34,8 @@
     self.navigationController.navigationBar.translucent = YES;
     self.navigationController.view.backgroundColor = [UIColor clearColor];
     */
+    
+    [self createMenu];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -60,6 +62,55 @@
 
 -(IBAction)showSettings:(id)sender {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+}
+
+-(void)createMenu {
+    UIImage *micImage = [UIImage imageNamed:@"mic"];
+    
+    UIImage *soloImage = [UIImage imageNamed:@"solo"];
+    UIImage *chatImage = [UIImage imageNamed:@"chat"];
+    UIImage *loopImage = [UIImage imageNamed:@"loop"];
+    
+    // Default Menu
+    
+    AwesomeMenuItem *starMenuItem1 = [[AwesomeMenuItem alloc] initWithImage:soloImage
+                                                           highlightedImage:soloImage
+                                                               ContentImage:nil
+                                                    highlightedContentImage:nil];
+    AwesomeMenuItem *starMenuItem2 = [[AwesomeMenuItem alloc] initWithImage:chatImage
+                                                           highlightedImage:chatImage
+                                                               ContentImage:nil
+                                                    highlightedContentImage:nil];
+    AwesomeMenuItem *starMenuItem3 = [[AwesomeMenuItem alloc] initWithImage:loopImage
+                                                           highlightedImage:loopImage
+                                                               ContentImage:nil
+                                                    highlightedContentImage:nil];
+    
+    NSArray *menuItems = [NSArray arrayWithObjects:starMenuItem1, starMenuItem2, starMenuItem3, nil];
+    
+    AwesomeMenuItem *startItem = [[AwesomeMenuItem alloc] initWithImage:micImage
+                                                       highlightedImage:micImage
+                                                           ContentImage:micImage
+                                                highlightedContentImage:micImage];
+    
+    AwesomeMenu *menu = [[AwesomeMenu alloc] initWithFrame:self.view.bounds startItem:startItem menuItems:menuItems];
+    menu.delegate = self;
+    menu.startPoint = CGPointMake(self.view.frame.size.width - 80, self.view.frame.size.height - 80);
+    menu.menuWholeAngle = -1 * M_PI / 2;
+    
+    [self.view addSubview:menu];
+
+}
+
+- (void)awesomeMenu:(AwesomeMenu *)menu didSelectIndex:(NSInteger)idx
+{
+    NSLog(@"Select the index : %d",idx);
+}
+- (void)awesomeMenuDidFinishAnimationClose:(AwesomeMenu *)menu {
+    NSLog(@"Menu was closed!");
+}
+- (void)awesomeMenuDidFinishAnimationOpen:(AwesomeMenu *)menu {
+    NSLog(@"Menu is open!");
 }
 
 @end

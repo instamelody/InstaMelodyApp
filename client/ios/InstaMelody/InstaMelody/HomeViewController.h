@@ -7,12 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AwesomeMenu.h"
 
-@interface HomeViewController : UIViewController
+@interface HomeViewController : UIViewController <AwesomeMenuDelegate>
 
 @property (nonatomic, strong) IBOutlet UIView *profileView;
 @property (nonatomic, strong) IBOutlet UIImageView *profileImageView;
 @property (nonatomic, strong) IBOutlet UILabel *nameLabel;
+
+@property (nonatomic, strong) IBOutlet UIView *pathMenuView;
 
 -(IBAction)showSettings:(id)sender;
 
