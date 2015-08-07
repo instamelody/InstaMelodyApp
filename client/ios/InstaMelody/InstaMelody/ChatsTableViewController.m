@@ -11,6 +11,7 @@
 #import "DemoMessagesViewController.h"
 #import "constants.h"
 #import "ChatCell.h"
+#import "ChatViewController.h"
 
 @interface ChatsTableViewController ()
 
@@ -87,6 +88,29 @@
     cell.timeLabel.text = [dateString substringToIndex:10];
     
     return cell;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    //chat id = indexPath.row
+    
+    ChatViewController *vc = [ChatViewController messagesViewController];
+    
+    vc.chatDict = [self.chatsArray objectAtIndex:indexPath.row];
+    
+    [self.navigationController pushViewController:vc animated:YES];
+    
+    /*
+     DemoMessagesViewController *vc = [DemoMessagesViewController messagesViewController];
+     [self.navigationController pushViewController:vc animated:YES];
+     */
+    
+    
+     //UINavigationController *navCon = [[UINavigationController alloc] initWithRootViewController:vc];
+     //vc.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleDone target:self action:@selector(done:)];
+     
+     
+     //[self.navigationController presentViewController:navCon animated:YES completion:nil];
 }
 
 /*
@@ -184,16 +208,7 @@
         NSLog(@"JSON: %@", responseObject);
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"You have created a chat" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alertView show];
-        
-        /*
-        DemoMessagesViewController *vc = [DemoMessagesViewController messagesViewController];
-        [self.navigationController pushViewController:vc animated:YES];
-        //UINavigationController *navCon = [[UINavigationController alloc] initWithRootViewController:vc];
-        //vc.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleDone target:self action:@selector(done:)];
-        
-        
-        //[self.navigationController presentViewController:navCon animated:YES completion:nil];
-        */
+
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);

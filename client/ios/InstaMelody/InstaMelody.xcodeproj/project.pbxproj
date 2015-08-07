@@ -31,6 +31,7 @@
 		87175C6B1B4AE08E00C042E4 /* NSUserDefaults+DemoSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 87175C6A1B4AE08E00C042E4 /* NSUserDefaults+DemoSettings.m */; };
 		872BB5681B74AD26004CDBE7 /* FriendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BB5671B74AD26004CDBE7 /* FriendCell.m */; };
 		872BB56B1B74B56C004CDBE7 /* ChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BB56A1B74B56C004CDBE7 /* ChatCell.m */; };
+		872BB56E1B74BC36004CDBE7 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BB56D1B74BC36004CDBE7 /* ChatViewController.m */; };
 		874C881F1B4ADB3B0069A041 /* JSQMessagesAssets.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 874C87C31B4ADB3B0069A041 /* JSQMessagesAssets.bundle */; };
 		874C88201B4ADB3B0069A041 /* JSQSystemSoundPlayer+JSQMessages.m in Sources */ = {isa = PBXBuildFile; fileRef = 874C87C61B4ADB3B0069A041 /* JSQSystemSoundPlayer+JSQMessages.m */; };
 		874C88211B4ADB3B0069A041 /* NSBundle+JSQMessages.m in Sources */ = {isa = PBXBuildFile; fileRef = 874C87C81B4ADB3B0069A041 /* NSBundle+JSQMessages.m */; };
@@ -138,6 +139,8 @@
 		872BB5671B74AD26004CDBE7 /* FriendCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendCell.m; sourceTree = "<group>"; };
 		872BB5691B74B56C004CDBE7 /* ChatCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatCell.h; sourceTree = "<group>"; };
 		872BB56A1B74B56C004CDBE7 /* ChatCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatCell.m; sourceTree = "<group>"; };
+		872BB56C1B74BC36004CDBE7 /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
+		872BB56D1B74BC36004CDBE7 /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
 		874C87C31B4ADB3B0069A041 /* JSQMessagesAssets.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = JSQMessagesAssets.bundle; sourceTree = "<group>"; };
 		874C87C51B4ADB3B0069A041 /* JSQSystemSoundPlayer+JSQMessages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JSQSystemSoundPlayer+JSQMessages.h"; sourceTree = "<group>"; };
 		874C87C61B4ADB3B0069A041 /* JSQSystemSoundPlayer+JSQMessages.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JSQSystemSoundPlayer+JSQMessages.m"; sourceTree = "<group>"; };
@@ -293,6 +296,8 @@
 				87175C521B4ADCEA00C042E4 /* ChatsTableViewController.m */,
 				87D472361B74A719008075B8 /* FriendsTableViewController.h */,
 				87D472371B74A719008075B8 /* FriendsTableViewController.m */,
+				872BB56C1B74BC36004CDBE7 /* ChatViewController.h */,
+				872BB56D1B74BC36004CDBE7 /* ChatViewController.m */,
 				872BB5661B74AD26004CDBE7 /* FriendCell.h */,
 				872BB5671B74AD26004CDBE7 /* FriendCell.m */,
 				872BB5691B74B56C004CDBE7 /* ChatCell.h */,
@@ -645,6 +650,7 @@
 			files = (
 				874C88381B4ADB3B0069A041 /* JSQVideoMediaItem.m in Sources */,
 				8707F9F71B4476BD004B4C20 /* AFURLConnectionOperation.m in Sources */,
+				872BB56E1B74BC36004CDBE7 /* ChatViewController.m in Sources */,
 				8707F9F21B4476BD004B4C20 /* AFHTTPRequestOperation.m in Sources */,
 				87D472381B74A719008075B8 /* FriendsTableViewController.m in Sources */,
 				874C883C1B4ADB3B0069A041 /* JSQMessagesCollectionViewCellIncoming.m in Sources */,
