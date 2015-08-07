@@ -72,6 +72,8 @@
 		874C88471B4ADB3B0069A041 /* JSQMessagesToolbarContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 874C881B1B4ADB3B0069A041 /* JSQMessagesToolbarContentView.xib */; };
 		874C88481B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 874C881D1B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.m */; };
 		874C88491B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 874C881E1B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.xib */; };
+		87D472351B749891008075B8 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D472341B749891008075B8 /* HomeViewController.m */; };
+		87D472381B74A719008075B8 /* FriendsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D472371B74A719008075B8 /* FriendsTableViewController.m */; };
 		87DA195F1B72872A00941DCE /* SignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87DA195E1B72872A00941DCE /* SignInViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -216,6 +218,10 @@
 		874C881C1B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesTypingIndicatorFooterView.h; sourceTree = "<group>"; };
 		874C881D1B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesTypingIndicatorFooterView.m; sourceTree = "<group>"; };
 		874C881E1B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JSQMessagesTypingIndicatorFooterView.xib; sourceTree = "<group>"; };
+		87D472331B749891008075B8 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
+		87D472341B749891008075B8 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
+		87D472361B74A719008075B8 /* FriendsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendsTableViewController.h; sourceTree = SOURCE_ROOT; };
+		87D472371B74A719008075B8 /* FriendsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendsTableViewController.m; sourceTree = SOURCE_ROOT; };
 		87DA195D1B72872A00941DCE /* SignInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignInViewController.h; sourceTree = SOURCE_ROOT; };
 		87DA195E1B72872A00941DCE /* SignInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignInViewController.m; sourceTree = SOURCE_ROOT; };
 		87EAC92D1B74183D00935178 /* constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = constants.h; sourceTree = "<group>"; };
@@ -273,10 +279,14 @@
 				8707F9B61B446F57004B4C20 /* AppDelegate.h */,
 				8707F9B71B446F57004B4C20 /* AppDelegate.m */,
 				8737469F1B729C2B0006F2A9 /* login process */,
+				87D472331B749891008075B8 /* HomeViewController.h */,
+				87D472341B749891008075B8 /* HomeViewController.m */,
 				8707F9B91B446F57004B4C20 /* FirstViewController.h */,
 				8707F9BA1B446F57004B4C20 /* FirstViewController.m */,
 				87175C511B4ADCEA00C042E4 /* ChatsTableViewController.h */,
 				87175C521B4ADCEA00C042E4 /* ChatsTableViewController.m */,
+				87D472361B74A719008075B8 /* FriendsTableViewController.h */,
+				87D472371B74A719008075B8 /* FriendsTableViewController.m */,
 				8707F9BF1B446F57004B4C20 /* Main.storyboard */,
 				8707F9C21B446F57004B4C20 /* Images.xcassets */,
 				8707F9C41B446F57004B4C20 /* LaunchScreen.xib */,
@@ -626,6 +636,7 @@
 				874C88381B4ADB3B0069A041 /* JSQVideoMediaItem.m in Sources */,
 				8707F9F71B4476BD004B4C20 /* AFURLConnectionOperation.m in Sources */,
 				8707F9F21B4476BD004B4C20 /* AFHTTPRequestOperation.m in Sources */,
+				87D472381B74A719008075B8 /* FriendsTableViewController.m in Sources */,
 				874C883C1B4ADB3B0069A041 /* JSQMessagesCollectionViewCellIncoming.m in Sources */,
 				874C88311B4ADB3B0069A041 /* JSQMessagesCollectionViewLayoutAttributes.m in Sources */,
 				8707F9F51B4476BD004B4C20 /* AFNetworkReachabilityManager.m in Sources */,
@@ -670,6 +681,7 @@
 				874C88241B4ADB3B0069A041 /* UIDevice+JSQMessages.m in Sources */,
 				874C88421B4ADB3B0069A041 /* JSQMessagesLabel.m in Sources */,
 				8707F9F41B4476BD004B4C20 /* AFHTTPSessionManager.m in Sources */,
+				87D472351B749891008075B8 /* HomeViewController.m in Sources */,
 				874C882A1B4ADB3B0069A041 /* JSQMessagesAvatarImageFactory.m in Sources */,
 				87175C591B4ADF9E00C042E4 /* DemoModelData.m in Sources */,
 				874C88201B4ADB3B0069A041 /* JSQSystemSoundPlayer+JSQMessages.m in Sources */,
