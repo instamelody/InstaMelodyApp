@@ -19,6 +19,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    self.usernameField.delegate = self;
+    self.passwordField.delegate = self;
+    self.phoneNumberField.delegate = self;
+    self.firstNameField.delegate = self;
+    self.lastNameField.delegate = self;
+    self.emailAddressField.delegate = self;
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -74,6 +82,19 @@
         [alertView show];
     }
     
+}
+
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    return YES;
+}
+
+// It is important for you to hide the keyboard
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
 }
 
 

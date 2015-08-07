@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SignInViewController : UIViewController
+@interface SignInViewController : UIViewController <UITextFieldDelegate>
 
 @property (nonatomic, strong) IBOutlet UILabel *userLabel;
 @property (nonatomic, strong) IBOutlet UILabel *passLabel;

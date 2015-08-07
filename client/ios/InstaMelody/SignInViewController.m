@@ -29,6 +29,9 @@
     
     self.userLabel.text =  [NSString fontAwesomeIconStringForEnum:FAUser];
     self.passLabel.text =  [NSString fontAwesomeIconStringForEnum:FALock];
+    
+    self.userField.delegate = self;
+    self.passField.delegate = self;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -135,6 +138,18 @@
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:error.description delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alertView show];
     }];
+}
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    return YES;
+}
+
+// It is important for you to hide the keyboard
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
 }
 
 @end

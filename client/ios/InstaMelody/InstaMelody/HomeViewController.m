@@ -22,7 +22,7 @@
     
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"] ==  nil) {
         UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        UINavigationController *nc = [sb instantiateViewControllerWithIdentifier:@"SignInViewController"];
+        UINavigationController *nc = [sb instantiateViewControllerWithIdentifier:@"SignInNavController"];
         [self presentViewController:nc animated:NO completion:nil];
     }
     
@@ -112,5 +112,7 @@
 - (void)awesomeMenuDidFinishAnimationOpen:(AwesomeMenu *)menu {
     NSLog(@"Menu is open!");
 }
+
+
 
 @end

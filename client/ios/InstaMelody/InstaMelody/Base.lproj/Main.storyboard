@@ -21,7 +21,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <animations/>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="InstaMelodyCircle" translatesAutoresizingMaskIntoConstraints="NO" id="AuC-oa-rUV">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="InstaMelodyCircle" translatesAutoresizingMaskIntoConstraints="NO" id="AuC-oa-rUV">
                                 <rect key="frame" x="263" y="110" width="74" height="74"/>
                                 <animations/>
                                 <constraints>
@@ -29,7 +29,7 @@
                                     <constraint firstAttribute="width" constant="74" id="xwa-w4-wsA"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to instaMelody" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QLo-o1-Dp6">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Welcome to instaMelody" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QLo-o1-Dp6">
                                 <rect key="frame" x="16" y="203" width="568" height="21"/>
                                 <animations/>
                                 <constraints>
@@ -39,7 +39,7 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" alpha="0.5499999999999996" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pkQ-MK-b0m">
+                            <button opaque="NO" alpha="0.5499999999999996" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pkQ-MK-b0m">
                                 <rect key="frame" x="170" y="376" width="260" height="45"/>
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -96,7 +96,7 @@
                                     <constraint firstAttribute="trailing" secondItem="6sq-Md-cvw" secondAttribute="trailing" id="xDj-KH-fn5"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="egD-kB-n8n">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="egD-kB-n8n">
                                 <rect key="frame" x="170" y="426" width="260" height="40"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="      Don't have an account?" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dsV-KE-XzG">
@@ -135,7 +135,7 @@
                                     <constraint firstItem="1FS-OY-9b2" firstAttribute="leading" secondItem="dsV-KE-XzG" secondAttribute="trailing" id="kja-L7-9Nt"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Fj-iB-bdv">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8Fj-iB-bdv">
                                 <rect key="frame" x="170" y="332" width="260" height="25"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1gP-uk-6TY">
@@ -180,7 +180,7 @@
                                     <constraint firstItem="v6U-Wm-ncJ" firstAttribute="leading" secondItem="8Fj-iB-bdv" secondAttribute="leading" id="et7-SQ-LIR"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a3G-eF-s6a">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="a3G-eF-s6a">
                                 <rect key="frame" x="170" y="299" width="260" height="25"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ADo-1M-WqO">
@@ -282,7 +282,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pQL-dO-dl1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="918" y="-686"/>
+            <point key="canvasLocation" x="1730" y="-686"/>
         </scene>
         <!--Chats-->
         <scene sceneID="PKl-op-Eby">
@@ -854,7 +854,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <animations/>
                             </imageView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J2p-zQ-zmO">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J2p-zQ-zmO">
                                 <rect key="frame" x="170" y="40" width="260" height="130"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="P0e-1P-5nm">
@@ -971,7 +971,7 @@
                                     <constraint firstItem="iis-99-XvR" firstAttribute="leading" secondItem="J2p-zQ-zmO" secondAttribute="leading" id="sLe-WN-Pk0"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="amD-iD-Tlh">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="amD-iD-Tlh">
                                 <rect key="frame" x="170" y="238" width="260" height="52"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vQP-p5-dFL">
@@ -1016,7 +1016,7 @@
                                     <constraint firstAttribute="trailing" secondItem="3t6-l6-MaB" secondAttribute="trailing" id="vh8-Md-Jc0"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8C7-en-b7j">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8C7-en-b7j">
                                 <rect key="frame" x="170" y="381" width="260" height="52"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uk9-tS-ddl">
@@ -1061,7 +1061,7 @@
                                     <constraint firstItem="Ddl-KJ-mft" firstAttribute="leading" secondItem="8C7-en-b7j" secondAttribute="leading" id="uCP-hh-whh"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="01l-oD-CmQ">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="01l-oD-CmQ">
                                 <rect key="frame" x="170" y="178" width="260" height="52"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4NJ-6v-8aw">
@@ -1106,7 +1106,7 @@
                                     <constraint firstAttribute="trailing" secondItem="4NJ-6v-8aw" secondAttribute="trailing" id="xh4-Ej-eJ8"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="omB-hr-KNv">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="omB-hr-KNv">
                                 <rect key="frame" x="170" y="463" width="260" height="50"/>
                                 <subviews>
                                     <button opaque="NO" alpha="0.80000001192092896" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a4z-2L-oLx">
@@ -1134,7 +1134,7 @@
                                     <constraint firstAttribute="width" constant="260" id="Yn3-Ly-2Yy"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" alpha="0.55000001192092896" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hbk-QL-c8X">
+                            <button opaque="NO" alpha="0.55000001192092896" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hbk-QL-c8X">
                                 <rect key="frame" x="170" y="535" width="260" height="45"/>
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1151,7 +1151,7 @@
                                     <action selector="submit:" destination="nbi-tE-dvK" eventType="touchUpInside" id="t8C-MU-ZcB"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="12J-CJ-TA0">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="12J-CJ-TA0">
                                 <rect key="frame" x="170" y="602" width="260" height="60"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="By signing up you agree to our " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u5p-nP-bc7">
@@ -1189,7 +1189,7 @@
                                     <constraint firstAttribute="bottom" secondItem="Zg0-VK-xOa" secondAttribute="bottom" constant="8" id="pgA-ac-gbU"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="neb-me-utk">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="neb-me-utk">
                                 <rect key="frame" x="170" y="308" width="260" height="52"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XM5-6K-HPd">
@@ -1271,7 +1271,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tll-37-NcB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1621" y="-686"/>
+            <point key="canvasLocation" x="2433" y="-686"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="9nu-Tv-a9Z">
@@ -1292,6 +1292,25 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QdF-2f-tAc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="0.0" y="85"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="PN4-7Z-ryz">
+            <objects>
+                <navigationController storyboardIdentifier="SignInNavController" automaticallyAdjustsScrollViewInsets="NO" id="cn8-WA-B0V" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="RPC-sh-Bgd">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="tJt-rS-ObC" kind="relationship" relationship="rootViewController" id="654-9h-ZIS"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="eIi-eK-CZw" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="918" y="-686"/>
         </scene>
     </scenes>
     <resources>
