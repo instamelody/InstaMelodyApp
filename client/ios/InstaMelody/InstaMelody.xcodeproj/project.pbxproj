@@ -24,6 +24,7 @@
 		8707F9F81B4476BD004B4C20 /* AFURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 8707F9ED1B4476BD004B4C20 /* AFURLRequestSerialization.m */; };
 		8707F9F91B4476BD004B4C20 /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 8707F9EF1B4476BD004B4C20 /* AFURLResponseSerialization.m */; };
 		8707F9FA1B4476BD004B4C20 /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8707F9F11B4476BD004B4C20 /* AFURLSessionManager.m */; };
+		87098F601B74E88000C3E7C9 /* CreateChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87098F5F1B74E88000C3E7C9 /* CreateChatViewController.m */; };
 		87175C531B4ADCEA00C042E4 /* ChatsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87175C521B4ADCEA00C042E4 /* ChatsTableViewController.m */; };
 		87175C581B4ADF9E00C042E4 /* DemoMessagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87175C551B4ADF9E00C042E4 /* DemoMessagesViewController.m */; };
 		87175C591B4ADF9E00C042E4 /* DemoModelData.m in Sources */ = {isa = PBXBuildFile; fileRef = 87175C571B4ADF9E00C042E4 /* DemoModelData.m */; };
@@ -133,6 +134,8 @@
 		8707F9EF1B4476BD004B4C20 /* AFURLResponseSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLResponseSerialization.m; sourceTree = "<group>"; };
 		8707F9F01B4476BD004B4C20 /* AFURLSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLSessionManager.h; sourceTree = "<group>"; };
 		8707F9F11B4476BD004B4C20 /* AFURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLSessionManager.m; sourceTree = "<group>"; };
+		87098F5E1B74E88000C3E7C9 /* CreateChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateChatViewController.h; sourceTree = SOURCE_ROOT; };
+		87098F5F1B74E88000C3E7C9 /* CreateChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateChatViewController.m; sourceTree = SOURCE_ROOT; };
 		87175C511B4ADCEA00C042E4 /* ChatsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatsTableViewController.h; sourceTree = "<group>"; };
 		87175C521B4ADCEA00C042E4 /* ChatsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatsTableViewController.m; sourceTree = "<group>"; };
 		87175C541B4ADF9E00C042E4 /* DemoMessagesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoMessagesViewController.h; sourceTree = SOURCE_ROOT; };
@@ -319,6 +322,8 @@
 				87175C511B4ADCEA00C042E4 /* ChatsTableViewController.h */,
 				87175C521B4ADCEA00C042E4 /* ChatsTableViewController.m */,
 				87D472361B74A719008075B8 /* FriendsTableViewController.h */,
+				87098F5E1B74E88000C3E7C9 /* CreateChatViewController.h */,
+				87098F5F1B74E88000C3E7C9 /* CreateChatViewController.m */,
 				87D472371B74A719008075B8 /* FriendsTableViewController.m */,
 				872BB56C1B74BC36004CDBE7 /* ChatViewController.h */,
 				872BB56D1B74BC36004CDBE7 /* ChatViewController.m */,
@@ -776,6 +781,7 @@
 				874C88361B4ADB3B0069A041 /* JSQMessagesBubbleImage.m in Sources */,
 				87175C681B4AE03700C042E4 /* JSQSystemSoundPlayer.m in Sources */,
 				874C88211B4ADB3B0069A041 /* NSBundle+JSQMessages.m in Sources */,
+				87098F601B74E88000C3E7C9 /* CreateChatViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

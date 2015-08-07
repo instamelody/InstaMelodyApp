@@ -224,7 +224,7 @@
     
     NSDictionary *pendingFriend = [self.pendingFriendsList objectAtIndex:sendingButton.tag];
     
-    NSDictionary *parameters = @{@"Token": token, @"User": @{@"id": [pendingFriend objectForKey:@"Id"]}};
+    NSDictionary *parameters = @{@"Token": token, @"User": @{@"EmailAddress": [pendingFriend objectForKey:@"EmailAddress"]}};
 
     NSString *requestUrl = [NSString stringWithFormat:@"%@/User/Friend/Approve", BASE_URL];
     

@@ -36,12 +36,15 @@
     
     self.tableView.backgroundView = tempImageView;
     
-    [self refreshChats];
-    
     //2015-07-07T16:52:02.217
     
     self.dateFormatter = [[NSDateFormatter alloc] init];
     
+}
+
+- (void)viewWillAppear:(BOOL)animated  {
+    [super viewWillAppear:animated];
+    [self refreshChats];
 }
 
 - (void)didReceiveMemoryWarning {
