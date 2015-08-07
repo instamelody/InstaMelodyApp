@@ -129,6 +129,14 @@ namespace InstaMelody.API.Controllers
             var chat = nvc["id"];
             Guid.TryParse(chat, out _chat);
 
+            int _limit;
+            var limit = nvc["limit"];
+            int.TryParse(limit, out _limit);
+
+            int _fromId;
+            var fromId = nvc["fromId"];
+            int.TryParse(fromId, out _fromId);
+
             if (_token.Equals(default(Guid)))
             {
                 InstaMelodyLogger.Log("Received NULL GetChat request", LogLevel.Trace);
@@ -153,7 +161,7 @@ namespace InstaMelody.API.Controllers
                     }
                     else
                     {
-                        result = bll.GetChat(new Chat { Id = _chat }, _token);
+                        result = bll.GetChat(new Chat { Id = _chat }, _token, _limit, _fromId);
                     }
 
                     if (result == null)

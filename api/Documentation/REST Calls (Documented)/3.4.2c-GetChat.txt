@@ -1,0 +1,155 @@
+// EXAMPLE C - Get A Chat by Id and Limit Results to 4 Records
+
+// REQUEST - GET https://api.instamelody.com/v1.0/Message/Chat?token=941740AC-C447-4352-9216-1994D062BBD9&id=6ABC53AB-90E6-4B80-9B05-F8D0A0CBF7AA&limit=4
+
+// RESPONSE - HTTP/1.1 200 OK
+{
+  "Id": "6abc53ab-90e6-4b80-9b05-f8d0a0cbf7aa",
+  "DateCreated": "2015-08-06T23:17:56.49",
+  "DateModified": "2015-08-07T13:31:25.113",
+  "IsDeleted": false,
+  "Messages": [
+    {
+      "Id": 6,
+      "ChatId": "6abc53ab-90e6-4b80-9b05-f8d0a0cbf7aa",
+      "MessageId": "003a1b45-924c-4081-9aaa-b3308c9219e4",
+      "SenderId": "e883026c-2d41-413a-aefa-b81f8a71bed7",
+      "DateCreated": "2015-08-07T13:31:25.11",
+      "IsDeleted": false,
+      "Message": {
+        "Id": "003a1b45-924c-4081-9aaa-b3308c9219e4",
+        "ParentId": null,
+        "Description": "test3",
+        "MediaType": 0,
+        "IsRead": false,
+        "DateRead": null,
+        "DateCreated": "2015-08-07T13:31:25.11",
+        "IsDeleted": false,
+        "Image": null,
+        "UserMelody": null,
+        "Video": null
+      }
+    },
+    {
+      "Id": 5,
+      "ChatId": "6abc53ab-90e6-4b80-9b05-f8d0a0cbf7aa",
+      "MessageId": "a08498af-abe8-4bca-bfb9-dc4f7574a0b3",
+      "SenderId": "e883026c-2d41-413a-aefa-b81f8a71bed7",
+      "DateCreated": "2015-08-07T13:10:33.847",
+      "IsDeleted": false,
+      "Message": {
+        "Id": "a08498af-abe8-4bca-bfb9-dc4f7574a0b3",
+        "ParentId": null,
+        "Description": "test 2",
+        "MediaType": 0,
+        "IsRead": false,
+        "DateRead": null,
+        "DateCreated": "2015-08-07T13:10:33.843",
+        "IsDeleted": false,
+        "Image": null,
+        "UserMelody": null,
+        "Video": null
+      }
+    },
+    {
+      "Id": 4,
+      "ChatId": "6abc53ab-90e6-4b80-9b05-f8d0a0cbf7aa",
+      "MessageId": "0b5aab24-0190-4ab2-bdc1-1d6aaf94c099",
+      "SenderId": "e883026c-2d41-413a-aefa-b81f8a71bed7",
+      "DateCreated": "2015-08-07T13:10:16.527",
+      "IsDeleted": false,
+      "Message": {
+        "Id": "0b5aab24-0190-4ab2-bdc1-1d6aaf94c099",
+        "ParentId": null,
+        "Description": "test",
+        "MediaType": 0,
+        "IsRead": false,
+        "DateRead": null,
+        "DateCreated": "2015-08-07T13:10:16.52",
+        "IsDeleted": false,
+        "Image": null,
+        "UserMelody": null,
+        "Video": null
+      }
+    },
+    {
+      "Id": 3,
+      "ChatId": "6abc53ab-90e6-4b80-9b05-f8d0a0cbf7aa",
+      "MessageId": "0919b916-1514-4420-af58-f34aa837dc19",
+      "SenderId": "e883026c-2d41-413a-aefa-b81f8a71bed7",
+      "DateCreated": "2015-08-06T23:32:06.49",
+      "IsDeleted": false,
+      "Message": {
+        "Id": "0919b916-1514-4420-af58-f34aa837dc19",
+        "ParentId": null,
+        "Description": "what up yo",
+        "MediaType": 0,
+        "IsRead": false,
+        "DateRead": null,
+        "DateCreated": "2015-08-06T23:32:06.487",
+        "IsDeleted": false,
+        "Image": null,
+        "UserMelody": null,
+        "Video": null
+      }
+    }
+  ],
+  "Users": [
+    {
+      "Id": "a3d0c762-4dee-4567-b770-3fa2c92347be",
+      "UserImageId": null,
+      "EmailAddress": "test@testy.com",
+      "DisplayName": "testeraccount",
+      "FirstName": "testy",
+      "LastName": "testerson",
+      "PhoneNumber": "",
+      "IsFemale": false,
+      "HashSalt": "",
+      "Password": "",
+      "TwitterUsername": null,
+      "TwitterUserId": null,
+      "TwitterToken": "",
+      "TwitterSecret": "",
+      "FacebookUserId": null,
+      "FacebookToken": "",
+      "LastLoginSuccess": null,
+      "LastLoginFailure": null,
+      "NumberLoginFailures": 0,
+      "IsLocked": false,
+      "DateCreated": "2015-08-06T22:40:17.193",
+      "DateModified": "2015-08-06T22:40:17.193",
+      "IsDeleted": false,
+      "DeviceToken": "",
+      "Image": null,
+      "Friends": null
+    },
+    {
+      "Id": "e883026c-2d41-413a-aefa-b81f8a71bed7",
+      "UserImageId": null,
+      "EmailAddress": "ahmed@devatelier.com",
+      "DisplayName": "Ahmed1",
+      "FirstName": "Ahmed",
+      "LastName": "Bakir",
+      "PhoneNumber": "",
+      "IsFemale": false,
+      "HashSalt": "",
+      "Password": "",
+      "TwitterUsername": null,
+      "TwitterUserId": null,
+      "TwitterToken": "",
+      "TwitterSecret": "",
+      "FacebookUserId": null,
+      "FacebookToken": "",
+      "LastLoginSuccess": null,
+      "LastLoginFailure": null,
+      "NumberLoginFailures": 0,
+      "IsLocked": false,
+      "DateCreated": "2015-08-06T22:45:26.41",
+      "DateModified": "2015-08-06T22:45:26.41",
+      "IsDeleted": false,
+      "DeviceToken": "",
+      "Image": null,
+      "Friends": null
+    }
+  ]
+}

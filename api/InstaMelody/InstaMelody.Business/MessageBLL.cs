@@ -162,10 +162,12 @@ namespace InstaMelody.Business
         /// </summary>
         /// <param name="chat">The chat.</param>
         /// <param name="sessionToken">The session token.</param>
+        /// <param name="limitRecords">The limit records.</param>
+        /// <param name="fromId">From identifier.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentException">No valid Chat Id provided.</exception>
         /// <exception cref="System.Data.DataException">Could not find the requested Chat, Id {0}.</exception>
-        public Chat GetChat(Chat chat, Guid sessionToken)
+        public Chat GetChat(Chat chat, Guid sessionToken, int? limitRecords = null, int? fromId = null)
         {
             // check token
             Utilities.GetUserBySession(sessionToken);
@@ -176,7 +178,7 @@ namespace InstaMelody.Business
                 throw new ArgumentException("No valid Chat Id provided.");
             }
 
-            return GetChat(chat);
+            return GetChat(chat, limitRecords, fromId);
         }
 
         /// <summary>
@@ -345,7 +347,7 @@ namespace InstaMelody.Business
             var chats = dal.GetChatsByUserId(sessionUser.Id);
             if (chats != null && chats.Any())
             {
-                results = chats.Select(GetChat).ToList();
+                results = chats.Select(chat => GetChat(chat)).ToList();
             }
 
             // return all chats
@@ -397,9 +399,11 @@ namespace InstaMelody.Business
         /// Gets the chat.
         /// </summary>
         /// <param name="chat">The chat.</param>
+        /// <param name="limitRecords">The limit records.</param>
+        /// <param name="fromId">From identifier.</param>
         /// <returns></returns>
         /// <exception cref="System.Data.DataException">Could not find the requested Chat, Id {0}.</exception>
-        private Chat GetChat(Chat chat)
+        private Chat GetChat(Chat chat, int? limitRecords = null, int? fromId = null)
         {
             var dal = new Chats();
 
@@ -424,7 +428,18 @@ namespace InstaMelody.Business
             }
             
             // get chat messages
-            var messages = dal.GetMessagesByChat(foundChat.Id);
+            IList<ChatMessage> messages;
+            if (limitRecords != null && limitRecords > 0)
+            {
+                messages = fromId != null && fromId > 0
+                    ? dal.GetMessagesByChat(foundChat.Id, (int) limitRecords, (int) fromId)
+                    : dal.GetMessagesByChat(foundChat.Id, (int) limitRecords);
+            }
+            else
+            {
+                messages = dal.GetMessagesByChat(foundChat.Id);
+            }
+
             foreach (var message in messages)
             {
                 var messageRecord = GetMessageByChatMessage(message);
