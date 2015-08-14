@@ -19,6 +19,8 @@
 
 @property (strong, nonatomic) JSQMessagesBubbleImage *incomingBubbleImageData;
 
+@property (strong, nonatomic) NSDateFormatter *dateFormatter;
+
 @end
 
 @implementation ChatViewController
@@ -28,6 +30,19 @@
     [super viewDidLoad];
     
     self.title = [self.chatDict objectForKey:@"Id"];
+
+    
+    //2015-08-10T20:23:13.283
+    //yyyy-MM-dd
+    
+    self.dateFormatter = [[NSDateFormatter alloc] init];
+    
+    NSLocale *enUSPOSIXLocale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
+    
+    [self.dateFormatter setLocale:enUSPOSIXLocale];
+    
+    [self.dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
+    [self.dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
     
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -406,11 +421,19 @@
     for (NSDictionary *messageDict in messageArray) {
         NSDictionary *messageContent = [messageDict objectForKey:@"Message"];
         
-        JSQMessage *message = [[JSQMessage alloc] initWithSenderId:[messageDict objectForKey:@"SenderId"]
-                                                                      senderDisplayName:[messageDict objectForKey:@"SenderId"]
-                                                                                   date:[NSDate distantPast]
-                                                              text:[messageContent objectForKey:@"Description"]];
-        [self.messages addObject:message];
+        
+        NSString *dateString = [messageDict objectForKey:@"DateCreated"];
+        dateString = [dateString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        NSDate *date = [self.dateFormatter dateFromString:dateString];
+        
+        if (date != nil) {
+            JSQMessage *message = [[JSQMessage alloc] initWithSenderId:[messageDict objectForKey:@"SenderId"]
+                                                     senderDisplayName:[messageDict objectForKey:@"SenderId"]
+                                                                  date:date
+                                                                  text:[messageContent objectForKey:@"Description"]];
+            
+            [self.messages addObject:message];
+        }
     }
     [self.collectionView reloadData];
 }

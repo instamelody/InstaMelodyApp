@@ -175,7 +175,6 @@
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     
-    
     NSDictionary *parameters = @{@"token": token};
     
     [manager GET:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -196,32 +195,6 @@
 
 #pragma mark - button actions
 
-
-- (IBAction)submit:(id)sender {
-    
-    NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
-    
-    NSDictionary *messageDict = @{@"Description": @"Hello"};
-    NSDictionary *userDict = @{@"EmailAddress": @"ahmed@devatelier.com"};
-    NSDictionary *parameters = @{@"Token": token, @"Message": messageDict, @"User": userDict};
-    
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    
-    [manager POST:@"http://104.130.230.164/api/v0.1/Message/Chat" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"JSON: %@", responseObject);
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"You have created a chat" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alertView show];
-
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:error.description delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alertView show];
-    }];
-    
-
-    
-}
 
 -(IBAction)done:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
