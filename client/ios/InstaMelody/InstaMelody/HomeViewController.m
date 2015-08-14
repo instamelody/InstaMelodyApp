@@ -20,10 +20,18 @@
     self.profileView.layer.cornerRadius = self.profileView.frame.size.height / 2;
     self.profileView.layer.masksToBounds = YES;
     
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"] ==  nil) {
-        UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        UINavigationController *nc = [sb instantiateViewControllerWithIdentifier:@"SignInNavController"];
-        [self presentViewController:nc animated:NO completion:nil];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *authToken = [defaults objectForKey:@"authToken"];
+    NSString *deviceToken = [defaults objectForKey:@"deviceToken"];
+    
+    if ( authToken ==  nil || [authToken isEqualToString:@""]) {
+        
+        [self signIn:nil];
+
+    } else {
+        //validate token
+        
+        
     }
     
     //to make nav bar clear
@@ -62,6 +70,24 @@
 
 -(IBAction)showSettings:(id)sender {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+}
+
+-(IBAction)signOut:(id)sender {
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if ([defaults objectForKey:@"authToken"]== nil || [[defaults objectForKey:@"authToken"] isEqualToString:@""]) {
+        [self signIn:nil];
+    } else {
+        
+        [defaults setObject:@"" forKey:@"authToken"];
+        [defaults synchronize];
+    }
+}
+
+-(IBAction)signIn:(id)sender {
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UINavigationController *nc = [sb instantiateViewControllerWithIdentifier:@"SignInNavController"];
+    [self presentViewController:nc animated:NO completion:nil];
 }
 
 -(void)createMenu {

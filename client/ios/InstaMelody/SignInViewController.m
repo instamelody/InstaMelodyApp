@@ -152,4 +152,17 @@
     return YES;
 }
 
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    
+    NSInteger parentTag = textField.tag + 10;
+    UIView *parentView = [self.scrollView viewWithTag:parentTag];
+    
+    CGPoint scrollPoint = CGPointMake(0, parentView.frame.origin.y - 20);
+    [self.scrollView setContentOffset:scrollPoint animated:YES];
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    [self.scrollView setContentOffset:CGPointZero animated:YES];
+}
+
 @end

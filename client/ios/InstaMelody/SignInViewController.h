@@ -16,6 +16,7 @@
 @property (nonatomic, strong) IBOutlet UITextField *userField;
 @property (nonatomic, strong) IBOutlet UITextField *passField;
 
+@property (nonatomic, strong) IBOutlet UIScrollView *scrollView;
 
 -(IBAction)signIn:(id)sender;
 -(IBAction)cancel:(id)sender;

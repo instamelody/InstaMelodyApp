@@ -18,6 +18,8 @@
 @property IBOutlet UITextField * lastNameField;
 @property IBOutlet UITextField * emailAddressField;
 
+@property IBOutlet UIScrollView *scrollView;
+
 -(IBAction)submit:(id)sender;
 
 @end
