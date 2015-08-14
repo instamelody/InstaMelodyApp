@@ -12,10 +12,12 @@
 @implementation UIFont (FontAwesome)
 
 #pragma mark - Public API
++ (UIFont *)iconicFontOfSize:(CGFloat)size {
+    return [UIFont fontAwesomeFontOfSize:size];
+}
+
 + (UIFont*)fontAwesomeFontOfSize:(CGFloat)size {
-	UIFont *font = [UIFont fontWithName:kFontAwesomeFamilyName size:size];
-    NSAssert(font!=nil, @"%@ couldn't be loaded",kFontAwesomeFamilyName);
-    return font;
+    return [UIFont fontWithName:kFontAwesomeFamilyName size:size];
 }
 
 @end

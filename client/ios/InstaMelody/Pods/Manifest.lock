@@ -1,0 +1,10 @@
+PODS:
+  - FontAwesome+iOS (0.1.4)
+
+DEPENDENCIES:
+  - FontAwesome+iOS
+
+SPEC CHECKSUMS:
+  FontAwesome+iOS: 9070b682a9255ca0fdc34bcfb129ad0ba2b73b87
+
+COCOAPODS: 0.38.2

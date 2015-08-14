@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A10B9D513BF2A431F2FEB6C /* Pods_InstaMelody.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C4BFAFF7F0F445B4DF19637 /* Pods_InstaMelody.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		8707F9B51B446F57004B4C20 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8707F9B41B446F57004B4C20 /* main.m */; };
 		8707F9B81B446F57004B4C20 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8707F9B71B446F57004B4C20 /* AppDelegate.m */; };
 		8707F9BB1B446F57004B4C20 /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8707F9BA1B446F57004B4C20 /* FirstViewController.m */; };
@@ -30,15 +31,10 @@
 		87175C591B4ADF9E00C042E4 /* DemoModelData.m in Sources */ = {isa = PBXBuildFile; fileRef = 87175C571B4ADF9E00C042E4 /* DemoModelData.m */; };
 		87175C681B4AE03700C042E4 /* JSQSystemSoundPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 87175C671B4AE03700C042E4 /* JSQSystemSoundPlayer.m */; };
 		87175C6B1B4AE08E00C042E4 /* NSUserDefaults+DemoSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 87175C6A1B4AE08E00C042E4 /* NSUserDefaults+DemoSettings.m */; };
+		872113441B7E942000F787F1 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 872113431B7E942000F787F1 /* FontAwesome.ttf */; };
 		872BB5681B74AD26004CDBE7 /* FriendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BB5671B74AD26004CDBE7 /* FriendCell.m */; };
 		872BB56B1B74B56C004CDBE7 /* ChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BB56A1B74B56C004CDBE7 /* ChatCell.m */; };
 		872BB56E1B74BC36004CDBE7 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BB56D1B74BC36004CDBE7 /* ChatViewController.m */; };
-		872BB5951B74C438004CDBE7 /* FAImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BB58B1B74C438004CDBE7 /* FAImageView.m */; };
-		872BB5961B74C438004CDBE7 /* NSString+FontAwesome.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BB58D1B74C438004CDBE7 /* NSString+FontAwesome.m */; };
-		872BB5971B74C438004CDBE7 /* fontawesome-github.png in Resources */ = {isa = PBXBuildFile; fileRef = 872BB58F1B74C438004CDBE7 /* fontawesome-github.png */; };
-		872BB5981B74C438004CDBE7 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 872BB5901B74C438004CDBE7 /* FontAwesome.ttf */; };
-		872BB5991B74C438004CDBE7 /* UIFont+FontAwesome.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BB5921B74C438004CDBE7 /* UIFont+FontAwesome.m */; };
-		872BB59A1B74C438004CDBE7 /* UIImage+FontAwesome.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BB5941B74C438004CDBE7 /* UIImage+FontAwesome.m */; };
 		872BB5A01B74CAD1004CDBE7 /* AwesomeMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BB59D1B74CAD1004CDBE7 /* AwesomeMenu.m */; };
 		872BB5A11B74CAD1004CDBE7 /* AwesomeMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BB59F1B74CAD1004CDBE7 /* AwesomeMenuItem.m */; };
 		874C881F1B4ADB3B0069A041 /* JSQMessagesAssets.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 874C87C31B4ADB3B0069A041 /* JSQMessagesAssets.bundle */; };
@@ -100,6 +96,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6C4BFAFF7F0F445B4DF19637 /* Pods_InstaMelody.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InstaMelody.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7E4C9DC22F5EAEA430AB4E1D /* Pods-InstaMelody.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InstaMelody.debug.xcconfig"; path = "Pods/Target Support Files/Pods-InstaMelody/Pods-InstaMelody.debug.xcconfig"; sourceTree = "<group>"; };
+		85A8BE665FB43D9DB14E6A1E /* Pods-InstaMelody.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InstaMelody.release.xcconfig"; path = "Pods/Target Support Files/Pods-InstaMelody/Pods-InstaMelody.release.xcconfig"; sourceTree = "<group>"; };
 		8707F9AF1B446F57004B4C20 /* InstaMelody.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InstaMelody.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8707F9B31B446F57004B4C20 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8707F9B41B446F57004B4C20 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -146,22 +145,13 @@
 		87175C671B4AE03700C042E4 /* JSQSystemSoundPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQSystemSoundPlayer.m; sourceTree = "<group>"; };
 		87175C691B4AE08E00C042E4 /* NSUserDefaults+DemoSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSUserDefaults+DemoSettings.h"; sourceTree = SOURCE_ROOT; };
 		87175C6A1B4AE08E00C042E4 /* NSUserDefaults+DemoSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSUserDefaults+DemoSettings.m"; sourceTree = SOURCE_ROOT; };
+		872113431B7E942000F787F1 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.ttf; path = "Pods/FontAwesome+iOS/Resources/FontAwesome.ttf"; sourceTree = "<group>"; };
 		872BB5661B74AD26004CDBE7 /* FriendCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendCell.h; sourceTree = "<group>"; };
 		872BB5671B74AD26004CDBE7 /* FriendCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendCell.m; sourceTree = "<group>"; };
 		872BB5691B74B56C004CDBE7 /* ChatCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatCell.h; sourceTree = "<group>"; };
 		872BB56A1B74B56C004CDBE7 /* ChatCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatCell.m; sourceTree = "<group>"; };
 		872BB56C1B74BC36004CDBE7 /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
 		872BB56D1B74BC36004CDBE7 /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
-		872BB58A1B74C438004CDBE7 /* FAImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FAImageView.h; sourceTree = "<group>"; };
-		872BB58B1B74C438004CDBE7 /* FAImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FAImageView.m; sourceTree = "<group>"; };
-		872BB58C1B74C438004CDBE7 /* NSString+FontAwesome.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+FontAwesome.h"; sourceTree = "<group>"; };
-		872BB58D1B74C438004CDBE7 /* NSString+FontAwesome.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+FontAwesome.m"; sourceTree = "<group>"; };
-		872BB58F1B74C438004CDBE7 /* fontawesome-github.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fontawesome-github.png"; sourceTree = "<group>"; };
-		872BB5901B74C438004CDBE7 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome.ttf; sourceTree = "<group>"; };
-		872BB5911B74C438004CDBE7 /* UIFont+FontAwesome.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+FontAwesome.h"; sourceTree = "<group>"; };
-		872BB5921B74C438004CDBE7 /* UIFont+FontAwesome.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+FontAwesome.m"; sourceTree = "<group>"; };
-		872BB5931B74C438004CDBE7 /* UIImage+FontAwesome.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+FontAwesome.h"; sourceTree = "<group>"; };
-		872BB5941B74C438004CDBE7 /* UIImage+FontAwesome.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+FontAwesome.m"; sourceTree = "<group>"; };
 		872BB59C1B74CAD1004CDBE7 /* AwesomeMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AwesomeMenu.h; sourceTree = "<group>"; };
 		872BB59D1B74CAD1004CDBE7 /* AwesomeMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AwesomeMenu.m; sourceTree = "<group>"; };
 		872BB59E1B74CAD1004CDBE7 /* AwesomeMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AwesomeMenuItem.h; sourceTree = "<group>"; };
@@ -266,6 +256,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A10B9D513BF2A431F2FEB6C /* Pods_InstaMelody.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,9 +273,12 @@
 		8707F9A61B446F57004B4C20 = {
 			isa = PBXGroup;
 			children = (
+				872113431B7E942000F787F1 /* FontAwesome.ttf */,
 				8707F9B11B446F57004B4C20 /* InstaMelody */,
 				8707F9CE1B446F57004B4C20 /* InstaMelodyTests */,
 				8707F9B01B446F57004B4C20 /* Products */,
+				EA93DE5A339495D0F34F13A9 /* Pods */,
+				BBCBAEC0539C77E9A4D53598 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -301,7 +295,6 @@
 			isa = PBXGroup;
 			children = (
 				872BB59B1B74CAD1004CDBE7 /* AwesomeMenu */,
-				872BB5891B74C438004CDBE7 /* FontAwesome */,
 				87175C641B4AE03700C042E4 /* JSQSystemSoundPlayer */,
 				874C87C11B4ADB3B0069A041 /* JSQMessagesViewController */,
 				8707F9DE1B4476BC004B4C20 /* AFNetworking */,
@@ -407,31 +400,6 @@
 				87175C671B4AE03700C042E4 /* JSQSystemSoundPlayer.m */,
 			);
 			path = Classes;
-			sourceTree = "<group>";
-		};
-		872BB5891B74C438004CDBE7 /* FontAwesome */ = {
-			isa = PBXGroup;
-			children = (
-				872BB58A1B74C438004CDBE7 /* FAImageView.h */,
-				872BB58B1B74C438004CDBE7 /* FAImageView.m */,
-				872BB58C1B74C438004CDBE7 /* NSString+FontAwesome.h */,
-				872BB58D1B74C438004CDBE7 /* NSString+FontAwesome.m */,
-				872BB58E1B74C438004CDBE7 /* Resources */,
-				872BB5911B74C438004CDBE7 /* UIFont+FontAwesome.h */,
-				872BB5921B74C438004CDBE7 /* UIFont+FontAwesome.m */,
-				872BB5931B74C438004CDBE7 /* UIImage+FontAwesome.h */,
-				872BB5941B74C438004CDBE7 /* UIImage+FontAwesome.m */,
-			);
-			path = FontAwesome;
-			sourceTree = "<group>";
-		};
-		872BB58E1B74C438004CDBE7 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				872BB58F1B74C438004CDBE7 /* fontawesome-github.png */,
-				872BB5901B74C438004CDBE7 /* FontAwesome.ttf */,
-			);
-			path = Resources;
 			sourceTree = "<group>";
 		};
 		872BB59B1B74CAD1004CDBE7 /* AwesomeMenu */ = {
@@ -605,6 +573,23 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		BBCBAEC0539C77E9A4D53598 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6C4BFAFF7F0F445B4DF19637 /* Pods_InstaMelody.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		EA93DE5A339495D0F34F13A9 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				7E4C9DC22F5EAEA430AB4E1D /* Pods-InstaMelody.debug.xcconfig */,
+				85A8BE665FB43D9DB14E6A1E /* Pods-InstaMelody.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -612,9 +597,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8707F9D51B446F57004B4C20 /* Build configuration list for PBXNativeTarget "InstaMelody" */;
 			buildPhases = (
+				682DB5FEE556F739CCB73B2D /* Check Pods Manifest.lock */,
 				8707F9AB1B446F57004B4C20 /* Sources */,
 				8707F9AC1B446F57004B4C20 /* Frameworks */,
 				8707F9AD1B446F57004B4C20 /* Resources */,
+				206560889E9A4B2242FE364C /* Embed Pods Frameworks */,
+				5C0189A8A889736A07B044E8 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -686,6 +674,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				872113441B7E942000F787F1 /* FontAwesome.ttf in Resources */,
 				8707F9C11B446F57004B4C20 /* Main.storyboard in Resources */,
 				874C88491B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.xib in Resources */,
 				874C881F1B4ADB3B0069A041 /* JSQMessagesAssets.bundle in Resources */,
@@ -696,8 +685,6 @@
 				874C88291B4ADB3B0069A041 /* JSQMessagesViewController.xib in Resources */,
 				874C883D1B4ADB3B0069A041 /* JSQMessagesCollectionViewCellIncoming.xib in Resources */,
 				874C88471B4ADB3B0069A041 /* JSQMessagesToolbarContentView.xib in Resources */,
-				872BB5971B74C438004CDBE7 /* fontawesome-github.png in Resources */,
-				872BB5981B74C438004CDBE7 /* FontAwesome.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -710,6 +697,54 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		206560889E9A4B2242FE364C /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-InstaMelody/Pods-InstaMelody-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5C0189A8A889736A07B044E8 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-InstaMelody/Pods-InstaMelody-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		682DB5FEE556F739CCB73B2D /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		8707F9AB1B446F57004B4C20 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -721,7 +756,6 @@
 				872BB5A01B74CAD1004CDBE7 /* AwesomeMenu.m in Sources */,
 				872BB56E1B74BC36004CDBE7 /* ChatViewController.m in Sources */,
 				8707F9F21B4476BD004B4C20 /* AFHTTPRequestOperation.m in Sources */,
-				872BB59A1B74C438004CDBE7 /* UIImage+FontAwesome.m in Sources */,
 				87D472381B74A719008075B8 /* FriendsTableViewController.m in Sources */,
 				874C883C1B4ADB3B0069A041 /* JSQMessagesCollectionViewCellIncoming.m in Sources */,
 				874C88311B4ADB3B0069A041 /* JSQMessagesCollectionViewLayoutAttributes.m in Sources */,
@@ -729,7 +763,6 @@
 				8707F9FA1B4476BD004B4C20 /* AFURLSessionManager.m in Sources */,
 				874C88431B4ADB3B0069A041 /* JSQMessagesLoadEarlierHeaderView.m in Sources */,
 				874C882D1B4ADB3B0069A041 /* JSQMessagesTimestampFormatter.m in Sources */,
-				872BB5951B74C438004CDBE7 /* FAImageView.m in Sources */,
 				874C88331B4ADB3B0069A041 /* JSQMediaItem.m in Sources */,
 				8707F9F81B4476BD004B4C20 /* AFURLRequestSerialization.m in Sources */,
 				874C883A1B4ADB3B0069A041 /* JSQMessagesCollectionView.m in Sources */,
@@ -746,7 +779,6 @@
 				8707F9F31B4476BD004B4C20 /* AFHTTPRequestOperationManager.m in Sources */,
 				874C88251B4ADB3B0069A041 /* UIImage+JSQMessages.m in Sources */,
 				87175C581B4ADF9E00C042E4 /* DemoMessagesViewController.m in Sources */,
-				872BB5961B74C438004CDBE7 /* NSString+FontAwesome.m in Sources */,
 				874C882C1B4ADB3B0069A041 /* JSQMessagesMediaViewBubbleImageMasker.m in Sources */,
 				874C88451B4ADB3B0069A041 /* JSQMessagesMediaPlaceholderView.m in Sources */,
 				87175C531B4ADCEA00C042E4 /* ChatsTableViewController.m in Sources */,
@@ -771,7 +803,6 @@
 				874C88241B4ADB3B0069A041 /* UIDevice+JSQMessages.m in Sources */,
 				874C88421B4ADB3B0069A041 /* JSQMessagesLabel.m in Sources */,
 				8707F9F41B4476BD004B4C20 /* AFHTTPSessionManager.m in Sources */,
-				872BB5991B74C438004CDBE7 /* UIFont+FontAwesome.m in Sources */,
 				87D472351B749891008075B8 /* HomeViewController.m in Sources */,
 				874C882A1B4ADB3B0069A041 /* JSQMessagesAvatarImageFactory.m in Sources */,
 				87175C591B4ADF9E00C042E4 /* DemoModelData.m in Sources */,
@@ -907,6 +938,7 @@
 		};
 		8707F9D61B446F57004B4C20 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7E4C9DC22F5EAEA430AB4E1D /* Pods-InstaMelody.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -920,6 +952,7 @@
 		};
 		8707F9D71B446F57004B4C20 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 85A8BE665FB43D9DB14E6A1E /* Pods-InstaMelody.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";

@@ -1,0 +1,6 @@
+framework module Pods_InstaMelody {
+  umbrella header "Pods-InstaMelody-umbrella.h"
+
+  export *
+  module * { export * }
+}
