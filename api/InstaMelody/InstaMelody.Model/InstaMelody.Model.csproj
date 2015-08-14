@@ -62,6 +62,7 @@
     <Compile Include="Enums\MediaTypeEnum.cs" />
     <Compile Include="FileGroup.cs" />
     <Compile Include="FileUploadToken.cs" />
+    <Compile Include="Friend.cs" />
     <Compile Include="Image.cs" />
     <Compile Include="Melody.cs" />
     <Compile Include="MelodyCategory.cs" />

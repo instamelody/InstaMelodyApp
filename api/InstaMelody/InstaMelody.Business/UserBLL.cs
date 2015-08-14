@@ -549,7 +549,7 @@ namespace InstaMelody.Business
                 InstaMelodyLogger.Log(
                     string.Format("User not authorized to approve friend request. User Id: {0}, Friend Id: {1}", 
                         sessionUser.Id, requestingFriend.Id), LogLevel.Error);
-                throw new DataException(string.Format("User: {0} not authorized to execute request.", sessionUser.Id));
+                throw new UnauthorizedAccessException(string.Format("User: {0} not authorized to execute request.", sessionUser.Id));
             }
 
             requestingFriend = requestingFriend.StripSensitiveInfoForFriends();
@@ -611,7 +611,7 @@ namespace InstaMelody.Business
                 InstaMelodyLogger.Log(
                     string.Format("User not authorized to deny friend request. User Id: {0}, Friend Id: {1}",
                         sessionUser.Id, requestingFriend.Id), LogLevel.Error);
-                throw new DataException(string.Format("User: {0} not authorized to execute request.", sessionUser.Id));
+                throw new UnauthorizedAccessException(string.Format("User: {0} not authorized to execute request.", sessionUser.Id));
             }
 
             return requestingFriend.DisplayName;
@@ -709,7 +709,7 @@ namespace InstaMelody.Business
         /// <returns></returns>
         /// <exception cref="System.UnauthorizedAccessException">Could not validate session.</exception>
         /// <exception cref="System.Data.DataException"></exception>
-        public IList<User> GetPendingFriendsByUser(Guid sessionToken)
+        public IList<Friend> GetPendingFriendsByUser(Guid sessionToken)
         {
             User sessionUser;
             try
@@ -735,7 +735,7 @@ namespace InstaMelody.Business
                 friend.StripSensitiveInfoForFriends();
             }
 
-            return GetUsersWithImages(friends);
+            return GetFriendsWithImages(friends);
         }
 
         #endregion Public Methods
@@ -834,6 +834,28 @@ namespace InstaMelody.Business
         }
 
         /// <summary>
+        /// Gets the friend with image.
+        /// </summary>
+        /// <param name="friend">The friend.</param>
+        /// <returns></returns>
+        private Friend GetFriendWithImage(Friend friend)
+        {
+            if (friend.UserImageId != null && !friend.UserImageId.Equals(default(int)))
+            {
+                var imageBll = new FileBll();
+                var image = imageBll.GetImage(new Image
+                {
+                    Id = (int)friend.UserImageId
+                });
+                if (image != null)
+                {
+                    friend.Image = image;
+                }
+            }
+            return friend;
+        }
+
+        /// <summary>
         /// Gets the users with images.
         /// </summary>
         /// <param name="users">The users.</param>
@@ -845,6 +867,23 @@ namespace InstaMelody.Business
             if (users != null && users.Any())
             {
                 results = users.Select(GetUserWithImage).ToList();
+            }
+
+            return results;
+        }
+
+        /// <summary>
+        /// Gets the friends with images.
+        /// </summary>
+        /// <param name="friends">The friends.</param>
+        /// <returns></returns>
+        private IList<Friend> GetFriendsWithImages(IList<Friend> friends)
+        {
+            List<Friend> results = null;
+
+            if (friends != null && friends.Any())
+            {
+                results = friends.Select(GetFriendWithImage).ToList();
             }
 
             return results;

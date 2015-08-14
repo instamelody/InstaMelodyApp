@@ -239,9 +239,10 @@ namespace InstaMelody.Data
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <returns></returns>
-        public IList<User> GetPendingFriends(Guid userId)
+        public IList<Friend> GetPendingFriends(Guid userId)
         {
-            var query = @"SELECT * FROM dbo.Users u JOIN dbo.UserFriends f
+            var query = @"SELECT CAST(case when f.RequestorId = @UserId then 1 else 0 end as bit) IsRequestor, u.* 
+                        FROM dbo.Users u JOIN dbo.UserFriends f
                         ON (u.Id = f.UserId OR u.Id = f.RequestorId)
                         WHERE u.IsDeleted = 0 AND (f.UserId = @UserId OR f.RequestorId = @UserId)
                         AND u.Id != @UserId AND f.IsPending = 1 AND f.IsDenied = 0 AND f.IsDeleted = 0";
@@ -257,7 +258,7 @@ namespace InstaMelody.Data
                 }
             };
 
-            return GetRecordSet<User>(query, parameters.ToArray());
+            return GetRecordSet<Friend>(query, parameters.ToArray());
         }
 
         /// <summary>

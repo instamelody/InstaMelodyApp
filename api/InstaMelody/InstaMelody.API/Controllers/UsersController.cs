@@ -329,17 +329,21 @@ namespace InstaMelody.API.Controllers
                 try
                 {
                     InstaMelodyLogger.Log(
-                        string.Format("Update User Profile Image - User: {0}", request.User.Id),
+                        string.Format("Update User Profile Image - Token: {0}", request.Token),
                         LogLevel.Trace);
 
-                    if (request.Token.Equals(default(Guid)) || request.User == null)
+                    var image = (request.User != null && request.User.Image != null)
+                        ? request.User.Image
+                        : request.Image;
+
+                    if (request.Token.Equals(default(Guid)) || image == null)
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, Exceptions.FailedUpdateUser);
                         return response;
                     }
 
                     var bll = new UserBll();
-                    var result = bll.UpdateUserImage(request.User.Image ?? request.Image, request.Token);
+                    var result = bll.UpdateUserImage(image, request.Token);
 
                     if (result == null)
                     {
