@@ -7,6 +7,8 @@
 //
 
 #import "HomeViewController.h"
+#import "constants.h"
+#import "AFHTTPRequestOperationManager.h"
 
 @interface HomeViewController ()
 
@@ -194,15 +196,16 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     
     //step 1 - get file token
     
+
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *token =  [defaults objectForKey:@"authToken"];
     
-    //step 2 - upload file
-    /*
-    NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
-    
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"User": @{@"DisplayName" : self.nameField.text}, @"Message": @{@"Description" : self.messageField.text}}];
+    NSString *imageName = [NSString stringWithFormat:@"%@_%@_profile.png", [defaults objectForKey:@"FirstName"], [defaults objectForKey:@"LastName"]];
+                         
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Image": @{@"FileName" : imageName}}];
     
     
-    NSString *requestUrl = [NSString stringWithFormat:@"%@/Message/Chat", BASE_URL];
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/User/Update/Image", BASE_URL];
     
     //add 64 char string
     
@@ -211,17 +214,53 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         NSLog(@"JSON: %@", responseObject);
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"You have created a chat" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alertView show];
+
+        //
+        //step 2 - upload file
         
-        [self dismissViewControllerAnimated:YES completion:nil];
+        NSDictionary *responseDict = (NSDictionary *)responseObject;
+        NSDictionary *tokenDict = [responseDict objectForKey:@"FileUploadToken"];
+        NSString *fileTokenString = [tokenDict objectForKey:@"Token"];
+        
+        NSData *imageData = UIImagePNGRepresentation(image);
+        
+        [self uploadData:imageData withFileToken:fileTokenString];
+         
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:error.description delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alertView show];
     }];
-    */
+    
+    
+}
+
+-(void)uploadData:(NSData *)data withFileToken:(NSString *)fileToken {
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *sessionToken =  [defaults objectForKey:@"authToken"];
+    
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/Upload/%@/%@", BASE_URL, sessionToken, fileToken];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    [manager POST:requestUrl parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        [formData appendPartWithFormData:data name:@"file"];
+    } success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"Success: %@", responseObject);
+        
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"You have updated your profile photo" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:error.description delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+    }];
+    
 }
 
 @end
