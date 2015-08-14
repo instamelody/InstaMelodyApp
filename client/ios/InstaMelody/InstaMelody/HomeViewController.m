@@ -14,6 +14,17 @@
 
 @implementation HomeViewController
 
++ (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
+    //UIGraphicsBeginImageContext(newSize);
+    // In next line, pass 0.0 to use the current device's pixel scaling factor (and thus account for Retina resolution).
+    // Pass 1.0 to force exact pixel size.
+    UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
+    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -97,6 +108,11 @@
     UIImage *chatImage = [UIImage imageNamed:@"chat"];
     UIImage *loopImage = [UIImage imageNamed:@"loop"];
     
+    micImage = [HomeViewController imageWithImage:micImage scaledToSize:CGSizeMake(75, 75)];
+    soloImage = [HomeViewController imageWithImage:soloImage scaledToSize:CGSizeMake(50, 50)];
+    chatImage = [HomeViewController imageWithImage:chatImage scaledToSize:CGSizeMake(50, 50)];
+    loopImage = [HomeViewController imageWithImage:loopImage scaledToSize:CGSizeMake(50, 50)];
+    
     // Default Menu
     
     AwesomeMenuItem *starMenuItem1 = [[AwesomeMenuItem alloc] initWithImage:soloImage
@@ -121,7 +137,7 @@
     
     AwesomeMenu *menu = [[AwesomeMenu alloc] initWithFrame:self.view.bounds startItem:startItem menuItems:menuItems];
     menu.delegate = self;
-    menu.startPoint = CGPointMake(self.view.frame.size.width - 80, self.view.frame.size.height - 80);
+    menu.startPoint = CGPointMake(self.view.frame.size.width - 60, self.view.frame.size.height - 60);
     menu.menuWholeAngle = -1 * M_PI / 2;
     
     [self.view addSubview:menu];
