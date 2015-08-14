@@ -180,6 +180,8 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
          NSLog(@"Image selected!");
      }];
     
+    [self prepareImage:selectedImage];
+    
     [self updateProfilePicture:selectedImage];
 }
 
@@ -190,6 +192,39 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     }];
 }
 
+
+-(void)prepareImage:(UIImage *)image {
+
+    UIImage *resizedImage = nil;
+    CGSize originalImageSize = image.size;
+    CGSize targetImageSize = CGSizeMake(150.0f, 150.0f);
+    float scaleFactor, tempImageHeight, tempImageWidth;
+    CGRect croppingRect;
+    BOOL favorsX = NO;
+    if (originalImageSize.width > originalImageSize.height) {
+        scaleFactor = targetImageSize.height / originalImageSize.height;
+        favorsX = YES;
+    } else {
+        scaleFactor = targetImageSize.width / originalImageSize.width;
+        favorsX = NO;
+    }
+    
+    tempImageHeight = originalImageSize.height * scaleFactor;
+    tempImageWidth = originalImageSize.width * scaleFactor;
+    if (favorsX) {
+        float delta = (tempImageWidth - targetImageSize.width) / 2;
+        croppingRect = CGRectMake(-1.0f * delta, 0, tempImageWidth, tempImageHeight);
+    } else {
+        float delta = (tempImageHeight - targetImageSize.height) / 2;
+        croppingRect = CGRectMake(0, -1.0f * delta, tempImageWidth, tempImageHeight);
+    }
+    UIGraphicsBeginImageContext(targetImageSize);
+    [image drawInRect:croppingRect];
+    resizedImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    [self updateProfilePicture:resizedImage];
+}
 
 #pragma mark - network operations
 -(void)updateProfilePicture:(UIImage *)image{
