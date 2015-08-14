@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "AwesomeMenu.h"
 
-@interface HomeViewController : UIViewController <AwesomeMenuDelegate>
+@interface HomeViewController : UIViewController <AwesomeMenuDelegate, UIImagePickerControllerDelegate>
 
 @property (nonatomic, strong) IBOutlet UIView *profileView;
 @property (nonatomic, strong) IBOutlet UIImageView *profileImageView;

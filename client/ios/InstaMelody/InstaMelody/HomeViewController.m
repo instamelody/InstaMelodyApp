@@ -33,7 +33,7 @@
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *authToken = [defaults objectForKey:@"authToken"];
-    NSString *deviceToken = [defaults objectForKey:@"deviceToken"];
+    //NSString *deviceToken = [defaults objectForKey:@"deviceToken"];
     
     if ( authToken ==  nil || [authToken isEqualToString:@""]) {
         
@@ -101,6 +101,17 @@
     [self presentViewController:nc animated:NO completion:nil];
 }
 
+-(IBAction)changeProfilePic:(id)sender {
+    
+    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+    imagePicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+    imagePicker.delegate = self;
+    
+    [self presentViewController:imagePicker animated:YES completion:^{
+        NSLog(@"Image picker presented!");
+    }];
+}
+
 -(void)createMenu {
     UIImage *micImage = [UIImage imageNamed:@"mic"];
     
@@ -155,6 +166,23 @@
     NSLog(@"Menu is open!");
 }
 
+#pragma mark - image picker delegate
 
+
+-(void)imagePickerController:(UIImagePickerController *)picker
+didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *selectedImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+    [self.profileImageView setImage:selectedImage];
+    [picker dismissViewControllerAnimated:YES completion:^{
+         NSLog(@"Image selected!");
+     }];
+}
+
+-(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:^{
+        NSLog(@"Picker cancelled without doing anything");
+    }]; }
 
 @end

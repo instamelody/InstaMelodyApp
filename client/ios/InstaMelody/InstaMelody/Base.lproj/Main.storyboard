@@ -480,6 +480,14 @@
                                 <color key="textColor" red="0.74607371794871802" green="0.74607371794871802" blue="0.74607371794871802" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AcU-EH-pZ9">
+                                <rect key="frame" x="0.0" y="180" width="600" height="3"/>
+                                <animations/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="3" id="4EJ-CE-b59"/>
+                                </constraints>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BHt-nu-b7N">
                                 <rect key="frame" x="30" y="104" width="110" height="110"/>
                                 <subviews>
@@ -499,6 +507,9 @@
                                             <color key="titleColor" red="0.70738781028252251" green="0.74944583856164326" blue="0.96003605769230771" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="changeProfilePic:" destination="xSn-CF-ntb" eventType="touchUpInside" id="l05-mE-aNk"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <animations/>
@@ -513,14 +524,6 @@
                                     <constraint firstAttribute="bottom" secondItem="33E-sB-90N" secondAttribute="bottom" id="ff2-7c-i3D"/>
                                     <constraint firstAttribute="trailing" secondItem="01h-hF-xsz" secondAttribute="trailing" id="l6Y-4W-ZQU"/>
                                     <constraint firstAttribute="height" constant="110" id="qXD-3q-UmI"/>
-                                </constraints>
-                            </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AcU-EH-pZ9">
-                                <rect key="frame" x="0.0" y="180" width="600" height="3"/>
-                                <animations/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="3" id="4EJ-CE-b59"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r6v-GZ-td4">
@@ -731,6 +734,7 @@
                     <navigationItem key="navigationItem" title="instaMelody" id="anY-73-bnU"/>
                     <connections>
                         <outlet property="nameLabel" destination="soX-59-dIa" id="QCl-zc-nXW"/>
+                        <outlet property="profileImageView" destination="01h-hF-xsz" id="Vc6-2Z-R62"/>
                         <outlet property="profileView" destination="BHt-nu-b7N" id="KKe-og-ZVe"/>
                     </connections>
                 </viewController>
