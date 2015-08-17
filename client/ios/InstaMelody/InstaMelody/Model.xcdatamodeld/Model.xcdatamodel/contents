@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="1" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7701" systemVersion="15A226f" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="1" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7701" systemVersion="14F27" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Friend" representedClassName="Friend" syncable="YES">
         <attribute name="displayName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
@@ -8,7 +8,25 @@
         <attribute name="twitterUsername" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userId" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
+    <entity name="Melody" representedClassName="Melody" syncable="YES">
+        <attribute name="dateModified" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="fileName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="filePathUrlString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isUserCreated" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="melodyDesc" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="melodyId" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="melodyName" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="melodyGroup" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MelodyGroup" inverseName="melodies" inverseEntity="MelodyGroup" syncable="YES"/>
+    </entity>
+    <entity name="MelodyGroup" representedClassName="MelodyGroup" syncable="YES">
+        <attribute name="dateModified" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="groupId" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="groupName" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="melodies" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Melody" inverseName="melodyGroup" inverseEntity="Melody" syncable="YES"/>
+    </entity>
     <elements>
-        <element name="Friend" positionX="-63" positionY="-18" width="128" height="133"/>
+        <element name="Friend" positionX="-90" positionY="-7" width="128" height="133"/>
+        <element name="MelodyGroup" positionX="36" positionY="-162" width="128" height="103"/>
+        <element name="Melody" positionX="243" positionY="-15" width="128" height="163"/>
     </elements>
 </model>

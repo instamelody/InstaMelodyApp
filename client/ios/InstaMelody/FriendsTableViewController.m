@@ -189,36 +189,6 @@
     //get friends from core data
     self.friendsList = [[DataManager sharedManager] friendList];
     
-    /*
-    NSString *requestUrl = [NSString stringWithFormat:@"%@/User/Friends", BASE_URL];
-    
-    NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
-    
-    //add 64 char string
-    
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    
-    
-    NSDictionary *parameters = @{@"token": token};
-    
-    [manager GET:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"JSON: %@", responseObject);
-        
-        self.friendsList = (NSArray *)responseObject;
-        
-        [[DataManager sharedManager] updateFriends:self.friendsList];
-        
-        [self.tableView reloadData];
-        
-        //NSDictionary *responseDict = (NSDictionary *)responseObject;
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-        
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:error.description delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alertView show];
-    }];
-     */
-    
 }
 
 -(void)getPendingFriendList {

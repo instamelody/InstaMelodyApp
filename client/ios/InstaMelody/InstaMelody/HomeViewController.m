@@ -73,6 +73,7 @@
         
     } else {
         [[DataManager sharedManager] fetchFriends];
+        [[DataManager sharedManager] fetchMelodies];
     }
 }
 

@@ -83,6 +83,8 @@
 		879CCC541B81D2870031FDCC /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 879CCC521B81D2870031FDCC /* Model.xcdatamodeld */; };
 		879CCC5A1B81D4860031FDCC /* Friend.m in Sources */ = {isa = PBXBuildFile; fileRef = 879CCC591B81D4860031FDCC /* Friend.m */; };
 		879CCC5D1B81D6460031FDCC /* DataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 879CCC5C1B81D6460031FDCC /* DataManager.m */; };
+		87CFE8BC1B829426009A4B6D /* MelodyGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 87CFE8BB1B829426009A4B6D /* MelodyGroup.m */; };
+		87CFE8BF1B829427009A4B6D /* Melody.m in Sources */ = {isa = PBXBuildFile; fileRef = 87CFE8BE1B829427009A4B6D /* Melody.m */; };
 		87D472351B749891008075B8 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D472341B749891008075B8 /* HomeViewController.m */; };
 		87D472381B74A719008075B8 /* FriendsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D472371B74A719008075B8 /* FriendsTableViewController.m */; };
 		87DA195F1B72872A00941DCE /* SignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87DA195E1B72872A00941DCE /* SignInViewController.m */; };
@@ -250,6 +252,10 @@
 		879CCC591B81D4860031FDCC /* Friend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Friend.m; sourceTree = "<group>"; };
 		879CCC5B1B81D6460031FDCC /* DataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataManager.h; sourceTree = "<group>"; };
 		879CCC5C1B81D6460031FDCC /* DataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataManager.m; sourceTree = "<group>"; };
+		87CFE8BA1B829426009A4B6D /* MelodyGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MelodyGroup.h; sourceTree = "<group>"; };
+		87CFE8BB1B829426009A4B6D /* MelodyGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MelodyGroup.m; sourceTree = "<group>"; };
+		87CFE8BD1B829427009A4B6D /* Melody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Melody.h; sourceTree = "<group>"; };
+		87CFE8BE1B829427009A4B6D /* Melody.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Melody.m; sourceTree = "<group>"; };
 		87D472331B749891008075B8 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		87D472341B749891008075B8 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		87D472361B74A719008075B8 /* FriendsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendsTableViewController.h; sourceTree = SOURCE_ROOT; };
@@ -588,10 +594,22 @@
 			children = (
 				879CCC5B1B81D6460031FDCC /* DataManager.h */,
 				879CCC5C1B81D6460031FDCC /* DataManager.m */,
+				87CFE8B31B828E76009A4B6D /* Entities */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		87CFE8B31B828E76009A4B6D /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				87CFE8BD1B829427009A4B6D /* Melody.h */,
+				87CFE8BE1B829427009A4B6D /* Melody.m */,
+				87CFE8BA1B829426009A4B6D /* MelodyGroup.h */,
+				87CFE8BB1B829426009A4B6D /* MelodyGroup.m */,
 				879CCC581B81D4860031FDCC /* Friend.h */,
 				879CCC591B81D4860031FDCC /* Friend.m */,
 			);
-			path = Model;
+			name = Entities;
 			sourceTree = "<group>";
 		};
 		BBCBAEC0539C77E9A4D53598 /* Frameworks */ = {
@@ -796,6 +814,7 @@
 				874C882B1B4ADB3B0069A041 /* JSQMessagesBubbleImageFactory.m in Sources */,
 				874C88231B4ADB3B0069A041 /* UIColor+JSQMessages.m in Sources */,
 				8707F9BB1B446F57004B4C20 /* FirstViewController.m in Sources */,
+				87CFE8BF1B829427009A4B6D /* Melody.m in Sources */,
 				874C88371B4ADB3B0069A041 /* JSQPhotoMediaItem.m in Sources */,
 				874C882F1B4ADB3B0069A041 /* JSQMessagesCollectionViewFlowLayout.m in Sources */,
 				8707F9F31B4476BD004B4C20 /* AFHTTPRequestOperationManager.m in Sources */,
@@ -837,6 +856,7 @@
 				87175C681B4AE03700C042E4 /* JSQSystemSoundPlayer.m in Sources */,
 				874C88211B4ADB3B0069A041 /* NSBundle+JSQMessages.m in Sources */,
 				87098F601B74E88000C3E7C9 /* CreateChatViewController.m in Sources */,
+				87CFE8BC1B829426009A4B6D /* MelodyGroup.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

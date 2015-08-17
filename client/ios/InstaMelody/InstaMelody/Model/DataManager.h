@@ -9,13 +9,19 @@
 #import <Foundation/Foundation.h>
 #import <MagicalRecord/MagicalRecord.h>
 #import "Friend.h"
+#import "Melody.h"
+#import "MelodyGroup.h"
 
 @interface DataManager : NSObject
 
 + (id)sharedManager;
 
-- (void)updateFriends:(NSArray *)friendsList;
 - (void)fetchFriends;
 - (NSArray *)friendList;
+
+- (void)fetchMelodies;
+- (NSArray *)melodyList;
+
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
 @end
