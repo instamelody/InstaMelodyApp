@@ -231,11 +231,12 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     
     //step 1 - get file token
     
-
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *token =  [defaults objectForKey:@"authToken"];
     
-    NSString *imageName = [NSString stringWithFormat:@"%@_%@_profile.png", [defaults objectForKey:@"FirstName"], [defaults objectForKey:@"LastName"]];
+    time_t unixTime = time(NULL);   
+    
+    NSString *imageName = [NSString stringWithFormat:@"%@_%@_profile_%d.png", [defaults objectForKey:@"FirstName"], [defaults objectForKey:@"LastName"], (int)unixTime];
                          
     NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Image": @{@"FileName" : imageName}}];
     
