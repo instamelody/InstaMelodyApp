@@ -12,6 +12,7 @@
 #import "AFHTTPRequestOperationManager.h"
 #import "UIFont+FontAwesome.h"
 #import "NSString+FontAwesome.h"
+#import "DataManager.h"
 
 @interface FriendsTableViewController ()
 
@@ -196,6 +197,8 @@
         NSLog(@"JSON: %@", responseObject);
         
         self.friendsList = (NSArray *)responseObject;
+        
+        [[DataManager sharedManager] updateFriends:self.friendsList];
         
         [self.tableView reloadData];
         

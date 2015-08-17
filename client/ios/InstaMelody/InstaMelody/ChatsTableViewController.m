@@ -12,11 +12,15 @@
 #import "constants.h"
 #import "ChatCell.h"
 #import "ChatViewController.h"
+#import <MagicalRecord/MagicalRecord.h>
+#import "Friend.h"
 
 @interface ChatsTableViewController ()
 
 @property (nonatomic, strong) NSArray *chatsArray;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
+
+@property (nonatomic, strong) NSArray *friendsList;
 
 @end
 
@@ -39,6 +43,8 @@
     //2015-07-07T16:52:02.217
     
     self.dateFormatter = [[NSDateFormatter alloc] init];
+    
+    self.friendsList = [Friend MR_findAll];
     
 }
 
@@ -81,10 +87,18 @@
     
     NSString *dateString = [chatDict objectForKey:@"DateModified"];
     
-    cell.nameLabel.text = [chatDict objectForKey:@"Id"];
+    
+    NSDictionary *firstUser = userArray[0];
+    Friend *friend = [Friend MR_findFirstByAttribute:@"userId" withValue:[firstUser objectForKey:@"Id"]];
+    
+    if (userArray.count == 2) {
+        cell.nameLabel.text = [NSString stringWithFormat:@"Chat with %@", friend.displayName];
+    } else {
+        cell.nameLabel.text = [NSString stringWithFormat:@"Chat with %@ +%ld others", friend.displayName, userArray.count - 2];
+    }
     
     
-    cell.descriptionLabel.text = [NSString stringWithFormat:@"%d users", userArray.count];
+    cell.descriptionLabel.text = [NSString stringWithFormat:@"%ld users", userArray.count];
     
     cell.profileImageView.image = [UIImage imageNamed:@"Profile"];
     
@@ -99,6 +113,9 @@
     
     ChatViewController *vc = [ChatViewController messagesViewController];
     
+    ChatCell *cell = (ChatCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    
+    vc.title = cell.nameLabel.text;
     vc.chatDict = [self.chatsArray objectAtIndex:indexPath.row];
     
     [self.navigationController pushViewController:vc animated:YES];

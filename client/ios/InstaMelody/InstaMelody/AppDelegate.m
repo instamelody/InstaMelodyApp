@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import <MagicalRecord/MagicalRecord.h>
 
 @interface AppDelegate ()
 
@@ -24,6 +25,7 @@
     [application registerUserNotificationSettings:settings];
     [application registerForRemoteNotifications];
     
+    [MagicalRecord setupCoreDataStackWithStoreNamed:@"InstaMelody"];
     
     return YES;
 }
@@ -83,6 +85,7 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    [MagicalRecord cleanUp];
 }
 
 @end

@@ -80,6 +80,9 @@
 		874C88471B4ADB3B0069A041 /* JSQMessagesToolbarContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 874C881B1B4ADB3B0069A041 /* JSQMessagesToolbarContentView.xib */; };
 		874C88481B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 874C881D1B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.m */; };
 		874C88491B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 874C881E1B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.xib */; };
+		879CCC541B81D2870031FDCC /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 879CCC521B81D2870031FDCC /* Model.xcdatamodeld */; };
+		879CCC5A1B81D4860031FDCC /* Friend.m in Sources */ = {isa = PBXBuildFile; fileRef = 879CCC591B81D4860031FDCC /* Friend.m */; };
+		879CCC5D1B81D6460031FDCC /* DataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 879CCC5C1B81D6460031FDCC /* DataManager.m */; };
 		87D472351B749891008075B8 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D472341B749891008075B8 /* HomeViewController.m */; };
 		87D472381B74A719008075B8 /* FriendsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D472371B74A719008075B8 /* FriendsTableViewController.m */; };
 		87DA195F1B72872A00941DCE /* SignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87DA195E1B72872A00941DCE /* SignInViewController.m */; };
@@ -242,6 +245,11 @@
 		874C881C1B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesTypingIndicatorFooterView.h; sourceTree = "<group>"; };
 		874C881D1B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesTypingIndicatorFooterView.m; sourceTree = "<group>"; };
 		874C881E1B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JSQMessagesTypingIndicatorFooterView.xib; sourceTree = "<group>"; };
+		879CCC531B81D2870031FDCC /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		879CCC581B81D4860031FDCC /* Friend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Friend.h; sourceTree = "<group>"; };
+		879CCC591B81D4860031FDCC /* Friend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Friend.m; sourceTree = "<group>"; };
+		879CCC5B1B81D6460031FDCC /* DataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataManager.h; sourceTree = "<group>"; };
+		879CCC5C1B81D6460031FDCC /* DataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataManager.m; sourceTree = "<group>"; };
 		87D472331B749891008075B8 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		87D472341B749891008075B8 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		87D472361B74A719008075B8 /* FriendsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendsTableViewController.h; sourceTree = SOURCE_ROOT; };
@@ -294,6 +302,7 @@
 		8707F9B11B446F57004B4C20 /* InstaMelody */ = {
 			isa = PBXGroup;
 			children = (
+				879CCC571B81D4860031FDCC /* Model */,
 				872BB59B1B74CAD1004CDBE7 /* AwesomeMenu */,
 				87175C641B4AE03700C042E4 /* JSQSystemSoundPlayer */,
 				874C87C11B4ADB3B0069A041 /* JSQMessagesViewController */,
@@ -328,6 +337,7 @@
 				8707F9C21B446F57004B4C20 /* Images.xcassets */,
 				8707F9C41B446F57004B4C20 /* LaunchScreen.xib */,
 				8707F9B21B446F57004B4C20 /* Supporting Files */,
+				879CCC521B81D2870031FDCC /* Model.xcdatamodeld */,
 			);
 			path = InstaMelody;
 			sourceTree = "<group>";
@@ -573,6 +583,17 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		879CCC571B81D4860031FDCC /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				879CCC5B1B81D6460031FDCC /* DataManager.h */,
+				879CCC5C1B81D6460031FDCC /* DataManager.m */,
+				879CCC581B81D4860031FDCC /* Friend.h */,
+				879CCC591B81D4860031FDCC /* Friend.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		BBCBAEC0539C77E9A4D53598 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -751,6 +772,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				874C88381B4ADB3B0069A041 /* JSQVideoMediaItem.m in Sources */,
+				879CCC5A1B81D4860031FDCC /* Friend.m in Sources */,
 				872BB5A11B74CAD1004CDBE7 /* AwesomeMenuItem.m in Sources */,
 				8707F9F71B4476BD004B4C20 /* AFURLConnectionOperation.m in Sources */,
 				872BB5A01B74CAD1004CDBE7 /* AwesomeMenu.m in Sources */,
@@ -777,8 +799,10 @@
 				874C88371B4ADB3B0069A041 /* JSQPhotoMediaItem.m in Sources */,
 				874C882F1B4ADB3B0069A041 /* JSQMessagesCollectionViewFlowLayout.m in Sources */,
 				8707F9F31B4476BD004B4C20 /* AFHTTPRequestOperationManager.m in Sources */,
+				879CCC541B81D2870031FDCC /* Model.xcdatamodeld in Sources */,
 				874C88251B4ADB3B0069A041 /* UIImage+JSQMessages.m in Sources */,
 				87175C581B4ADF9E00C042E4 /* DemoMessagesViewController.m in Sources */,
+				879CCC5D1B81D6460031FDCC /* DataManager.m in Sources */,
 				874C882C1B4ADB3B0069A041 /* JSQMessagesMediaViewBubbleImageMasker.m in Sources */,
 				874C88451B4ADB3B0069A041 /* JSQMessagesMediaPlaceholderView.m in Sources */,
 				87175C531B4ADCEA00C042E4 /* ChatsTableViewController.m in Sources */,
@@ -1029,6 +1053,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		879CCC521B81D2870031FDCC /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				879CCC531B81D2870031FDCC /* Model.xcdatamodel */,
+			);
+			currentVersion = 879CCC531B81D2870031FDCC /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 8707F9A71B446F57004B4C20 /* Project object */;
 }

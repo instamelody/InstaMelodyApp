@@ -10,6 +10,8 @@
 #import "AFHTTPRequestOperationManager.h"
 #import "JSQMessages.h"
 #import "constants.h"
+#import "Friend.h"
+#import <MagicalRecord/MagicalRecord.h>
 
 @interface ChatViewController ()
 
@@ -29,7 +31,7 @@
 {
     [super viewDidLoad];
     
-    self.title = [self.chatDict objectForKey:@"Id"];
+    //self.title = [self.chatDict objectForKey:@"Id"];
 
     
     //2015-08-10T20:23:13.283
@@ -51,7 +53,7 @@
      *  You MUST set your senderId and display name
      */
     self.senderId = [defaults objectForKey:@"Id"];
-    self.senderDisplayName = [defaults objectForKey:@"Id"];
+    self.senderDisplayName = @"Me";
     //self.senderDisplayName = [defaults objectForKey:@"DisplayName"];
     
     UIImageView *tempImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"blurBlue"]];
@@ -421,14 +423,21 @@
     for (NSDictionary *messageDict in messageArray) {
         NSDictionary *messageContent = [messageDict objectForKey:@"Message"];
         
+        NSString *senderId = [messageDict objectForKey:@"SenderId"];
+        NSString *senderName = self.senderDisplayName;
+        
+        if (![senderId isEqualToString:self.senderId]) {
+            Friend *friend = [Friend MR_findFirstByAttribute:@"userId" withValue:senderId];
+            senderName = [NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName];
+        }
         
         NSString *dateString = [messageDict objectForKey:@"DateCreated"];
         dateString = [dateString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         NSDate *date = [self.dateFormatter dateFromString:dateString];
         
         if (date != nil) {
-            JSQMessage *message = [[JSQMessage alloc] initWithSenderId:[messageDict objectForKey:@"SenderId"]
-                                                     senderDisplayName:[messageDict objectForKey:@"SenderId"]
+            JSQMessage *message = [[JSQMessage alloc] initWithSenderId:senderId
+                                                     senderDisplayName:senderName
                                                                   date:date
                                                                   text:[messageContent objectForKey:@"Description"]];
             
