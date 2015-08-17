@@ -15,6 +15,7 @@
 
 @property (nonatomic, strong) NSArray *friendsList;
 @property (nonatomic, strong) NSArray *pendingFriendsList;
+@property (nonatomic, strong) NSArray *otherFriendsList;
 
 
 @end
@@ -48,6 +49,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // Return the number of sections.
+    //return 3;
     return 2;
 }
 
@@ -56,7 +58,11 @@
     
     if (section == 0) {
         return self.friendsList.count;
+    } /*else if (section == 1) {
+        return self.pendingFriendsList.count;
     }
+    return self.otherFriendsList.count;
+       */
     return self.pendingFriendsList.count;
 }
 
@@ -82,12 +88,19 @@
         
         cell.profileImageView.image = [UIImage imageNamed:@"Profile"];
         
-    } else {
+    } else if (indexPath.section == 1) {
         NSDictionary *friendDict = [self.pendingFriendsList objectAtIndex:indexPath.row];
         
         cell.nameLabel.text = [friendDict objectForKey:@"DisplayName"];
         cell.approveButton.tag = indexPath.row;
         
+        cell.profileImageView.image = [UIImage imageNamed:@"Profile"];
+    } else {
+        NSDictionary *friendDict = [self.otherFriendsList objectAtIndex:indexPath.row];
+
+        cell.approveButton.hidden = YES;
+        cell.nameLabel.text = [friendDict objectForKey:@"DisplayName"];
+
         cell.profileImageView.image = [UIImage imageNamed:@"Profile"];
     }
     
@@ -98,8 +111,12 @@
 {
     if (section == 0) {
         return @"Friends";
+    } /*else if (section == 1)  {
+        return @"People who have added me";
     }
-    return @"Pending Friends";
+    return @"People I've added";
+       */
+    return @"Pending Friend Requests";
 }
 
 /*
@@ -201,7 +218,21 @@
     [manager GET:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
         
-        self.pendingFriendsList = (NSArray *)responseObject;
+        NSArray *responseFriendList = (NSArray *)responseObject;
+        
+        NSMutableArray *pendingFriendList = [NSMutableArray new];
+        NSMutableArray *otherFriendList = [NSMutableArray new];
+        
+        for (NSDictionary *friend in responseFriendList) {
+            if ([friend objectForKey:@"IsRequestor"]) {
+                [otherFriendList addObject:friend];
+            } else {
+                [pendingFriendList addObject:friend];
+            }
+        }
+        
+        self.pendingFriendsList = (NSArray *)pendingFriendList;
+        self.otherFriendsList = (NSArray *)otherFriendList;
         
         [self.tableView reloadData];
         
