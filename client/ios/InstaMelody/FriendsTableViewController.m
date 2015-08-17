@@ -10,6 +10,8 @@
 #import "FriendCell.h"
 #import "constants.h"
 #import "AFHTTPRequestOperationManager.h"
+#import "UIFont+FontAwesome.h"
+#import "NSString+FontAwesome.h"
 
 @interface FriendsTableViewController ()
 
@@ -74,7 +76,11 @@
     
     cell.backgroundColor = [UIColor clearColor];
 
+    cell.approveButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:22.0f];
+    cell.denyButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:22.0f];
     
+    [cell.approveButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconCheck] forState:UIControlStateNormal];
+    [cell.denyButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconRemove] forState:UIControlStateNormal];
     
     // Configure the cell...
     
@@ -83,6 +89,7 @@
         NSDictionary *friendDict = [self.friendsList objectAtIndex:indexPath.row];
         
         cell.approveButton.hidden = YES;
+        cell.denyButton.hidden = YES;
         
         cell.nameLabel.text = [friendDict objectForKey:@"DisplayName"];
         
@@ -99,6 +106,7 @@
         NSDictionary *friendDict = [self.otherFriendsList objectAtIndex:indexPath.row];
 
         cell.approveButton.hidden = YES;
+        cell.denyButton.hidden = YES;
         cell.nameLabel.text = [friendDict objectForKey:@"DisplayName"];
 
         cell.profileImageView.image = [UIImage imageNamed:@"Profile"];
@@ -309,6 +317,35 @@
     NSDictionary *parameters = @{@"Token": token, @"User": @{@"EmailAddress": [pendingFriend objectForKey:@"EmailAddress"]}};
 
     NSString *requestUrl = [NSString stringWithFormat:@"%@/User/Friend/Approve", BASE_URL];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"You have added a friend" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+        
+        [self refreshFriendsList];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:error.description delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+    }];
+}
+
+-(IBAction)denyFriend:(id)sender {
+    UIButton *sendingButton = (UIButton *)sender;
+    
+    NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
+    
+    NSDictionary *pendingFriend = [self.pendingFriendsList objectAtIndex:sendingButton.tag];
+    
+    NSDictionary *parameters = @{@"Token": token, @"User": @{@"EmailAddress": [pendingFriend objectForKey:@"EmailAddress"]}};
+    
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/User/Friend/Deny", BASE_URL];
     
     //add 64 char string
     

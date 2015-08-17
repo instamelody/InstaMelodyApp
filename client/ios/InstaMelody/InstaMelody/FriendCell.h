@@ -11,6 +11,7 @@
 @interface FriendCell : UITableViewCell
 
 @property (nonatomic, strong) IBOutlet UIButton *approveButton;
+@property (nonatomic, strong) IBOutlet UIButton *denyButton;
 @property (nonatomic, strong) IBOutlet UIImageView *profileImageView;
 @property (nonatomic, strong) IBOutlet UILabel *nameLabel;
 

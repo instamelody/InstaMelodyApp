@@ -761,7 +761,7 @@
                                             <rect key="frame" x="113" y="36" width="374" height="28"/>
                                             <animations/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="28" id="zbR-Fd-TL3"/>
+                                                <constraint firstAttribute="height" constant="28" id="an6-hh-ngP"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                             <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -776,34 +776,54 @@
                                             </constraints>
                                         </imageView>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kzH-gN-lCY">
-                                            <rect key="frame" x="512" y="15" width="70" height="70"/>
+                                            <rect key="frame" x="512" y="8" width="30" height="83.5"/>
                                             <animations/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="70" id="Eag-cU-6Tv"/>
-                                                <constraint firstAttribute="width" constant="70" id="Jae-Eu-fb2"/>
+                                                <constraint firstAttribute="width" constant="30" id="YTx-2Z-a9a"/>
                                             </constraints>
-                                            <state key="normal" title="Approve">
+                                            <state key="normal" title="A">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
                                             <connections>
                                                 <action selector="approveFriend:" destination="vYc-MT-dDl" eventType="touchUpInside" id="gcZ-ZG-HRX"/>
                                             </connections>
                                         </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c4V-Fj-v06">
+                                            <rect key="frame" x="550" y="8" width="30" height="83.5"/>
+                                            <animations/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="30" id="do3-fS-IHz"/>
+                                            </constraints>
+                                            <state key="normal" title="C">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="denyFriend:" destination="vYc-MT-dDl" eventType="touchUpInside" id="Gnz-bn-xbt"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <animations/>
                                     <constraints>
-                                        <constraint firstItem="kzH-gN-lCY" firstAttribute="leading" secondItem="Y0i-r9-LvI" secondAttribute="trailing" constant="25" id="Ch7-4N-CfI"/>
+                                        <constraint firstAttribute="centerY" secondItem="Y0i-r9-LvI" secondAttribute="centerY" id="0WV-fW-zVe"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="c4V-Fj-v06" secondAttribute="bottom" id="2ee-Sn-wPQ"/>
+                                        <constraint firstItem="c4V-Fj-v06" firstAttribute="leading" secondItem="kzH-gN-lCY" secondAttribute="trailing" constant="8" id="8ch-Yb-0ds"/>
+                                        <constraint firstItem="kzH-gN-lCY" firstAttribute="leading" secondItem="Y0i-r9-LvI" secondAttribute="trailing" constant="25" id="JZL-9c-eI5"/>
                                         <constraint firstAttribute="centerY" secondItem="nks-ZE-lUZ" secondAttribute="centerY" id="ZMz-a9-0pp"/>
-                                        <constraint firstAttribute="centerY" secondItem="kzH-gN-lCY" secondAttribute="centerY" id="cfP-fg-VEG"/>
-                                        <constraint firstAttribute="centerY" secondItem="Y0i-r9-LvI" secondAttribute="centerY" id="eey-ZS-nTS"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="kzH-gN-lCY" secondAttribute="trailing" constant="10" id="etC-rX-7UQ"/>
-                                        <constraint firstItem="Y0i-r9-LvI" firstAttribute="leading" secondItem="nks-ZE-lUZ" secondAttribute="trailing" constant="25" id="rhZ-4b-THb"/>
+                                        <constraint firstItem="c4V-Fj-v06" firstAttribute="leading" secondItem="kzH-gN-lCY" secondAttribute="trailing" constant="8" id="eCV-oV-oX8"/>
+                                        <constraint firstItem="c4V-Fj-v06" firstAttribute="top" secondItem="szM-2O-Cvy" secondAttribute="topMargin" id="fb3-IU-nLT"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="kzH-gN-lCY" secondAttribute="bottom" id="rpm-m5-IOf"/>
+                                        <constraint firstItem="kzH-gN-lCY" firstAttribute="top" secondItem="szM-2O-Cvy" secondAttribute="topMargin" id="sj4-vk-kkf"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="c4V-Fj-v06" secondAttribute="trailing" constant="12" id="upG-bs-xeT"/>
+                                        <constraint firstItem="Y0i-r9-LvI" firstAttribute="leading" secondItem="nks-ZE-lUZ" secondAttribute="trailing" constant="25" id="xRq-lQ-hLA"/>
                                         <constraint firstItem="nks-ZE-lUZ" firstAttribute="leading" secondItem="szM-2O-Cvy" secondAttribute="leadingMargin" constant="10" id="zu8-pi-Lxg"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <animations/>
                                 <connections>
                                     <outlet property="approveButton" destination="kzH-gN-lCY" id="lZm-OC-TIv"/>
+                                    <outlet property="denyButton" destination="c4V-Fj-v06" id="qGS-FF-xay"/>
                                     <outlet property="nameLabel" destination="Y0i-r9-LvI" id="3M8-zU-Ilm"/>
                                     <outlet property="profileImageView" destination="nks-ZE-lUZ" id="qar-Zs-aar"/>
                                 </connections>
