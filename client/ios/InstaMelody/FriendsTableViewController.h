@@ -10,4 +10,6 @@
 
 @interface FriendsTableViewController : UITableViewController
 
+-(IBAction)requestFriend:(id)sender;
+
 @end
