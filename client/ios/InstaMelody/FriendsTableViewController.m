@@ -267,7 +267,7 @@
     
     [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"You have added a friend" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"You have requested a friend" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alertView show];
         
         [self refreshFriendsList];
@@ -353,7 +353,7 @@
     
     [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"You have added a friend" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"You have denied a friend" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alertView show];
         
         [self refreshFriendsList];
