@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "4659EA84A06F8384B8E4FE8E"
+               BlueprintIdentifier = "475189A82B0BEA183D10FB01"
                BuildableName = "Pods_InstaMelody.framework"
                BlueprintName = "Pods-InstaMelody"
                ReferencedContainer = "container:Pods.xcodeproj">

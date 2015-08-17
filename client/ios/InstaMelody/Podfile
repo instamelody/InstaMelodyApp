@@ -3,4 +3,5 @@ use_frameworks!
 
 target 'InstaMelody' do
   pod 'FontAwesome+iOS'
+  pod 'MagicalRecord'
 end

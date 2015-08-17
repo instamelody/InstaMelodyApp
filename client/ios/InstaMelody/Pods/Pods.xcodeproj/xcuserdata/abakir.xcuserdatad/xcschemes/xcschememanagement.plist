@@ -9,6 +9,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>MagicalRecord.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-InstaMelody.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -17,12 +22,17 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>E8868BEACD668AC94B737D6E8CA18F0C</key>
+		<key>108B2BA2176458FF4926D85254C11689</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>F2E8C294D4E20403FA87BCD6E2CC5977</key>
+		<key>75A13C008B7D893B1F5C0B01516F498F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E12C0B4B8D317BB93C6F6A876A01FB14</key>
 		<dict>
 			<key>primary</key>
 			<true/>
