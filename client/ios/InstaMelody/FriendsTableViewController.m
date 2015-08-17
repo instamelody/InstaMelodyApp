@@ -87,12 +87,14 @@
     
     if (indexPath.section == 0)  {
         
-        NSDictionary *friendDict = [self.friendsList objectAtIndex:indexPath.row];
+        Friend *friend = (Friend *)[self.friendsList objectAtIndex:indexPath.row];
+        
+        //NSDictionary *friendDict = [self.friendsList objectAtIndex:indexPath.row];
         
         cell.approveButton.hidden = YES;
         cell.denyButton.hidden = YES;
         
-        cell.nameLabel.text = [friendDict objectForKey:@"DisplayName"];
+        cell.nameLabel.text = friend.displayName;
         
         cell.profileImageView.image = [UIImage imageNamed:@"Profile"];
         
@@ -182,6 +184,12 @@
 -(void)getFriendList {
     //
     
+    //add observer for fetching friend list asynchronously
+    
+    //get friends from core data
+    self.friendsList = [[DataManager sharedManager] friendList];
+    
+    /*
     NSString *requestUrl = [NSString stringWithFormat:@"%@/User/Friends", BASE_URL];
     
     NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
@@ -209,6 +217,7 @@
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:error.description delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alertView show];
     }];
+     */
     
 }
 

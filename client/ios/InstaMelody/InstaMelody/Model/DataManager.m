@@ -7,6 +7,8 @@
 //
 
 #import "DataManager.h"
+#import "Constants.h"
+#import "AFHTTPRequestOperationManager.h"
 
 @implementation DataManager
 
@@ -17,6 +19,32 @@
         sharedMyManager = [[self alloc] init];
     });
     return sharedMyManager;
+}
+
+- (void)fetchFriends {
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/User/Friends", BASE_URL];
+    
+    NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    NSDictionary *parameters = @{@"token": token};
+    
+    [manager GET:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        
+        NSArray *friendsList = (NSArray *)responseObject;
+        
+        [self updateFriends:friendsList];
+        
+        
+        //NSDictionary *responseDict = (NSDictionary *)responseObject;
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error fetching friends: %@", error);
+        
+    }];
 }
 
 - (void)updateFriends:(NSArray *)friendsList {
@@ -38,6 +66,10 @@
         }
         //
     }];
+}
+
+- (NSArray *)friendList {
+    return [Friend MR_findAll];
 }
 
 @end

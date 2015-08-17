@@ -15,5 +15,7 @@
 + (id)sharedManager;
 
 - (void)updateFriends:(NSArray *)friendsList;
+- (void)fetchFriends;
+- (NSArray *)friendList;
 
 @end

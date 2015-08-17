@@ -9,6 +9,7 @@
 #import "HomeViewController.h"
 #import "constants.h"
 #import "AFHTTPRequestOperationManager.h"
+#import "DataManager.h"
 
 @interface HomeViewController ()
 
@@ -44,6 +45,7 @@
     } else {
         //validate token
         
+        //sd
         
     }
     
@@ -64,6 +66,14 @@
      if ([defaults objectForKey:@"authToken"] !=  nil) {
          self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", [defaults objectForKey:@"FirstName"], [defaults objectForKey:@"LastName"]];
      }
+    
+    NSString *authToken = [defaults objectForKey:@"authToken"];
+    
+    if ( authToken ==  nil || [authToken isEqualToString:@""]) {
+        
+    } else {
+        [[DataManager sharedManager] fetchFriends];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
