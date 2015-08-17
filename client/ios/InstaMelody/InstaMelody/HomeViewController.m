@@ -160,12 +160,22 @@
 - (void)awesomeMenu:(AwesomeMenu *)menu didSelectIndex:(NSInteger)idx
 {
     NSLog(@"Select the index : %d",idx);
+    
+    if (idx == 1) {
+        [self showChats:nil];
+    }
 }
 - (void)awesomeMenuDidFinishAnimationClose:(AwesomeMenu *)menu {
     NSLog(@"Menu was closed!");
 }
 - (void)awesomeMenuDidFinishAnimationOpen:(AwesomeMenu *)menu {
     NSLog(@"Menu is open!");
+}
+
+-(IBAction)showChats:(id)sender {
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UIViewController *vc = [sb instantiateViewControllerWithIdentifier:@"ChatsTableViewController"];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark - image picker delegate

@@ -276,7 +276,7 @@
         <!--Chats-->
         <scene sceneID="PKl-op-Eby">
             <objects>
-                <tableViewController id="eln-IA-CPa" customClass="ChatsTableViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="ChatsTableViewController" id="eln-IA-CPa" customClass="ChatsTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="110" sectionHeaderHeight="22" sectionFooterHeight="22" id="aP1-Sn-kpu">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
