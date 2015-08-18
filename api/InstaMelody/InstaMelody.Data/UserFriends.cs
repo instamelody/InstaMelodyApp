@@ -298,5 +298,43 @@ namespace InstaMelody.Data
 
             return Convert.ToInt32(id) > 0;
         }
+
+        /// <summary>
+        /// Determines whether [has pending friend request] [the specified user identifier].
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="friendUserId">The friend user identifier.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Exception"></exception>
+        public bool HasPendingFriendRequest(Guid userId, Guid friendUserId)
+        {
+            var query = @"SELECT COUNT(*) FROM dbo.UserFriends
+                        WHERE (UserId = @UserId AND RequestorId = @FriendId) 
+                        OR (UserId = @FriendId AND RequestorId = @UserId)
+                        AND IsDeleted = 0 AND IsPending = 1 AND IsDenied = 0";
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "UserId",
+                    Value = userId,
+                    SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "FriendId",
+                    Value = friendUserId,
+                    SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                }
+            };
+
+            var id = ExecuteScalar(query, parameters.ToArray());
+            if (Convert.IsDBNull(id)) throw new Exception();
+
+            return Convert.ToInt32(id) > 0;
+        }
     }
 }

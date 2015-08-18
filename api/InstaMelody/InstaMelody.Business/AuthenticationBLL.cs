@@ -84,7 +84,7 @@ namespace InstaMelody.Business
             }
 
             var sessionDal = new UserSessions();
-            sessionDal.EndAllSessionsByUserId(credentialedUser.Id);
+            //sessionDal.EndAllSessionsByUserId(credentialedUser.Id);
             var sessionToken = sessionDal.AddSession(credentialedUser.Id, deviceToken);
             if (!sessionToken.Equals(default(Guid)))
             {

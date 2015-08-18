@@ -854,7 +854,7 @@ namespace InstaMelody.Business
                 var foundImage = fileBll.GetImage(new Image{ Id = (int)station.StationImageId });
                 if (foundImage != null)
                 {
-                    fileBll.DeleteImage(foundImage);
+                    DeleteStationImage(foundImage.Id);
                 }
             }
 
@@ -883,8 +883,15 @@ namespace InstaMelody.Business
         /// <param name="imageId">The image identifier.</param>
         private void DeleteStationImage(int imageId)
         {
-            var fileBll = new FileBll();
-            fileBll.DeleteImage(new Image {Id = imageId});
+            try
+            {
+                var fileBll = new FileBll();
+                fileBll.DeleteImage(new Image { Id = imageId });
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
         }
 
         /// <summary>

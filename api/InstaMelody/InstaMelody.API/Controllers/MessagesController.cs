@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web;
@@ -182,7 +181,8 @@ namespace InstaMelody.API.Controllers
                     }
                     else if (exc is DataException)
                     {
-                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, exc.Message);
+                        //response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, exc.Message);
+                        response = this.Request.CreateResponse(HttpStatusCode.OK);
                     }
                     else
                     {

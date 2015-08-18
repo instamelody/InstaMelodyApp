@@ -721,15 +721,7 @@ namespace InstaMelody.API.Controllers
                     Guid _token;
                     Guid.TryParse(token, out _token);
                     var friends = bll.GetFriendsByUser(_token);
-
-                    if (friends == null || !friends.Any())
-                    {
-                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.FailedGetFriends);
-                    }
-                    else
-                    {
-                        response = this.Request.CreateResponse(HttpStatusCode.OK, friends);
-                    }
+                    response = this.Request.CreateResponse(HttpStatusCode.OK, friends);
                 }
                 catch (Exception exc)
                 {
@@ -783,15 +775,7 @@ namespace InstaMelody.API.Controllers
                     Guid _token;
                     Guid.TryParse(token, out _token);
                     var friends = bll.GetPendingFriendsByUser(_token);
-
-                    if (friends == null || !friends.Any())
-                    {
-                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.FailedGetFriends);
-                    }
-                    else
-                    {
-                        response = this.Request.CreateResponse(HttpStatusCode.OK, friends);
-                    }
+                    response = this.Request.CreateResponse(HttpStatusCode.OK, friends);
                 }
                 catch (Exception exc)
                 {
