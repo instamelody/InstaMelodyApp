@@ -214,7 +214,8 @@
         NSMutableArray *otherFriendList = [NSMutableArray new];
         
         for (NSDictionary *friend in responseFriendList) {
-            if ([friend objectForKey:@"IsRequestor"]) {
+            NSInteger isRequestor = [[friend objectForKey:@"IsRequestor"] integerValue];
+            if ( isRequestor == 1) {
                 [otherFriendList addObject:friend];
             } else {
                 [pendingFriendList addObject:friend];
