@@ -96,7 +96,8 @@
     NSDictionary *parameters = @{@"token": token};
     
     [manager GET:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"JSON: %@", responseObject);
+       // NSLog(@"JSON: %@", responseObject);
+        NSLog(@"melodies updated");
         
         NSArray *melodyList = (NSArray *)responseObject;
         
