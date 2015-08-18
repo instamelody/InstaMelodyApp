@@ -80,7 +80,14 @@ namespace InstaMelody.Business
                 foundUser = GetUserByEmailAddress(user.EmailAddress);
             }
 
-            if (foundUser != null && !foundUser.Id.Equals(sessionUser.Id))
+            if (foundUser == null)
+            {
+                InstaMelodyLogger.Log(string.Format("Cannot find requested User. Id: {0}, Email: {1}, DisplayName: {2}, Token: {3}", 
+                    user.Id, user.EmailAddress, user.DisplayName, sessionToken), LogLevel.Error);
+                throw new DataException("Cannot find requested User.");
+            }
+
+            if (!foundUser.Id.Equals(sessionUser.Id))
             {
                 var userDetail = string.IsNullOrWhiteSpace(user.DisplayName) ? user.EmailAddress : user.DisplayName;
                 InstaMelodyLogger.Log(
@@ -350,10 +357,17 @@ namespace InstaMelody.Business
             var imageBll = new FileBll();
             if (userToUpdate.UserImageId != null && !userToUpdate.UserImageId.Equals(default(int)))
             {
-                imageBll.DeleteImage(new Image
+                try
                 {
-                    Id = (int)userToUpdate.UserImageId
-                });
+                    imageBll.DeleteImage(new Image
+                    {
+                        Id = (int)userToUpdate.UserImageId
+                    });
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
             }
 
             // add new image
@@ -432,11 +446,18 @@ namespace InstaMelody.Business
             // delete profile image
             if (foundUser.UserImageId != null)
             {
-                var imageBll = new FileBll();
-                imageBll.DeleteImage(new Image
+                try
                 {
-                    Id = (int)foundUser.UserImageId
-                });
+                    var imageBll = new FileBll();
+                    imageBll.DeleteImage(new Image
+                    {
+                        Id = (int)foundUser.UserImageId
+                    });
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
             }
 
             return foundUser;
@@ -484,8 +505,15 @@ namespace InstaMelody.Business
                 throw new DataException("Could not find requested friend in database.");
             }
 
-            // make friend request
+            // check for existing friend request
             var friendDal = new UserFriends();
+            if (friendDal.HasPendingFriendRequest(sessionUser.Id, requestedFriend.Id))
+            {
+                InstaMelodyLogger.Log(string.Format("Friend Request Already Pending. Token: {0}, Friend Id: {1}", sessionToken, requestedFriend.Id), LogLevel.Error);
+                throw new DataException(string.Format("A Friend Request for {0} is already Pending.", requestedFriend.DisplayName));
+            }
+
+            // make friend request
             friendDal.RequestFriend(sessionUser.Id, requestedFriend.Id);
 
             // send push notification to friend
@@ -691,7 +719,8 @@ namespace InstaMelody.Business
             if (friends == null || !friends.Any())
             {
                 InstaMelodyLogger.Log(string.Format("Could not find friends for User: {0}", sessionUser.Id), LogLevel.Error);
-                throw new DataException(string.Format("Could not find friends for User: {0}", sessionUser.Id));
+                //throw new DataException(string.Format("Could not find friends for User: {0}", sessionUser.Id));
+                return new List<User>();
             }
 
             foreach (var friend in friends)
@@ -727,7 +756,8 @@ namespace InstaMelody.Business
             if (friends == null || !friends.Any())
             {
                 InstaMelodyLogger.Log(string.Format("Could not find pending friends for User: {0}", sessionUser.Id), LogLevel.Error);
-                throw new DataException(string.Format("Could not find pending friends for User: {0}", sessionUser.Id));
+                //throw new DataException(string.Format("Could not find pending friends for User: {0}", sessionUser.Id));
+                return new List<Friend>();
             }
 
             foreach (var friend in friends)

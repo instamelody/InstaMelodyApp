@@ -248,8 +248,6 @@ namespace InstaMelody.Business
         /// <exception cref="System.Data.DataException">No Image Id or File name provided</exception>
         public Image GetImage(Image image)
         {
-            Image result;
-
             if (image.Id.Equals(default(int)) && string.IsNullOrWhiteSpace(image.FileName))
             {
                 InstaMelodyLogger.Log("No Image Id or File name provided. for GetImage()", LogLevel.Error);
@@ -257,13 +255,13 @@ namespace InstaMelody.Business
             }
 
             var dal = new Images();
-            if (!image.Id.Equals(default(int)))
+            var result = !image.Id.Equals(default(int)) 
+                ? dal.GetImageById(image.Id) 
+                : dal.GetImageByFileName(image.FileName);
+
+            if (result != null)
             {
-                result = dal.GetImageById(image.Id);
-            }
-            else
-            {
-                result = dal.GetImageByFileName(image.FileName);
+                result.FilePath = Utilities.GetFilePath(result.FileName, MediaTypeEnum.Image);
             }
 
             return result;
@@ -370,8 +368,6 @@ namespace InstaMelody.Business
         /// <exception cref="System.ArgumentException">No Video Id or File name provided.</exception>
         public Video GetVideo(Video video)
         {
-            Video result;
-
             if (video.Id.Equals(default(int)) && string.IsNullOrWhiteSpace(video.FileName))
             {
                 InstaMelodyLogger.Log("No Video Id or File name provided for GetVideo().", LogLevel.Error);
@@ -379,13 +375,13 @@ namespace InstaMelody.Business
             }
 
             var dal = new Videos();
-            if (!video.Id.Equals(default(int)))
+            var result = !video.Id.Equals(default(int)) 
+                ? dal.GetVideoById(video.Id) 
+                : dal.GetVideoByFileName(video.FileName);
+
+            if (result != null)
             {
-                result = dal.GetVideoById(video.Id);
-            }
-            else
-            {
-                result = dal.GetVideoByFileName(video.FileName);
+                result.FilePath = Utilities.GetFilePath(result.FileName, MediaTypeEnum.Video);
             }
 
             return result;
@@ -447,7 +443,14 @@ namespace InstaMelody.Business
         private void DeleteUserImageRecords(Guid userId, string fileName)
         {
             // delete image record
-            DeleteImage(new Image { FileName = fileName });
+            try
+            {
+                DeleteImage(new Image { FileName = fileName });
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
 
             // set userimageid column to null
             var userBll = new UserBll();
@@ -461,14 +464,21 @@ namespace InstaMelody.Business
         private void DeleteMessageImageRecords(string fileName)
         {
             // delete image record
-            var deletedImgId = DeleteImage(new Image
+            try
             {
-                FileName = fileName
-            });
+                var deletedImgId = DeleteImage(new Image
+                {
+                    FileName = fileName
+                });
 
-            // delete message image record
-            var messageBll = new MessageBll();
-            messageBll.DeleteMessageImage(deletedImgId);
+                // delete message image record
+                var messageBll = new MessageBll();
+                messageBll.DeleteMessageImage(deletedImgId);
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
         }
 
         /// <summary>
