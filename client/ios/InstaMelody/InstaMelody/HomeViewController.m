@@ -9,6 +9,7 @@
 #import "HomeViewController.h"
 #import "constants.h"
 #import "AFHTTPRequestOperationManager.h"
+#import "LoopViewController.h"
 #import "DataManager.h"
 
 @interface HomeViewController ()
@@ -96,6 +97,12 @@
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
 }
 
+-(IBAction)showLoop:(id)sender {
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    LoopViewController *lvc = [sb instantiateViewControllerWithIdentifier:@"LoopViewController"];
+    [self.navigationController pushViewController:lvc animated:YES];
+}
+
 -(IBAction)signOut:(id)sender {
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -170,11 +177,19 @@
 
 - (void)awesomeMenu:(AwesomeMenu *)menu didSelectIndex:(NSInteger)idx
 {
-    NSLog(@"Select the index : %d",idx);
+    NSLog(@"Select the index : %ld",idx);
     
-    if (idx == 1) {
-        [self showChats:nil];
+    switch (idx) {
+        case 1:
+            [self showChats:nil];
+            break;
+        case 2:
+            [self showLoop:nil];
+            break;
+        default:
+            break;
     }
+
 }
 - (void)awesomeMenuDidFinishAnimationClose:(AwesomeMenu *)menu {
     NSLog(@"Menu was closed!");

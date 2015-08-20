@@ -22,6 +22,8 @@
 - (void)fetchMelodies;
 - (NSArray *)melodyList;
 
+- (NSArray *)melodyGroupList;
+
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
 @end
