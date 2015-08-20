@@ -13,11 +13,14 @@
 #import "UIFont+FontAwesome.h"
 #import "AFURLSessionManager.h"
 #import "constants.h"
+#import <AVFoundation/AVFoundation.h>
 
 @interface LoopViewController ()
 
 @property (nonatomic, strong) NSArray *groupArray;
 @property (nonatomic, strong) Melody *selectedMelody;
+
+@property (nonatomic, strong) AVAudioPlayer *bgPlayer;
 
 @end
 
@@ -41,7 +44,9 @@
 }
 
 -(void)applyFontAwesome {
-    self.playButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:self.playButton.titleLabel.frame.size.width - 10];
+    self.playButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:50.0f];
+    
+    self.playButton.hidden = YES;
     
     self.shareButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:35.0f];
     self.playLoopButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:25.0f];
@@ -128,7 +133,34 @@
 }
 
 -(IBAction)togglePlayback:(id)sender {
+    //sdf
     
+    if ([self.bgPlayer isPlaying]) {
+        
+        [self.bgPlayer stop];
+        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconPlay] forState:UIControlStateNormal];
+    } else {
+        
+        NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+        
+        NSString *pathString = [NSString stringWithFormat:@"%@/Melodies/%@", documentsPath, self.selectedMelody.fileName];
+        
+        //pathString = [pathString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+        
+        NSURL *docURL = [NSURL fileURLWithPath:pathString];
+        
+        NSError *error = nil;
+        
+        self.bgPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:docURL error:&error];
+        
+        if (error == nil) {
+            
+            [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconStop] forState:UIControlStateNormal];
+            [self.bgPlayer setNumberOfLoops:-1];
+            [self.bgPlayer play];
+        }
+        
+    }
 }
 
 -(void)didSelectMelody:(Melody *)melody {
@@ -140,21 +172,40 @@
 -(void)loadMelody:(Melody *)melody {
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
+    
     NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     
-    NSString *pathString = [NSString stringWithFormat:@"%@/Melodies/%@", documentsPath, melody.fileName];
-    //pathString = [pathString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    NSString *melodyPath = [documentsPath stringByAppendingPathComponent:@"Melodies"];
+    
+    NSError *error= nil;
+    
+    BOOL isDir;
+    if (![[NSFileManager defaultManager] fileExistsAtPath:melodyPath isDirectory:&isDir]) {
+        [[NSFileManager defaultManager] createDirectoryAtPath:documentsPath withIntermediateDirectories:NO attributes:nil error:&error];
+    }
     
     
-    NSString *filePath = [documentsPath stringByAppendingPathComponent:pathString];
+    NSURL *docURL = [NSURL fileURLWithPath:documentsPath];
+    NSArray *contents = [fileManager contentsOfDirectoryAtURL:docURL
+                                   includingPropertiesForKeys:@[]
+                                                      options:NSDirectoryEnumerationSkipsHiddenFiles
+                                                        error:nil];
+    
+    
+    
+    NSString *pathString = [melodyPath stringByAppendingPathComponent:melody.fileName];
+    
+    //NSString *filePath = [documentsPath stringByAppendingPathComponent:pathString];
+    
+    self.selectedMelody = melody;
     
     //if file exists, load, set status = loaded,
-    if ([fileManager fileExistsAtPath:filePath]) {
+    if ([fileManager fileExistsAtPath:pathString]) {
         //
         
         self.loopStatusLabel.text = @"Loop loaded!";
         
-        self.selectedMelody = melody;
+        self.playButton.hidden = NO;
         
     } else {
         //else, download, show progress, set loaded, set play button
@@ -179,9 +230,11 @@
     
     NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:&progress destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
         
+        //NSString *fileString = [NSString stringWithFormat:@"file://%@", destinationFilePath];
         NSURL *fileURL = [NSURL fileURLWithPath:destinationFilePath];
         
         return fileURL;
+         
         //NSURL *documentsDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
         //return [documentsDirectoryURL URLByAppendingPathComponent:[response suggestedFilename]];
     } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
@@ -189,6 +242,8 @@
         if (error == nil) {
             NSLog(@"File downloaded to: %@", filePath);
             self.loopStatusLabel.text = @"Loop loaded!";
+            
+            self.playButton.hidden = NO;
         } else {
             NSLog(@"Download error: %@", error.description);
             self.loopStatusLabel.text = @"Error loading loop";
