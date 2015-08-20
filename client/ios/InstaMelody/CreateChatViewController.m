@@ -46,7 +46,7 @@
         NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"User": @{@"DisplayName" : self.nameField.text}, @"Message": @{@"Description" : self.messageField.text}}];
         
         
-        NSString *requestUrl = [NSString stringWithFormat:@"%@/Message/Chat", BASE_URL];
+        NSString *requestUrl = [NSString stringWithFormat:@"%@/Message/Chat", API_BASE_URL];
         
         //add 64 char string
         

@@ -194,7 +194,7 @@
 -(void)getPendingFriendList {
     //
     
-    NSString *requestUrl = [NSString stringWithFormat:@"%@/User/Friends/Pending", BASE_URL];
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/User/Friends/Pending", API_BASE_URL];
     
     NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
     
@@ -242,7 +242,7 @@
     
     NSDictionary *parameters = @{@"Token": token, @"User": @{@"EmailAddress": emailString}};
     
-    NSString *requestUrl = [NSString stringWithFormat:@"%@/User/Friend/Request", BASE_URL];
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/User/Friend/Request", API_BASE_URL];
     
     //add 64 char string
     
@@ -267,7 +267,7 @@
     
     NSDictionary *parameters = @{@"Token": token, @"User": @{@"DisplayName": usernameString}};
     
-    NSString *requestUrl = [NSString stringWithFormat:@"%@/User/Friend/Request", BASE_URL];
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/User/Friend/Request", API_BASE_URL];
     
     //add 64 char string
     
@@ -299,7 +299,7 @@
     
     NSDictionary *parameters = @{@"Token": token, @"User": @{@"EmailAddress": [pendingFriend objectForKey:@"EmailAddress"]}};
 
-    NSString *requestUrl = [NSString stringWithFormat:@"%@/User/Friend/Approve", BASE_URL];
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/User/Friend/Approve", API_BASE_URL];
     
     //add 64 char string
     
@@ -328,7 +328,7 @@
     
     NSDictionary *parameters = @{@"Token": token, @"User": @{@"EmailAddress": [pendingFriend objectForKey:@"EmailAddress"]}};
     
-    NSString *requestUrl = [NSString stringWithFormat:@"%@/User/Friend/Deny", BASE_URL];
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/User/Friend/Deny", API_BASE_URL];
     
     //add 64 char string
     

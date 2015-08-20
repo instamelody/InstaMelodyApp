@@ -32,7 +32,7 @@
 
 
 - (void)fetchFriends {
-    NSString *requestUrl = [NSString stringWithFormat:@"%@/User/Friends", BASE_URL];
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/User/Friends", API_BASE_URL];
     
     NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
     
@@ -85,7 +85,7 @@
 #pragma mark - melodies
 
 -(void)fetchMelodies {
-    NSString *requestUrl = [NSString stringWithFormat:@"%@/Melody", BASE_URL];
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/Melody", API_BASE_URL];
     
     NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
     
@@ -165,7 +165,7 @@
 }
 
 -(NSArray *)melodyGroupList {
-    return [MelodyGroup MR_findAll];
+    return [MelodyGroup MR_findAllSortedBy:@"groupId" ascending:YES];
 }
 
 @end

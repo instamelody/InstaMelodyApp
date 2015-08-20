@@ -20,6 +20,7 @@
 @property (nonatomic, strong) IBOutlet UIButton *playButton;
 
 @property (nonatomic, strong) IBOutlet UILabel *topicLabel;
+@property (nonatomic, strong) IBOutlet UILabel *loopStatusLabel;
 
 @property (nonatomic, strong) IBOutlet UIView *consoleView;
 @property (nonatomic, strong) IBOutlet UIView *centerConsoleView;

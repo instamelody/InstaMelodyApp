@@ -184,7 +184,7 @@
 }
 
 - (void)getUserChats {
-    NSString *requestUrl = [NSString stringWithFormat:@"%@/Message/Chat", BASE_URL];
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/Message/Chat", API_BASE_URL];
     
     NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
     

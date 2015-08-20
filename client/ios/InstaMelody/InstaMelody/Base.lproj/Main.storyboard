@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="15A226f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Upz-he-51Z">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Upz-he-51Z">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -565,7 +565,7 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sLJ-Xo-jnS">
-                                        <rect key="frame" x="0.0" y="194" width="320" height="71"/>
+                                        <rect key="frame" x="0.0" y="194" width="320" height="88"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Melody Loop" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L2N-ny-ckY">
                                                 <rect key="frame" x="8" y="0.0" width="304" height="19"/>
@@ -616,17 +616,27 @@
                                                     <constraint firstAttribute="bottom" secondItem="0On-X8-oAn" secondAttribute="bottom" id="zXs-5V-41l"/>
                                                 </constraints>
                                             </view>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loop status" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l2r-ZE-dbj">
+                                                <rect key="frame" x="8" y="71" width="304" height="17"/>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
                                         </subviews>
                                         <animations/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="71" id="0qP-aP-S4W"/>
+                                            <constraint firstAttribute="height" constant="88" id="0qP-aP-S4W"/>
                                             <constraint firstAttribute="trailing" secondItem="L2N-ny-ckY" secondAttribute="trailing" constant="8" id="8MF-Mu-MAW"/>
                                             <constraint firstAttribute="trailing" secondItem="95d-mp-i3Y" secondAttribute="trailing" constant="8" id="ALY-en-BzO"/>
+                                            <constraint firstAttribute="trailing" secondItem="l2r-ZE-dbj" secondAttribute="trailing" constant="8" id="Eiq-CY-8oc"/>
+                                            <constraint firstItem="l2r-ZE-dbj" firstAttribute="top" secondItem="95d-mp-i3Y" secondAttribute="bottom" constant="8" id="T7b-HZ-h28"/>
                                             <constraint firstItem="L2N-ny-ckY" firstAttribute="leading" secondItem="sLJ-Xo-jnS" secondAttribute="leading" constant="8" id="U4o-9B-r0l"/>
-                                            <constraint firstAttribute="bottom" secondItem="95d-mp-i3Y" secondAttribute="bottom" constant="8" id="b5o-bf-cio"/>
+                                            <constraint firstAttribute="bottom" secondItem="95d-mp-i3Y" secondAttribute="bottom" constant="25" id="b5o-bf-cio"/>
+                                            <constraint firstAttribute="bottom" secondItem="l2r-ZE-dbj" secondAttribute="bottom" id="i4T-4r-PKN"/>
                                             <constraint firstAttribute="width" constant="320" id="o6I-4A-VHB"/>
                                             <constraint firstItem="95d-mp-i3Y" firstAttribute="leading" secondItem="sLJ-Xo-jnS" secondAttribute="leading" constant="8" id="vig-I1-R3q"/>
                                             <constraint firstItem="L2N-ny-ckY" firstAttribute="top" secondItem="sLJ-Xo-jnS" secondAttribute="top" id="yms-Kq-03x"/>
+                                            <constraint firstItem="l2r-ZE-dbj" firstAttribute="leading" secondItem="sLJ-Xo-jnS" secondAttribute="leading" constant="8" id="zp6-dh-qgr"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rUU-u9-gFW">
@@ -679,7 +689,7 @@
                                 <animations/>
                                 <constraints>
                                     <constraint firstItem="sLJ-Xo-jnS" firstAttribute="top" secondItem="rUU-u9-gFW" secondAttribute="bottom" constant="8" id="EUZ-o2-9b1"/>
-                                    <constraint firstAttribute="bottom" secondItem="sLJ-Xo-jnS" secondAttribute="bottom" constant="63" id="Prb-MV-TZU"/>
+                                    <constraint firstAttribute="bottom" secondItem="sLJ-Xo-jnS" secondAttribute="bottom" constant="46" id="Prb-MV-TZU"/>
                                     <constraint firstAttribute="width" constant="320" id="WqJ-i4-Rmt"/>
                                     <constraint firstItem="sLJ-Xo-jnS" firstAttribute="leading" secondItem="iRk-FD-g04" secondAttribute="leading" id="bHm-LU-go7"/>
                                     <constraint firstAttribute="trailing" secondItem="rUU-u9-gFW" secondAttribute="trailing" id="ggj-0z-4Mb"/>
@@ -754,6 +764,7 @@
                         <outlet property="centerConsoleView" destination="WV3-gz-0cc" id="LW0-GR-C4U"/>
                         <outlet property="chooseLoopButton" destination="FBw-JA-ZNG" id="q1I-LW-cIK"/>
                         <outlet property="consoleView" destination="yIN-IG-5BF" id="ZbM-pl-jbh"/>
+                        <outlet property="loopStatusLabel" destination="l2r-ZE-dbj" id="yne-Ww-F9x"/>
                         <outlet property="participantsView" destination="86P-TD-YtE" id="7Fa-sM-KBn"/>
                         <outlet property="playButton" destination="ObB-It-L2l" id="gRN-0e-5bJ"/>
                         <outlet property="playLoopButton" destination="0On-X8-oAn" id="fuD-Tr-2VW"/>
@@ -1108,7 +1119,7 @@
                                                 <constraint firstAttribute="height" constant="70" id="bef-ic-Maa"/>
                                             </constraints>
                                         </imageView>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kzH-gN-lCY">
+                                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kzH-gN-lCY">
                                             <rect key="frame" x="512" y="8" width="30" height="84"/>
                                             <animations/>
                                             <constraints>
@@ -1122,7 +1133,7 @@
                                                 <action selector="approveFriend:" destination="vYc-MT-dDl" eventType="touchUpInside" id="gcZ-ZG-HRX"/>
                                             </connections>
                                         </button>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c4V-Fj-v06">
+                                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c4V-Fj-v06">
                                             <rect key="frame" x="550" y="8" width="30" height="84"/>
                                             <animations/>
                                             <constraints>

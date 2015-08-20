@@ -63,7 +63,7 @@
             [parameters setObject:deviceToken forKey:@"DeviceToken"];
         }
         
-        NSString *requestUrl = [NSString stringWithFormat:@"%@/Auth/User", BASE_URL];
+        NSString *requestUrl = [NSString stringWithFormat:@"%@/Auth/User", API_BASE_URL];
         
         //add 64 char string
         
@@ -104,7 +104,7 @@
     
     //https://api.instamelody.com/v1.0/User?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&displayName=testeraccount
     
-    NSString *requestUrl = [NSString stringWithFormat:@"%@/User", BASE_URL];
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/User", API_BASE_URL];
     
     NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
     

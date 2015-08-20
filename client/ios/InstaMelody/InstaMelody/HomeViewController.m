@@ -277,7 +277,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Image": @{@"FileName" : imageName}}];
     
     
-    NSString *requestUrl = [NSString stringWithFormat:@"%@/User/Update/Image", BASE_URL];
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/User/Update/Image", API_BASE_URL];
     
     //add 64 char string
     
@@ -313,7 +313,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *sessionToken =  [defaults objectForKey:@"authToken"];
     
-    NSString *requestUrl = [NSString stringWithFormat:@"%@/Upload/%@/%@", BASE_URL, sessionToken, fileToken];
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/Upload/%@/%@", API_BASE_URL, sessionToken, fileToken];
     
     //add 64 char string
     

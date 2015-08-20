@@ -11,10 +11,13 @@
 #import "MelodyGroup.h"
 #import "NSString+FontAwesome.h"
 #import "UIFont+FontAwesome.h"
+#import "AFURLSessionManager.h"
+#import "constants.h"
 
 @interface LoopViewController ()
 
 @property (nonatomic, strong) NSArray *groupArray;
+@property (nonatomic, strong) Melody *selectedMelody;
 
 @end
 
@@ -65,6 +68,7 @@
         for (Melody *melody in group.melodies) {
             UIAlertAction *action = [UIAlertAction actionWithTitle:melody.melodyName style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 //make the button do something
+                [self didSelectMelody:melody];
                 
             }];
             [alert addAction:action];
@@ -125,6 +129,95 @@
 
 -(IBAction)togglePlayback:(id)sender {
     
+}
+
+-(void)didSelectMelody:(Melody *)melody {
+    [self.chooseLoopButton setTitle:melody.melodyName forState:UIControlStateNormal];
+    
+    [self loadMelody:melody];
+}
+
+-(void)loadMelody:(Melody *)melody {
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    
+    NSString *pathString = [NSString stringWithFormat:@"%@/Melodies/%@", documentsPath, melody.fileName];
+    //pathString = [pathString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    
+    
+    NSString *filePath = [documentsPath stringByAppendingPathComponent:pathString];
+    
+    //if file exists, load, set status = loaded,
+    if ([fileManager fileExistsAtPath:filePath]) {
+        //
+        
+        self.loopStatusLabel.text = @"Loop loaded!";
+        
+        self.selectedMelody = melody;
+        
+    } else {
+        //else, download, show progress, set loaded, set play button
+        
+        self.loopStatusLabel.text = @"Loop downloading (0%)";
+        
+        [self downloadFile:melody.filePathUrlString toPath:pathString];
+    }
+}
+
+-(void)downloadFile:(NSString *)sourceFilePath toPath:(NSString *)destinationFilePath {
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
+    
+    NSString *fullUrlString = [NSString stringWithFormat:@"%@/%@", DOWNLOAD_BASE_URL, sourceFilePath];
+    fullUrlString = [fullUrlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    
+    NSURL *URL = [NSURL URLWithString:fullUrlString];
+    NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+    
+    NSProgress *progress = nil;
+    
+    NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:&progress destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+        
+        NSURL *fileURL = [NSURL fileURLWithPath:destinationFilePath];
+        
+        return fileURL;
+        //NSURL *documentsDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
+        //return [documentsDirectoryURL URLByAppendingPathComponent:[response suggestedFilename]];
+    } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+        
+        if (error == nil) {
+            NSLog(@"File downloaded to: %@", filePath);
+            self.loopStatusLabel.text = @"Loop loaded!";
+        } else {
+            NSLog(@"Download error: %@", error.description);
+            self.loopStatusLabel.text = @"Error loading loop";
+        }
+        [progress removeObserver:self forKeyPath:@"fractionCompleted" context:NULL];
+    }];
+    [downloadTask resume];
+    
+    [progress addObserver:self
+               forKeyPath:@"fractionCompleted"
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:@"fractionCompleted"]) {
+        NSProgress *progress = (NSProgress *)object;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            //Wants to update UI or perform any task on main thread.
+            double percent = progress.fractionCompleted * 100.0;
+            self.loopStatusLabel.text = [NSString stringWithFormat:@"Loop downloading (%.0f%%)", percent];
+        });
+        
+        NSLog(@"Progress… %f", progress.fractionCompleted);
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
 }
 
 @end

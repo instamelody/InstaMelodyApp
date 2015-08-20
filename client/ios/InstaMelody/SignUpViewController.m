@@ -58,7 +58,7 @@
          [[AFHTTPRequestSerializer serializer] requestWithMethod:@"POST" URLString:URLString parameters:parameters];
          */
         
-        NSString *requestUrl = [NSString stringWithFormat:@"%@/User/New", BASE_URL];
+        NSString *requestUrl = [NSString stringWithFormat:@"%@/User/New", API_BASE_URL];
         
         [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"JSON: %@", responseObject);
