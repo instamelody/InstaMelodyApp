@@ -204,6 +204,12 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 
+-(IBAction)showLoops:(id)sender {
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UIViewController *vc = [sb instantiateViewControllerWithIdentifier:@"LoopViewController"];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
 #pragma mark - image picker delegate
 
 
