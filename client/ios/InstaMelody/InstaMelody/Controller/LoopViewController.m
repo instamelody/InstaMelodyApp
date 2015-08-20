@@ -125,7 +125,25 @@
 }
 
 -(IBAction)playLoop:(id)sender {
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     
+    NSString *pathString = [NSString stringWithFormat:@"%@/Melodies/%@", documentsPath, self.selectedMelody.fileName];
+    
+    //pathString = [pathString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    
+    NSURL *docURL = [NSURL fileURLWithPath:pathString];
+    
+    NSError *error = nil;
+    
+    self.bgPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:docURL error:&error];
+    
+    if (error == nil) {
+        
+        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconStop] forState:UIControlStateNormal];
+        [self.bgPlayer setNumberOfLoops:-1];
+        [self.bgPlayer play];
+    }
+
 }
 
 -(IBAction)toggleRecording:(id)sender {
@@ -141,24 +159,17 @@
         [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconPlay] forState:UIControlStateNormal];
     } else {
         
-        NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-        
-        NSString *pathString = [NSString stringWithFormat:@"%@/Melodies/%@", documentsPath, self.selectedMelody.fileName];
-        
-        //pathString = [pathString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-        
-        NSURL *docURL = [NSURL fileURLWithPath:pathString];
-        
-        NSError *error = nil;
-        
-        self.bgPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:docURL error:&error];
-        
-        if (error == nil) {
-            
-            [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconStop] forState:UIControlStateNormal];
-            [self.bgPlayer setNumberOfLoops:-1];
-            [self.bgPlayer play];
+        if ([self isHeadsetPluggedIn]) {
+            [self playLoop:nil];
+        } else {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Headphones not detected" message:@"For the best results, please plug in your headphones" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [self playLoop:nil];
+            }];
+            [alert addAction:okAction];
+            [self presentViewController:alert animated:YES completion:nil];
         }
+        
         
     }
 }
@@ -273,6 +284,15 @@
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
+}
+
+- (BOOL)isHeadsetPluggedIn {
+    AVAudioSessionRouteDescription* route = [[AVAudioSession sharedInstance] currentRoute];
+    for (AVAudioSessionPortDescription* desc in [route outputs]) {
+        if ([[desc portType] isEqualToString:AVAudioSessionPortHeadphones])
+            return YES;
+    }
+    return NO;
 }
 
 @end
