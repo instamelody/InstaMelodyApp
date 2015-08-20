@@ -97,12 +97,6 @@
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
 }
 
--(IBAction)showLoop:(id)sender {
-    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    LoopViewController *lvc = [sb instantiateViewControllerWithIdentifier:@"LoopViewController"];
-    [self.navigationController pushViewController:lvc animated:YES];
-}
-
 -(IBAction)signOut:(id)sender {
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -177,14 +171,14 @@
 
 - (void)awesomeMenu:(AwesomeMenu *)menu didSelectIndex:(NSInteger)idx
 {
-    NSLog(@"Select the index : %ld",idx);
+    NSLog(@"Select the index : %ld",(long)idx);
     
     switch (idx) {
         case 1:
             [self showChats:nil];
             break;
         case 2:
-            [self showLoop:nil];
+            [self showLoops:nil];
             break;
         default:
             break;

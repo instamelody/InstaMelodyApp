@@ -9,6 +9,8 @@
 #import "LoopViewController.h"
 #import "DataManager.h"
 #import "MelodyGroup.h"
+#import "NSString+FontAwesome.h"
+#import "UIFont+FontAwesome.h"
 
 @interface LoopViewController ()
 
@@ -22,6 +24,35 @@
     [super viewDidLoad];
     
     self.groupArray = [[DataManager sharedManager] melodyGroupList];
+    [self roundView:self.profileImageView];
+    [self roundView:self.centerConsoleView];
+    [self roundView:self.consoleView];
+    
+    [self applyFontAwesome];
+    
+}
+
+-(void)roundView:(UIView *)view {
+    view.layer.cornerRadius = view.frame.size.height / 2;
+    view.layer.masksToBounds = YES;
+}
+
+-(void)applyFontAwesome {
+    self.playButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:self.playButton.titleLabel.frame.size.width - 10];
+    
+    self.shareButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:35.0f];
+    self.playLoopButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:25.0f];
+    
+    [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconPlay] forState:UIControlStateNormal];
+    [self.playLoopButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconRefresh] forState:UIControlStateNormal];
+    [self.shareButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconShareAlt] forState:UIControlStateNormal];
+    
+    [self.volumeBarButtonItem setTitleTextAttributes:@{
+                                         NSFontAttributeName: [UIFont fontAwesomeFontOfSize:20.0f]
+                                         } forState:UIControlStateNormal];
+    [self.volumeBarButtonItem setTitle:[NSString fontAwesomeIconStringForEnum:FAIconVolumeUp]];
+    
+    
 }
 
 -(IBAction)chooseLoop:(id)sender {
@@ -45,6 +76,26 @@
     }
     
     [self presentViewController:alert animated:YES completion:nil];
+}
+
+-(IBAction)share:(id)sender {
+    
+}
+
+-(IBAction)showVolumeSettings:(id)sender {
+    
+}
+
+-(IBAction)playLoop:(id)sender {
+    
+}
+
+-(IBAction)toggleRecording:(id)sender {
+    
+}
+
+-(IBAction)togglePlayback:(id)sender {
+    
 }
 
 @end
