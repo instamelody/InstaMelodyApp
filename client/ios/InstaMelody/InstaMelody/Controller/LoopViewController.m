@@ -168,9 +168,10 @@
         
         [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconStop] forState:UIControlStateNormal];
         [self.bgPlayer setNumberOfLoops:-1];
+        [self.bgPlayer setVolume:0.4f];
         [self.bgPlayer play];
         
-        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(updatePlaybackProgress) userInfo:nil repeats:YES];
+        //self.timer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(updatePlaybackProgress) userInfo:nil repeats:YES];
     } else {
         NSLog(@"Error loading file: %@", [error description]);
         
@@ -209,7 +210,7 @@
         
         [self.timer invalidate];
         
-        [self.playButton setHidden:NO];
+        self.playButton.hidden = NO;
         
     } else {
         NSError *error;
@@ -314,13 +315,25 @@
     if ([self.fgPlayer isPlaying]) {
         
         [self.fgPlayer stop];
+        [self.bgPlayer stop];
         [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconPlay] forState:UIControlStateNormal];
         
         [self.timer invalidate];
     } else {
         
         if ([self isHeadsetPluggedIn]) {
-            [self playRecording:nil];
+            
+            if (self.selectedMelody != nil) {
+                [self playRecording:nil];
+                [self playLoop:nil];
+            } else {
+                
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"No loop selected" message:@"Please select a loop" preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+                [alert addAction:okAction];
+                [self presentViewController:alert animated:YES completion:nil];
+                
+            }
         } else {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Headphones not detected" message:@"For the best results, please plug in your headphones" preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
@@ -383,7 +396,7 @@
         
         self.loopStatusLabel.text = @"Loop loaded!";
         
-        self.playButton.hidden = NO;
+        //self.playButton.hidden = NO;
         
     } else {
         //else, download, show progress, set loaded, set play button
@@ -421,7 +434,7 @@
             NSLog(@"File downloaded to: %@", filePath);
             self.loopStatusLabel.text = @"Loop loaded!";
             
-            self.playButton.hidden = NO;
+            //self.playButton.hidden = NO;
         } else {
             NSLog(@"Download error: %@", error.description);
             self.loopStatusLabel.text = @"Error loading loop";
@@ -467,6 +480,9 @@
     if (flag) {
         [self.timer invalidate];
         [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconPlay] forState:UIControlStateNormal];
+        if (player == self.fgPlayer) {
+            [self.bgPlayer stop];
+        }
     }
 }
 
