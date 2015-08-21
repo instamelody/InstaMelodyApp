@@ -23,6 +23,9 @@
 @property (nonatomic, strong) AVAudioPlayer *bgPlayer;
 
 @property (nonatomic, strong) NSTimer *timer;
+@property (nonatomic, strong)  NSDate *startTime;
+
+@property (nonatomic, strong) AVAudioRecorder *recorder;
 
 @end
 
@@ -50,8 +53,19 @@
     view.layer.masksToBounds = YES;
 }
 
--(void)updateProgress {
+-(void)updatePlaybackProgress {
     [self.progressView setProgress:self.bgPlayer.currentTime/self.bgPlayer.duration animated:YES];
+}
+
+-(void)updateRecordProgress {
+    NSDate *now = [NSDate date];
+    NSTimeInterval interval = [now timeIntervalSinceDate:self.startTime];
+    
+    if (interval > 10) {
+        self.startTime = [NSDate date];
+        interval = 0;
+    }
+    [self.progressView setProgress:interval/10.0f animated:YES];
 }
 
 -(void)applyFontAwesome {
@@ -154,7 +168,7 @@
         [self.bgPlayer setNumberOfLoops:-1];
         [self.bgPlayer play];
         
-        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(updateProgress) userInfo:nil repeats:YES];
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(updatePlaybackProgress) userInfo:nil repeats:YES];
     } else {
         NSLog(@"Error loading file: %@", [error description]);
         
@@ -163,7 +177,79 @@
 }
 
 -(IBAction)toggleRecording:(id)sender {
-    
+    if (self.recorder.isRecording) {
+        
+        [self.recorder stop];
+        
+        [self.timer invalidate];
+        
+    } else {
+        NSError *error;
+        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+        [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord
+                            error:&error];
+        if (error == nil) {
+            NSArray *paths =
+            NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                NSUserDomainMask, YES);
+            NSString *documentsPath = [paths objectAtIndex:0];
+            
+            NSString *recordingPath = [documentsPath stringByAppendingPathComponent:@"Recordings"];
+            
+            if (![[NSFileManager defaultManager] fileExistsAtPath:recordingPath]){
+                
+                NSError* error;
+                if(  [[NSFileManager defaultManager] createDirectoryAtPath:recordingPath withIntermediateDirectories:NO attributes:nil error:&error]) {
+                    
+                    NSLog(@"success creating folder");
+                    
+                } else {
+                    NSLog(@"[%@] ERROR: attempting to write create MyFolder directory", [self class]);
+                    NSAssert( FALSE, @"Failed to create directory maybe out of disk space?");
+                }
+                
+            }
+            
+            time_t unixTime = time(NULL);
+            
+            NSString *fileName = [NSString stringWithFormat:@"recording_%d.wav", (int)unixTime];
+            
+            NSString *filePath = [recordingPath
+                                  stringByAppendingPathComponent:fileName];
+            NSURL *fileURL = [NSURL fileURLWithPath:filePath];
+            NSMutableDictionary *settingsDict = [NSMutableDictionary new];
+            [settingsDict setObject:[NSNumber numberWithInt:44100.0]
+                             forKey:AVSampleRateKey];
+            [settingsDict setObject:[NSNumber numberWithInt:2]
+                             forKey:AVNumberOfChannelsKey];
+            [settingsDict setObject:[NSNumber
+                                     numberWithInt:AVAudioQualityMedium]
+                             forKey:AVEncoderAudioQualityKey];
+            
+            [settingsDict setObject:[NSNumber numberWithInt:kAudioFormatLinearPCM] forKey:AVFormatIDKey];
+            
+            [settingsDict setObject:[NSNumber numberWithInt:16]
+                             forKey:AVEncoderBitRateKey];
+            self.recorder = [[AVAudioRecorder alloc]
+                             initWithURL:fileURL
+                             settings:settingsDict error:&error];
+            if (error == nil) {
+                NSLog(@"audio recorder initialized successfully!");
+                
+                [self.recorder record];
+                
+                self.startTime = [NSDate date];
+                self.timer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(updateRecordProgress) userInfo:nil repeats:YES];
+            } else {
+                NSLog(@"error initializing audio recorder: %@",
+                      [error description]);
+            }
+        } else {
+            NSLog(@"error initializing audio session: %@",
+                  [error description]);
+        }
+        
+    }
 }
 
 -(IBAction)togglePlayback:(id)sender {
