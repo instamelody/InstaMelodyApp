@@ -13,14 +13,15 @@
 #import "UIFont+FontAwesome.h"
 #import "AFURLSessionManager.h"
 #import "constants.h"
-#import <AVFoundation/AVFoundation.h>
 
 @interface LoopViewController ()
 
 @property (nonatomic, strong) NSArray *groupArray;
 @property (nonatomic, strong) Melody *selectedMelody;
+@property (nonatomic, strong) NSURL *currentRecordingURL;
 
 @property (nonatomic, strong) AVAudioPlayer *bgPlayer;
+@property (nonatomic, strong) AVAudioPlayer *fgPlayer;
 
 @property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic, strong)  NSDate *startTime;
@@ -54,7 +55,7 @@
 }
 
 -(void)updatePlaybackProgress {
-    [self.progressView setProgress:self.bgPlayer.currentTime/self.bgPlayer.duration animated:YES];
+    [self.progressView setProgress:self.fgPlayer.currentTime/self.fgPlayer.duration animated:YES];
 }
 
 -(void)updateRecordProgress {
@@ -161,6 +162,7 @@
     NSError *error = nil;
     
     self.bgPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:docURL error:&error];
+    self.bgPlayer.delegate = self;
     
     if (error == nil) {
         
@@ -176,12 +178,38 @@
 
 }
 
+-(IBAction)playRecording:(id)sender {
+    
+    //pathString = [pathString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    
+    NSURL *docURL = self.currentRecordingURL;
+    
+    NSError *error = nil;
+    
+    self.fgPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:docURL error:&error];
+    self.fgPlayer.delegate = self;
+    
+    if (error == nil) {
+        
+        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconStop] forState:UIControlStateNormal];
+        [self.fgPlayer play];
+        
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(updatePlaybackProgress) userInfo:nil repeats:YES];
+    } else {
+        NSLog(@"Error loading file: %@", [error description]);
+        
+    }
+    
+}
+
 -(IBAction)toggleRecording:(id)sender {
     if (self.recorder.isRecording) {
         
         [self.recorder stop];
         
         [self.timer invalidate];
+        
+        [self.playButton setHidden:NO];
         
     } else {
         NSError *error;
@@ -236,6 +264,8 @@
             if (error == nil) {
                 NSLog(@"audio recorder initialized successfully!");
                 
+                self.currentRecordingURL = fileURL;
+                
                 [self.recorder record];
                 
                 self.startTime = [NSDate date];
@@ -255,6 +285,8 @@
 -(IBAction)togglePlayback:(id)sender {
     //sdf
     
+    /*
+    
     if ([self.bgPlayer isPlaying]) {
         
         [self.bgPlayer stop];
@@ -269,6 +301,30 @@
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Headphones not detected" message:@"For the best results, please plug in your headphones" preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 [self playLoop:nil];
+            }];
+            [alert addAction:okAction];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+        
+        
+    }
+     */
+    
+    
+    if ([self.fgPlayer isPlaying]) {
+        
+        [self.fgPlayer stop];
+        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconPlay] forState:UIControlStateNormal];
+        
+        [self.timer invalidate];
+    } else {
+        
+        if ([self isHeadsetPluggedIn]) {
+            [self playRecording:nil];
+        } else {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Headphones not detected" message:@"For the best results, please plug in your headphones" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [self playRecording:nil];
             }];
             [alert addAction:okAction];
             [self presentViewController:alert animated:YES completion:nil];
@@ -404,6 +460,14 @@
             return YES;
     }
     return NO;
+}
+
+-(void)audioPlayerDidFinishPlaying: (AVAudioPlayer *)player successfully:(BOOL)flag
+{
+    if (flag) {
+        [self.timer invalidate];
+        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconPlay] forState:UIControlStateNormal];
+    }
 }
 
 @end
