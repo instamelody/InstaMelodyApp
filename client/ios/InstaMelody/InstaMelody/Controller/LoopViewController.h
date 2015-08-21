@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DACircularProgressView.h"
 
 @interface LoopViewController : UIViewController
 
@@ -24,7 +25,7 @@
 
 @property (nonatomic, strong) IBOutlet UIView *consoleView;
 @property (nonatomic, strong) IBOutlet UIView *centerConsoleView;
-@property (nonatomic, strong) IBOutlet UIView *progressView;
+@property (nonatomic, strong) IBOutlet DACircularProgressView *progressView;
 @property (nonatomic, strong) IBOutlet UIImageView *profileImageView;
 
 @property (nonatomic, strong) IBOutlet UIScrollView *scrollView;

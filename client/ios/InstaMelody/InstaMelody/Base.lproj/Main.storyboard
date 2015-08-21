@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Upz-he-51Z">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="15A226f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Upz-he-51Z">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -463,6 +463,10 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yIN-IG-5BF">
                                 <rect key="frame" x="225" y="400" width="150" height="150"/>
                                 <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XdP-JA-fd2" customClass="DACircularProgressView">
+                                        <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
+                                        <animations/>
+                                    </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WV3-gz-0cc">
                                         <rect key="frame" x="18" y="18" width="115" height="115"/>
                                         <subviews>
@@ -503,10 +507,14 @@
                                 <animations/>
                                 <color key="backgroundColor" red="0.88235294119999996" green="0.88235294119999996" blue="0.88235294119999996" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
+                                    <constraint firstItem="XdP-JA-fd2" firstAttribute="top" secondItem="yIN-IG-5BF" secondAttribute="top" id="0cg-OQ-dCO"/>
                                     <constraint firstAttribute="centerY" secondItem="WV3-gz-0cc" secondAttribute="centerY" id="EkX-w9-hPP"/>
+                                    <constraint firstAttribute="bottom" secondItem="XdP-JA-fd2" secondAttribute="bottom" id="J4J-sv-ziy"/>
                                     <constraint firstAttribute="centerX" secondItem="WV3-gz-0cc" secondAttribute="centerX" id="KI5-A9-Srh"/>
+                                    <constraint firstItem="XdP-JA-fd2" firstAttribute="leading" secondItem="yIN-IG-5BF" secondAttribute="leading" id="MNK-zN-SJh"/>
                                     <constraint firstAttribute="width" constant="150" id="oP2-M2-QxR"/>
                                     <constraint firstAttribute="height" constant="150" id="q9a-4g-pUH"/>
+                                    <constraint firstAttribute="trailing" secondItem="XdP-JA-fd2" secondAttribute="trailing" id="z9S-vH-o6h"/>
                                 </constraints>
                             </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iRk-FD-g04">
@@ -582,6 +590,7 @@
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FBw-JA-ZNG">
                                                         <rect key="frame" x="8" y="0.0" width="250" height="36"/>
+                                                        <animations/>
                                                         <state key="normal" title="Pick a Loop">
                                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                         </state>
@@ -618,6 +627,7 @@
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loop status" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l2r-ZE-dbj">
                                                 <rect key="frame" x="8" y="71" width="304" height="17"/>
+                                                <animations/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
@@ -659,7 +669,7 @@
                                                         <rect key="frame" x="8" y="8" width="288" height="20"/>
                                                         <animations/>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
-                                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
@@ -769,6 +779,7 @@
                         <outlet property="playButton" destination="ObB-It-L2l" id="gRN-0e-5bJ"/>
                         <outlet property="playLoopButton" destination="0On-X8-oAn" id="fuD-Tr-2VW"/>
                         <outlet property="profileImageView" destination="Not-UM-Ow1" id="ZxR-tc-QV5"/>
+                        <outlet property="progressView" destination="XdP-JA-fd2" id="tie-lA-UZv"/>
                         <outlet property="recordButton" destination="8lD-vy-m4N" id="eCo-hG-Mkx"/>
                         <outlet property="scrollView" destination="iRk-FD-g04" id="8tw-Wq-egh"/>
                         <outlet property="shareButton" destination="511-II-2sA" id="cWl-xp-Q6T"/>
@@ -1119,7 +1130,7 @@
                                                 <constraint firstAttribute="height" constant="70" id="bef-ic-Maa"/>
                                             </constraints>
                                         </imageView>
-                                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kzH-gN-lCY">
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kzH-gN-lCY">
                                             <rect key="frame" x="512" y="8" width="30" height="84"/>
                                             <animations/>
                                             <constraints>
@@ -1133,7 +1144,7 @@
                                                 <action selector="approveFriend:" destination="vYc-MT-dDl" eventType="touchUpInside" id="gcZ-ZG-HRX"/>
                                             </connections>
                                         </button>
-                                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c4V-Fj-v06">
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c4V-Fj-v06">
                                             <rect key="frame" x="550" y="8" width="30" height="84"/>
                                             <animations/>
                                             <constraints>

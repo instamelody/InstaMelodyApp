@@ -22,6 +22,8 @@
 
 @property (nonatomic, strong) AVAudioPlayer *bgPlayer;
 
+@property (nonatomic, strong) NSTimer *timer;
+
 @end
 
 @implementation LoopViewController
@@ -36,11 +38,20 @@
     
     [self applyFontAwesome];
     
+    self.progressView.roundedCorners = YES;
+    self.progressView.trackTintColor = [UIColor clearColor];
+    self.progressView.progressTintColor = [UIColor colorWithRed:1/255.0f green:174/255.0f blue:255/255.0f alpha:1.0f];
+    self.progressView.thicknessRatio = 0.1f;
+    
 }
 
 -(void)roundView:(UIView *)view {
     view.layer.cornerRadius = view.frame.size.height / 2;
     view.layer.masksToBounds = YES;
+}
+
+-(void)updateProgress {
+    [self.progressView setProgress:self.bgPlayer.currentTime/self.bgPlayer.duration animated:YES];
 }
 
 -(void)applyFontAwesome {
@@ -142,6 +153,11 @@
         [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconStop] forState:UIControlStateNormal];
         [self.bgPlayer setNumberOfLoops:-1];
         [self.bgPlayer play];
+        
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(updateProgress) userInfo:nil repeats:YES];
+    } else {
+        NSLog(@"Error loading file: %@", [error description]);
+        
     }
 
 }
@@ -157,6 +173,8 @@
         
         [self.bgPlayer stop];
         [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconPlay] forState:UIControlStateNormal];
+        
+        [self.timer invalidate];
     } else {
         
         if ([self isHeadsetPluggedIn]) {
@@ -187,12 +205,25 @@
     NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     
     NSString *melodyPath = [documentsPath stringByAppendingPathComponent:@"Melodies"];
-    
-    NSError *error= nil;
-    
+    /*
     BOOL isDir;
     if (![[NSFileManager defaultManager] fileExistsAtPath:melodyPath isDirectory:&isDir]) {
         [[NSFileManager defaultManager] createDirectoryAtPath:documentsPath withIntermediateDirectories:NO attributes:nil error:&error];
+    }
+     */
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:melodyPath]){
+        
+        NSError* error;
+        if(  [[NSFileManager defaultManager] createDirectoryAtPath:melodyPath withIntermediateDirectories:NO attributes:nil error:&error]) {
+            
+            NSLog(@"success creating folder");
+            
+        } else {
+            NSLog(@"[%@] ERROR: attempting to write create MyFolder directory", [self class]);
+            NSAssert( FALSE, @"Failed to create directory maybe out of disk space?");
+        }
+        
     }
     
     

@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>DACircularProgress.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>FontAwesome+iOS.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -22,27 +27,22 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>108B2BA2176458FF4926D85254C11689</key>
+		<key>14A7D6928E63EAE92079A8505C3A21BF</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>75A13C008B7D893B1F5C0B01516F498F</key>
+		<key>6DEDD629322D0576D731A1F5669C4C60</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E12C0B4B8D317BB93C6F6A876A01FB14</key>
+		<key>A79A713AE69F65142D6A096191F67F7D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E8868BEACD668AC94B737D6E8CA18F0C</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>F2E8C294D4E20403FA87BCD6E2CC5977</key>
+		<key>D0B42EFECB72C8484A5218FDA168AD96</key>
 		<dict>
 			<key>primary</key>
 			<true/>
