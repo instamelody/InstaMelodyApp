@@ -8,6 +8,7 @@
 
 #import "SignInViewController.h"
 #import "AFHTTPRequestOperationManager.h"
+#import "AFURLSessionManager.h"
 #import "constants.h"
 
 #import "UIFont+FontAwesome.h"
@@ -126,8 +127,15 @@
         [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"FirstName"] forKey:@"FirstName"];
         [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"LastName"] forKey:@"LastName"];
 
+        if ([responseDict objectForKey:@"Image"] != nil) {
+            NSDictionary *imageDict = [responseDict objectForKey:@"Image"];
+            [[NSUserDefaults standardUserDefaults] setObject:[imageDict objectForKey:@"FilePath"] forKey:@"ProfileFilePath"];
+        }
+            
         
         [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        [self downloadProfilePhoto];
         
         [self cancel:nil];
         
@@ -138,6 +146,55 @@
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:error.description delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alertView show];
     }];
+}
+
+-(void)downloadProfilePhoto {
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    
+    NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
+    
+    NSString *remotePath =  [[NSUserDefaults standardUserDefaults] objectForKey:@"ProfileFilePath"];
+    
+    NSString *fileName = [remotePath lastPathComponent];
+    NSString *pathString = [profilePath stringByAppendingPathComponent:fileName];
+    
+    if (![fileManager fileExistsAtPath:pathString]) {
+        
+        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+        AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
+        
+        NSString *fullUrlString = [NSString stringWithFormat:@"%@/%@", DOWNLOAD_BASE_URL, remotePath];
+        fullUrlString = [fullUrlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+        
+        NSURL *URL = [NSURL URLWithString:fullUrlString];
+        NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+        
+        NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+            
+            //NSString *fileString = [NSString stringWithFormat:@"file://%@", destinationFilePath];
+            NSURL *fileURL = [NSURL fileURLWithPath:pathString];
+            
+            return fileURL;
+            
+            //NSURL *documentsDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
+            //return [documentsDirectoryURL URLByAppendingPathComponent:[response suggestedFilename]];
+        } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+            
+            if (error == nil) {
+                NSLog(@"File downloaded to: %@", filePath);
+                
+            } else {
+                NSLog(@"Download error: %@", error.description);
+            }
+        }];
+        [downloadTask resume];
+        
+    }
+    
+
 }
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField

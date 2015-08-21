@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="1" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7701" systemVersion="14F27" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="1" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7701" systemVersion="15A226f" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Friend" representedClassName="Friend" syncable="YES">
         <attribute name="displayName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="profileFilePath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="twitterUsername" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userId" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
@@ -25,8 +26,8 @@
         <relationship name="melodies" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Melody" inverseName="melodyGroup" inverseEntity="Melody" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Friend" positionX="-90" positionY="-7" width="128" height="133"/>
-        <element name="MelodyGroup" positionX="36" positionY="-162" width="128" height="103"/>
+        <element name="Friend" positionX="-90" positionY="-7" width="128" height="148"/>
         <element name="Melody" positionX="243" positionY="-15" width="128" height="163"/>
+        <element name="MelodyGroup" positionX="36" positionY="-162" width="128" height="103"/>
     </elements>
 </model>

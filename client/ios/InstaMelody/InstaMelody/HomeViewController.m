@@ -66,6 +66,7 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
      if ([defaults objectForKey:@"authToken"] !=  nil) {
          self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", [defaults objectForKey:@"FirstName"], [defaults objectForKey:@"LastName"]];
+         
      }
     
     NSString *authToken = [defaults objectForKey:@"authToken"];
@@ -75,6 +76,17 @@
     } else {
         [[DataManager sharedManager] fetchFriends];
         [[DataManager sharedManager] fetchMelodies];
+    }
+    
+    if ([defaults objectForKey:@"ProfileFilePath"] != nil) {
+        
+        NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+        
+        NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
+        NSString *imageName = [[defaults objectForKey:@"ProfileFilePath"] lastPathComponent];
+        
+        NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
+        self.profileImageView.image = [UIImage imageWithContentsOfFile:imagePath];
     }
 }
 
@@ -354,6 +366,11 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"You have updated your profile photo" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alertView show];
+        
+        NSArray *responseArray = (NSArray *)responseObject;
+        NSDictionary *responseDict = responseArray[0];
+        
+        [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"Path"] forKey:@"ProfileFilePath"];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);

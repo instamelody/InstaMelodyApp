@@ -2,7 +2,7 @@
 //  Friend.m
 //  
 //
-//  Created by Ahmed Bakir on 8/17/15.
+//  Created by Ahmed Bakir on 8/21/15.
 //
 //
 
@@ -13,9 +13,10 @@
 
 @dynamic displayName;
 @dynamic firstName;
+@dynamic image;
 @dynamic lastName;
 @dynamic twitterUsername;
-@dynamic image;
 @dynamic userId;
+@dynamic profileFilePath;
 
 @end

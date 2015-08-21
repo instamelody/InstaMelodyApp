@@ -9,6 +9,7 @@
 #import "DataManager.h"
 #import "Constants.h"
 #import "AFHTTPRequestOperationManager.h"
+#import "AFURLSessionManager.h"
 
 @implementation DataManager
 
@@ -66,16 +67,97 @@
         newFriend.lastName = [friendDict objectForKey:@"LastName"];
         newFriend.userId = [friendDict objectForKey:@"Id"];
         newFriend.displayName = [friendDict objectForKey:@"DisplayName"];
+        
+        if ([friendDict objectForKey:@"Image"] != nil) {
+            NSDictionary *imageDict = [friendDict objectForKey:@"Image"];
+            newFriend.profileFilePath = [imageDict objectForKey:@"FilePath"];
+        }
     }
     
     [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:^(BOOL contextDidSave, NSError *error) {
         if (error == nil) {
             NSLog(@"CORE DATA save - successful");
+            
+            
+            //fetch profiles
+            [self downloadProfilePictures];
+            
         } else {
             NSLog(@"CORE DATA error - %@", error.description);
         }
         //
     }];
+    
+}
+
+-(void)downloadProfilePictures {
+    
+    //try to create folder
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    
+    NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
+    
+    if (![fileManager fileExistsAtPath:profilePath]){
+        
+        NSError* error;
+        if(  [[NSFileManager defaultManager] createDirectoryAtPath:profilePath withIntermediateDirectories:NO attributes:nil error:&error]) {
+            
+            NSLog(@"success creating folder");
+            
+        } else {
+            NSLog(@"[%@] ERROR: attempting to write create MyFolder directory", [self class]);
+            NSAssert( FALSE, @"Failed to create directory maybe out of disk space?");
+        }
+        
+    }
+    
+    NSArray *friendList = [Friend MR_findAll];
+    
+    for (Friend *friend in friendList) {
+        if (friend.profileFilePath != nil) {
+            NSString *fileName = [friend.profileFilePath lastPathComponent];
+            NSString *pathString = [profilePath stringByAppendingPathComponent:fileName];
+            
+            if (![fileManager fileExistsAtPath:pathString]) {
+                
+                NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+                AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
+                
+                NSString *fullUrlString = [NSString stringWithFormat:@"%@/%@", DOWNLOAD_BASE_URL, friend.profileFilePath];
+                fullUrlString = [fullUrlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+                
+                NSURL *URL = [NSURL URLWithString:fullUrlString];
+                NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+                
+                NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+                    
+                    //NSString *fileString = [NSString stringWithFormat:@"file://%@", destinationFilePath];
+                    NSURL *fileURL = [NSURL fileURLWithPath:pathString];
+                    
+                    return fileURL;
+                    
+                    //NSURL *documentsDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
+                    //return [documentsDirectoryURL URLByAppendingPathComponent:[response suggestedFilename]];
+                } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+                    
+                    if (error == nil) {
+                        NSLog(@"File downloaded to: %@", filePath);
+                        
+                    } else {
+                        NSLog(@"Download error: %@", error.description);
+                    }
+                }];
+                [downloadTask resume];
+                
+            }
+            
+            
+        }
+    }
+    
 }
 
 - (NSArray *)friendList {

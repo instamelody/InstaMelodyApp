@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:InstaMelody/Model/Friend.h">
+   </FileRef>
+   <FileRef
+      location = "group:InstaMelody/Model/Friend.m">
+   </FileRef>
+   <FileRef
       location = "group:InstaMelody.xcodeproj">
    </FileRef>
    <FileRef
