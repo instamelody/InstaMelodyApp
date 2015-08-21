@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "DACircularProgressView.h"
+#import <AVFoundation/AVFoundation.h>
 
-@interface LoopViewController : UIViewController
+@interface LoopViewController : UIViewController <AVAudioPlayerDelegate>
 
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *volumeBarButtonItem;
 
