@@ -87,9 +87,24 @@
     
     NSString *dateString = [chatDict objectForKey:@"DateModified"];
     
+    cell.profileImageView.image = [UIImage imageNamed:@"Profile"];
+    
     
     NSDictionary *firstUser = userArray[0];
     Friend *friend = [Friend MR_findFirstByAttribute:@"userId" withValue:[firstUser objectForKey:@"Id"]];
+    
+    if (friend.profileFilePath != nil && ![friend.profileFilePath isEqualToString:@""]) {
+        
+        NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+        
+        NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
+        NSString *imageName = [friend.profileFilePath lastPathComponent];
+        
+        NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
+        cell.profileImageView.image = [UIImage imageWithContentsOfFile:imagePath];
+        
+    }
+    
     
     if (userArray.count == 2) {
         cell.nameLabel.text = [NSString stringWithFormat:@"Chat with %@", friend.displayName];
@@ -99,8 +114,6 @@
     
     
     cell.descriptionLabel.text = [NSString stringWithFormat:@"%ld users", userArray.count];
-    
-    cell.profileImageView.image = [UIImage imageNamed:@"Profile"];
     
     cell.timeLabel.text = [dateString substringToIndex:10];
     

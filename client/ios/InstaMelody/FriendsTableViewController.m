@@ -98,6 +98,19 @@
         
         cell.profileImageView.image = [UIImage imageNamed:@"Profile"];
         
+        if (friend.profileFilePath != nil && ![friend.profileFilePath isEqualToString:@""]) {
+            
+            NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+            
+            NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
+            NSString *imageName = [friend.profileFilePath lastPathComponent];
+            
+            NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
+            cell.profileImageView.image = [UIImage imageWithContentsOfFile:imagePath];
+            
+        }
+        
+        
     } else if (indexPath.section == 1) {
         NSDictionary *friendDict = [self.pendingFriendsList objectAtIndex:indexPath.row];
         

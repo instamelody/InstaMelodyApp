@@ -68,7 +68,7 @@
         newFriend.userId = [friendDict objectForKey:@"Id"];
         newFriend.displayName = [friendDict objectForKey:@"DisplayName"];
         
-        if ([friendDict objectForKey:@"Image"] != nil) {
+        if ([friendDict objectForKey:@"Image"] != nil && [[friendDict objectForKey:@"Image"] isKindOfClass:[NSDictionary class]]) {
             NSDictionary *imageDict = [friendDict objectForKey:@"Image"];
             newFriend.profileFilePath = [imageDict objectForKey:@"FilePath"];
         }
