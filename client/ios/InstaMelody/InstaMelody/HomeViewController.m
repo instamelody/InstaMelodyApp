@@ -217,8 +217,6 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
      }];
     
     [self prepareImage:selectedImage];
-    
-    [self updateProfilePicture:selectedImage];
 }
 
 -(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
@@ -265,14 +263,42 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 #pragma mark - network operations
 -(void)updateProfilePicture:(UIImage *)image{
     
-    //step 1 - get file token
-    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    //save to file
+    
+    time_t unixTime = time(NULL);
+    
+    NSString *imageName = [NSString stringWithFormat:@"%@_%@_profile_%d.jpg", [defaults objectForKey:@"FirstName"], [defaults objectForKey:@"LastName"], (int)unixTime];
+    
+    //try to create folder
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    
+    NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:profilePath]){
+        
+        NSError* error;
+        if(  [[NSFileManager defaultManager] createDirectoryAtPath:profilePath withIntermediateDirectories:NO attributes:nil error:&error]) {
+            
+            NSLog(@"success creating folder");
+            
+        } else {
+            NSLog(@"[%@] ERROR: attempting to write create MyFolder directory", [self class]);
+            NSAssert( FALSE, @"Failed to create directory maybe out of disk space?");
+        }
+        
+    }
+    
+    //save to folder
+    NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
+    NSData *imageData = UIImageJPEGRepresentation(image, 0.7);
+    [imageData writeToFile:imagePath atomically:YES];
+    
+    
+    //step 1 - get file token
     NSString *token =  [defaults objectForKey:@"authToken"];
-    
-    time_t unixTime = time(NULL);   
-    
-    NSString *imageName = [NSString stringWithFormat:@"%@_%@_profile_%d.png", [defaults objectForKey:@"FirstName"], [defaults objectForKey:@"LastName"], (int)unixTime];
                          
     NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Image": @{@"FileName" : imageName}}];
     
@@ -294,9 +320,8 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         NSDictionary *tokenDict = [responseDict objectForKey:@"FileUploadToken"];
         NSString *fileTokenString = [tokenDict objectForKey:@"Token"];
         
-        NSData *imageData = UIImagePNGRepresentation(image);
-        
-        [self uploadData:imageData withFileToken:fileTokenString];
+        [self uploadFile:imagePath withFileToken:fileTokenString];
+        //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
          
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -308,19 +333,22 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     
 }
 
--(void)uploadData:(NSData *)data withFileToken:(NSString *)fileToken {
+-(void)uploadFile:(NSString *)filePath withFileToken:(NSString *)fileToken {
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *sessionToken =  [defaults objectForKey:@"authToken"];
     
     NSString *requestUrl = [NSString stringWithFormat:@"%@/Upload/%@/%@", API_BASE_URL, sessionToken, fileToken];
     
+    NSURL *fileURL = [NSURL fileURLWithPath:filePath];
+    
     //add 64 char string
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     
     [manager POST:requestUrl parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        [formData appendPartWithFormData:data name:@"file"];
+        //[formData appendPartWithFormData:data name:[filePath last]];
+        [formData appendPartWithFileURL:fileURL name:[filePath lastPathComponent] error:nil];
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"Success: %@", responseObject);
         

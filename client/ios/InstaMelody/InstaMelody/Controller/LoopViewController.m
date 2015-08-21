@@ -205,12 +205,6 @@
     NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     
     NSString *melodyPath = [documentsPath stringByAppendingPathComponent:@"Melodies"];
-    /*
-    BOOL isDir;
-    if (![[NSFileManager defaultManager] fileExistsAtPath:melodyPath isDirectory:&isDir]) {
-        [[NSFileManager defaultManager] createDirectoryAtPath:documentsPath withIntermediateDirectories:NO attributes:nil error:&error];
-    }
-     */
     
     if (![[NSFileManager defaultManager] fileExistsAtPath:melodyPath]){
         
