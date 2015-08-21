@@ -50,7 +50,7 @@ namespace InstaMelody.API.Controllers
             }
             catch (Exception ex)
             {
-                InstaMelodyLogger.Log(string.Format("Failure sending push notification: {0}, {1}", ex.InnerException, ex.InnerException.InnerException), LogLevel.Error);
+                InstaMelodyLogger.Log(string.Format("Failure sending push notification: {0}", ex.InnerException), LogLevel.Error);
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }

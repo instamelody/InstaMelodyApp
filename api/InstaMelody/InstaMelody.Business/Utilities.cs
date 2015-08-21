@@ -259,6 +259,8 @@ namespace InstaMelody.Business
 
             var key = Infrastructure.Utilities.GetApnsTypeString(type);
             SendApplePushNotification(token.First(), key, data);
+            InstaMelodyLogger.Log(string.Format("Push notification triggered: Token: {0}, Type: {1}", 
+                token, key), LogLevel.Trace);
         }
 
         /// <summary>
@@ -274,6 +276,8 @@ namespace InstaMelody.Business
             foreach (var token in tokens)
             {
                 SendApplePushNotification(token, key, data);
+                InstaMelodyLogger.Log(string.Format("Push notification triggered: Token: {0}, Type: {1}",
+                    token, key), LogLevel.Trace);
             }
         }
 
@@ -347,7 +351,8 @@ namespace InstaMelody.Business
             //  for registered for remote notifications is called, and the device token is passed back to you
             push.QueueNotification(new AppleNotification()
                                        .ForDeviceToken(deviceToken)
-                                       .WithCustomItem(key, values));
+                                       .WithCustomItem(key, values)
+                                       .WithAlert(key));
         }
 
         /// <summary>

@@ -163,15 +163,7 @@ namespace InstaMelody.API.Controllers
                         result = bll.GetChat(new Chat { Id = _chat }, _token, _limit, _fromId);
                     }
 
-                    if (result == null)
-                    {
-                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, 
-                            string.Format(Exceptions.FailedGetChat, _chat));
-                    }
-                    else
-                    {
-                        response = this.Request.CreateResponse(HttpStatusCode.OK, result);
-                    }
+                    response = this.Request.CreateResponse(HttpStatusCode.OK, result);
                 }
                 catch (Exception exc)
                 {

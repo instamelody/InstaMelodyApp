@@ -497,7 +497,7 @@ namespace InstaMelody.Business
 
             // try to request friend by id, email, or display name
             var requestedFriend = FindUser(friend);
-            if (requestedFriend == null)
+            if (requestedFriend == null || requestedFriend.Id.Equals(default(Guid)))
             {
                 InstaMelodyLogger.Log(
                     string.Format("Could not find requested friend in database. Token: {0}, Friend Id: {1}, Friend Display Name: {2}, Friend Email: {3}", 

@@ -178,7 +178,7 @@ namespace InstaMelody.Business.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("InstaMelodyDev.p12")]
+        [global::System.Configuration.DefaultSettingValueAttribute("DevAPNSCert.p12")]
         public string APNSDevCertificate {
             get {
                 return ((string)(this["APNSDevCertificate"]));
@@ -187,7 +187,7 @@ namespace InstaMelody.Business.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("InstaMelodyDev.p12")]
+        [global::System.Configuration.DefaultSettingValueAttribute("DevAPNSCert.p12")]
         public string APNSProdCertificate {
             get {
                 return ((string)(this["APNSProdCertificate"]));
@@ -196,7 +196,7 @@ namespace InstaMelody.Business.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("insta")]
+        [global::System.Configuration.DefaultSettingValueAttribute("instamelody")]
         public string APNSDevCertPassword {
             get {
                 return ((string)(this["APNSDevCertPassword"]));
@@ -205,7 +205,7 @@ namespace InstaMelody.Business.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("insta")]
+        [global::System.Configuration.DefaultSettingValueAttribute("instamelody")]
         public string APNSProdCertPassword {
             get {
                 return ((string)(this["APNSProdCertPassword"]));

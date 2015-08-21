@@ -54,16 +54,16 @@
       <Value Profile="(Default)">104.130.230.164</Value>
     </Setting>
     <Setting Name="APNSDevCertificate" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">InstaMelodyDev.p12</Value>
+      <Value Profile="(Default)">DevAPNSCert.p12</Value>
     </Setting>
     <Setting Name="APNSProdCertificate" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">InstaMelodyDev.p12</Value>
+      <Value Profile="(Default)">DevAPNSCert.p12</Value>
     </Setting>
     <Setting Name="APNSDevCertPassword" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">insta</Value>
+      <Value Profile="(Default)">instamelody</Value>
     </Setting>
     <Setting Name="APNSProdCertPassword" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">insta</Value>
+      <Value Profile="(Default)">instamelody</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -67,6 +67,14 @@ namespace InstaMelody.Business
                 UserId = sessionUser.Id
             });
 
+            if (message == null)
+            {
+                InstaMelodyLogger.Log(
+                    string.Format("Cannot start a Chat with a NULL message. User Id: {0}, Requested User Id: {1}, Token: {2}, Chat Id: {3}",
+                        sessionUser.Id, foundFriend.Id, sessionToken, newChat.Id), LogLevel.Error);
+                throw new DataException("Cannot start a Chat with a NULL message.");
+            }
+
             // create chat message
             var chatMessage = CreateChatMessage(newChat, sessionUser, message);
 
@@ -337,7 +345,7 @@ namespace InstaMelody.Business
         /// <returns></returns>
         public IList<Chat> GetAllUserChats(Guid sessionToken)
         {
-            List<Chat> results = null;
+            List<Chat> results = new List<Chat>();
 
             // check token
             var sessionUser = Utilities.GetUserBySession(sessionToken);
@@ -428,7 +436,7 @@ namespace InstaMelody.Business
             }
             
             // get chat messages
-            IList<ChatMessage> messages;
+            IList<ChatMessage> messages = null;
             if (limitRecords != null && limitRecords > 0)
             {
                 messages = fromId != null && fromId > 0
@@ -438,6 +446,11 @@ namespace InstaMelody.Business
             else
             {
                 messages = dal.GetMessagesByChat(foundChat.Id);
+            }
+
+            if (messages == null)
+            {
+                return foundChat;
             }
 
             foreach (var message in messages)
