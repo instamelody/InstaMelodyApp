@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="15A226f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Upz-he-51Z">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Upz-he-51Z">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -299,18 +299,18 @@
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zng-c1-8kw">
-                                            <rect key="frame" x="512" y="33" width="70" height="44"/>
+                                            <rect key="frame" x="532" y="33" width="50" height="44"/>
                                             <animations/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="70" id="Ctm-WP-8M2"/>
+                                                <constraint firstAttribute="width" constant="50" id="Ctm-WP-8M2"/>
                                                 <constraint firstAttribute="height" constant="44" id="nXo-Tl-Mrs"/>
                                             </constraints>
-                                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
+                                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="10"/>
                                             <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lby-6D-IGy">
-                                            <rect key="frame" x="108" y="62" width="384" height="15"/>
+                                            <rect key="frame" x="108" y="62" width="414" height="15"/>
                                             <animations/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="15" id="vJw-Li-9H8"/>
@@ -320,7 +320,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N7I-s8-hTz">
-                                            <rect key="frame" x="108" y="33" width="384" height="21"/>
+                                            <rect key="frame" x="108" y="33" width="414" height="21"/>
                                             <animations/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="S1u-vl-zZL"/>
@@ -338,10 +338,10 @@
                                         <constraint firstAttribute="centerY" secondItem="S9z-ld-Glk" secondAttribute="centerY" id="MHe-fK-DZn"/>
                                         <constraint firstAttribute="centerY" secondItem="Zng-c1-8kw" secondAttribute="centerY" id="NAA-AU-VM8"/>
                                         <constraint firstItem="N7I-s8-hTz" firstAttribute="top" secondItem="ZlZ-jV-Pyt" secondAttribute="topMargin" constant="25" id="NrO-2c-Hir"/>
-                                        <constraint firstItem="Zng-c1-8kw" firstAttribute="leading" secondItem="N7I-s8-hTz" secondAttribute="trailing" constant="20" id="Qlm-dp-kff"/>
+                                        <constraint firstItem="Zng-c1-8kw" firstAttribute="leading" secondItem="N7I-s8-hTz" secondAttribute="trailing" constant="10" id="Qlm-dp-kff"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="Zng-c1-8kw" secondAttribute="trailing" constant="10" id="RGR-Q5-udz"/>
                                         <constraint firstItem="N7I-s8-hTz" firstAttribute="leading" secondItem="S9z-ld-Glk" secondAttribute="trailing" constant="20" id="aGQ-wp-93q"/>
-                                        <constraint firstItem="Zng-c1-8kw" firstAttribute="leading" secondItem="Lby-6D-IGy" secondAttribute="trailing" constant="20" id="yKd-83-Jd0"/>
+                                        <constraint firstItem="Zng-c1-8kw" firstAttribute="leading" secondItem="Lby-6D-IGy" secondAttribute="trailing" constant="10" id="yKd-83-Jd0"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <animations/>
@@ -1130,7 +1130,7 @@
                                                 <constraint firstAttribute="height" constant="70" id="bef-ic-Maa"/>
                                             </constraints>
                                         </imageView>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kzH-gN-lCY">
+                                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kzH-gN-lCY">
                                             <rect key="frame" x="512" y="8" width="30" height="84"/>
                                             <animations/>
                                             <constraints>
@@ -1144,7 +1144,7 @@
                                                 <action selector="approveFriend:" destination="vYc-MT-dDl" eventType="touchUpInside" id="gcZ-ZG-HRX"/>
                                             </connections>
                                         </button>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c4V-Fj-v06">
+                                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c4V-Fj-v06">
                                             <rect key="frame" x="550" y="8" width="30" height="84"/>
                                             <animations/>
                                             <constraints>

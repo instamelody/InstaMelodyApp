@@ -444,6 +444,12 @@
             [self.messages addObject:message];
         }
     }
+    
+    NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"date" ascending:YES];
+    NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
+    NSArray *sortedArray = [self.messages sortedArrayUsingDescriptors:descriptors];
+    
+    self.messages = [NSMutableArray arrayWithArray:sortedArray];
     [self.collectionView reloadData];
 }
 
