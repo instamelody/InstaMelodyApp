@@ -145,5 +145,26 @@ namespace InstaMelody.Infrastructure
 
             return null;
         }
+
+        /// <summary>
+        /// Gets the apns alert string.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="userName">Name of the user.</param>
+        /// <returns></returns>
+        public static string GetApnsAlertString(APNSTypeEnum type, string sender)
+        {
+            switch (type)
+            {
+                case APNSTypeEnum.FriendRequest:
+                    return string.Format("New friend request from {0}.", sender);
+                case APNSTypeEnum.ChatCreated:
+                    return string.Format("New chat request from {0}.", sender);
+                case APNSTypeEnum.ChatNewMessage:
+                    return string.Format("New message from {0}.", sender);
+            }
+
+            return null;
+        }
     }
 }

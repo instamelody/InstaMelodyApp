@@ -79,7 +79,7 @@ namespace InstaMelody.Business
             var chatMessage = CreateChatMessage(newChat, sessionUser, message);
 
             // send push notification to requested user
-            Utilities.SendPushNotification(foundFriend.Id, APNSTypeEnum.ChatCreated, newChat.Id);
+            Utilities.SendPushNotification(foundFriend.Id, sessionUser.DisplayName, APNSTypeEnum.ChatCreated, newChat.Id);
 
             // return chat & file upload token (if necessary)
             if (chatMessage.Item2 != null)
@@ -150,7 +150,7 @@ namespace InstaMelody.Business
             var chatMessage = CreateChatMessage(newChat, sessionUser, message);
 
             // send push notification to requested user
-            Utilities.SendPushNotification(foundUserIds, APNSTypeEnum.ChatCreated, newChat.Id);
+            Utilities.SendPushNotification(foundUserIds, sessionUser.DisplayName, APNSTypeEnum.ChatCreated, newChat.Id);
 
             // return chat & file upload token (if necessary)
             if (chatMessage.Item2 != null)
@@ -278,7 +278,8 @@ namespace InstaMelody.Business
 
             // send push notification to all users in chat
             var userIds = chatUsers.Select(u => u.UserId).Where(i => !i.Equals(sessionUser.Id));
-            Utilities.SendPushNotification(userIds.ToList(), APNSTypeEnum.ChatNewMessage, chatMessage.Item1.ChatId, chatMessage.Item1.Id);
+            Utilities.SendPushNotification(userIds.ToList(), sessionUser.DisplayName, 
+                APNSTypeEnum.ChatNewMessage, chatMessage.Item1.ChatId, chatMessage.Item1.Id);
 
             // return new chat message
             if (chatMessage.Item2 != null)
