@@ -14,6 +14,7 @@
 @property (nonatomic, strong) IBOutlet UIView *profileView;
 @property (nonatomic, strong) IBOutlet UIImageView *profileImageView;
 @property (nonatomic, strong) IBOutlet UILabel *nameLabel;
+@property (nonatomic, strong) IBOutlet UILabel *displayNameLabel;
 
 @property (nonatomic, strong) IBOutlet UIView *pathMenuView;
 
