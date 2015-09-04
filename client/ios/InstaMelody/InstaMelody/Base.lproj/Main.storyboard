@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Upz-he-51Z">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="15A226f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Upz-he-51Z">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -1088,6 +1088,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="instaMelody" id="anY-73-bnU"/>
                     <connections>
+                        <outlet property="displayNameLabel" destination="M5O-ye-LAW" id="T5t-B0-bas"/>
                         <outlet property="nameLabel" destination="soX-59-dIa" id="QCl-zc-nXW"/>
                         <outlet property="profileImageView" destination="01h-hF-xsz" id="Vc6-2Z-R62"/>
                         <outlet property="profileView" destination="BHt-nu-b7N" id="KKe-og-ZVe"/>
@@ -1130,7 +1131,7 @@
                                                 <constraint firstAttribute="height" constant="70" id="bef-ic-Maa"/>
                                             </constraints>
                                         </imageView>
-                                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kzH-gN-lCY">
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kzH-gN-lCY">
                                             <rect key="frame" x="512" y="8" width="30" height="84"/>
                                             <animations/>
                                             <constraints>
@@ -1144,7 +1145,7 @@
                                                 <action selector="approveFriend:" destination="vYc-MT-dDl" eventType="touchUpInside" id="gcZ-ZG-HRX"/>
                                             </connections>
                                         </button>
-                                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c4V-Fj-v06">
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c4V-Fj-v06">
                                             <rect key="frame" x="550" y="8" width="30" height="84"/>
                                             <animations/>
                                             <constraints>

@@ -282,6 +282,62 @@ namespace InstaMelody.Business
         }
 
         /// <summary>
+        /// Sends the push notification.
+        /// </summary>
+        /// <param name="userIds">The user ids.</param>
+        /// <param name="senderDisplayName">Display name of the sender.</param>
+        /// <param name="type">The type.</param>
+        /// <param name="data">The data.</param>
+        public static void SendPushNotification(IList<Guid> userIds, string senderDisplayName, APNSTypeEnum type, params object[] data)
+        {
+            var tokens = GetDeviceTokens(userIds);
+            var key = Infrastructure.Utilities.GetApnsTypeString(type);
+            var alert = Infrastructure.Utilities.GetApnsAlertString(type, senderDisplayName);
+            foreach (var token in tokens)
+            {
+                if (alert == null)
+                {
+                    SendApplePushNotification(token, key, data);
+                }
+                else
+                {
+                    SendApplePushNotification(token, alert, key, data);
+                }
+                InstaMelodyLogger.Log(string.Format("Push notification triggered: Token: {0}, Type: {1}",
+                    token, key), LogLevel.Trace);
+            }
+        }
+
+        /// <summary>
+        /// Sends the push notification.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="senderDisplayName">Display name of the sender.</param>
+        /// <param name="type">The type.</param>
+        /// <param name="data">The data.</param>
+        public static void SendPushNotification(Guid userId, string senderDisplayName, APNSTypeEnum type, params object[] data)
+        {
+            var token = GetDeviceTokens(new List<Guid> { userId });
+            if (token == null || !token.Any())
+            {
+                return;
+            }
+
+            var key = Infrastructure.Utilities.GetApnsTypeString(type);
+            var alert = Infrastructure.Utilities.GetApnsAlertString(type, senderDisplayName);
+            if (alert == null)
+            {
+                SendApplePushNotification(token.First(), key, data);
+            }
+            else
+            {
+                SendApplePushNotification(token.First(), alert, key, data);
+            }
+            InstaMelodyLogger.Log(string.Format("Push notification triggered: Token: {0}, Type: {1}",
+                token, key), LogLevel.Trace);
+        }
+
+        /// <summary>
         /// Gets the device tokens.
         /// </summary>
         /// <param name="userIds">The user ids.</param>
@@ -349,10 +405,42 @@ namespace InstaMelody.Business
             //Fluent construction of an iOS notification
             //IMPORTANT: For iOS you MUST MUST MUST use your own DeviceToken here that gets generated within your iOS app itself when the Application Delegate
             //  for registered for remote notifications is called, and the device token is passed back to you
-            push.QueueNotification(new AppleNotification()
-                                       .ForDeviceToken(deviceToken)
-                                       .WithCustomItem(key, values)
-                                       .WithAlert(key));
+
+            var alert = string.Empty;
+
+            var notification = new AppleNotification()
+                                .ForDeviceToken(deviceToken)
+                                .WithCustomItem(key, values);
+
+            push.QueueNotification(notification);
+        }
+
+        private static void SendApplePushNotification(string deviceToken, string alert, string key, params object[] values)
+        {
+            var push = new PushBroker();
+
+            push.OnNotificationSent += NotificationSent;
+            push.OnChannelException += ChannelException;
+            push.OnServiceException += ServiceException;
+            push.OnNotificationFailed += NotificationFailed;
+            push.OnDeviceSubscriptionExpired += DeviceSubscriptionExpired;
+            push.OnChannelCreated += ChannelCreated;
+            push.OnChannelDestroyed += ChannelDestroyed;
+
+#if DEBUG
+            var appleCert = File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Settings.Default.APNSDevCertificate));
+            push.RegisterAppleService(new ApplePushChannelSettings(appleCert, Settings.Default.APNSDevCertPassword));
+#else
+            var appleCert = File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Settings.Default.APNSProdCertificate));
+            push.RegisterAppleService(new ApplePushChannelSettings(appleCert, Settings.Default.APNSProdCertPassword));
+#endif
+
+            var notification = new AppleNotification()
+                                .ForDeviceToken(deviceToken)
+                                .WithCustomItem(key, values)
+                                .WithAlert(alert);
+
+            push.QueueNotification(notification);
         }
 
         /// <summary>

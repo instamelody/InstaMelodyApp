@@ -67,6 +67,28 @@
      if ([defaults objectForKey:@"authToken"] !=  nil) {
          self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", [defaults objectForKey:@"FirstName"], [defaults objectForKey:@"LastName"]];
          
+         self.displayNameLabel.text = [NSString stringWithFormat:@"@%@", [defaults objectForKey:@"DisplayName"]];
+
+         //image path
+         
+         NSFileManager *fileManager = [NSFileManager defaultManager];
+         
+         NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+         
+         NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
+         
+         NSString *remotePath =  [defaults objectForKey:@"ProfileFilePath"];
+         
+         NSString *fileName = [remotePath lastPathComponent];
+         NSString *pathString = [profilePath stringByAppendingPathComponent:fileName];
+         
+         UIImage *remoteImage = [UIImage imageWithContentsOfFile:pathString];
+         
+         if ([fileManager fileExistsAtPath:pathString]) {
+             
+             self.profileImageView.image = remoteImage;
+         }
+         
      }
     
     NSString *authToken = [defaults objectForKey:@"authToken"];

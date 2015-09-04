@@ -68,6 +68,12 @@
             NSDictionary *responseDict = (NSDictionary *)responseObject;
             [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"Token"] forKey:@"authToken"];
             [[NSUserDefaults standardUserDefaults] synchronize];
+            
+            [self dismissViewControllerAnimated:YES completion:^{
+                if (self.presentingViewController != nil) {
+                    [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
+                }
+            }];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             //NSLog(@"Error: %@", error);
             
