@@ -550,7 +550,7 @@ namespace InstaMelody.Business
             if (messageImage != null)
             {
                 var imgDal = new Images();
-                var image = imgDal.GetImageById(messageImage.Id);
+                var image = imgDal.GetImageById(messageImage.ImageId);
                 if (image == null) return null;
 
                 image.FilePath = Utilities.GetFilePath(image.FileName, MediaTypeEnum.Image);
