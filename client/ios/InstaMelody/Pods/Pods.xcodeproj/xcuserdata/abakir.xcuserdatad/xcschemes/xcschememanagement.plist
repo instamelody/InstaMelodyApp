@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>CLTokenInputView.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>DACircularProgress.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -27,22 +32,27 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>14A7D6928E63EAE92079A8505C3A21BF</key>
+		<key>532BFCF48FBE88FA98C3C713BC559FCA</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>6DEDD629322D0576D731A1F5669C4C60</key>
+		<key>ADC758A438B2AE491DF2164888F9212F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A79A713AE69F65142D6A096191F67F7D</key>
+		<key>B54D7A0B8B4FF2C56D041BCEE3FC6977</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D0B42EFECB72C8484A5218FDA168AD96</key>
+		<key>E0B84123EBB06FB20FB708CC5FAC6D45</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>FEB268F9620EFE78211FD37B063D0789</key>
 		<dict>
 			<key>primary</key>
 			<true/>

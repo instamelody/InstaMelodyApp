@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "F1BBE6EEF973B2C8B847FB88"
-               BuildableName = "FontAwesome_iOS.framework"
-               BlueprintName = "FontAwesome+iOS"
+               BlueprintIdentifier = "41A3C648E7909B9FB06DCA5A"
+               BuildableName = "CLTokenInputView.framework"
+               BlueprintName = "CLTokenInputView"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
