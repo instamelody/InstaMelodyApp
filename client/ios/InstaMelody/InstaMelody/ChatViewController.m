@@ -469,7 +469,12 @@
             
             NSInteger mediaType = [[messageContent objectForKey:@"MediaType"] integerValue];
             if (mediaType == 2) {
-                //[self createPhotoMessageWithSenderId:senderId andName:senderName andPath:imagePath];
+                id imageComponent = [messageContent objectForKey:@"Image"];
+                if (imageComponent != nil && [imageComponent isKindOfClass:[NSString class]]) {
+                    NSString *imageName = [imageComponent lastPathComponent];
+                    NSString *imagePath = [self getPathforImageNamed:imageName];
+                    //[self createPhotoMessageWithSenderId:senderId andName:senderName andPath:imagePath];
+                }
             } else {
                 JSQMessage *message = [[JSQMessage alloc] initWithSenderId:senderId
                                                          senderDisplayName:senderName
@@ -557,7 +562,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     
     NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     
-    NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
+    NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Downloads"];
     
     if (![fileManager fileExistsAtPath:profilePath]){
         
@@ -577,6 +582,17 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
     NSData *imageData = UIImageJPEGRepresentation(image, 0.7);
     [imageData writeToFile:imagePath atomically:YES];
+    
+    return imagePath;
+}
+
+-(NSString *)getPathforImageNamed:(NSString *)imageName {
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    
+    NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Downloads"];
+    
+    //save to folder
+    NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
     
     return imagePath;
 }
