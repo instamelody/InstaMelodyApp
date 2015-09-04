@@ -569,6 +569,19 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		879881F51B9A137800AF5B8B /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				87175C511B4ADCEA00C042E4 /* ChatsTableViewController.h */,
+				87175C521B4ADCEA00C042E4 /* ChatsTableViewController.m */,
+				87098F5E1B74E88000C3E7C9 /* CreateChatViewController.h */,
+				87098F5F1B74E88000C3E7C9 /* CreateChatViewController.m */,
+				872BB56C1B74BC36004CDBE7 /* ChatViewController.h */,
+				872BB56D1B74BC36004CDBE7 /* ChatViewController.m */,
+			);
+			name = Chat;
+			sourceTree = "<group>";
+		};
 		879CCC571B81D4860031FDCC /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -602,14 +615,9 @@
 				87D472341B749891008075B8 /* HomeViewController.m */,
 				8707F9B91B446F57004B4C20 /* FirstViewController.h */,
 				8707F9BA1B446F57004B4C20 /* FirstViewController.m */,
-				87175C511B4ADCEA00C042E4 /* ChatsTableViewController.h */,
-				87175C521B4ADCEA00C042E4 /* ChatsTableViewController.m */,
+				879881F51B9A137800AF5B8B /* Chat */,
 				87D472361B74A719008075B8 /* FriendsTableViewController.h */,
 				87D472371B74A719008075B8 /* FriendsTableViewController.m */,
-				87098F5E1B74E88000C3E7C9 /* CreateChatViewController.h */,
-				87098F5F1B74E88000C3E7C9 /* CreateChatViewController.m */,
-				872BB56C1B74BC36004CDBE7 /* ChatViewController.h */,
-				872BB56D1B74BC36004CDBE7 /* ChatViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";

@@ -402,15 +402,45 @@
     
 }
 
+#pragma mark -attach files
+
 - (void)didPressAccessoryButton:(UIButton *)sender
 {
     UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"Media messages"
                                                        delegate:self
                                               cancelButtonTitle:@"Cancel"
                                          destructiveButtonTitle:nil
-                                              otherButtonTitles:@"Send photo", @"Send location", @"Send video", nil];
+                                              otherButtonTitles:@"Send photo", nil];
     
     [sheet showFromToolbar:self.inputToolbar];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == actionSheet.cancelButtonIndex) {
+        return;
+    }
+    
+    switch (buttonIndex) {
+        case 0:
+            //[self.demoData addPhotoMediaMessage];
+            [self presentImagePicker:nil];
+            break;
+            /*
+        case 1:
+        {
+            __weak UICollectionView *weakView = self.collectionView;
+            
+            [self.demoData addLocationMediaMessageCompletion:^{
+                [weakView reloadData];
+            }];
+        }
+            break;
+            
+        case 2:
+            [self.demoData addVideoMediaMessage];
+            break;*/
+    }
 }
 
 
@@ -436,12 +466,18 @@
         NSDate *date = [self.dateFormatter dateFromString:dateString];
         
         if (date != nil) {
-            JSQMessage *message = [[JSQMessage alloc] initWithSenderId:senderId
-                                                     senderDisplayName:senderName
-                                                                  date:date
-                                                                  text:[messageContent objectForKey:@"Description"]];
             
-            [self.messages addObject:message];
+            NSInteger mediaType = [[messageContent objectForKey:@"MediaType"] integerValue];
+            if (mediaType == 2) {
+                //[self createPhotoMessageWithSenderId:senderId andName:senderName andPath:imagePath];
+            } else {
+                JSQMessage *message = [[JSQMessage alloc] initWithSenderId:senderId
+                                                         senderDisplayName:senderName
+                                                                      date:date
+                                                                      text:[messageContent objectForKey:@"Description"]];
+                
+                [self.messages addObject:message];
+            }
         }
     }
     
@@ -452,5 +488,178 @@
     self.messages = [NSMutableArray arrayWithArray:sortedArray];
     [self.collectionView reloadData];
 }
+
+-(void)createPhotoMessageWithSenderId:(NSString *)senderId andName:(NSString *)senderName andPath:(NSString *)path {
+    UIImage *localImage = [UIImage imageWithContentsOfFile:path];
+    JSQPhotoMediaItem *photoItem = [[JSQPhotoMediaItem alloc] initWithImage:localImage];
+    JSQMessage *photoMessage = [JSQMessage messageWithSenderId:senderId
+                                                   displayName:senderName
+                                                         media:photoItem];
+    [self.messages addObject:photoMessage];
+}
+
+#pragma mark - image picker
+
+
+-(IBAction)presentImagePicker:(id)sender {
+    
+    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+    imagePicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+    imagePicker.delegate = self;
+    
+    [self presentViewController:imagePicker animated:YES completion:^{
+        NSLog(@"Image picker presented!");
+    }];
+}
+
+
+-(void)imagePickerController:(UIImagePickerController *)picker
+didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *selectedImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+    //[self.profileImageView setImage:selectedImage];
+    [picker dismissViewControllerAnimated:YES completion:^{
+        NSLog(@"Image selected!");
+    }];
+    
+    //save image
+    NSString *imagePath = [self saveImage:selectedImage];
+    
+    //create media message bubble
+    [self createPhotoMessageWithSenderId:self.senderId andName:self.senderDisplayName andPath:imagePath];
+    
+    //upload image
+    [self attachImageWithPath:imagePath];
+    
+    [JSQSystemSoundPlayer jsq_playMessageSentSound];
+    
+    [self finishSendingMessageAnimated:YES];
+}
+
+-(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:^{
+        NSLog(@"Picker cancelled without doing anything");
+    }];
+}
+
+-(NSString *)saveImage:(UIImage *)image {
+    //save to file
+    
+    time_t unixTime = time(NULL);
+    
+    NSString *chatId = [self.chatDict objectForKey:@"Id"];
+    
+    NSString *imageName = [NSString stringWithFormat:@"chat_%@_%d.jpg", chatId, (int)unixTime];
+    
+    //try to create folder
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    
+    NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
+    
+    if (![fileManager fileExistsAtPath:profilePath]){
+        
+        NSError* error;
+        if(  [[NSFileManager defaultManager] createDirectoryAtPath:profilePath withIntermediateDirectories:NO attributes:nil error:&error]) {
+            
+            NSLog(@"success creating folder");
+            
+        } else {
+            NSLog(@"[%@] ERROR: attempting to write create MyFolder directory", [self class]);
+            NSAssert( FALSE, @"Failed to create directory maybe out of disk space?");
+        }
+        
+    }
+    
+    //save to folder
+    NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
+    NSData *imageData = UIImageJPEGRepresentation(image, 0.7);
+    [imageData writeToFile:imagePath atomically:YES];
+    
+    return imagePath;
+}
+
+#pragma mark - network operations
+
+-(void)attachImageWithPath:(NSString *)imagePath{
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    //save to file
+    
+    NSString *imageName = [imagePath lastPathComponent];
+    
+    //step 1 - get file token
+    NSString *token =  [defaults objectForKey:@"authToken"];
+    
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Chat": @{@"Id" : [self.chatDict objectForKey:@"Id"]}, @"Message": @{@"Description" : @"", @"Image": @{@"FileName" : imageName}}}];
+    
+    
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/Message/Chat/Message", API_BASE_URL];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        NSLog(@"JSON: %@", responseObject);
+        
+        //
+        //step 2 - upload file
+        
+        NSDictionary *responseDict = (NSDictionary *)responseObject;
+        NSDictionary *tokenDict = [responseDict objectForKey:@"FileUploadToken"];
+        NSString *fileTokenString = [tokenDict objectForKey:@"Token"];
+        
+        [self uploadFile:imagePath withFileToken:fileTokenString];
+        //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
+        
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:error.description delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+    }];
+    
+    
+}
+
+
+-(void)uploadFile:(NSString *)filePath withFileToken:(NSString *)fileToken {
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *sessionToken =  [defaults objectForKey:@"authToken"];
+    
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/Upload/%@/%@", API_BASE_URL, sessionToken, fileToken];
+    
+    NSURL *fileURL = [NSURL fileURLWithPath:filePath];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    [manager POST:requestUrl parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        //[formData appendPartWithFormData:data name:[filePath last]];
+        [formData appendPartWithFileURL:fileURL name:[filePath lastPathComponent] error:nil];
+    } success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"File upload success: %@", responseObject);
+        
+
+        NSArray *responseArray = (NSArray *)responseObject;
+        NSDictionary *responseDict = responseArray[0];
+        
+        //[[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"Path"] forKey:@"ProfileFilePath"];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:error.description delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+    }];
+    
+}
+
+
 
 @end
