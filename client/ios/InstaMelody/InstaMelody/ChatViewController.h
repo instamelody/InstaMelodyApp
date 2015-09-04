@@ -8,7 +8,7 @@
 
 #import "JSQMessagesViewController.h"
 
-@interface ChatViewController : JSQMessagesViewController <UIActionSheetDelegate>
+@interface ChatViewController : JSQMessagesViewController <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic, strong) NSDictionary *chatDict;
 
