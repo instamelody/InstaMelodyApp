@@ -471,8 +471,8 @@
             if (mediaType == 2) {
                 id imageComponent = [messageContent objectForKey:@"Image"];
                 if (imageComponent != nil && [imageComponent isKindOfClass:[NSDictionary class]]) {
-                    NSString *imageName = [imageComponent lastPathComponent];
-                    NSString *imagePath = [self getPathforImageNamed:imageName];
+                    //NSString *imageName = [imageComponent lastPathComponent];
+                    //NSString *imagePath = [self getPathforImageNamed:imageName];
                     //[self createPhotoMessageWithSenderId:senderId andName:senderName andPath:imagePath];
                 }
             } else {

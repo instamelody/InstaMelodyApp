@@ -107,13 +107,28 @@
     
     
     if (userArray.count == 2) {
-        cell.nameLabel.text = [NSString stringWithFormat:@"Chat with %@", friend.displayName];
+        cell.nameLabel.text = friend.displayName;
+        cell.descriptionLabel.text = @"1:1 chat";
+    } else if (userArray.count > 2) {
+        
+        NSString *myName = [[NSUserDefaults standardUserDefaults] objectForKey:@"DisplayName"];
+        
+        NSMutableString *names = [NSMutableString new];
+        for (NSDictionary *user in userArray) {
+            NSString *name = [user objectForKey:@"DisplayName"];
+            
+            if (![name isEqualToString:myName]) {
+                [names appendFormat:@"%@,", name];
+            }
+        }
+        //cell.nameLabel.text = [NSString stringWithFormat:@"Chat with %@ +%ld others", friend.displayName, userArray.count - 2];
+        cell.nameLabel.text = names;
+        cell.descriptionLabel.text = [NSString stringWithFormat:@"%ld users", userArray.count];
     } else {
-        cell.nameLabel.text = [NSString stringWithFormat:@"Chat with %@ +%ld others", friend.displayName, userArray.count - 2];
+        cell.nameLabel.text = @"Group chat";
+        cell.descriptionLabel.text = @"Click to join";
     }
     
-    
-    cell.descriptionLabel.text = [NSString stringWithFormat:@"%ld users", userArray.count];
     
     cell.timeLabel.text = [dateString substringToIndex:10];
     
@@ -210,7 +225,13 @@
     [manager GET:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
         
-        self.chatsArray = (NSArray *)responseObject;
+        NSArray *tempChats = (NSArray *)responseObject;
+        
+        NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateModified" ascending:NO];
+        NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
+        NSArray *sortedArray = [tempChats sortedArrayUsingDescriptors:descriptors];
+        
+        self.chatsArray = sortedArray;
         
         [self.tableView reloadData];
         
