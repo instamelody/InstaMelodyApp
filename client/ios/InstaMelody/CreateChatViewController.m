@@ -83,19 +83,20 @@
         NSMutableDictionary *parameters;
         
         if ( tokenCount == 1) {
-            CLToken *token = (CLToken *)[self.tokenInputView.allTokens objectAtIndex:0];
+            CLToken *cltoken = (CLToken *)[self.tokenInputView.allTokens objectAtIndex:0];
             
-            parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"User": @{@"DisplayName" : token.displayText}, @"Message": @{@"Description" : self.messageField.text}}];
+            parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"User": @{@"DisplayName" : cltoken.displayText}, @"Message": @{@"Description" : self.messageField.text}}];
         } else if  (tokenCount > 1){
             
             NSMutableArray *tempUserArray = [NSMutableArray new];
             
-            for (CLToken *token in self.tokenInputView.allTokens) {
-                NSDictionary *tempDict = @{@"DisplayName" : token.displayText};
+            for (CLToken *cltoken in self.tokenInputView.allTokens) {
+                NSDictionary *tempDict = [NSDictionary dictionaryWithObject:cltoken.displayText forKey:@"DisplayName"];
                 [tempUserArray addObject:tempDict];
             }
             
-            parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Users": (NSArray *)tempUserArray, @"Message": @{@"Description" : self.messageField.text}}];
+            
+            parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Users": tempUserArray, @"Message": @{@"Description" : self.messageField.text}}];
         }
         
         
@@ -104,6 +105,8 @@
         //add 64 char string
         
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+
+        manager.requestSerializer = [AFJSONRequestSerializer serializer];
         
         [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
             

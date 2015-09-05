@@ -8,6 +8,7 @@
 
 #import "ChatViewController.h"
 #import "AFHTTPRequestOperationManager.h"
+#import "AFURLSessionManager.h"
 #import "JSQMessages.h"
 #import "constants.h"
 #import "Friend.h"
@@ -673,6 +674,55 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:error.description delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alertView show];
     }];
+    
+}
+
+-(void)downloadImageWithUrl:(NSString *)remoteUrl andImageView:(UIImageView *)imageView {
+
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    NSString *fileName = [remoteUrl lastPathComponent];
+    
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    
+    NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Downloads"];
+    
+    NSString *pathString = [profilePath stringByAppendingPathComponent:fileName];
+    
+    if (![fileManager fileExistsAtPath:pathString]) {
+        
+        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+        AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
+        
+        NSString *fullUrlString = [NSString stringWithFormat:@"%@/%@", DOWNLOAD_BASE_URL, fileName];
+        fullUrlString = [fullUrlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+        
+        NSURL *URL = [NSURL URLWithString:fullUrlString];
+        NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+        
+        NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+            
+            //NSString *fileString = [NSString stringWithFormat:@"file://%@", destinationFilePath];
+            NSURL *fileURL = [NSURL fileURLWithPath:pathString];
+            
+            return fileURL;
+            
+            //NSURL *documentsDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
+            //return [documentsDirectoryURL URLByAppendingPathComponent:[response suggestedFilename]];
+        } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+            
+            if (error == nil) {
+                NSLog(@"File downloaded to: %@", filePath);
+                
+                imageView.image = [UIImage imageWithContentsOfFile:pathString];
+                
+            } else {
+                NSLog(@"Download error: %@", error.description);
+            }
+        }];
+        [downloadTask resume];
+        
+    }
     
 }
 
