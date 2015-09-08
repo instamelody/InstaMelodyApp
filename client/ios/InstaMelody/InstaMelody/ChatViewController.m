@@ -476,9 +476,15 @@
             if (mediaType == 2) {
                 id imageComponent = [messageContent objectForKey:@"Image"];
                 if (imageComponent != nil && [imageComponent isKindOfClass:[NSDictionary class]]) {
-                    //NSString *imageName = [imageComponent lastPathComponent];
-                    //NSString *imagePath = [self getPathforImageNamed:imageName];
-                    //[self createPhotoMessageWithSenderId:senderId andName:senderName andPath:imagePath];
+                    NSString *remoteImageURL = [imageComponent objectForKey:@"FilePath"];
+                    NSString *imageName = [remoteImageURL lastPathComponent];
+                    NSString *imagePath = [self getPathforImageNamed:imageName];
+                    [self createPhotoMessageWithSenderId:senderId andName:senderName andPath:imagePath];
+                    
+                    if (imagePath == nil) {
+                        [self downloadImageWithUrl:remoteImageURL];
+                    }
+                    
                 }
             } else {
                 JSQMessage *message = [[JSQMessage alloc] initWithSenderId:senderId
@@ -609,12 +615,19 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 }
 
 -(NSString *)getPathforImageNamed:(NSString *)imageName {
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
     NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     
     NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Downloads"];
     
     //save to folder
     NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
+    
+    if (![fileManager fileExistsAtPath:imagePath]){
+        return nil;
+    }
     
     return imagePath;
 }
@@ -698,7 +711,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     
 }
 
--(void)downloadImageWithUrl:(NSString *)remoteUrl andImageView:(UIImageView *)imageView {
+-(void)downloadImageWithUrl:(NSString *)remoteUrl {
 
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
@@ -710,12 +723,28 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     
     NSString *pathString = [profilePath stringByAppendingPathComponent:fileName];
     
+    //download iamge if it doesn't exist
     if (![fileManager fileExistsAtPath:pathString]) {
+        
+        //make folder if it doesn't exist
+        if (![fileManager fileExistsAtPath:profilePath]){
+            
+            NSError* error;
+            if(  [[NSFileManager defaultManager] createDirectoryAtPath:profilePath withIntermediateDirectories:NO attributes:nil error:&error]) {
+                
+                NSLog(@"success creating folder");
+                
+            } else {
+                NSLog(@"[%@] ERROR: attempting to write create MyFolder directory", [self class]);
+                NSAssert( FALSE, @"Failed to create directory maybe out of disk space?");
+            }
+            
+        }
         
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
         AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
         
-        NSString *fullUrlString = [NSString stringWithFormat:@"%@/%@", DOWNLOAD_BASE_URL, fileName];
+        NSString *fullUrlString = [NSString stringWithFormat:@"%@/%@", DOWNLOAD_BASE_URL, remoteUrl];
         fullUrlString = [fullUrlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
         
         NSURL *URL = [NSURL URLWithString:fullUrlString];
@@ -735,7 +764,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
             if (error == nil) {
                 NSLog(@"File downloaded to: %@", filePath);
                 
-                imageView.image = [UIImage imageWithContentsOfFile:pathString];
+                [self loadMessages];
                 
             } else {
                 NSLog(@"Download error: %@", error.description);
