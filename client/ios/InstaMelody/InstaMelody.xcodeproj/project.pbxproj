@@ -80,6 +80,7 @@
 		874C88471B4ADB3B0069A041 /* JSQMessagesToolbarContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 874C881B1B4ADB3B0069A041 /* JSQMessagesToolbarContentView.xib */; };
 		874C88481B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 874C881D1B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.m */; };
 		874C88491B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 874C881E1B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.xib */; };
+		87915E8B1B9F4AC300628937 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 87915E8A1B9F4AC300628937 /* placeholder.png */; };
 		879CCC541B81D2870031FDCC /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 879CCC521B81D2870031FDCC /* Model.xcdatamodeld */; };
 		879CCC5A1B81D4860031FDCC /* Friend.m in Sources */ = {isa = PBXBuildFile; fileRef = 879CCC591B81D4860031FDCC /* Friend.m */; };
 		879CCC5D1B81D6460031FDCC /* DataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 879CCC5C1B81D6460031FDCC /* DataManager.m */; };
@@ -248,6 +249,7 @@
 		874C881C1B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesTypingIndicatorFooterView.h; sourceTree = "<group>"; };
 		874C881D1B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesTypingIndicatorFooterView.m; sourceTree = "<group>"; };
 		874C881E1B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JSQMessagesTypingIndicatorFooterView.xib; sourceTree = "<group>"; };
+		87915E8A1B9F4AC300628937 /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = SOURCE_ROOT; };
 		879CCC531B81D2870031FDCC /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		879CCC581B81D4860031FDCC /* Friend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Friend.h; sourceTree = "<group>"; };
 		879CCC591B81D4860031FDCC /* Friend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Friend.m; sourceTree = "<group>"; };
@@ -311,6 +313,7 @@
 		8707F9B11B446F57004B4C20 /* InstaMelody */ = {
 			isa = PBXGroup;
 			children = (
+				87915E8A1B9F4AC300628937 /* placeholder.png */,
 				879CCC571B81D4860031FDCC /* Model */,
 				87CFE8C81B82AAE5009A4B6D /* View */,
 				87CFE8C31B82AAA3009A4B6D /* Controller */,
@@ -752,6 +755,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				872113441B7E942000F787F1 /* FontAwesome.ttf in Resources */,
+				87915E8B1B9F4AC300628937 /* placeholder.png in Resources */,
 				8707F9C11B446F57004B4C20 /* Main.storyboard in Resources */,
 				874C88491B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.xib in Resources */,
 				874C881F1B4ADB3B0069A041 /* JSQMessagesAssets.bundle in Resources */,
