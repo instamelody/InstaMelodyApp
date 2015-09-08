@@ -525,6 +525,7 @@
 
 -(void)didFinishWithInfo:(NSDictionary *)userDict {
     [self createPhotoMessageWithSenderId:self.senderId andName:self.senderDisplayName andPath:nil];
+    [self.collectionView reloadData];
 }
 
 -(void)cancel {
