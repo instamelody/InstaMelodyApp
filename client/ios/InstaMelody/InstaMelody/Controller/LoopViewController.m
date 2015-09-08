@@ -81,10 +81,12 @@
     [self.playLoopButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconRefresh] forState:UIControlStateNormal];
     [self.shareButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconShareAlt] forState:UIControlStateNormal];
     
+    /*
     [self.volumeBarButtonItem setTitleTextAttributes:@{
                                          NSFontAttributeName: [UIFont fontAwesomeFontOfSize:20.0f]
                                          } forState:UIControlStateNormal];
     [self.volumeBarButtonItem setTitle:[NSString fontAwesomeIconStringForEnum:FAIconVolumeUp]];
+     */
     
     
 }
@@ -201,6 +203,15 @@
         
     }
     
+}
+
+-(IBAction)save:(id)sender {
+    
+    NSDictionary *userDict = [NSDictionary dictionaryWithObject:@"Title" forKey:@"Hello"];
+    
+    [self.delegate didFinishWithInfo:userDict];
+    
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(IBAction)toggleRecording:(id)sender {

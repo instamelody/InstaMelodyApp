@@ -422,7 +422,7 @@
                                             <constraint firstAttribute="width" constant="78" id="kQt-IR-yRD"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
@@ -809,9 +809,9 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Loop" id="vsC-Yg-ig1">
-                        <barButtonItem key="rightBarButtonItem" title="V" id="czj-c1-ryE">
+                        <barButtonItem key="rightBarButtonItem" title="Save" id="czj-c1-ryE">
                             <connections>
-                                <action selector="showVolumeSettings:" destination="zFq-Vd-UtH" id="ngV-b2-idz"/>
+                                <action selector="save:" destination="zFq-Vd-UtH" id="E5J-tU-Bix"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -829,7 +829,6 @@
                         <outlet property="scrollView" destination="iRk-FD-g04" id="8tw-Wq-egh"/>
                         <outlet property="shareButton" destination="511-II-2sA" id="cWl-xp-Q6T"/>
                         <outlet property="topicLabel" destination="IMR-dG-CnL" id="Rc4-R7-aKv"/>
-                        <outlet property="volumeBarButtonItem" destination="czj-c1-ryE" id="bSI-os-2f4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qOQ-D8-rml" userLabel="First Responder" sceneMemberID="firstResponder"/>

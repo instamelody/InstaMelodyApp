@@ -411,7 +411,7 @@
                                                        delegate:self
                                               cancelButtonTitle:@"Cancel"
                                          destructiveButtonTitle:nil
-                                              otherButtonTitles:@"Send photo", nil];
+                                              otherButtonTitles:@"Send photo", @"Send loop", nil];
     
     [sheet showFromToolbar:self.inputToolbar];
 }
@@ -427,16 +427,20 @@
             //[self.demoData addPhotoMediaMessage];
             [self presentImagePicker:nil];
             break;
-            /*
+
         case 1:
         {
+            [self createLoop:nil];
+            /*
             __weak UICollectionView *weakView = self.collectionView;
             
             [self.demoData addLocationMediaMessageCompletion:^{
                 [weakView reloadData];
             }];
+             */
         }
             break;
+            /*
             
         case 2:
             [self.demoData addVideoMediaMessage];
@@ -502,6 +506,23 @@
                                                    displayName:senderName
                                                          media:photoItem];
     [self.messages addObject:photoMessage];
+}
+
+#pragma mark - loop delegate
+
+-(IBAction)createLoop:(id)sender {
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    LoopViewController *vc = (LoopViewController *)[sb instantiateViewControllerWithIdentifier:@"LoopViewController"];
+    vc.delegate = self;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+-(void)didFinishWithInfo:(NSDictionary *)userDict {
+    [self createPhotoMessageWithSenderId:self.senderId andName:self.senderDisplayName andPath:nil];
+}
+
+-(void)cancel {
+//do nothing
 }
 
 #pragma mark - image picker
