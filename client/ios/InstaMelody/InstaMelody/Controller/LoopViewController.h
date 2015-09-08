@@ -22,7 +22,9 @@
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *volumeBarButtonItem;
 
 @property (nonatomic, strong) IBOutlet UIButton *chooseLoopButton;
+@property (nonatomic, strong) IBOutlet UIButton *chooseLoop2Button;
 @property (nonatomic, strong) IBOutlet UIButton *playLoopButton;
+@property (nonatomic, strong) IBOutlet UIButton *playLoop2Button;
 @property (nonatomic, strong) IBOutlet UIButton *shareButton;
 
 @property (nonatomic, strong) IBOutlet UIButton *recordButton;
@@ -44,10 +46,15 @@
 -(IBAction)showVolumeSettings:(id)sender;
 -(IBAction)share:(id)sender;
 -(IBAction)chooseLoop:(id)sender;
+-(IBAction)chooseLoop2:(id)sender;
 -(IBAction)playLoop:(id)sender;
+-(IBAction)playLoop2:(id)sender;
 -(IBAction)toggleRecording:(id)sender;
 -(IBAction)togglePlayback:(id)sender;
 -(IBAction)save:(id)sender;
+
+-(IBAction)toggleLoop:(id)sender;
+-(IBAction)toggleLoop2:(id)sender;
 
 
 @end
