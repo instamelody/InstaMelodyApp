@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "41A3C648E7909B9FB06DCA5A"
+               BlueprintIdentifier = "2A3611DEA0E34958A707CD82"
                BuildableName = "CLTokenInputView.framework"
                BlueprintName = "CLTokenInputView"
                ReferencedContainer = "container:Pods.xcodeproj">
