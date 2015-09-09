@@ -64,7 +64,7 @@ namespace InstaMelody.API.Controllers
                     var bll = new MessageBll();
 
                     object result = null;
-                    if (request.Users != null)
+                    if (request.Users != null && request.Users.Count > 0)
                     {
                         result = bll.StartChat(request.Users, request.Message, request.Token);
                     }

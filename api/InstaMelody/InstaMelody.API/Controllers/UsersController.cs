@@ -797,5 +797,242 @@ namespace InstaMelody.API.Controllers
 
             return response;
         }
+
+        /// <summary>
+        /// Adds the application purchase receipt.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        [HttpPost]
+        [HttpPut]
+        [Route(Routes.RouteAppReceipt)]
+        public HttpResponseMessage AddAppPurchaseReceipt(ApiReceiptDataRequest request)
+        {
+            HttpResponseMessage response;
+
+            if (request != null)
+            {
+                try
+                {
+                    InstaMelodyLogger.Log(
+                        string.Format("Add App Purchase Receipt - Receipt Data: {0}, Token: {1}", request.ReceiptData, request.Token),
+                        LogLevel.Trace);
+
+                    var bll = new UserBll();
+                    var receipt = bll.CreateAppPurchaseReceipt(request.ReceiptData, request.Token);
+                    if (receipt != null)
+                    {
+                        response = this.Request.CreateResponse(HttpStatusCode.OK, receipt);
+                    }
+                    else
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.FailedCreateReceipt);
+                    }
+                }
+                catch (Exception exc)
+                {
+                    if (exc is UnauthorizedAccessException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, exc.Message);
+                    }
+                    else
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
+                    }
+                }
+            }
+            else
+            {
+                InstaMelodyLogger.Log("Received NULL Receipt request", LogLevel.Trace);
+                response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.NullReceipt);
+            }
+
+            return response;
+        }
+
+        /// <summary>
+        /// Gets the application purchase receipts.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route(Routes.RouteAppReceipt)]
+        public HttpResponseMessage GetAppPurchaseReceipts()
+        {
+            HttpResponseMessage response;
+
+            var nvc = HttpUtility.ParseQueryString(Request.RequestUri.Query);
+            var token = nvc["token"];
+
+            InstaMelodyLogger.Log(
+                string.Format("Get App Purchase Receipt - Token: {0}", token),
+                LogLevel.Trace);
+
+            if (string.IsNullOrEmpty(token))
+            {
+                response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, Exceptions.FailedValidation);
+            }
+            else
+            {
+                try
+                {
+                    Guid _token;
+                    Guid.TryParse(token, out _token);
+
+                    var bll = new UserBll();
+                    var data = bll.GetAppPurchaseReceiptsForUser(_token);
+
+                    response = this.Request.CreateResponse(HttpStatusCode.OK, data);
+                }
+                catch (Exception exc)
+                {
+                    if (exc is UnauthorizedAccessException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, exc.Message);
+                    }
+                    else if (exc is DataException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, exc.Message);
+                    }
+                    else
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
+                    }
+                }
+            }
+
+            return response;
+        }
+
+        /// <summary>
+        /// Validates the application purchase receipt.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route(Routes.RouteValidateAppReceipt)]
+        public HttpResponseMessage ValidateAppPurchaseReceipts(ApiReceiptDataRequest request)
+        {
+            HttpResponseMessage response;
+
+            if (request != null)
+            {
+                try
+                {
+                    var bll = new UserBll();
+                    object validation;
+                    if (request.Receipt != null || !string.IsNullOrWhiteSpace(request.ReceiptData))
+                    {
+                        InstaMelodyLogger.Log(
+                            string.Format("Validate App Purchase Receipt - Token: {0}, Receipt Id: {1}, Receipt Data: {2}", 
+                                request.Token, 
+                                request.Receipt != null ? request.Receipt.Id.ToString() : "NULL",
+                                request.Receipt != null ? request.Receipt.ReceiptData : request.ReceiptData),
+                            LogLevel.Trace);
+
+                        var receipt = request.Receipt ?? new UserAppPurchaseReceipt
+                        {
+                            ReceiptData = request.ReceiptData
+                        };
+
+                        validation = bll.ValidateAppPurchaseReceipt(receipt, request.Token);
+                    }
+                    else
+                    {
+                        InstaMelodyLogger.Log(
+                            string.Format("Validate App Purchase Receipt - Token: {0}", request.Token),
+                            LogLevel.Trace);
+                        validation = bll.ValidateAllAppPurchaseReceipts(request.Token);
+                    }
+
+                    if (validation != null)
+                    {
+                        response = this.Request.CreateResponse(HttpStatusCode.OK, validation);
+                    }
+                    else
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.FailedValidateReceipt);
+                    }
+                }
+                catch (Exception exc)
+                {
+                    if (exc is UnauthorizedAccessException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, exc.Message);
+                    }
+                    else if (exc is DataException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, exc.Message);
+                    } 
+                    else
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
+                    }
+                }
+            }
+            else
+            {
+                InstaMelodyLogger.Log("Received NULL Receipt request", LogLevel.Trace);
+                response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.NullReceipt);
+            }
+
+            return response;
+        }
+
+        /// <summary>
+        /// Deletes the application purchase receipt.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route(Routes.RouteDeleteAppReceipt)]
+        public HttpResponseMessage DeleteAppPurchaseReceipt(ApiReceiptDataRequest request)
+        {
+            HttpResponseMessage response;
+
+            if (request != null)
+            {
+                try
+                {
+                    InstaMelodyLogger.Log(
+                        string.Format("Delete App Purchase Receipt - Token: {0}, Receipt Id: {1}, Receipt Data: {2}",
+                            request.Token,
+                            request.Receipt != null ? request.Receipt.Id.ToString() : "NULL",
+                            request.Receipt != null ? request.Receipt.ReceiptData : request.ReceiptData),
+                        LogLevel.Trace);
+
+                    var receipt = request.Receipt ?? new UserAppPurchaseReceipt
+                    {
+                        ReceiptData = request.ReceiptData
+                    };
+
+                    var bll = new UserBll();
+                    bll.DeleteAppPurchaseReceipt(receipt, request.Token);
+
+                    response = this.Request.CreateResponse(HttpStatusCode.Accepted);
+                }
+                catch (Exception exc)
+                {
+                    if (exc is UnauthorizedAccessException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, exc.Message);
+                    }
+                    else if (exc is DataException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, exc.Message);
+                    }
+                    else
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
+                    }
+                }
+            }
+            else
+            {
+                InstaMelodyLogger.Log("Received NULL Receipt request", LogLevel.Trace);
+                response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.NullReceipt);
+            }
+
+            return response;
+        }
     }
 }

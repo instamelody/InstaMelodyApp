@@ -78,6 +78,10 @@ namespace InstaMelody.Business
             // create chat message
             var chatMessage = CreateChatMessage(newChat, sessionUser, message);
 
+            InstaMelodyLogger.Log(
+                        string.Format("Chat Created for User: {0}, Requestor Id: {1}",
+                            foundFriend.Id, sessionUser.Id), LogLevel.Error);
+
             // send push notification to requested user
             Utilities.SendPushNotification(foundFriend.Id, sessionUser.DisplayName, APNSTypeEnum.ChatCreated, newChat.Id);
 
@@ -119,6 +123,10 @@ namespace InstaMelody.Business
                 throw new DataException("Failed to create Chat.");
             }
 
+            InstaMelodyLogger.Log(
+                        string.Format("Creating Chat for {0} total Users.",
+                            users.Count + 1), LogLevel.Error);
+
             // add users to chat
             var foundUserIds = new List<Guid>();
             foreach (var user in users)
@@ -148,6 +156,10 @@ namespace InstaMelody.Business
 
             // create chat message
             var chatMessage = CreateChatMessage(newChat, sessionUser, message);
+
+            InstaMelodyLogger.Log(
+                        string.Format("Chat Created for Users: {0}, Requestor Id: {1}",
+                            string.Join(",", foundUserIds), sessionUser.Id), LogLevel.Error);
 
             // send push notification to requested user
             Utilities.SendPushNotification(foundUserIds, sessionUser.DisplayName, APNSTypeEnum.ChatCreated, newChat.Id);

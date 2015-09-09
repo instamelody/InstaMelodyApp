@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Text;
@@ -12,6 +13,7 @@ using InstaMelody.Infrastructure.Enums;
 using InstaMelody.Model;
 using InstaMelody.Model.ApiModels;
 using InstaMelody.Model.Enums;
+using Newtonsoft.Json.Linq;
 using NLog;
 using ModelUtilities = InstaMelody.Model.Utilities;
 
@@ -768,8 +770,167 @@ namespace InstaMelody.Business
             return GetFriendsWithImages(friends);
         }
 
+        #region In-App Purchases
+
+        /// <summary>
+        /// Creates the application purchase receipt.
+        /// </summary>
+        /// <param name="receiptData">The receipt data.</param>
+        /// <param name="sessionToken">The session token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.UnauthorizedAccessException"></exception>
+        public UserAppPurchaseReceipt CreateAppPurchaseReceipt(string receiptData, Guid sessionToken)
+        {
+            User sessionUser;
+            try
+            {
+                sessionUser = Utilities.GetUserBySession(sessionToken);
+            }
+            catch (Exception)
+            {
+                InstaMelodyLogger.Log(string.Format("Could not find a valid session. Token: {0}.", sessionToken), LogLevel.Error);
+                throw new UnauthorizedAccessException(string.Format("Could not find a valid session for Session: {0}.", sessionToken));
+            }
+
+            var dal = new UserAppPurchases();
+            var createdReceipt = dal.AddPurchaseReceipt(new UserAppPurchaseReceipt
+            {
+                ReceiptData = receiptData,
+                UserId = sessionUser.Id,
+                DateCreated = DateTime.UtcNow
+            });
+
+            return createdReceipt;
+        }
+
+        /// <summary>
+        /// Gets the application purchase receipts for user.
+        /// </summary>
+        /// <param name="sessionToken">The session token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.UnauthorizedAccessException"></exception>
+        public IList<UserAppPurchaseReceipt> GetAppPurchaseReceiptsForUser(Guid sessionToken)
+        {
+            User sessionUser;
+            try
+            {
+                sessionUser = Utilities.GetUserBySession(sessionToken);
+            }
+            catch (Exception)
+            {
+                InstaMelodyLogger.Log(string.Format("Could not find a valid session. Token: {0}.", sessionToken), LogLevel.Error);
+                throw new UnauthorizedAccessException(string.Format("Could not find a valid session for Session: {0}.", sessionToken));
+            }
+
+            var dal = new UserAppPurchases();
+            return dal.GetAppPurchaseReceiptsByUserId(sessionUser.Id);
+        }
+
+        /// <summary>
+        /// Validates the application purchase receipt.
+        /// </summary>
+        /// <param name="receipt">The receipt.</param>
+        /// <param name="sessionToken">The session token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.UnauthorizedAccessException"></exception>
+        public string ValidateAppPurchaseReceipt(UserAppPurchaseReceipt receipt, Guid sessionToken)
+        {
+            User sessionUser;
+            try
+            {
+                sessionUser = Utilities.GetUserBySession(sessionToken);
+            }
+            catch (Exception)
+            {
+                InstaMelodyLogger.Log(string.Format("Could not find a valid session. Token: {0}.", sessionToken), LogLevel.Error);
+                throw new UnauthorizedAccessException(string.Format("Could not find a valid session for Session: {0}.", sessionToken));
+            }
+
+            var foundReceipt = !string.IsNullOrWhiteSpace(receipt.ReceiptData) 
+                ? GetAppPurchaseReceipt(receipt.ReceiptData) 
+                : GetAppPurchaseReceipt(receipt.Id);
+            return ValidateAppPurchaseReceipt(foundReceipt, sessionUser);
+        }
+
+        /// <summary>
+        /// Validates all application purchase receipts.
+        /// </summary>
+        /// <param name="sessionToken">The session token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.UnauthorizedAccessException"></exception>
+        public IList<string> ValidateAllAppPurchaseReceipts(Guid sessionToken)
+        {
+            User sessionUser;
+            try
+            {
+                sessionUser = Utilities.GetUserBySession(sessionToken);
+            }
+            catch (Exception)
+            {
+                InstaMelodyLogger.Log(string.Format("Could not find a valid session. Token: {0}.", sessionToken), LogLevel.Error);
+                throw new UnauthorizedAccessException(string.Format("Could not find a valid session for Session: {0}.", sessionToken));
+            }
+
+            var dal = new UserAppPurchases();
+            var receipts = dal.GetAppPurchaseReceiptsByUserId(sessionUser.Id);
+
+            var returnValues = new List<string>();
+            foreach (var receipt in receipts)
+            {
+                try
+                {
+                    var validation = ValidateAppPurchaseReceipt(receipt, sessionUser);
+                    returnValues.Add(validation);
+                }
+                catch (Exception)
+                {
+                    returnValues.Add(string.Format("Error: Unable to validate receipt with iTunes server. Receipt Data: {0}", receipt.ReceiptData));
+                }
+            }
+
+            return returnValues;
+        }
+
+        /// <summary>
+        /// Deletes the application purchase receipt.
+        /// </summary>
+        /// <param name="receipt">The receipt.</param>
+        /// <param name="sessionToken">The session token.</param>
+        /// <exception cref="System.UnauthorizedAccessException">User is not allowed to delete this Receipt.</exception>
+        /// <exception cref="System.Data.DataException">Could not find the requested Receipt.</exception>
+        public void DeleteAppPurchaseReceipt(UserAppPurchaseReceipt receipt, Guid sessionToken)
+        {
+            User sessionUser;
+            try
+            {
+                sessionUser = Utilities.GetUserBySession(sessionToken);
+            }
+            catch (Exception)
+            {
+                InstaMelodyLogger.Log(string.Format("Could not find a valid session. Token: {0}.", sessionToken), LogLevel.Error);
+                throw new UnauthorizedAccessException(string.Format("Could not find a valid session for Session: {0}.", sessionToken));
+            }
+
+            var foundReceipt = !string.IsNullOrWhiteSpace(receipt.ReceiptData)
+                ? GetAppPurchaseReceipt(receipt.ReceiptData)
+                : GetAppPurchaseReceipt(receipt.Id);
+            if (!foundReceipt.UserId.Equals(sessionUser.Id))
+            {
+                InstaMelodyLogger.Log(
+                    string.Format("User is not allowed to delete this Receipt. Token: {0}, Receipt Id: {1}, Receipt User: {2}",
+                        sessionToken, receipt.Id, receipt.UserId), 
+                    LogLevel.Error);
+                throw new UnauthorizedAccessException("User is not allowed to delete this Receipt.");
+            }
+
+            var dal = new UserAppPurchases();
+            dal.DeleteAppPurchaseReceipt(receipt.Id);
+        }
+
+        #endregion In-App Purchases
+
         #endregion Public Methods
-        
+
         #region Private Methods
 
         /// <summary>
@@ -966,6 +1127,119 @@ namespace InstaMelody.Business
                         user.EmailAddress, sb),
                     LogLevel.Fatal);
             }
+        }
+
+        /// <summary>
+        /// Validates the apple purchase receipt.
+        /// </summary>
+        /// <param name="receiptData">The receipt data.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Exception">
+        /// </exception>
+        private string ValidateApplePurchaseReceipt(string receiptData)
+        {
+            string returnmessage;
+            try
+            {
+                var json = new JObject(new JProperty("receipt-data", receiptData)).ToString();
+                var postBytes = Encoding.UTF8.GetBytes(json);
+
+                var request = System.Net.WebRequest.Create("https://sandbox.itunes.apple.com/verifyReceipt");
+                //var request = System.Net.WebRequest.Create("https://buy.itunes.apple.com/verifyReceipt");
+                request.Method = "POST";
+                request.ContentType = "application/json";
+                request.ContentLength = postBytes.Length;
+
+                using (var stream = request.GetRequestStream())
+                {
+                    stream.Write(postBytes, 0, postBytes.Length);
+                    stream.Flush();
+                }
+
+                var responseStream = request.GetResponse().GetResponseStream();
+                if (responseStream == null)
+                {
+                    // throw error
+                    throw new Exception("Failed to get a response from the iTunes server.");
+                }
+
+                string sendresponsetext;
+                using (var streamReader = new StreamReader(responseStream))
+                {
+                    sendresponsetext = streamReader.ReadToEnd().Trim();
+                }
+                returnmessage = sendresponsetext;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return returnmessage;
+        }
+
+        /// <summary>
+        /// Gets the application purchase receipt.
+        /// </summary>
+        /// <param name="receiptData">The receipt data.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Data.DataException">Could not find the requested Receipt.</exception>
+        private UserAppPurchaseReceipt GetAppPurchaseReceipt(string receiptData)
+        {
+            var dal = new UserAppPurchases();
+            var receipt = dal.GetAppPurchaseReceiptByReceiptData(receiptData);
+            if (receipt == null)
+            {
+                InstaMelodyLogger.Log(
+                    string.Format("Could not find the requested Receipt. ReceiptData: {0}",
+                        receiptData),
+                    LogLevel.Error);
+                throw new DataException("Could not find the requested Receipt.");
+            }
+
+            return receipt;
+        }
+
+        /// <summary>
+        /// Gets the application purchase receipt.
+        /// </summary>
+        /// <param name="receiptId">The receipt identifier.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Data.DataException">Could not find the requested Receipt.</exception>
+        private UserAppPurchaseReceipt GetAppPurchaseReceipt(int receiptId)
+        {
+            var dal = new UserAppPurchases();
+            var receipt = dal.GetAppPurchaseReceiptById(receiptId);
+            if (receipt == null)
+            {
+                InstaMelodyLogger.Log(
+                    string.Format("Could not find the requested Receipt. Receipt Id: {0}",
+                        receiptId),
+                    LogLevel.Error);
+                throw new DataException("Could not find the requested Receipt.");
+            }
+
+            return receipt;
+        }
+
+        /// <summary>
+        /// Validates the application purchase receipt.
+        /// </summary>
+        /// <param name="receipt">The receipt.</param>
+        /// <param name="user">The user.</param>
+        /// <returns></returns>
+        /// <exception cref="System.UnauthorizedAccessException">User is not allowed to retrieve this Receipt.</exception>
+        private string ValidateAppPurchaseReceipt(UserAppPurchaseReceipt receipt, User user)
+        {
+            if (!receipt.UserId.Equals(user.Id))
+            {
+                InstaMelodyLogger.Log(
+                    string.Format("User is not allowed to retrieve this Receipt. Requestor: {0}, Receipt Id: {1}, Receipt User: {2}",
+                        user, receipt.Id, receipt.UserId),
+                    LogLevel.Error);
+                throw new UnauthorizedAccessException("User is not allowed to retrieve this Receipt.");
+            }
+
+            return ValidateApplePurchaseReceipt(receipt.ReceiptData);
         }
 
         #endregion Private Methods

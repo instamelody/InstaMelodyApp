@@ -145,6 +145,21 @@
         /// </summary>
         public const string RouteFriendDelete = "Friend/Delete";
 
+        /// <summary>
+        /// The route application receipt
+        /// </summary>
+        public const string RouteAppReceipt = "PurchaseReceipt";
+
+        /// <summary>
+        /// The route validate application receipt
+        /// </summary>
+        public const string RouteValidateAppReceipt = "PurchaseReceipt/Validate";
+
+        /// <summary>
+        /// The route delete application receipt
+        /// </summary>
+        public const string RouteDeleteAppReceipt = "PurchaseReceipt/Delete";
+
         #endregion User Routes
 
         #region Melody Routes

@@ -43,6 +43,18 @@ CREATE TABLE dbo.Users
 CREATE UNIQUE NONCLUSTERED INDEX UIX_Users_DisplayName ON dbo.Users(DisplayName)
 GO
 
+CREATE TABLE dbo.UserAppPurchaseReceipts
+	(Id int IDENTITY(1,1) PRIMARY KEY,
+	UserId UNIQUEIDENTIFIER NOT NULL,
+	CONSTRAINT FK_UserAppPurchaseReceipts_UserId FOREIGN KEY (UserId)
+		REFERENCES Users (Id),
+	ReceiptData varchar(max) NOT NULL,
+	IsInvalid bit NOT NULL default 0,
+	DateCreated datetime NOT NULL,
+	DateModified datetime NOT NULL,
+	IsDeleted bit NOT NULL default 0)
+GO
+
 CREATE TABLE dbo.FileUploadTokens
 	(Token UNIQUEIDENTIFIER PRIMARY KEY NOT NULL,
 	UserId UNIQUEIDENTIFIER NOT NULL,

@@ -46,6 +46,7 @@
     <Compile Include="ApiModels\ApiFile.cs" />
     <Compile Include="ApiModels\ApiLoopFileUpload.cs" />
     <Compile Include="ApiModels\ApiMessage.cs" />
+    <Compile Include="ApiModels\ApiReceiptDataRequest.cs" />
     <Compile Include="ApiModels\ApiRequest.cs" />
     <Compile Include="ApiModels\ApiStationFileUpload.cs" />
     <Compile Include="ApiModels\ApiStationMessageFileUpload.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="StationMessage.cs" />
     <Compile Include="StationMessageUserLike.cs" />
     <Compile Include="User.cs" />
+    <Compile Include="UserAppPurchaseReceipt.cs" />
     <Compile Include="UserFriend.cs" />
     <Compile Include="UserLoop.cs" />
     <Compile Include="UserLoopPart.cs" />

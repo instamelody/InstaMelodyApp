@@ -103,6 +103,31 @@
         /// </summary>
         public const string FailedGetFriends = "Failed to find friends.";
 
+        /// <summary>
+        /// The null receipt
+        /// </summary>
+        public const string NullReceipt = "Null Receipt request.";
+
+        /// <summary>
+        /// The failed create receipt
+        /// </summary>
+        public const string FailedCreateReceipt = "Failed to create a new App Purchase Receipt record.";
+
+        /// <summary>
+        /// The failed get receipt
+        /// </summary>
+        public const string FailedGetReceipt = "Failed to retrieve the requested App Purchase Receipt(s) for this User.";
+
+        /// <summary>
+        /// The failed validate receipt
+        /// </summary>
+        public const string FailedValidateReceipt = "Failed to validate the requested App Purchase Receipt(s) for this User.";
+
+        /// <summary>
+        /// The failed delete receipt
+        /// </summary>
+        public const string FailedDeleteReceipt = "Failed to delete the requested App Purchase Receipt";
+
         #endregion Users Exceptions
 
         #region Stations Exceptions
