@@ -161,6 +161,18 @@
     NSString *fileName = [remotePath lastPathComponent];
     NSString *pathString = [profilePath stringByAppendingPathComponent:fileName];
     
+    if (![fileManager fileExistsAtPath:profilePath]) {
+        NSError* error;
+        if(  [[NSFileManager defaultManager] createDirectoryAtPath:profilePath withIntermediateDirectories:NO attributes:nil error:&error]) {
+            
+            NSLog(@"success creating folder");
+            
+        } else {
+            NSLog(@"[%@] ERROR: attempting to write create MyFolder directory", [self class]);
+            NSAssert( FALSE, @"Failed to create directory maybe out of disk space?");
+        }
+    }
+    
     if (![fileManager fileExistsAtPath:pathString]) {
         
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
