@@ -411,7 +411,7 @@
                                                        delegate:self
                                               cancelButtonTitle:@"Cancel"
                                          destructiveButtonTitle:nil
-                                              otherButtonTitles:@"Send photo", @"Send loop", nil];
+                                              otherButtonTitles:@"Send photo", @"Send melody", nil];
     
     [sheet showFromToolbar:self.inputToolbar];
 }
@@ -525,6 +525,9 @@
 
 -(void)didFinishWithInfo:(NSDictionary *)userDict {
     [self createPhotoMessageWithSenderId:self.senderId andName:self.senderDisplayName andPath:nil];
+    
+    [[NetworkManager sharedManager] uploadUserMelody:userDict];
+    
     [self.collectionView reloadData];
 }
 
@@ -665,7 +668,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         NSDictionary *tokenDict = [responseDict objectForKey:@"FileUploadToken"];
         NSString *fileTokenString = [tokenDict objectForKey:@"Token"];
         
-        [self uploadFile:imagePath withFileToken:fileTokenString];
+        [[NetworkManager sharedManager] uploadFile:imagePath withFileToken:fileTokenString];
         //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
         
         
@@ -675,40 +678,6 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         [alertView show];
     }];
     
-    
-}
-
-
--(void)uploadFile:(NSString *)filePath withFileToken:(NSString *)fileToken {
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *sessionToken =  [defaults objectForKey:@"authToken"];
-    
-    NSString *requestUrl = [NSString stringWithFormat:@"%@/Upload/%@/%@", API_BASE_URL, sessionToken, fileToken];
-    
-    NSURL *fileURL = [NSURL fileURLWithPath:filePath];
-    
-    //add 64 char string
-    
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    
-    [manager POST:requestUrl parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        //[formData appendPartWithFormData:data name:[filePath last]];
-        [formData appendPartWithFileURL:fileURL name:[filePath lastPathComponent] error:nil];
-    } success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"File upload success: %@", responseObject);
-        
-
-        NSArray *responseArray = (NSArray *)responseObject;
-        NSDictionary *responseDict = responseArray[0];
-        
-        //[[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"Path"] forKey:@"ProfileFilePath"];
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:error.description delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alertView show];
-    }];
     
 }
 

@@ -8,6 +8,7 @@
 
 #import "JSQMessagesViewController.h"
 #import "LoopViewController.h"
+#import "NetworkManager.h"
 
 @interface ChatViewController : JSQMessagesViewController <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, LoopDelegate>
 
