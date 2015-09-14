@@ -372,9 +372,12 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:error.description delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alertView show];
+        if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
+            NSString *errorString = [operation.responseObject objectForKey:@"Message"];
+            NSLog(@"Error: %@", errorString);
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:errorString delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
+        }
     }];
     
     
@@ -445,9 +448,12 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
          
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:error.description delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alertView show];
+        if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
+            NSString *errorString = [operation.responseObject objectForKey:@"Message"];
+            NSLog(@"Error: %@", errorString);
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:errorString delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
+        }
     }];
     
     
@@ -481,9 +487,13 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"Path"] forKey:@"ProfileFilePath"];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:error.description delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alertView show];
+        
+        if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
+            NSString *errorString = [operation.responseObject objectForKey:@"Message"];
+            NSLog(@"Error: %@", errorString);
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:errorString delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
+        }
     }];
     
 }
