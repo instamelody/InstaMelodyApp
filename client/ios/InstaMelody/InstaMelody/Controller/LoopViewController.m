@@ -284,7 +284,7 @@
 -(IBAction)save:(id)sender {
 
     NSMutableDictionary *userDict = [NSMutableDictionary new];
-    [userDict setObject:[self.currentRecordingURL absoluteString] forKey:@"LoopURL"];
+    [userDict setObject:[self.currentRecordingURL path] forKey:@"LoopURL"];
     [userDict setObject:self.topicLabel.text forKey:@"Description"];
     [userDict setObject:@"Chat Melody" forKey:@"Name"];
     

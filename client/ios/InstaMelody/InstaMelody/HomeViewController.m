@@ -478,7 +478,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"Success: %@", responseObject);
         
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"You have updated your profile photo" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"File uploaded successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alertView show];
         
         NSArray *responseArray = (NSArray *)responseObject;
