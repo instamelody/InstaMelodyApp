@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "AwesomeMenu.h"
 #import "LoopViewController.h"
+#import "NetworkManager.h"
 
 @interface HomeViewController : UIViewController <AwesomeMenuDelegate, UIImagePickerControllerDelegate, LoopDelegate>
 

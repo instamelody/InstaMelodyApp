@@ -31,6 +31,7 @@
 		87175C591B4ADF9E00C042E4 /* DemoModelData.m in Sources */ = {isa = PBXBuildFile; fileRef = 87175C571B4ADF9E00C042E4 /* DemoModelData.m */; };
 		87175C681B4AE03700C042E4 /* JSQSystemSoundPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 87175C671B4AE03700C042E4 /* JSQSystemSoundPlayer.m */; };
 		87175C6B1B4AE08E00C042E4 /* NSUserDefaults+DemoSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 87175C6A1B4AE08E00C042E4 /* NSUserDefaults+DemoSettings.m */; };
+		8718CDC41BA7778C00FE6F23 /* NetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8718CDC31BA7778C00FE6F23 /* NetworkManager.m */; };
 		872113441B7E942000F787F1 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 872113431B7E942000F787F1 /* FontAwesome.ttf */; };
 		872BB5681B74AD26004CDBE7 /* FriendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BB5671B74AD26004CDBE7 /* FriendCell.m */; };
 		872BB56B1B74B56C004CDBE7 /* ChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BB56A1B74B56C004CDBE7 /* ChatCell.m */; };
@@ -152,6 +153,8 @@
 		87175C671B4AE03700C042E4 /* JSQSystemSoundPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQSystemSoundPlayer.m; sourceTree = "<group>"; };
 		87175C691B4AE08E00C042E4 /* NSUserDefaults+DemoSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSUserDefaults+DemoSettings.h"; sourceTree = SOURCE_ROOT; };
 		87175C6A1B4AE08E00C042E4 /* NSUserDefaults+DemoSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSUserDefaults+DemoSettings.m"; sourceTree = SOURCE_ROOT; };
+		8718CDC21BA7778C00FE6F23 /* NetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkManager.h; sourceTree = "<group>"; };
+		8718CDC31BA7778C00FE6F23 /* NetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkManager.m; sourceTree = "<group>"; };
 		872113431B7E942000F787F1 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.ttf; path = "Pods/FontAwesome+iOS/Resources/FontAwesome.ttf"; sourceTree = "<group>"; };
 		872BB5661B74AD26004CDBE7 /* FriendCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendCell.h; sourceTree = "<group>"; };
 		872BB5671B74AD26004CDBE7 /* FriendCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendCell.m; sourceTree = "<group>"; };
@@ -588,6 +591,8 @@
 		879CCC571B81D4860031FDCC /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				8718CDC21BA7778C00FE6F23 /* NetworkManager.h */,
+				8718CDC31BA7778C00FE6F23 /* NetworkManager.m */,
 				879CCC5B1B81D6460031FDCC /* DataManager.h */,
 				879CCC5C1B81D6460031FDCC /* DataManager.m */,
 				87CFE8B31B828E76009A4B6D /* Entities */,
@@ -839,6 +844,7 @@
 				872BB56E1B74BC36004CDBE7 /* ChatViewController.m in Sources */,
 				8707F9F21B4476BD004B4C20 /* AFHTTPRequestOperation.m in Sources */,
 				87D472381B74A719008075B8 /* FriendsTableViewController.m in Sources */,
+				8718CDC41BA7778C00FE6F23 /* NetworkManager.m in Sources */,
 				874C883C1B4ADB3B0069A041 /* JSQMessagesCollectionViewCellIncoming.m in Sources */,
 				874C88311B4ADB3B0069A041 /* JSQMessagesCollectionViewLayoutAttributes.m in Sources */,
 				8707F9F51B4476BD004B4C20 /* AFNetworkReachabilityManager.m in Sources */,
