@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "AwesomeMenu.h"
+#import "LoopViewController.h"
 
-@interface HomeViewController : UIViewController <AwesomeMenuDelegate, UIImagePickerControllerDelegate>
+@interface HomeViewController : UIViewController <AwesomeMenuDelegate, UIImagePickerControllerDelegate, LoopDelegate>
 
 @property (nonatomic, strong) IBOutlet UIView *profileView;
 @property (nonatomic, strong) IBOutlet UIImageView *profileImageView;
@@ -17,6 +18,7 @@
 @property (nonatomic, strong) IBOutlet UILabel *displayNameLabel;
 
 @property (nonatomic, strong) IBOutlet UIView *pathMenuView;
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
 -(IBAction)showSettings:(id)sender;
 

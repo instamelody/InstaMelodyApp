@@ -39,6 +39,8 @@
     NSString *authToken = [defaults objectForKey:@"authToken"];
     //NSString *deviceToken = [defaults objectForKey:@"deviceToken"];
     
+    self.dateFormatter = [[NSDateFormatter alloc] init];
+    
     if ( authToken ==  nil || [authToken isEqualToString:@""]) {
         
         [self signIn:nil];
@@ -234,8 +236,18 @@
 
 -(IBAction)showLoops:(id)sender {
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    UIViewController *vc = [sb instantiateViewControllerWithIdentifier:@"LoopViewController"];
-    [self.navigationController pushViewController:vc animated:YES];
+    LoopViewController *loopVc = (LoopViewController *)[sb instantiateViewControllerWithIdentifier:@"LoopViewController"];
+    loopVc.delegate = self;
+    
+    [self.navigationController pushViewController:loopVc animated:YES];
+}
+
+#pragma mark - loop delegate
+
+-(void)didFinishWithInfo:(NSDictionary *)userDict
+{
+    //sdfsdf
+    [self uploadUserMelody:userDict];
 }
 
 #pragma mark - image picker delegate
@@ -295,6 +307,80 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 }
 
 #pragma mark - network operations
+
+-(void)uploadUserMelody:(NSDictionary *)userDict{
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    //save to file
+    
+    time_t unixTime = time(NULL);
+    
+    
+    NSString *recordingPath = [userDict objectForKey:@"LoopURL"];
+    NSString *recordingName = [recordingPath lastPathComponent];
+    
+    
+    //step 1 - get file token
+    NSString *token =  [defaults objectForKey:@"authToken"];
+    
+    NSMutableArray *partArray = [NSMutableArray new];
+    
+    NSNumber *firstId = [userDict objectForKey:@"MelodyId1"];
+    NSNumber *secondId = [userDict objectForKey:@"MelodyId2"];
+    
+    if (firstId) {
+        NSDictionary *entry = [NSDictionary dictionaryWithObject:firstId forKey:@"Id"];
+        [partArray addObject:entry];
+    }
+    
+    if (secondId) {
+        NSDictionary *entry = [NSDictionary dictionaryWithObject:secondId forKey:@"Id"];
+        [partArray addObject:entry];
+    }
+    
+    NSMutableDictionary *recordingDict = [NSMutableDictionary dictionary];
+    
+    [recordingDict setObject:[NSString stringWithFormat:@"%d", (int)unixTime] forKey:@"Name"];
+    [recordingDict setObject:[userDict objectForKey:@"Description"] forKey:@"Description"];
+    [recordingDict setObject:recordingName forKey:@"FileName"];
+    [partArray addObject:recordingDict];
+    
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"UserMelody": @{@"Parts" : partArray}}];
+    
+    
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/Melody/New", API_BASE_URL];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    
+    [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        NSLog(@"JSON: %@", responseObject);
+        
+        //
+        //step 2 - upload file
+        
+        NSDictionary *responseDict = (NSDictionary *)responseObject;
+        NSDictionary *tokenDict = [responseDict objectForKey:@"FileUploadToken"];
+        NSString *fileTokenString = [tokenDict objectForKey:@"Token"];
+        
+        [self uploadFile:recordingPath withFileToken:fileTokenString];
+        //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
+        
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:error.description delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+    }];
+    
+    
+}
+
+
 -(void)updateProfilePicture:(UIImage *)image{
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

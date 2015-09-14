@@ -282,8 +282,20 @@
 }
 
 -(IBAction)save:(id)sender {
+
+    NSMutableDictionary *userDict = [NSMutableDictionary new];
+    [userDict setObject:[self.currentRecordingURL absoluteString] forKey:@"LoopURL"];
+    [userDict setObject:self.topicLabel.text forKey:@"Description"];
+    [userDict setObject:@"Chat Melody" forKey:@"Name"];
     
-    NSDictionary *userDict = [NSDictionary dictionaryWithObject:@"Title" forKey:@"Hello"];
+    if (self.selectedMelody != nil) {
+        [userDict setObject:self.selectedMelody.melodyId forKey:@"MelodyId1"];
+    }
+    
+    if (self.selectedMelody2 != nil) {
+        [userDict setObject:self.selectedMelody2.melodyId forKey:@"MelodyId2"];
+    }
+    
     
     [self.delegate didFinishWithInfo:userDict];
     
