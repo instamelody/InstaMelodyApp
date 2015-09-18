@@ -80,6 +80,22 @@
         self.outgoingBubbleImageData = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor colorWithRed:255/255.0f green:255/255.0f blue:255/255.0f alpha:0.2f]];
     
     [self loadMessages];
+    
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"uploadDone" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+        [self loadMessages];
+    }];
+    
+}
+
+-(void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"uploadDone" object:nil];
 }
 
 #pragma mark - JSQMessages CollectionView DataSource
@@ -352,13 +368,23 @@
     
     UserMelody *um = [UserMelody MR_findFirstByAttribute:@"userMelodyId" withValue:tag];
     
-    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    LoopViewController *vc = (LoopViewController *)[sb instantiateViewControllerWithIdentifier:@"LoopViewController"];
-    vc.selectedUserMelody = um;
-    vc.delegate = self;
-    [self.navigationController pushViewController:vc animated:YES];
-    
-    NSLog(@"found something");
+    if (tag.length > 0) {
+        
+        [[DataManager sharedManager] fetchUserMelody:tag];
+        
+        um = [UserMelody MR_findFirstByAttribute:@"userMelodyId" withValue:tag];
+        
+        if (um != nil){
+            UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+            LoopViewController *vc = (LoopViewController *)[sb instantiateViewControllerWithIdentifier:@"LoopViewController"];
+            vc.selectedUserMelody = um;
+            vc.delegate = self;
+            [self.navigationController pushViewController:vc animated:YES];
+            
+            NSLog(@"found something");
+        }
+        
+    }
     /*
     NSArray *messageArray = [self.chatDict objectForKey:@"Messages"];
     NSDictionary *messageDict = [messageArray objectAtIndex:indexPath.row];

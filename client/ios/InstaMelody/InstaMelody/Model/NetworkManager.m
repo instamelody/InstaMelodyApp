@@ -297,7 +297,8 @@
         NSArray *responseArray = (NSArray *)responseObject;
         NSDictionary *responseDict = responseArray[0];
         
-        [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"Path"] forKey:@"ProfileFilePath"];
+        //[[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"Path"] forKey:@"ProfileFilePath"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"uploadDone" object:nil];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
