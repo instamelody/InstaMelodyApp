@@ -346,6 +346,30 @@
 - (void)collectionView:(JSQMessagesCollectionView *)collectionView didTapMessageBubbleAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"Tapped message bubble!");
+    
+    JSQMessage *message = (JSQMessage *)[self.messages objectAtIndex:indexPath.row];
+    NSString *tag = message.tag;
+    
+    UserMelody *um = [UserMelody MR_findFirstByAttribute:@"userMelodyId" withValue:tag];
+    
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    LoopViewController *vc = (LoopViewController *)[sb instantiateViewControllerWithIdentifier:@"LoopViewController"];
+    vc.selectedUserMelody = um;
+    vc.delegate = self;
+    [self.navigationController pushViewController:vc animated:YES];
+    
+    NSLog(@"found something");
+    /*
+    NSArray *messageArray = [self.chatDict objectForKey:@"Messages"];
+    NSDictionary *messageDict = [messageArray objectAtIndex:indexPath.row];
+    NSDictionary *messageContent = [messageDict objectForKey:@"Message"];
+    
+    if ([[messageContent objectForKey:@"UserMelody"] isKindOfClass:[NSDictionary class]]) {
+        NSDictionary *umDict = [messageContent objectForKey:@"UserMelody"];
+        
+        //NSString *umId = [umDict objectForKey:@""]
+    }
+     */
 }
 
 - (void)collectionView:(JSQMessagesCollectionView *)collectionView didTapCellAtIndexPath:(NSIndexPath *)indexPath touchLocation:(CGPoint)touchLocation
@@ -494,12 +518,25 @@
                     
                 }
             } else {
-                JSQMessage *message = [[JSQMessage alloc] initWithSenderId:senderId
-                                                         senderDisplayName:senderName
-                                                                      date:date
-                                                                      text:[messageContent objectForKey:@"Description"]];
                 
-                [self.messages addObject:message];
+                if ([[messageContent objectForKey:@"UserMelody"] isKindOfClass:[NSDictionary class]]) {
+                    //melody message
+                    NSLog(@"i have a melody message");
+                    
+                    NSString *userMelody = [[messageContent objectForKey:@"UserMelody"] objectForKey:@"Id"];
+                    
+                    [self createPlaceholderWithSenderId:self.senderId andName:self.senderDisplayName andMelodyId:userMelody];
+                    
+                } else {
+                    //text message
+                    JSQMessage *message = [[JSQMessage alloc] initWithSenderId:senderId
+                                                             senderDisplayName:senderName
+                                                                          date:date
+                                                                          text:[messageContent objectForKey:@"Description"]];
+                    
+                    [self.messages addObject:message];
+                }
+                
             }
         }
     }
@@ -521,6 +558,16 @@
     [self.messages addObject:photoMessage];
 }
 
+-(void)createPlaceholderWithSenderId:(NSString *)senderId andName:(NSString *)senderName andMelodyId:(NSString *)melodyId {
+    UIImage *localImage = [UIImage imageNamed:@"placeholder"];
+    JSQPhotoMediaItem *photoItem = [[JSQPhotoMediaItem alloc] initWithImage:localImage];
+    JSQMessage *photoMessage = [JSQMessage messageWithSenderId:senderId
+                                                   displayName:senderName
+                                                         media:photoItem];
+    photoMessage.tag = melodyId;
+    [self.messages addObject:photoMessage];
+}
+
 #pragma mark - loop delegate
 
 -(IBAction)createLoop:(id)sender {
@@ -533,7 +580,11 @@
 -(void)didFinishWithInfo:(NSDictionary *)userDict {
     [self createPhotoMessageWithSenderId:self.senderId andName:self.senderDisplayName andPath:nil];
     
-    [[NetworkManager sharedManager] uploadUserMelody:userDict];
+    NSMutableDictionary *mutableDict = [NSMutableDictionary dictionaryWithDictionary:userDict];
+    
+    [mutableDict setObject:[self.chatDict objectForKey:@"Id"] forKey:@"Id"];
+    
+    [[NetworkManager sharedManager] uploadChatUserMelody:mutableDict];
     
     [self.collectionView reloadData];
 }

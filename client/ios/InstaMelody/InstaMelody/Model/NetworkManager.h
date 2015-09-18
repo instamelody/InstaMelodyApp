@@ -15,6 +15,7 @@
 + (id)sharedManager;
 
 -(void)uploadUserMelody:(NSDictionary *)userDict;
+-(void)uploadChatUserMelody:(NSDictionary *)userDict;
 -(void)updateProfilePicture:(UIImage *)image;
 -(void)uploadFile:(NSString *)filePath withFileToken:(NSString *)fileToken;
 

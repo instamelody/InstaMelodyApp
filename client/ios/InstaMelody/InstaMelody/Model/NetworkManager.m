@@ -30,6 +30,89 @@
 
 #pragma mark - network operations
 
+-(void)uploadChatUserMelody:(NSDictionary *)userDict{
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    //save to file
+    
+    time_t unixTime = time(NULL);
+    
+    
+    NSString *recordingPath = [userDict objectForKey:@"LoopURL"];
+    NSString *recordingName = [recordingPath lastPathComponent];
+    
+    
+    //step 1 - get file token
+    NSString *token =  [defaults objectForKey:@"authToken"];
+    
+    NSMutableArray *partArray = [NSMutableArray new];
+    
+    NSNumber *firstId = [userDict objectForKey:@"MelodyId1"];
+    NSNumber *secondId = [userDict objectForKey:@"MelodyId2"];
+    
+    if (firstId) {
+        NSDictionary *entry = [NSDictionary dictionaryWithObject:firstId forKey:@"Id"];
+        [partArray addObject:entry];
+    }
+    
+    if (secondId) {
+        NSDictionary *entry = [NSDictionary dictionaryWithObject:secondId forKey:@"Id"];
+        [partArray addObject:entry];
+    }
+    
+    NSMutableDictionary *recordingDict = [NSMutableDictionary dictionary];
+    
+    [recordingDict setObject:[NSString stringWithFormat:@"%d", (int)unixTime] forKey:@"Name"];
+    [recordingDict setObject:[userDict objectForKey:@"Description"] forKey:@"Description"];
+    [recordingDict setObject:recordingName forKey:@"FileName"];
+    [partArray addObject:recordingDict];
+    
+    //NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"UserMelody": @{@"Parts" : partArray}}];
+    
+    
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Chat": @{@"Id" : [userDict objectForKey:@"Id"]}, @"Message": @{@"Description" : @"User Melody Message", @"UserMelody": @{@"Parts" : partArray} }}];
+    
+    
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/Message/Chat/Message", API_BASE_URL];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    
+    [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        NSLog(@"JSON: %@", responseObject);
+        
+        //
+        //step 2 - upload file
+        
+        NSDictionary *responseDict = (NSDictionary *)responseObject;
+        NSDictionary *tokenDict = [responseDict objectForKey:@"FileUploadToken"];
+        NSString *fileTokenString = [tokenDict objectForKey:@"Token"];
+        
+        [self uploadFile:recordingPath withFileToken:fileTokenString];
+        //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
+        
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
+            
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            
+            NSLog(@"%@",ErrorResponse);
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
+        }
+    }];
+    
+    
+}
+
+
 -(void)uploadUserMelody:(NSDictionary *)userDict{
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
