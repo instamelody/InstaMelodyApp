@@ -23,3 +23,4 @@ FontAwesome+iOS.xcscheme
 MagicalRecord.xcscheme
 Pods-InstaMelody.xcscheme
 client/ios/InstaMelody/InstaMelody.xcworkspace/xcuserdata/abakir.xcuserdatad
+*.developerprofile

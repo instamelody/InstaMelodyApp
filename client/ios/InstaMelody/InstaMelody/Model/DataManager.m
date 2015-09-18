@@ -327,7 +327,7 @@
 }
 
 -(NSArray *)userMelodyList {
-    return [UserMelody MR_findAll];
+    return [UserMelody MR_findAllSortedBy:@"userMelodyName" ascending:YES];
 }
 
 -(NSArray *)melodyList {

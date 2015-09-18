@@ -12,6 +12,7 @@
 #import "UIFont+FontAwesome.h"
 #import "NSString+FontAwesome.h"
 #import "DataManager.h"
+#import "LoopViewController.h"
 
 @interface UserMelodyListViewController ()
 
@@ -130,6 +131,24 @@
     
     return cell;
 }
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+    
+    UITableViewCell *selectedCell = (UITableViewCell *)sender;
+    
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:selectedCell];
+    
+    UserMelody *melody = [self.melodyList objectAtIndex:indexPath.row];
+    
+    LoopViewController *loopVC = (LoopViewController *)segue.destinationViewController;
+    loopVC.selectedUserMelody = melody;
+    
+    
+}
+
 
 #pragma mark - web actions
 

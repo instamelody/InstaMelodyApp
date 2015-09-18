@@ -1204,10 +1204,10 @@
             </objects>
             <point key="canvasLocation" x="812" y="85"/>
         </scene>
-        <!--User Melody List View Controller-->
+        <!--My Station-->
         <scene sceneID="Mxs-I5-Wxq">
             <objects>
-                <viewController id="M3b-v7-3nS" customClass="UserMelodyListViewController" sceneMemberID="viewController">
+                <viewController title="My Station" id="M3b-v7-3nS" customClass="UserMelodyListViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="bW7-pn-ecl"/>
                         <viewControllerLayoutGuide type="bottom" id="vrX-NE-AuI"/>
@@ -1253,6 +1253,9 @@
                                             <animations/>
                                         </tableViewCellContentView>
                                         <animations/>
+                                        <connections>
+                                            <segue destination="zFq-Vd-UtH" kind="show" identifier="showUserMelody" id="42P-9A-i60"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -1290,6 +1293,7 @@
                             <constraint firstItem="KWT-Ls-UHr" firstAttribute="top" secondItem="2pD-Ql-WIv" secondAttribute="bottom" constant="14" id="oEN-Pr-E3K"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" title="Station" id="I3y-NR-1F1"/>
                     <connections>
                         <outlet property="filterControl" destination="2pD-Ql-WIv" id="wiC-Ao-Zq5"/>
                         <outlet property="tableView" destination="KWT-Ls-UHr" id="rYH-fV-z48"/>
@@ -1297,7 +1301,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KLE-zN-Jhf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="812" y="928"/>
+            <point key="canvasLocation" x="804" y="1528"/>
         </scene>
         <!--Friends-->
         <scene sceneID="whu-lG-pLZ">
@@ -1986,4 +1990,7 @@
         <image name="station" width="56" height="65"/>
         <image name="store" width="70" height="64"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="p0p-hV-u3V"/>
+    </inferredMetricsTieBreakers>
 </document>

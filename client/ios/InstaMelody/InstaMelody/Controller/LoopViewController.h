@@ -9,6 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "DACircularProgressView.h"
 #import <AVFoundation/AVFoundation.h>
+#import "DataManager.h"
+#import "MelodyGroup.h"
+#import "UserMelody.h"
+
 
 @protocol LoopDelegate <NSObject>
 
@@ -18,6 +22,8 @@
 @end
 
 @interface LoopViewController : UIViewController <AVAudioPlayerDelegate>
+
+@property (nonatomic, strong) UserMelody *selectedUserMelody;
 
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *volumeBarButtonItem;
 

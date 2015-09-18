@@ -7,8 +7,6 @@
 //
 
 #import "LoopViewController.h"
-#import "DataManager.h"
-#import "MelodyGroup.h"
 #import "NSString+FontAwesome.h"
 #import "UIFont+FontAwesome.h"
 #import "AFURLSessionManager.h"
@@ -48,6 +46,53 @@
     self.progressView.trackTintColor = [UIColor clearColor];
     self.progressView.progressTintColor = [UIColor colorWithRed:1/255.0f green:174/255.0f blue:255/255.0f alpha:1.0f];
     self.progressView.thicknessRatio = 0.1f;
+    
+    if (self.selectedUserMelody != nil) {
+        
+        int count = 0;
+        NSLog(@"loaded with a melody");
+        for (UserMelodyPart *part in [self.selectedUserMelody parts]) {
+            if ([part.isUserCreated boolValue] == true) {
+                //get and set recording
+                
+                //part.fileName
+                
+                NSArray *paths =
+                NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                    NSUserDomainMask, YES);
+                NSString *documentsPath = [paths objectAtIndex:0];
+                
+                NSString *recordingPath = [documentsPath stringByAppendingPathComponent:@"Recordings"];
+                
+                NSString *filePath = [recordingPath
+                                      stringByAppendingPathComponent:part.fileName];
+                
+                if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
+                    self.currentRecordingURL = [NSURL URLWithString:filePath];
+                    self.playButton.hidden = NO;
+                } else {
+                    [self downloadRecording:part.filePath toPath:filePath];
+                }
+                
+                
+                
+            } else if (count == 0) {
+                Melody *melody = [Melody MR_findFirstByAttribute:@"melodyId" withValue:part.partId];
+                
+                //get and set system melodies
+                [self didSelectMelody:melody];
+                count++;
+            } else if (count == 1) {
+                //
+                
+                Melody *melody = [Melody MR_findFirstByAttribute:@"melodyId" withValue:part.partId];
+                
+                [self didSelectMelody2:melody];
+                count++;
+                
+            }
+        }
+    }
     
 }
 
@@ -581,6 +626,26 @@
     NSURL *URL = [NSURL URLWithString:fullUrlString];
     NSURLRequest *request = [NSURLRequest requestWithURL:URL];
     
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    NSString *melodyPath = [documentsPath stringByAppendingPathComponent:@"Melodies"];
+    
+    if (![fileManager fileExistsAtPath:melodyPath]){
+        
+        NSError* error;
+        if(  [[NSFileManager defaultManager] createDirectoryAtPath:melodyPath withIntermediateDirectories:NO attributes:nil error:&error]) {
+            
+            NSLog(@"success creating folder");
+            
+        } else {
+            NSLog(@"[%@] ERROR: attempting to write create MyFolder directory", [self class]);
+            NSAssert( FALSE, @"Failed to create directory maybe out of disk space?");
+        }
+        
+    }
+    
+    
     NSProgress *progress = nil;
     
     NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:&progress destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
@@ -613,6 +678,70 @@
                   context:NULL];
 }
 
+-(void)downloadRecording:(NSString *)sourceFilePath toPath:(NSString *)destinationFilePath {
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    NSString *recordingPath = [documentsPath stringByAppendingPathComponent:@"Recordings"];
+    
+    if (![fileManager fileExistsAtPath:recordingPath]){
+        
+        NSError* error;
+        if(  [[NSFileManager defaultManager] createDirectoryAtPath:recordingPath withIntermediateDirectories:NO attributes:nil error:&error]) {
+            
+            NSLog(@"success creating folder");
+            
+        } else {
+            NSLog(@"[%@] ERROR: attempting to write create MyFolder directory", [self class]);
+            NSAssert( FALSE, @"Failed to create directory maybe out of disk space?");
+        }
+        
+    }
+    
+    
+    NSString *fullUrlString = [NSString stringWithFormat:@"%@/%@", DOWNLOAD_BASE_URL, sourceFilePath];
+    fullUrlString = [fullUrlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    
+    NSURL *URL = [NSURL URLWithString:fullUrlString];
+    NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+    
+    NSProgress *progress = nil;
+    
+    NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:&progress destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+        
+        //NSString *fileString = [NSString stringWithFormat:@"file://%@", destinationFilePath];
+        NSURL *fileURL = [NSURL fileURLWithPath:destinationFilePath];
+        
+        return fileURL;
+        
+        //NSURL *documentsDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
+        //return [documentsDirectoryURL URLByAppendingPathComponent:[response suggestedFilename]];
+    } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+        
+        if (error == nil) {
+            NSLog(@"File downloaded to: %@", filePath);
+            self.loopStatusLabel.text = @"Recording loaded!";
+            
+            self.currentRecordingURL = filePath;
+            
+            self.playButton.hidden = NO;
+        } else {
+            NSLog(@"Download error: %@", error.description);
+            self.loopStatusLabel.text = @"Error loading recording";
+        }
+        [progress removeObserver:self forKeyPath:@"fractionCompleted" context:NULL];
+    }];
+    [downloadTask resume];
+    
+    [progress addObserver:self
+               forKeyPath:@"fractionCompleted"
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if ([keyPath isEqualToString:@"fractionCompleted"]) {
@@ -621,7 +750,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             //Wants to update UI or perform any task on main thread.
             double percent = progress.fractionCompleted * 100.0;
-            self.loopStatusLabel.text = [NSString stringWithFormat:@"Loop downloading (%.0f%%)", percent];
+            self.loopStatusLabel.text = [NSString stringWithFormat:@"Downloading (%.0f%%)", percent];
         });
         
         NSLog(@"Progress… %f", progress.fractionCompleted);
