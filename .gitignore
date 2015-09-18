@@ -17,3 +17,8 @@ api/InstaMelody/TestResults/*
 api/InstaMelody/InstaMelody.API/logs/*
 client/ios/InstaMelody/InstaMelody.xcworkspace/xcuserdata/abakir.xcuserdatad/UserInterfaceState.xcuserstate
 client/ios/InstaMelody/InstaMelody.xcworkspace/xcuserdata/abakir.xcuserdatad/xcdebugger/Breakpoints_v2.xcbkptlist
+CLTokenInputView.xcscheme
+DACircularProgress.xcscheme
+FontAwesome+iOS.xcscheme
+MagicalRecord.xcscheme
+Pods-InstaMelody.xcscheme
