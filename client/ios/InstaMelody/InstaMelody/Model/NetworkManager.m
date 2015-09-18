@@ -95,9 +95,13 @@
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
-            NSString *errorString = [operation.responseObject objectForKey:@"Message"];
-            NSLog(@"Error: %@", errorString);
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:errorString delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
+            
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            
+            NSLog(@"%@",ErrorResponse);
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [alertView show];
         }
     }];
@@ -171,9 +175,13 @@
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
-            NSString *errorString = [operation.responseObject objectForKey:@"Message"];
-            NSLog(@"Error: %@", errorString);
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:errorString delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
+            
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            
+            NSLog(@"%@",ErrorResponse);
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [alertView show];
         }
     }];
@@ -211,9 +219,13 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
-            NSString *errorString = [operation.responseObject objectForKey:@"Message"];
-            NSLog(@"Error: %@", errorString);
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:errorString delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
+            
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            
+            NSLog(@"%@",ErrorResponse);
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [alertView show];
         }
     }];
