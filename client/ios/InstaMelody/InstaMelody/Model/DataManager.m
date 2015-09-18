@@ -160,9 +160,6 @@
     
 }
 
-- (NSArray *)friendList {
-    return [Friend MR_findAll];
-}
 
 #pragma mark - melodies
 
@@ -240,6 +237,97 @@
         }
         //
     }];
+}
+
+#pragma mark - user melodies
+
+-(void)fetchUserMelodies {
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/Melody/User", API_BASE_URL];
+    
+    NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    NSDictionary *parameters = @{@"token": token};
+    
+    [manager GET:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        // NSLog(@"JSON: %@", responseObject);
+        NSLog(@"user melodies updated");
+        
+        NSArray *melodyList = (NSArray *)responseObject;
+        
+        [self updateUserMelodies:melodyList];
+        
+        
+        //NSDictionary *responseDict = (NSDictionary *)responseObject;
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error fetching friends: %@", error);
+        
+    }];
+}
+
+- (void)updateUserMelodies:(NSArray *)melodyList {
+    [UserMelody MR_truncateAll];
+    [UserMelodyPart MR_truncateAll];
+    
+    for (NSDictionary *melodyDict in melodyList) {
+        
+        UserMelody *newUserMelody = [UserMelody MR_createEntity];
+        newUserMelody.userMelodyName = [melodyDict objectForKey:@"Name"];
+        newUserMelody.userMelodyId = [melodyDict objectForKey:@"Id"];
+        newUserMelody.userId = [melodyDict objectForKey:@"UserId"];
+        
+        NSString *dateString = [melodyDict objectForKey:@"DateCreated"];
+        dateString = [dateString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        NSDate *date = [self.dateFormatter dateFromString:dateString];
+        
+        newUserMelody.dateCreated = date;
+        
+        //create melodies
+        
+        NSArray *partArray = [melodyDict objectForKey:@"Parts"];
+        for (NSDictionary *partDict in partArray) {
+            UserMelodyPart *newPart = [UserMelodyPart MR_createEntity];
+            newPart.partName = [partDict objectForKey:@"Name"];
+            //newPart.partDesc = [partDict objectForKey:@"Description"];
+            newPart.partId = [partDict objectForKey:@"Id"];
+            newPart.fileName = [partDict objectForKey:@"FileName"];
+            newPart.filePath = [partDict objectForKey:@"FilePath"];
+            newPart.isUserCreated = [partDict objectForKey:@"IsUserCreated"];
+            
+            NSString *dateString = [partDict objectForKey:@"DateModified"];
+            dateString = [dateString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            NSDate *date = [self.dateFormatter dateFromString:dateString];
+            
+            newPart.dateModified = date;
+            
+            newPart.userMelody = newUserMelody;
+        }
+        
+    }
+    
+    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:^(BOOL contextDidSave, NSError *error) {
+        if (error == nil) {
+            NSLog(@"CORE DATA save - successful");
+        } else {
+            NSLog(@"CORE DATA error - %@", error.description);
+        }
+        //
+    }];
+}
+
+
+
+#pragma mark - fetch operations
+
+- (NSArray *)friendList {
+    return [Friend MR_findAll];
+}
+
+-(NSArray *)userMelodyList {
+    return [UserMelody MR_findAll];
 }
 
 -(NSArray *)melodyList {

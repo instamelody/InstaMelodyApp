@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="1" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7701" systemVersion="15A226f" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="1" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7701" systemVersion="15B17c" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Friend" representedClassName="Friend" syncable="YES">
         <attribute name="displayName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
@@ -25,9 +25,28 @@
         <attribute name="groupName" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="melodies" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Melody" inverseName="melodyGroup" inverseEntity="Melody" syncable="YES"/>
     </entity>
+    <entity name="UserMelody" representedClassName="UserMelody" syncable="YES">
+        <attribute name="dateCreated" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="userId" attributeType="String" syncable="YES"/>
+        <attribute name="userMelodyId" attributeType="String" syncable="YES"/>
+        <attribute name="userMelodyName" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="parts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="UserMelodyPart" inverseName="userMelody" inverseEntity="UserMelodyPart" syncable="YES"/>
+    </entity>
+    <entity name="UserMelodyPart" representedClassName="UserMelodyPart" syncable="YES">
+        <attribute name="dateModified" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="fileName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="filePath" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isUserCreated" attributeType="Boolean" syncable="YES"/>
+        <attribute name="partDesc" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="partId" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="partName" attributeType="String" syncable="YES"/>
+        <relationship name="userMelody" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserMelody" inverseName="parts" inverseEntity="UserMelody" syncable="YES"/>
+    </entity>
     <elements>
         <element name="Friend" positionX="-90" positionY="-7" width="128" height="148"/>
         <element name="Melody" positionX="243" positionY="-15" width="128" height="163"/>
         <element name="MelodyGroup" positionX="36" positionY="-162" width="128" height="103"/>
+        <element name="UserMelody" positionX="-18" positionY="164" width="128" height="118"/>
+        <element name="UserMelodyPart" positionX="160" positionY="164" width="128" height="163"/>
     </elements>
 </model>

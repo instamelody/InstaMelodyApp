@@ -99,6 +99,7 @@
     } else {
         [[DataManager sharedManager] fetchFriends];
         [[DataManager sharedManager] fetchMelodies];
+        [[DataManager sharedManager] fetchUserMelodies];
     }
     
     if ([defaults objectForKey:@"ProfileFilePath"] != nil) {
