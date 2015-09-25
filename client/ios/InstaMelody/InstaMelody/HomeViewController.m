@@ -8,7 +8,6 @@
 
 #import "HomeViewController.h"
 #import "constants.h"
-#import "AFHTTPRequestOperationManager.h"
 #import "LoopViewController.h"
 #import "DataManager.h"
 
@@ -38,6 +37,8 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *authToken = [defaults objectForKey:@"authToken"];
     //NSString *deviceToken = [defaults objectForKey:@"deviceToken"];
+    
+    self.dateFormatter = [[NSDateFormatter alloc] init];
     
     if ( authToken ==  nil || [authToken isEqualToString:@""]) {
         
@@ -98,6 +99,7 @@
     } else {
         [[DataManager sharedManager] fetchFriends];
         [[DataManager sharedManager] fetchMelodies];
+        [[DataManager sharedManager] fetchUserMelodies];
     }
     
     if ([defaults objectForKey:@"ProfileFilePath"] != nil) {
@@ -234,8 +236,18 @@
 
 -(IBAction)showLoops:(id)sender {
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    UIViewController *vc = [sb instantiateViewControllerWithIdentifier:@"LoopViewController"];
-    [self.navigationController pushViewController:vc animated:YES];
+    LoopViewController *loopVc = (LoopViewController *)[sb instantiateViewControllerWithIdentifier:@"LoopViewController"];
+    loopVc.delegate = self;
+    
+    [self.navigationController pushViewController:loopVc animated:YES];
+}
+
+#pragma mark - loop delegate
+
+-(void)didFinishWithInfo:(NSDictionary *)userDict
+{
+    //sdfsdf
+    [[NetworkManager sharedManager] uploadUserMelody:userDict];
 }
 
 #pragma mark - image picker delegate
@@ -291,115 +303,8 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     resizedImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
-    [self updateProfilePicture:resizedImage];
+    [[NetworkManager sharedManager] updateProfilePicture:resizedImage];
 }
 
-#pragma mark - network operations
--(void)updateProfilePicture:(UIImage *)image{
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    //save to file
-    
-    time_t unixTime = time(NULL);
-    
-    NSString *imageName = [NSString stringWithFormat:@"%@_%@_profile_%d.jpg", [defaults objectForKey:@"FirstName"], [defaults objectForKey:@"LastName"], (int)unixTime];
-    
-    //try to create folder
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    
-    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-    
-    NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
-    
-    if (![[NSFileManager defaultManager] fileExistsAtPath:profilePath]){
-        
-        NSError* error;
-        if(  [[NSFileManager defaultManager] createDirectoryAtPath:profilePath withIntermediateDirectories:NO attributes:nil error:&error]) {
-            
-            NSLog(@"success creating folder");
-            
-        } else {
-            NSLog(@"[%@] ERROR: attempting to write create MyFolder directory", [self class]);
-            NSAssert( FALSE, @"Failed to create directory maybe out of disk space?");
-        }
-        
-    }
-    
-    //save to folder
-    NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
-    NSData *imageData = UIImageJPEGRepresentation(image, 0.7);
-    [imageData writeToFile:imagePath atomically:YES];
-    
-    
-    //step 1 - get file token
-    NSString *token =  [defaults objectForKey:@"authToken"];
-                         
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Image": @{@"FileName" : imageName}}];
-    
-    
-    NSString *requestUrl = [NSString stringWithFormat:@"%@/User/Update/Image", API_BASE_URL];
-    
-    //add 64 char string
-    
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    
-    [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
-        NSLog(@"JSON: %@", responseObject);
-
-        //
-        //step 2 - upload file
-        
-        NSDictionary *responseDict = (NSDictionary *)responseObject;
-        NSDictionary *tokenDict = [responseDict objectForKey:@"FileUploadToken"];
-        NSString *fileTokenString = [tokenDict objectForKey:@"Token"];
-        
-        [self uploadFile:imagePath withFileToken:fileTokenString];
-        //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
-         
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:error.description delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alertView show];
-    }];
-    
-    
-}
-
--(void)uploadFile:(NSString *)filePath withFileToken:(NSString *)fileToken {
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *sessionToken =  [defaults objectForKey:@"authToken"];
-    
-    NSString *requestUrl = [NSString stringWithFormat:@"%@/Upload/%@/%@", API_BASE_URL, sessionToken, fileToken];
-    
-    NSURL *fileURL = [NSURL fileURLWithPath:filePath];
-    
-    //add 64 char string
-    
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    
-    [manager POST:requestUrl parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        //[formData appendPartWithFormData:data name:[filePath last]];
-        [formData appendPartWithFileURL:fileURL name:[filePath lastPathComponent] error:nil];
-    } success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"Success: %@", responseObject);
-        
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"You have updated your profile photo" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alertView show];
-        
-        NSArray *responseArray = (NSArray *)responseObject;
-        NSDictionary *responseDict = responseArray[0];
-        
-        [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"Path"] forKey:@"ProfileFilePath"];
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:error.description delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alertView show];
-    }];
-    
-}
 
 @end

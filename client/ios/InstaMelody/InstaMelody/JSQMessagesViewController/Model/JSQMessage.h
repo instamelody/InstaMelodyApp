@@ -34,6 +34,8 @@
  */
 @property (copy, nonatomic, readonly) NSString *senderId;
 
+@property (strong) NSString *tag;
+
 /**
  *  Returns the display name for the user who sent the message. This value does not have to be unique.
  */

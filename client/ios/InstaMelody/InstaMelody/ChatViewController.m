@@ -80,6 +80,22 @@
         self.outgoingBubbleImageData = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor colorWithRed:255/255.0f green:255/255.0f blue:255/255.0f alpha:0.2f]];
     
     [self loadMessages];
+    
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"uploadDone" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+        [self loadMessages];
+    }];
+    
+}
+
+-(void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"uploadDone" object:nil];
 }
 
 #pragma mark - JSQMessages CollectionView DataSource
@@ -346,6 +362,40 @@
 - (void)collectionView:(JSQMessagesCollectionView *)collectionView didTapMessageBubbleAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"Tapped message bubble!");
+    
+    JSQMessage *message = (JSQMessage *)[self.messages objectAtIndex:indexPath.row];
+    NSString *tag = message.tag;
+    
+    UserMelody *um = [UserMelody MR_findFirstByAttribute:@"userMelodyId" withValue:tag];
+    
+    if (tag.length > 0) {
+        
+        [[DataManager sharedManager] fetchUserMelody:tag];
+        
+        um = [UserMelody MR_findFirstByAttribute:@"userMelodyId" withValue:tag];
+        
+        if (um != nil){
+            UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+            LoopViewController *vc = (LoopViewController *)[sb instantiateViewControllerWithIdentifier:@"LoopViewController"];
+            vc.selectedUserMelody = um;
+            vc.delegate = self;
+            [self.navigationController pushViewController:vc animated:YES];
+            
+            NSLog(@"found something");
+        }
+        
+    }
+    /*
+    NSArray *messageArray = [self.chatDict objectForKey:@"Messages"];
+    NSDictionary *messageDict = [messageArray objectAtIndex:indexPath.row];
+    NSDictionary *messageContent = [messageDict objectForKey:@"Message"];
+    
+    if ([[messageContent objectForKey:@"UserMelody"] isKindOfClass:[NSDictionary class]]) {
+        NSDictionary *umDict = [messageContent objectForKey:@"UserMelody"];
+        
+        //NSString *umId = [umDict objectForKey:@""]
+    }
+     */
 }
 
 - (void)collectionView:(JSQMessagesCollectionView *)collectionView didTapCellAtIndexPath:(NSIndexPath *)indexPath touchLocation:(CGPoint)touchLocation
@@ -396,9 +446,16 @@
         
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:error.description delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alertView show];
+        if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
+            
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            
+            NSLog(@"%@",ErrorResponse);
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
+        }
     }];
     
 }
@@ -411,7 +468,7 @@
                                                        delegate:self
                                               cancelButtonTitle:@"Cancel"
                                          destructiveButtonTitle:nil
-                                              otherButtonTitles:@"Send photo", @"Send loop", nil];
+                                              otherButtonTitles:@"Send photo", @"Send melody", nil];
     
     [sheet showFromToolbar:self.inputToolbar];
 }
@@ -487,12 +544,25 @@
                     
                 }
             } else {
-                JSQMessage *message = [[JSQMessage alloc] initWithSenderId:senderId
-                                                         senderDisplayName:senderName
-                                                                      date:date
-                                                                      text:[messageContent objectForKey:@"Description"]];
                 
-                [self.messages addObject:message];
+                if ([[messageContent objectForKey:@"UserMelody"] isKindOfClass:[NSDictionary class]]) {
+                    //melody message
+                    NSLog(@"i have a melody message");
+                    
+                    NSString *userMelody = [[messageContent objectForKey:@"UserMelody"] objectForKey:@"Id"];
+                    
+                    [self createPlaceholderWithSenderId:self.senderId andName:self.senderDisplayName andMelodyId:userMelody];
+                    
+                } else {
+                    //text message
+                    JSQMessage *message = [[JSQMessage alloc] initWithSenderId:senderId
+                                                             senderDisplayName:senderName
+                                                                          date:date
+                                                                          text:[messageContent objectForKey:@"Description"]];
+                    
+                    [self.messages addObject:message];
+                }
+                
             }
         }
     }
@@ -514,6 +584,16 @@
     [self.messages addObject:photoMessage];
 }
 
+-(void)createPlaceholderWithSenderId:(NSString *)senderId andName:(NSString *)senderName andMelodyId:(NSString *)melodyId {
+    UIImage *localImage = [UIImage imageNamed:@"placeholder"];
+    JSQPhotoMediaItem *photoItem = [[JSQPhotoMediaItem alloc] initWithImage:localImage];
+    JSQMessage *photoMessage = [JSQMessage messageWithSenderId:senderId
+                                                   displayName:senderName
+                                                         media:photoItem];
+    photoMessage.tag = melodyId;
+    [self.messages addObject:photoMessage];
+}
+
 #pragma mark - loop delegate
 
 -(IBAction)createLoop:(id)sender {
@@ -525,6 +605,13 @@
 
 -(void)didFinishWithInfo:(NSDictionary *)userDict {
     [self createPhotoMessageWithSenderId:self.senderId andName:self.senderDisplayName andPath:nil];
+    
+    NSMutableDictionary *mutableDict = [NSMutableDictionary dictionaryWithDictionary:userDict];
+    
+    [mutableDict setObject:[self.chatDict objectForKey:@"Id"] forKey:@"Id"];
+    
+    [[NetworkManager sharedManager] uploadChatUserMelody:mutableDict];
+    
     [self.collectionView reloadData];
 }
 
@@ -665,50 +752,23 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         NSDictionary *tokenDict = [responseDict objectForKey:@"FileUploadToken"];
         NSString *fileTokenString = [tokenDict objectForKey:@"Token"];
         
-        [self uploadFile:imagePath withFileToken:fileTokenString];
+        [[NetworkManager sharedManager] uploadFile:imagePath withFileToken:fileTokenString];
         //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
         
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:error.description delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alertView show];
+        if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
+            
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            
+            NSLog(@"%@",ErrorResponse);
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
+        }
     }];
     
-    
-}
-
-
--(void)uploadFile:(NSString *)filePath withFileToken:(NSString *)fileToken {
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *sessionToken =  [defaults objectForKey:@"authToken"];
-    
-    NSString *requestUrl = [NSString stringWithFormat:@"%@/Upload/%@/%@", API_BASE_URL, sessionToken, fileToken];
-    
-    NSURL *fileURL = [NSURL fileURLWithPath:filePath];
-    
-    //add 64 char string
-    
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    
-    [manager POST:requestUrl parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        //[formData appendPartWithFormData:data name:[filePath last]];
-        [formData appendPartWithFileURL:fileURL name:[filePath lastPathComponent] error:nil];
-    } success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"File upload success: %@", responseObject);
-        
-
-        NSArray *responseArray = (NSArray *)responseObject;
-        NSDictionary *responseDict = responseArray[0];
-        
-        //[[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"Path"] forKey:@"ProfileFilePath"];
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:error.description delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alertView show];
-    }];
     
 }
 

@@ -10,6 +10,8 @@
 #import <MagicalRecord/MagicalRecord.h>
 #import "Friend.h"
 #import "Melody.h"
+#import "UserMelody.h"
+#import "UserMelodyPart.h"
 #import "MelodyGroup.h"
 
 @interface DataManager : NSObject
@@ -21,8 +23,11 @@
 
 - (void)fetchMelodies;
 - (NSArray *)melodyList;
-
 - (NSArray *)melodyGroupList;
+
+- (void)fetchUserMelodies;
+- (NSArray *)userMelodyList;
+-(void)fetchUserMelody:(NSString*)melodyId;
 
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
