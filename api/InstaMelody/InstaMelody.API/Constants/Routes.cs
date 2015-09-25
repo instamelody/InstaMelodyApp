@@ -116,6 +116,11 @@
         public const string RouteUpdateUserImage = "Update/Image";
 
         /// <summary>
+        /// The route update user cover image
+        /// </summary>
+        public const string RouteUpdateUserCoverImage = "Update/CoverImage";
+
+        /// <summary>
         /// The route user friends
         /// </summary>
         public const string RouteUserFriends = "Friends";

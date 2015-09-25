@@ -324,14 +324,13 @@ namespace InstaMelody.Business
         /// </summary>
         /// <param name="newImage">The new image.</param>
         /// <param name="sessionToken">The session token.</param>
+        /// <param name="isImageCoverImage">if set to <c>true</c> [is image cover image].</param>
         /// <returns></returns>
         /// <exception cref="System.UnauthorizedAccessException"></exception>
-        /// <exception cref="System.ArgumentException">
-        /// Image not provided.
+        /// <exception cref="System.ArgumentException">Image not provided.
         /// or
-        /// Could not find user.
-        /// </exception>
-        public ApiUserFileUpload UpdateUserImage(Image newImage, Guid sessionToken)
+        /// Could not find user.</exception>
+        public ApiUserFileUpload UpdateUserImage(Image newImage, Guid sessionToken, bool isImageCoverImage = false)
         {
             User sessionUser;
             try
@@ -357,7 +356,23 @@ namespace InstaMelody.Business
 
             // delete existing profile image
             var imageBll = new FileBll();
-            if (userToUpdate.UserImageId != null && !userToUpdate.UserImageId.Equals(default(int)))
+            if (isImageCoverImage 
+                && userToUpdate.UserCoverImageId != null && !userToUpdate.UserCoverImageId.Equals(default(int)))
+            {
+                try
+                {
+                    imageBll.DeleteImage(new Image
+                    {
+                        Id = (int)userToUpdate.UserCoverImageId
+                    });
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
+            }
+            else if ((!isImageCoverImage) 
+                && userToUpdate.UserImageId != null && !userToUpdate.UserImageId.Equals(default(int)))
             {
                 try
                 {
@@ -374,11 +389,13 @@ namespace InstaMelody.Business
 
             // add new image
             var addedImage = imageBll.AddImage(newImage);
-            userToUpdate.UserImageId = addedImage.Id;
+            if (isImageCoverImage)
+                userToUpdate.UserCoverImageId = addedImage.Id;
+            else
+                userToUpdate.UserImageId = addedImage.Id;
 
             // update user with image id
-            var updatedUser = UpdateUserProfileImage(userToUpdate);
-            updatedUser.Image = addedImage;
+            var updatedUser = UpdateUserImage(userToUpdate, isImageCoverImage);
 
             // create file upload token
             var uploadBll = new FileBll();
@@ -979,22 +996,25 @@ namespace InstaMelody.Business
         /// Updates the user image.
         /// </summary>
         /// <param name="userToUpdate">The user to update.</param>
+        /// <param name="isImageCoverImage">if set to <c>true</c> [is image cover image].</param>
         /// <returns></returns>
-        /// <exception cref="UnauthorizedAccessException">
-        /// </exception>
+        /// <exception cref="System.Data.DataException"></exception>
+        /// <exception cref="UnauthorizedAccessException"></exception>
         /// <exception cref="DataException"></exception>
         /// <exception cref="System.UnauthorizedAccessException"></exception>
-        /// <exception cref="System.Data.DataException"></exception>
-        private User UpdateUserProfileImage(User userToUpdate)
+        private User UpdateUserImage(User userToUpdate, bool isImageCoverImage = false)
         {
             var dal = new Users();
-            var updatedUser = dal.UpdateUserProfileImage(userToUpdate.Id, userToUpdate.UserImageId);
+
+            var image = (isImageCoverImage) ? userToUpdate.UserCoverImageId : userToUpdate.UserImageId;
+
+            var updatedUser = dal.UpdateUserImage(userToUpdate.Id, image, isImageCoverImage);
             if (updatedUser == null)
             {
                 InstaMelodyLogger.Log(
-                    string.Format("Could not update profile image. User Id: {0}",
+                    string.Format("Could not update user image. User Id: {0}",
                         userToUpdate.Id), LogLevel.Error);
-                throw new DataException(string.Format("Could not update profile image for User: {0}", userToUpdate.Id));
+                throw new DataException(string.Format("Could not update image for User: {0}", userToUpdate.Id));
             }
 
             // remove sensitive information
@@ -1009,16 +1029,30 @@ namespace InstaMelody.Business
         /// <returns></returns>
         private User GetUserWithImage(User user)
         {
-            if (user.UserImageId != null && !user.UserImageId.Equals(default(int)))
+            if (!user.UserImageId.Equals(default(int)))
             {
                 var imageBll = new FileBll();
-                var image = imageBll.GetImage(new Image
+                if (user.UserImageId != null)
                 {
-                    Id = (int)user.UserImageId
-                });
-                if (image != null)
+                    var image = imageBll.GetImage(new Image
+                    {
+                        Id = (int)user.UserImageId
+                    });
+                    if (image != null)
+                    {
+                        user.Image = image;
+                    }
+                }
+                if (user.UserCoverImageId != null)
                 {
-                    user.Image = image;
+                    var image = imageBll.GetImage(new Image
+                    {
+                        Id = (int)user.UserCoverImageId
+                    });
+                    if (image != null)
+                    {
+                        user.CoverImage = image;
+                    }
                 }
             }
             return user;
@@ -1251,7 +1285,7 @@ namespace InstaMelody.Business
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <exception cref="System.ArgumentException">User cannot be found.</exception>
-        internal void DeleteUserImage(Guid userId)
+        internal void DeleteUserImages(Guid userId)
         {
             var dal = new Users();
             var user = dal.FindById(userId);
@@ -1261,7 +1295,8 @@ namespace InstaMelody.Business
                 throw new ArgumentException("User cannot be found.");
             }
 
-            dal.UpdateUserProfileImage(userId, null);
+            dal.UpdateUserImage(userId, null);
+            dal.UpdateUserImage(userId, null, true);
         }
 
         /// <summary>

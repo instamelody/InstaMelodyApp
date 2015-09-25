@@ -13,6 +13,8 @@ namespace InstaMelody.Model
 
         public int? UserImageId { get; set; }
 
+        public int? UserCoverImageId { get; set; }
+
         [StringLength(320, ErrorMessage = "Email address cannot exceed 320 characters.")]
         public string EmailAddress 
         { 
@@ -104,6 +106,8 @@ namespace InstaMelody.Model
         public string DeviceToken { get; set; }
 
         public Image Image { get; set; }
+
+        public Image CoverImage { get; set; }
 
         public IList<User> Friends { get; set; }
 

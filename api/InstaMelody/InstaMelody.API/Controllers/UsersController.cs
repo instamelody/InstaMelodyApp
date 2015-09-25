@@ -377,6 +377,69 @@ namespace InstaMelody.API.Controllers
         }
 
         /// <summary>
+        /// Updates the user cover image.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route(Routes.RouteUpdateUserCoverImage)]
+        public HttpResponseMessage UpdateUserCoverImage(ApiRequest request)
+        {
+            HttpResponseMessage response;
+
+            if (request != null)
+            {
+                try
+                {
+                    InstaMelodyLogger.Log(
+                        string.Format("Update User Cover Image - Token: {0}", request.Token),
+                        LogLevel.Trace);
+
+                    var image = (request.User != null && request.User.CoverImage != null)
+                        ? request.User.CoverImage
+                        : request.Image;
+
+                    if (request.Token.Equals(default(Guid)) || image == null)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, Exceptions.FailedUpdateUser);
+                        return response;
+                    }
+
+                    var bll = new UserBll();
+                    var result = bll.UpdateUserImage(image, request.Token, isImageCoverImage: true);
+
+                    if (result == null)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, Exceptions.FailedUpdateUser);
+                    }
+                    else
+                    {
+                        response = this.Request.CreateResponse(HttpStatusCode.OK, result);
+                    }
+                }
+                catch (Exception exc)
+                {
+                    if (exc is ArgumentException || exc is UnauthorizedAccessException || exc is DataException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, exc.Message);
+                    }
+                    else
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
+                    }
+
+                }
+            }
+            else
+            {
+                InstaMelodyLogger.Log("Received NULL UpdateUser request", LogLevel.Trace);
+                response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.NullUser);
+            }
+
+            return response;
+        }
+
+        /// <summary>
         /// Deletes the user profile.
         /// </summary>
         /// <param name="request">The request.</param>

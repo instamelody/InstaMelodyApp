@@ -37,6 +37,16 @@
 {
   "Chat":
   {
+    "Id": "ebcb1743-7378-4d7d-96c5-5403cc51a07e",
+    "ChatLoopId" : "bd4b3a27-f94c-4aeb-8da1-3c1bd9786e4d",
+    "DateCreated": "2015-07-07T16:52:02.217",
+    "DateModified": "2015-07-07T16:52:02.357",
+    "IsDeleted": false,
+    "Messages": null,
+    "Users": null
+  },
+  "ChatMessage":
+  {
     "Id": 7,
     "ChatId": "ebcb1743-7378-4d7d-96c5-5403cc51a07e",
     "MessageId": "6bc30a9c-ea0a-4e75-ac25-c120f920f63a",

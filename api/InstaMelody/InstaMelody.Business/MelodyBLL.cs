@@ -346,37 +346,7 @@ namespace InstaMelody.Business
                         existing.Name));
             }
 
-            // create loop
-            var createdLoop = dal.CreateUserLoop(new UserLoop
-            {
-                UserId = sessionUser.Id,
-                Name = loop.Name,
-                DateCreated = DateTime.UtcNow,
-                DateModified = DateTime.UtcNow
-            });
-
-            // create loop parts
-            try
-            {
-                var parts = CreateUserLoopParts(sessionUser, createdLoop.Id, loop.Parts);
-
-                var uploadTokens = (from tuple in parts where tuple.Item2 != null select tuple.Item2).ToList();
-                if (uploadTokens.Any())
-                {
-                    return new ApiLoopFileUpload
-                    {
-                        Loop = GetUserLoop(createdLoop),
-                        FileUploadTokens = uploadTokens
-                    };
-                }
-
-                return GetUserLoop(createdLoop);
-            }
-            catch (Exception)
-            {
-                dal.DeleteUserLoop(createdLoop.Id);
-                throw;
-            }
+            return CreateLoop(loop, sessionUser);
         }
 
         /// <summary>
@@ -390,32 +360,9 @@ namespace InstaMelody.Business
         {
             var sessionUser = Utilities.GetUserBySession(sessionToken);
 
-            // get loop
+            // get loop & attach part
             var foundLoop = GetUserLoop(loop);
-
-            // create loop parts
-            try
-            {
-                var parts = CreateUserLoopParts(sessionUser, foundLoop.Id, new List<UserLoopPart> { newPart });
-
-                var uploadTokens = (from tuple in parts where tuple.Item2 != null select tuple.Item2).ToList();
-                if (uploadTokens.Any())
-                {
-                    return new ApiLoopFileUpload
-                    {
-                        Loop = GetUserLoop(foundLoop),
-                        FileUploadTokens = uploadTokens
-                    };
-                }
-
-                return GetUserLoop(foundLoop);
-            }
-            catch (Exception)
-            {
-                var dal = new UserLoops();
-                dal.DeleteUserLoop(foundLoop.Id);
-                throw;
-            }
+            return AttachPartToLoop(foundLoop, newPart, sessionUser);
         }
 
         /// <summary>
@@ -971,6 +918,82 @@ namespace InstaMelody.Business
 
             // return user melody guid
             return userMelody.Id;
+        }
+
+        /// <summary>
+        /// Creates the loop.
+        /// </summary>
+        /// <param name="loop">The loop.</param>
+        /// <param name="creator">The creator.</param>
+        /// <returns></returns>
+        internal object CreateLoop(UserLoop loop, User creator)
+        {
+            // create loop
+            var dal = new UserLoops();
+            var createdLoop = dal.CreateUserLoop(new UserLoop
+            {
+                UserId = creator.Id,
+                Name = loop.Name,
+                DateCreated = DateTime.UtcNow,
+                DateModified = DateTime.UtcNow
+            });
+
+            // create loop parts
+            try
+            {
+                var parts = CreateUserLoopParts(creator, createdLoop.Id, loop.Parts);
+
+                var uploadTokens = (from tuple in parts where tuple.Item2 != null select tuple.Item2).ToList();
+                if (uploadTokens.Any())
+                {
+                    return new ApiLoopFileUpload
+                    {
+                        Loop = GetUserLoop(createdLoop),
+                        FileUploadTokens = uploadTokens
+                    };
+                }
+
+                return GetUserLoop(createdLoop);
+            }
+            catch (Exception)
+            {
+                dal.DeleteUserLoop(createdLoop.Id);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Attaches the part to loop.
+        /// </summary>
+        /// <param name="loop">The loop.</param>
+        /// <param name="newPart">The new part.</param>
+        /// <param name="creator">The creator.</param>
+        /// <returns></returns>
+        internal object AttachPartToLoop(UserLoop loop, UserLoopPart newPart, User creator)
+        {
+            // create loop parts
+            try
+            {
+                var parts = CreateUserLoopParts(creator, loop.Id, new List<UserLoopPart> { newPart });
+
+                var uploadTokens = (from tuple in parts where tuple.Item2 != null select tuple.Item2).ToList();
+                if (uploadTokens.Any())
+                {
+                    return new ApiLoopFileUpload
+                    {
+                        Loop = GetUserLoop(loop),
+                        FileUploadTokens = uploadTokens
+                    };
+                }
+
+                return GetUserLoop(loop);
+            }
+            catch (Exception)
+            {
+                var dal = new UserLoops();
+                dal.DeleteUserLoop(loop.Id);
+                throw;
+            }
         }
 
         #endregion Internal Methods

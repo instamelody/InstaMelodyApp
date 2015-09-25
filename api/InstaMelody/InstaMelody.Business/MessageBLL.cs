@@ -298,6 +298,7 @@ namespace InstaMelody.Business
             {
                 return new ApiChatFileUpload
                 {
+                    Chat = dal.GetChatById(foundChat.Id),
                     ChatMessage = chatMessage.Item1,
                     FileUploadToken = chatMessage.Item2
                 };
@@ -449,7 +450,7 @@ namespace InstaMelody.Business
             }
             
             // get chat messages
-            IList<ChatMessage> messages = null;
+            IList<ChatMessage> messages;
             if (limitRecords != null && limitRecords > 0)
             {
                 messages = fromId != null && fromId > 0
@@ -672,6 +673,12 @@ namespace InstaMelody.Business
             });
             newChatMessage.Message = newMessage.Item1;
 
+            // Create Chat Loop
+            if (newMessage.Item1.UserMelody != null)
+            {
+                CreateOrUpdateChatLoop(foundChat, newChatMessage.Message.UserMelody, sender);
+            }
+
             // return chat message and upload token
             return new Tuple<ChatMessage, FileUploadToken>(newChatMessage, newMessage.Item2);
         }
@@ -736,6 +743,58 @@ namespace InstaMelody.Business
 
             // return message image
             return addedMessageVideo;
+        }
+        /// <summary>
+        /// Creates the or update chat loop.
+        /// </summary>
+        /// <param name="chat">The chat.</param>
+        /// <param name="melody">The melody.</param>
+        /// <param name="creator">The creator.</param>
+        private void CreateOrUpdateChatLoop(Chat chat, UserMelody melody, User creator)
+        {
+            var melodyBll = new MelodyBll();
+            if (chat.ChatLoopId != null)
+            {
+                // Append to ChatLoop
+                melodyBll.AttachPartToLoop(
+                    new UserLoop
+                    {
+                        Id = (Guid)chat.ChatLoopId
+                    },
+                    new UserLoopPart
+                    {
+                        UserMelody = new UserMelody
+                        {
+                            Id = melody.Id
+                        }
+                    },
+                    creator);
+            }
+            else
+            {
+                // Create new ChatLoop
+                var createdLoop = melodyBll.CreateLoop(
+                    new UserLoop
+                    {
+                        Name = string.Format("ChatLoop_{0}", chat.Id),
+                        Parts = new List<UserLoopPart>
+                        {
+                            new UserLoopPart
+                            {
+                                UserMelody = new UserMelody
+                                {
+                                    Id = melody.Id
+                                }
+                            }
+                        }
+                    },
+                    creator);
+
+                // Update Chat.ChatLoopId
+                chat.ChatLoopId = ((UserLoop)createdLoop).Id;
+                var dal = new Chats();
+                dal.UpdateChat(chat);
+            }
         }
 
         #endregion Private Methods

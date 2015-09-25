@@ -431,12 +431,15 @@ namespace InstaMelody.Data
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <param name="imageId">The image identifier.</param>
+        /// <param name="isImageCoverImage">if set to <c>true</c> [is image cover image].</param>
         /// <returns></returns>
-        public User UpdateUserProfileImage(Guid userId, int? imageId)
+        public User UpdateUserImage(Guid userId, int? imageId, bool isImageCoverImage = false)
         {
-            var query = @"UPDATE dbo.Users 
-                        SET UserImageId = @UserImageId, DateModified = @DateModified
-                        WHERE Id = @UserId AND IsDeleted = 0";
+            var imageDbColumnName = (isImageCoverImage) ? "UserCoverImageId" : "UserImageId";
+
+            var query = string.Format(@"UPDATE dbo.Users 
+                        SET {0} = @{0}, DateModified = @DateModified
+                        WHERE Id = @UserId AND IsDeleted = 0", imageDbColumnName);
 
             var parameters = new List<SqlParameter>
             {
@@ -449,7 +452,7 @@ namespace InstaMelody.Data
                 },
                 new SqlParameter
                 {
-                    ParameterName = "UserImageId",
+                    ParameterName = imageDbColumnName,
                     Value = (object)imageId ?? DBNull.Value,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input

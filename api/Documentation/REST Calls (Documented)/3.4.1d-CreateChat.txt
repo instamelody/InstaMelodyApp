@@ -38,6 +38,7 @@
     "Chat":
     {
         "Id": "74f4fad4-e98d-4495-9ebf-728cefa6fed9",
+        "ChatLoopId" : "bd4b3a27-f94c-4aeb-8da1-3c1bd9786e4d",
         "DateCreated": "2015-07-07T16:52:02.217",
         "DateModified": "2015-07-07T16:52:02.357",
         "IsDeleted": false,

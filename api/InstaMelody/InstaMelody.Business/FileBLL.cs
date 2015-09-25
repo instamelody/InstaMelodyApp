@@ -454,7 +454,7 @@ namespace InstaMelody.Business
 
             // set userimageid column to null
             var userBll = new UserBll();
-            userBll.DeleteUserImage(userId);
+            userBll.DeleteUserImages(userId);
         }
 
         /// <summary>

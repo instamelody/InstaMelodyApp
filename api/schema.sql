@@ -18,6 +18,9 @@ CREATE TABLE dbo.Users
     UserImageId int NULL,
     CONSTRAINT FK_Users_UserImageId FOREIGN KEY (UserImageId)
 		REFERENCES Images (Id),
+    UserCoverImageId int NULL,
+    CONSTRAINT FK_Users_UserCoverImageId FOREIGN KEY (UserCoverImageId)
+		REFERENCES Images (Id),
     EmailAddress varchar(320) NULL,
     DisplayName varchar(32) NOT NULL,
     FirstName varchar(64) NULL,
@@ -225,6 +228,9 @@ GO
 
 CREATE TABLE dbo.Chats
 	(Id UNIQUEIDENTIFIER PRIMARY KEY NOT NULL,
+	ChatLoopId UNIQUEIDENTIFIER NULL,
+	CONSTRAINT FK_Chats_UserLoopId FOREIGN KEY (ChatLoopId)
+		REFERENCES UserLoops (Id),
 	DateCreated datetime NOT NULL,
 	DateModified datetime NOT NULL,
 	IsDeleted bit NOT NULL DEFAULT 0)

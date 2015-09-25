@@ -15,24 +15,37 @@
 
 // RESPONSE - HTTP/1.1 200 OK
 {
-  "Id": 7,
-  "ChatId": "ebcb1743-7378-4d7d-96c5-5403cc51a07e",
-  "MessageId": "6bc30a9c-ea0a-4e75-ac25-c120f920f63a",
-  "SenderId": "5651a0ad-b934-4be8-88f2-c380f884adf5",
-  "DateCreated": "2015-07-07T17:39:43.543",
-  "IsDeleted": false,
-  "Message": 
+  "Chat":
   {
-    "Id": "6bc30a9c-ea0a-4e75-ac25-c120f920f63a",
-    "ParentId": null,
-    "Description": "Test Message 2",
-    "MediaType": 0,
-    "IsRead": false,
-    "DateRead": "0001-01-01T00:00:00",
-    "DateCreated": "2015-07-07T17:39:43.513",
+    "Id": "ebcb1743-7378-4d7d-96c5-5403cc51a07e",
+    "ChatLoopId" : null,
+    "DateCreated": "2015-07-07T16:52:02.217",
+    "DateModified": "2015-07-07T16:52:02.357",
     "IsDeleted": false,
-    "Image": null,
-    "UserMelody": null,
-    "Video": null
+    "Messages": null,
+    "Users": null
+  },
+  "ChatMessage":
+  {
+    "Id": 7,
+    "ChatId": "ebcb1743-7378-4d7d-96c5-5403cc51a07e",
+    "MessageId": "6bc30a9c-ea0a-4e75-ac25-c120f920f63a",
+    "SenderId": "5651a0ad-b934-4be8-88f2-c380f884adf5",
+    "DateCreated": "2015-07-07T17:39:43.543",
+    "IsDeleted": false,
+    "Message": 
+    {
+      "Id": "6bc30a9c-ea0a-4e75-ac25-c120f920f63a",
+      "ParentId": null,
+      "Description": "Test Message 2",
+      "MediaType": 0,
+      "IsRead": false,
+      "DateRead": "0001-01-01T00:00:00",
+      "DateCreated": "2015-07-07T17:39:43.513",
+      "IsDeleted": false,
+      "Image": null,
+      "UserMelody": null,
+      "Video": null
+    }
   }
 }

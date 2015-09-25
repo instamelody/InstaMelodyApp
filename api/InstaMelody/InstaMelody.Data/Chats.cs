@@ -44,6 +44,55 @@ namespace InstaMelody.Data
         }
 
         /// <summary>
+        /// Updates the chat.
+        /// </summary>
+        /// <param name="chat">The chat.</param>
+        /// <returns></returns>
+        public Chat UpdateChat(Chat chat)
+        {
+            //ChatLoopId
+            var query = @"UPDATE dbo.Chats
+                        SET  DateModified = @DateModified
+                        WHERE IsDeleted = 0 AND Id = @ChatId";
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "ChatId",
+                    Value = chat.Id,
+                    SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "DateModified",
+                    Value = DateTime.UtcNow,
+                    SqlDbType = SqlDbType.DateTime,
+                    Direction = ParameterDirection.Input
+                }
+            };
+
+            if (chat.ChatLoopId != null)
+            {
+                query = @"UPDATE dbo.Chats
+                        SET ChatLoopId = @ChatLoopId, DateModified = @DateModified
+                        WHERE IsDeleted = 0 AND Id = @ChatId";
+
+                parameters.Add(new SqlParameter
+                    {
+                        ParameterName = "ChatLoopId",
+                        Value = chat.ChatLoopId,
+                        SqlDbType = SqlDbType.UniqueIdentifier,
+                        Direction = ParameterDirection.Input
+                    });
+            }
+
+            ExecuteNonQuery(query, parameters.ToArray());
+            return GetChatById(chat.Id);
+        }
+
+        /// <summary>
         /// Creates the chat message.
         /// </summary>
         /// <param name="message">The message.</param>

@@ -5,6 +5,7 @@
 // RESPONSE - HTTP/1.1 200 OK
 {
   "Id": "6abc53ab-90e6-4b80-9b05-f8d0a0cbf7aa",
+  "ChatLoopId" : null,
   "DateCreated": "2015-08-06T23:17:56.49",
   "DateModified": "2015-08-07T13:31:25.113",
   "IsDeleted": false,
