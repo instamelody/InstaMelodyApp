@@ -1,4 +1,4 @@
-// REQUEST - POST https://api.instamelody.com/v1.0/User/Update/Image
+// REQUEST - POST https://api.instamelody.com/v1.0/User/Update/CoverImage
 {
     "Token" : "9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e",
     "Image" :
@@ -11,8 +11,8 @@
 {
     "User": {
         "Id": "5651a0ad-b934-4be8-88f2-c380f884adf5",
-        "UserImageId": 1,
-        "UserCoverImageId": null,
+        "UserImageId": null,
+        "UserCoverImageId": 1,
         "EmailAddress": "test@testy.com",
         "DisplayName": "testaccount123",
         "FirstName": "test",
@@ -34,14 +34,14 @@
         "DateCreated": "2015-07-07T15:04:08.337",
         "DateModified": "2015-07-07T15:32:00.757",
         "IsDeleted": false,
-        "Image": {
+        "Image": null,
+        "CoverImage": {
             "Id": 1,
             "FileName": "thisismyimagename.jpg",
             "DateCreated": "2015-07-07T15:31:57.807",
             "IsDeleted": false,
             "FilePath": null
         },
-        "CoverImage": null,
         "Friends": null
     },
     "FileUploadToken": {
