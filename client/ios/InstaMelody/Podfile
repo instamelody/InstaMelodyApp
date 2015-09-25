@@ -6,4 +6,5 @@ target 'InstaMelody' do
   pod 'MagicalRecord'
   pod 'DACircularProgress'
   pod 'CLTokenInputView'
+  pod 'MGSwipeTableCell'
 end

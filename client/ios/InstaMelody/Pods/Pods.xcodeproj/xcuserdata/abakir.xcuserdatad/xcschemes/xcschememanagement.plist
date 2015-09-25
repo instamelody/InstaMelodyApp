@@ -19,6 +19,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>MGSwipeTableCell.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>MagicalRecord.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -32,27 +37,32 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>0BD34FFF2EA2FC07F779AA73054A0388</key>
+		<key>11A004108E8F34C77C384CCD85AF2AF1</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>694F6B659EA54CF1B608BAFB13235712</key>
+		<key>14F8950855508DC7707E4A78B7808DF2</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>75E4FD9C4F9F909A80A01FAE98644DD0</key>
+		<key>2E69E8D1D128B9F61B8A74675F707DE3</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7EEE29C02FDCD50A9515EF66C09EDA7E</key>
+		<key>E78C03C03F923E4552962B2EC819E413</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>BD4EF2F4EFADD4878C3F1E6CA59531A0</key>
+		<key>EB8BD6D2B98BFF654E3CB1127837AEA9</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F8853AD5FAD142924EC5542194807091</key>
 		<dict>
 			<key>primary</key>
 			<true/>

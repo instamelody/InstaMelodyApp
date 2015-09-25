@@ -239,7 +239,7 @@
     NSInteger parentTag = textField.tag + 10;
     UIView *parentView = [self.scrollView viewWithTag:parentTag];
     
-    CGPoint scrollPoint = CGPointMake(0, parentView.frame.origin.y - 20);
+    CGPoint scrollPoint = CGPointMake(0, parentView.frame.origin.y - 90);
     [self.scrollView setContentOffset:scrollPoint animated:YES];
 }
 

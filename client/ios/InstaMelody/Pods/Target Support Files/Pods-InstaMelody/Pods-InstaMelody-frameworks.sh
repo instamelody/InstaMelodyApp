@@ -55,11 +55,13 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework 'Pods-InstaMelody/CLTokenInputView.framework'
   install_framework 'Pods-InstaMelody/DACircularProgress.framework'
   install_framework 'Pods-InstaMelody/FontAwesome.framework'
+  install_framework 'Pods-InstaMelody/MGSwipeTableCell.framework'
   install_framework 'Pods-InstaMelody/MagicalRecord.framework'
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework 'Pods-InstaMelody/CLTokenInputView.framework'
   install_framework 'Pods-InstaMelody/DACircularProgress.framework'
   install_framework 'Pods-InstaMelody/FontAwesome.framework'
+  install_framework 'Pods-InstaMelody/MGSwipeTableCell.framework'
   install_framework 'Pods-InstaMelody/MagicalRecord.framework'
 fi

@@ -72,6 +72,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     FriendCell *cell = (FriendCell *)[tableView dequeueReusableCellWithIdentifier:@"FriendCell" forIndexPath:indexPath];
     
+    cell.delegate = self;
     cell.profileImageView.layer.cornerRadius = cell.profileImageView.frame.size.height / 2;
     cell.profileImageView.layer.masksToBounds = YES;
     
@@ -424,6 +425,72 @@
     NSString *emailRegex = stricterFilter ? stricterFilterString : laxString;
     NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
     return [emailTest evaluateWithObject:checkString];
+}
+
+#pragma mark Swipe Delegate
+
+-(BOOL) swipeTableCell:(MGSwipeTableCell*) cell canSwipe:(MGSwipeDirection) direction;
+{
+    return YES;
+}
+
+-(NSArray*) swipeTableCell:(MGSwipeTableCell*) cell swipeButtonsForDirection:(MGSwipeDirection)direction
+             swipeSettings:(MGSwipeSettings*) swipeSettings expansionSettings:(MGSwipeExpansionSettings*) expansionSettings
+{
+    
+    swipeSettings.transition = MGSwipeTransitionBorder;
+    expansionSettings.buttonIndex = 0;
+    
+    if (direction == MGSwipeDirectionRightToLeft) {
+        
+        expansionSettings.fillOnTrigger = YES;
+        expansionSettings.threshold = 1.1;
+        
+        CGFloat padding = 15;
+        
+        MGSwipeButton * fav = [MGSwipeButton buttonWithTitle:[NSString fontAwesomeIconStringForEnum:FAStar] backgroundColor:[UIColor lightGrayColor] padding:padding callback:^BOOL(MGSwipeTableCell *sender) {
+            
+            //do stuff
+            
+            return NO; //don't autohide to improve delete animation
+        }];
+        
+        MGSwipeButton * mail = [MGSwipeButton buttonWithTitle:[NSString fontAwesomeIconStringForEnum:FAEnvelope] backgroundColor:[UIColor lightGrayColor] padding:padding callback:^BOOL(MGSwipeTableCell *sender) {
+            
+            //do more stuff
+            [cell refreshContentView]; //needed to refresh cell contents while swipping
+            return YES;
+        }];
+        MGSwipeButton * chat = [MGSwipeButton buttonWithTitle:[NSString fontAwesomeIconStringForEnum:FAComment] backgroundColor:[UIColor lightGrayColor] padding:padding callback:^BOOL(MGSwipeTableCell *sender) {
+            
+            //[cell hideSwipeAnimated:YES];
+            
+            return NO; //avoid autohide swipe
+        }];
+        
+        fav.titleLabel.font = [UIFont fontAwesomeFontOfSize:20.0f];
+        mail.titleLabel.font = [UIFont fontAwesomeFontOfSize:20.0f];
+        chat.titleLabel.font = [UIFont fontAwesomeFontOfSize:20.0f];
+
+        
+        return @[fav, mail, chat];
+    }
+    
+    return nil;
+    
+}
+
+-(void) swipeTableCell:(MGSwipeTableCell*) cell didChangeSwipeState:(MGSwipeState)state gestureIsActive:(BOOL)gestureIsActive
+{
+    NSString * str;
+    switch (state) {
+        case MGSwipeStateNone: str = @"None"; break;
+        case MGSwipeStateSwippingLeftToRight: str = @"SwippingLeftToRight"; break;
+        case MGSwipeStateSwippingRightToLeft: str = @"SwippingRightToLeft"; break;
+        case MGSwipeStateExpandingLeftToRight: str = @"ExpandingLeftToRight"; break;
+        case MGSwipeStateExpandingRightToLeft: str = @"ExpandingRightToLeft"; break;
+    }
+    NSLog(@"Swipe state: %@ ::: Gesture: %@", str, gestureIsActive ? @"Active" : @"Ended");
 }
 
 @end

@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MGSwipeTableCell.h"
 
-@interface FriendCell : UITableViewCell
+@interface FriendCell : MGSwipeTableCell
 
 @property (nonatomic, strong) IBOutlet UIButton *approveButton;
 @property (nonatomic, strong) IBOutlet UIButton *denyButton;

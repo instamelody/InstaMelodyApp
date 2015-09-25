@@ -52,13 +52,17 @@
     }
     
     //to make nav bar clear
-    /*
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage new]
-                                                  forBarMetrics:UIBarMetricsDefault];
-    self.navigationController.navigationBar.shadowImage = [UIImage new];
-    self.navigationController.navigationBar.translucent = YES;
-    self.navigationController.view.backgroundColor = [UIColor clearColor];
-    */
+    
+    //self.navigationController.navigationBar.translucent = YES;
+    [(UIView*)[self.navigationController.navigationBar.subviews objectAtIndex:0] setAlpha:0.2f];
+    
+    NSDictionary *navbarTitleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                               [UIColor whiteColor],
+                                               NSForegroundColorAttributeName,
+                                               [UIFont fontWithName:@"Helvetica Neue Light" size:20.0],
+                                               NSFontAttributeName,
+                                               nil];
+    [self.navigationController.navigationBar setTitleTextAttributes:navbarTitleTextAttributes];
     
     [self createMenu];
 }
