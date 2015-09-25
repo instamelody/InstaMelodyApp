@@ -63,6 +63,7 @@
                                                NSFontAttributeName,
                                                nil];
     [self.navigationController.navigationBar setTitleTextAttributes:navbarTitleTextAttributes];
+    [self.navigationController.navigationBar setTintColor:[UIColor colorWithRed:191/255.0f green:139/255.0f blue:226/255.0f alpha:1.0f]];
     
     [self createMenu];
 }
