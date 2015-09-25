@@ -14,7 +14,7 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>FontAwesome+iOS.xcscheme</key>
+		<key>FontAwesome.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -32,27 +32,27 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>508290D85B407BDA3B024FD891DC8553</key>
+		<key>0BD34FFF2EA2FC07F779AA73054A0388</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>532BFCF48FBE88FA98C3C713BC559FCA</key>
+		<key>694F6B659EA54CF1B608BAFB13235712</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>99194C0EA01A44A774573FA9CFA36D33</key>
+		<key>75E4FD9C4F9F909A80A01FAE98644DD0</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>ABA4C02E56DB384887A1D57F6C549D0B</key>
+		<key>7EEE29C02FDCD50A9515EF66C09EDA7E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>B0AFB21238BA8FE84BBB0AA7D51D0359</key>
+		<key>BD4EF2F4EFADD4878C3F1E6CA59531A0</key>
 		<dict>
 			<key>primary</key>
 			<true/>

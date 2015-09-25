@@ -28,8 +28,8 @@
     self.userLabel.font  = [UIFont fontAwesomeFontOfSize:17.0f];
     self.passLabel.font  = [UIFont fontWithName:kFontAwesomeFamilyName size:17];
     
-    self.userLabel.text =  [NSString fontAwesomeIconStringForEnum:FAIconUser];
-    self.passLabel.text =  [NSString fontAwesomeIconStringForEnum:FAIconLock];
+    self.userLabel.text =  [NSString fontAwesomeIconStringForEnum:FAUser];
+    self.passLabel.text =  [NSString fontAwesomeIconStringForEnum:FALock];
     
     self.userField.delegate = self;
     self.passField.delegate = self;

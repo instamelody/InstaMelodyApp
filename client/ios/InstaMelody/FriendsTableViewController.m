@@ -80,8 +80,8 @@
     cell.approveButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:22.0f];
     cell.denyButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:22.0f];
     
-    [cell.approveButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconCheck] forState:UIControlStateNormal];
-    [cell.denyButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconRemove] forState:UIControlStateNormal];
+    [cell.approveButton setTitle:[NSString fontAwesomeIconStringForEnum:FACheck] forState:UIControlStateNormal];
+    [cell.denyButton setTitle:[NSString fontAwesomeIconStringForEnum:FAtrash] forState:UIControlStateNormal];
     
     // Configure the cell...
     

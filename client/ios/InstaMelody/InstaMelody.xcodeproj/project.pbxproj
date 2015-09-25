@@ -32,7 +32,6 @@
 		87175C681B4AE03700C042E4 /* JSQSystemSoundPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 87175C671B4AE03700C042E4 /* JSQSystemSoundPlayer.m */; };
 		87175C6B1B4AE08E00C042E4 /* NSUserDefaults+DemoSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 87175C6A1B4AE08E00C042E4 /* NSUserDefaults+DemoSettings.m */; };
 		8718CDC41BA7778C00FE6F23 /* NetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8718CDC31BA7778C00FE6F23 /* NetworkManager.m */; };
-		872113441B7E942000F787F1 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 872113431B7E942000F787F1 /* FontAwesome.ttf */; };
 		872BB5681B74AD26004CDBE7 /* FriendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BB5671B74AD26004CDBE7 /* FriendCell.m */; };
 		872BB56B1B74B56C004CDBE7 /* ChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BB56A1B74B56C004CDBE7 /* ChatCell.m */; };
 		872BB56E1B74BC36004CDBE7 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BB56D1B74BC36004CDBE7 /* ChatViewController.m */; };
@@ -81,6 +80,7 @@
 		874C88471B4ADB3B0069A041 /* JSQMessagesToolbarContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 874C881B1B4ADB3B0069A041 /* JSQMessagesToolbarContentView.xib */; };
 		874C88481B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 874C881D1B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.m */; };
 		874C88491B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 874C881E1B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.xib */; };
+		875C19FE1BB5F3B3007B14DE /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 875C19FD1BB5F3B3007B14DE /* FontAwesome.ttf */; };
 		878FAD601BAC6E1D00260D5B /* UserMelodyListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 878FAD5F1BAC6E1D00260D5B /* UserMelodyListViewController.m */; };
 		87915E8B1B9F4AC300628937 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 87915E8A1B9F4AC300628937 /* placeholder.png */; };
 		879CCC541B81D2870031FDCC /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 879CCC521B81D2870031FDCC /* Model.xcdatamodeld */; };
@@ -158,7 +158,6 @@
 		87175C6A1B4AE08E00C042E4 /* NSUserDefaults+DemoSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSUserDefaults+DemoSettings.m"; sourceTree = SOURCE_ROOT; };
 		8718CDC21BA7778C00FE6F23 /* NetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkManager.h; sourceTree = "<group>"; };
 		8718CDC31BA7778C00FE6F23 /* NetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkManager.m; sourceTree = "<group>"; };
-		872113431B7E942000F787F1 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.ttf; path = "Pods/FontAwesome+iOS/Resources/FontAwesome.ttf"; sourceTree = "<group>"; };
 		872BB5661B74AD26004CDBE7 /* FriendCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendCell.h; sourceTree = "<group>"; };
 		872BB5671B74AD26004CDBE7 /* FriendCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendCell.m; sourceTree = "<group>"; };
 		872BB5691B74B56C004CDBE7 /* ChatCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatCell.h; sourceTree = "<group>"; };
@@ -255,6 +254,7 @@
 		874C881C1B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesTypingIndicatorFooterView.h; sourceTree = "<group>"; };
 		874C881D1B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesTypingIndicatorFooterView.m; sourceTree = "<group>"; };
 		874C881E1B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JSQMessagesTypingIndicatorFooterView.xib; sourceTree = "<group>"; };
+		875C19FD1BB5F3B3007B14DE /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.ttf; path = Pods/FontAwesome/Resources/FontAwesome.ttf; sourceTree = "<group>"; };
 		878FAD5E1BAC6E1D00260D5B /* UserMelodyListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserMelodyListViewController.h; sourceTree = "<group>"; };
 		878FAD5F1BAC6E1D00260D5B /* UserMelodyListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserMelodyListViewController.m; sourceTree = "<group>"; };
 		87915E8A1B9F4AC300628937 /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = SOURCE_ROOT; };
@@ -304,7 +304,7 @@
 		8707F9A61B446F57004B4C20 = {
 			isa = PBXGroup;
 			children = (
-				872113431B7E942000F787F1 /* FontAwesome.ttf */,
+				875C19FD1BB5F3B3007B14DE /* FontAwesome.ttf */,
 				8707F9B11B446F57004B4C20 /* InstaMelody */,
 				8707F9CE1B446F57004B4C20 /* InstaMelodyTests */,
 				8707F9B01B446F57004B4C20 /* Products */,
@@ -774,7 +774,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				872113441B7E942000F787F1 /* FontAwesome.ttf in Resources */,
 				87915E8B1B9F4AC300628937 /* placeholder.png in Resources */,
 				8707F9C11B446F57004B4C20 /* Main.storyboard in Resources */,
 				874C88491B4ADB3B0069A041 /* JSQMessagesTypingIndicatorFooterView.xib in Resources */,
@@ -786,6 +785,7 @@
 				874C88291B4ADB3B0069A041 /* JSQMessagesViewController.xib in Resources */,
 				874C883D1B4ADB3B0069A041 /* JSQMessagesCollectionViewCellIncoming.xib in Resources */,
 				874C88471B4ADB3B0069A041 /* JSQMessagesToolbarContentView.xib in Resources */,
+				875C19FE1BB5F3B3007B14DE /* FontAwesome.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1056,7 +1056,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = InstaMelody/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.InstaMelody.recorder;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1073,7 +1073,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = InstaMelody/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.InstaMelody.recorder;
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -125,11 +125,11 @@
     self.playLoopButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:25.0f];
     self.playLoop2Button.titleLabel.font = [UIFont fontAwesomeFontOfSize:25.0f];
     
-    [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconPlay] forState:UIControlStateNormal];
-    [self.playLoopButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconRefresh] forState:UIControlStateNormal];
+    [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAPlay] forState:UIControlStateNormal];
+    [self.playLoopButton setTitle:[NSString fontAwesomeIconStringForEnum:FARefresh] forState:UIControlStateNormal];
     
-    [self.playLoop2Button setTitle:[NSString fontAwesomeIconStringForEnum:FAIconRefresh] forState:UIControlStateNormal];
-    [self.shareButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconShareAlt] forState:UIControlStateNormal];
+    [self.playLoop2Button setTitle:[NSString fontAwesomeIconStringForEnum:FARefresh] forState:UIControlStateNormal];
+    [self.shareButton setTitle:[NSString fontAwesomeIconStringForEnum:FAShare] forState:UIControlStateNormal];
     
     /*
     [self.volumeBarButtonItem setTitleTextAttributes:@{
@@ -260,7 +260,7 @@
     
     if (error == nil) {
         
-        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconPlay] forState:UIControlStateNormal];
+        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAPlay] forState:UIControlStateNormal];
         [self.bgPlayer setNumberOfLoops:-1];
         [self.bgPlayer setVolume:0.4f];
         [self.bgPlayer play];
@@ -289,7 +289,7 @@
     
     if (error == nil) {
         
-        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconPlay] forState:UIControlStateNormal];
+        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAPlay] forState:UIControlStateNormal];
         [self.bgPlayer2 setNumberOfLoops:-1];
         [self.bgPlayer2 setVolume:0.4f];
         [self.bgPlayer2 play];
@@ -315,7 +315,7 @@
     
     if (error == nil) {
         
-        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconStop] forState:UIControlStateNormal];
+        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAStop] forState:UIControlStateNormal];
         [self.fgPlayer play];
         
         self.timer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(updatePlaybackProgress) userInfo:nil repeats:YES];
@@ -452,7 +452,7 @@
         [self.fgPlayer stop];
         [self.bgPlayer stop];
         [self.bgPlayer2 stop];
-        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconPlay] forState:UIControlStateNormal];
+        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAPlay] forState:UIControlStateNormal];
         
         [self.timer invalidate];
     } else {
@@ -480,12 +480,12 @@
         [self playLoop:nil];
         [self playLoop2:nil];
         
-        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconStop] forState:UIControlStateNormal];
+        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAStop] forState:UIControlStateNormal];
     } else if (self.selectedMelody != nil) {
         [self playRecording:nil];
         [self playLoop:nil];
         
-        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconStop] forState:UIControlStateNormal];
+        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAStop] forState:UIControlStateNormal];
     } else {
         
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"No loop selected" message:@"Please select a loop" preferredStyle:UIAlertControllerStyleAlert];
@@ -772,7 +772,7 @@
 {
     if (flag) {
         [self.timer invalidate];
-        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAIconPlay] forState:UIControlStateNormal];
+        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAPlay] forState:UIControlStateNormal];
         if (player == self.fgPlayer) {
             [self.bgPlayer stop];
             [self.bgPlayer2 stop];
