@@ -8,7 +8,6 @@
 
 #import "ChatsTableViewController.h"
 #import "AFHTTPRequestOperationManager.h"
-#import "DemoMessagesViewController.h"
 #import "constants.h"
 #import "ChatCell.h"
 #import "ChatViewController.h"
@@ -153,10 +152,6 @@
     
     [self.navigationController pushViewController:vc animated:YES];
     
-    /*
-     DemoMessagesViewController *vc = [DemoMessagesViewController messagesViewController];
-     [self.navigationController pushViewController:vc animated:YES];
-     */
     
     
      //UINavigationController *navCon = [[UINavigationController alloc] initWithRootViewController:vc];

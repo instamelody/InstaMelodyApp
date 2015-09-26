@@ -162,21 +162,67 @@
      *  Override the defaults in `viewDidLoad`
      */
     
+    NSUserDefaults *defaults =[NSUserDefaults standardUserDefaults];
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     
-    /*
-    JSQMessage *message = [self.demoData.messages objectAtIndex:indexPath.item];
+    NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
     
+    JSQMessage *message = [self.messages objectAtIndex:indexPath.item];
+
     if ([message.senderId isEqualToString:self.senderId]) {
-        if (![NSUserDefaults outgoingAvatarSetting]) {
-            return nil;
+        
+        NSString *imageName = [[defaults objectForKey:@"ProfileFilePath"] lastPathComponent];
+        
+        NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
+        UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
+        
+        if (image != nil) {
+            JSQMessagesAvatarImage *avatar = [JSQMessagesAvatarImageFactory avatarImageWithImage:image diameter:kJSQMessagesCollectionViewAvatarSizeDefault];
+            
+            return avatar;
+        } else {
+            JSQMessagesAvatarImage *jsqImage = [JSQMessagesAvatarImageFactory avatarImageWithUserInitials:@"Me"
+                                                                                          backgroundColor:[UIColor colorWithWhite:0.85f alpha:1.0f]
+                                                                                                textColor:[UIColor colorWithWhite:0.60f alpha:1.0f]
+                                                                                                     font:[UIFont systemFontOfSize:14.0f]
+                                                                                                 diameter:kJSQMessagesCollectionViewAvatarSizeDefault];
+            return jsqImage;
         }
+
     }
     else {
-        if (![NSUserDefaults incomingAvatarSetting]) {
-            return nil;
+        
+        //need to replace with friend profile paths
+        //NSString *imageName = [[defaults objectForKey:@"ProfileFilePath"] lastPathComponent];
+        NSString *imageName = [NSString stringWithFormat:@"%@_profile.jpg", message.senderId];
+        
+        NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
+        UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
+        
+        if (image != nil) {
+            JSQMessagesAvatarImage *avatar = [JSQMessagesAvatarImageFactory avatarImageWithImage:image diameter:kJSQMessagesCollectionViewAvatarSizeDefault];
+            
+            return avatar;
+        } else {
+            
+            NSArray *components = [message.senderDisplayName componentsSeparatedByString:@" "];
+            NSString *initials = @"FR";
+            if (components.count == 2) {
+                initials = [NSString stringWithFormat:@"%@%@", [[components[0] substringToIndex:1] uppercaseString], [[components[1] substringToIndex:1] uppercaseString]];
+            }
+            
+            JSQMessagesAvatarImage *jsqImage = [JSQMessagesAvatarImageFactory avatarImageWithUserInitials:initials
+                                                                                          backgroundColor:[UIColor colorWithWhite:0.85f alpha:1.0f]
+                                                                                                textColor:[UIColor colorWithWhite:0.60f alpha:1.0f]
+                                                                                                     font:[UIFont systemFontOfSize:14.0f]
+                                                                                                 diameter:kJSQMessagesCollectionViewAvatarSizeDefault];
+            return jsqImage;
         }
+        
     }
     
+    
+    /*
     
     return [self.demoData.avatars objectForKey:message.senderId];
      */

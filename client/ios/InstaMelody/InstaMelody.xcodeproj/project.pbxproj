@@ -27,9 +27,6 @@
 		8707F9FA1B4476BD004B4C20 /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8707F9F11B4476BD004B4C20 /* AFURLSessionManager.m */; };
 		87098F601B74E88000C3E7C9 /* CreateChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87098F5F1B74E88000C3E7C9 /* CreateChatViewController.m */; };
 		87175C531B4ADCEA00C042E4 /* ChatsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87175C521B4ADCEA00C042E4 /* ChatsTableViewController.m */; };
-		87175C581B4ADF9E00C042E4 /* DemoMessagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87175C551B4ADF9E00C042E4 /* DemoMessagesViewController.m */; };
-		87175C591B4ADF9E00C042E4 /* DemoModelData.m in Sources */ = {isa = PBXBuildFile; fileRef = 87175C571B4ADF9E00C042E4 /* DemoModelData.m */; };
-		87175C6B1B4AE08E00C042E4 /* NSUserDefaults+DemoSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 87175C6A1B4AE08E00C042E4 /* NSUserDefaults+DemoSettings.m */; };
 		8718CDC41BA7778C00FE6F23 /* NetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8718CDC31BA7778C00FE6F23 /* NetworkManager.m */; };
 		872BB5681B74AD26004CDBE7 /* FriendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BB5671B74AD26004CDBE7 /* FriendCell.m */; };
 		872BB56B1B74B56C004CDBE7 /* ChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BB56A1B74B56C004CDBE7 /* ChatCell.m */; };
@@ -106,12 +103,6 @@
 		87098F5F1B74E88000C3E7C9 /* CreateChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateChatViewController.m; sourceTree = SOURCE_ROOT; };
 		87175C511B4ADCEA00C042E4 /* ChatsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatsTableViewController.h; path = ../ChatsTableViewController.h; sourceTree = "<group>"; };
 		87175C521B4ADCEA00C042E4 /* ChatsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChatsTableViewController.m; path = ../ChatsTableViewController.m; sourceTree = "<group>"; };
-		87175C541B4ADF9E00C042E4 /* DemoMessagesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoMessagesViewController.h; sourceTree = SOURCE_ROOT; };
-		87175C551B4ADF9E00C042E4 /* DemoMessagesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoMessagesViewController.m; sourceTree = SOURCE_ROOT; };
-		87175C561B4ADF9E00C042E4 /* DemoModelData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoModelData.h; sourceTree = SOURCE_ROOT; };
-		87175C571B4ADF9E00C042E4 /* DemoModelData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoModelData.m; sourceTree = SOURCE_ROOT; };
-		87175C691B4AE08E00C042E4 /* NSUserDefaults+DemoSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSUserDefaults+DemoSettings.h"; sourceTree = SOURCE_ROOT; };
-		87175C6A1B4AE08E00C042E4 /* NSUserDefaults+DemoSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSUserDefaults+DemoSettings.m"; sourceTree = SOURCE_ROOT; };
 		8718CDC21BA7778C00FE6F23 /* NetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkManager.h; sourceTree = "<group>"; };
 		8718CDC31BA7778C00FE6F23 /* NetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkManager.m; sourceTree = "<group>"; };
 		872BB5661B74AD26004CDBE7 /* FriendCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendCell.h; sourceTree = "<group>"; };
@@ -359,12 +350,6 @@
 			children = (
 				872BB59B1B74CAD1004CDBE7 /* AwesomeMenu */,
 				8707F9DE1B4476BC004B4C20 /* AFNetworking */,
-				87175C541B4ADF9E00C042E4 /* DemoMessagesViewController.h */,
-				87175C551B4ADF9E00C042E4 /* DemoMessagesViewController.m */,
-				87175C561B4ADF9E00C042E4 /* DemoModelData.h */,
-				87175C571B4ADF9E00C042E4 /* DemoModelData.m */,
-				87175C691B4AE08E00C042E4 /* NSUserDefaults+DemoSettings.h */,
-				87175C6A1B4AE08E00C042E4 /* NSUserDefaults+DemoSettings.m */,
 			);
 			name = "Third Party";
 			sourceTree = "<group>";
@@ -573,19 +558,16 @@
 				87CFE8BF1B829427009A4B6D /* Melody.m in Sources */,
 				8707F9F31B4476BD004B4C20 /* AFHTTPRequestOperationManager.m in Sources */,
 				879CCC541B81D2870031FDCC /* Model.xcdatamodeld in Sources */,
-				87175C581B4ADF9E00C042E4 /* DemoMessagesViewController.m in Sources */,
 				878FAD601BAC6E1D00260D5B /* UserMelodyListViewController.m in Sources */,
 				879CCC5D1B81D6460031FDCC /* DataManager.m in Sources */,
 				87175C531B4ADCEA00C042E4 /* ChatsTableViewController.m in Sources */,
 				872BB5681B74AD26004CDBE7 /* FriendCell.m in Sources */,
 				8707F9F61B4476BD004B4C20 /* AFSecurityPolicy.m in Sources */,
 				8707F9B51B446F57004B4C20 /* main.m in Sources */,
-				87175C6B1B4AE08E00C042E4 /* NSUserDefaults+DemoSettings.m in Sources */,
 				872BB56B1B74B56C004CDBE7 /* ChatCell.m in Sources */,
 				8707F9DD1B4475E9004B4C20 /* SignUpViewController.m in Sources */,
 				8707F9F41B4476BD004B4C20 /* AFHTTPSessionManager.m in Sources */,
 				87D472351B749891008075B8 /* HomeViewController.m in Sources */,
-				87175C591B4ADF9E00C042E4 /* DemoModelData.m in Sources */,
 				87EBFB461BB64C7900AA5F70 /* StationCell.m in Sources */,
 				87EBFB431BB6154900AA5F70 /* StationViewController.m in Sources */,
 				87CFE8C61B82AAA3009A4B6D /* LoopViewController.m in Sources */,

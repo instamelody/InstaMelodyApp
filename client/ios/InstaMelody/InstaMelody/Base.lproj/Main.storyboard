@@ -466,11 +466,13 @@
                     </view>
                     <navigationItem key="navigationItem" title="Create a chat" id="iIA-Pz-puQ">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="ScP-ib-I2D">
+                            <color key="tintColor" red="0.74901960779999999" green="0.5450980392" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="cancel:" destination="mbg-mc-26h" id="ZMu-Vo-Qo0"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Done" id="eH4-m5-xC7">
+                            <color key="tintColor" red="0.74901960779999999" green="0.5450980392" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="submit:" destination="mbg-mc-26h" id="btY-Bo-LG1"/>
                             </connections>
@@ -2323,7 +2325,7 @@
         <image name="store" width="59" height="55"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="iJg-m6-OlB"/>
+        <segue reference="H8W-zy-Sy3"/>
         <segue reference="42P-9A-i60"/>
     </inferredMetricsTieBreakers>
 </document>
