@@ -899,14 +899,10 @@
         Friend *friend = [Friend MR_findFirstByAttribute:@"userId" withValue:userId];
         
         cell.nameLabel.text = friend.firstName;
-        //cell.backgroundColor = [UIColor whiteColor];
         
-        /*
-         cell.shareButton.titleLabel.font  = [UIFont fontAwesomeFontOfSize:20.0f];
-         cell.likeButton.titleLabel.font  = [UIFont fontAwesomeFontOfSize:20.0f];
-         
-         [cell.shareButton setTitle:[NSString fontAwesomeIconStringForEnum:FAShareSquareO] forState:UIControlStateNormal];
-         [cell.likeButton setTitle:[NSString fontAwesomeIconStringForEnum:FAHeartO] forState:UIControlStateNormal];*/
+        NSString *userName = [NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName];
+        [cell.imageView setImageWithString:userName color:nil circular:YES];
+
     }
 
     return cell;

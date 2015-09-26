@@ -59,6 +59,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework 'Pods-InstaMelody/JSQSystemSoundPlayer.framework'
   install_framework 'Pods-InstaMelody/MGSwipeTableCell.framework'
   install_framework 'Pods-InstaMelody/MagicalRecord.framework'
+  install_framework 'Pods-InstaMelody/UIImageView_Letters.framework'
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework 'Pods-InstaMelody/CLTokenInputView.framework'
@@ -68,4 +69,5 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework 'Pods-InstaMelody/JSQSystemSoundPlayer.framework'
   install_framework 'Pods-InstaMelody/MGSwipeTableCell.framework'
   install_framework 'Pods-InstaMelody/MagicalRecord.framework'
+  install_framework 'Pods-InstaMelody/UIImageView_Letters.framework'
 fi

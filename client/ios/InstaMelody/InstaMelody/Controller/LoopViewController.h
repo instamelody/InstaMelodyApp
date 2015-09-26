@@ -14,6 +14,7 @@
 #import "MelodyGroup.h"
 #import "UserMelody.h"
 #import "UserCell.h"
+#import "UIImageView+Letters.h"
 
 @protocol LoopDelegate <NSObject, UITableViewDataSource, UITableViewDelegate>
 

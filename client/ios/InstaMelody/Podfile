@@ -8,4 +8,5 @@ target 'InstaMelody' do
   pod 'CLTokenInputView'
   pod 'MGSwipeTableCell'
   pod 'JSQMessagesViewController'
+  pod 'UIImageView-Letters'
 end

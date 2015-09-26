@@ -8,97 +8,91 @@
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>5</integer>
 		</dict>
 		<key>DACircularProgress.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>6</integer>
 		</dict>
 		<key>FontAwesome.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>0</integer>
 		</dict>
 		<key>JSQMessagesViewController.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>1</integer>
 		</dict>
 		<key>JSQSystemSoundPlayer.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>2</integer>
 		</dict>
 		<key>MGSwipeTableCell.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>3</integer>
 		</dict>
 		<key>MagicalRecord.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>7</integer>
 		</dict>
-		<key>Pods-InstaMelody.xcscheme_^#shared#^_</key>
+		<key>Pods-InstaMelody.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>8</integer>
+		</dict>
+		<key>UIImageView-Letters.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>75A528E5DDDCEC8881AE4B3295EE8228</key>
+		<key>089198133482794FF046268B58829510</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7C3E3F8D7DA95AECBC2681527B4A94E7</key>
+		<key>12C5DE1C4556E45ABE6E5D12BA5D4828</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8B1573820029AF9F9F2790D56EF76025</key>
+		<key>6709156A84A5F2792779C7A985F5AD46</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>99DF6CDE2F2BB1C7E8EEEF1E0BE65EB2</key>
+		<key>AD02B3BDEADC8221665D1E6B48DABD9F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>B35B1C3CDDB50E289B24F7B070359B3C</key>
+		<key>BD8078C0BE106343E91DEA6CAF43EA15</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C4A49E4CB53AFCBAABB1CBC6D87B8320</key>
+		<key>CF7C97AA5A0A7E0EB8A88D0E911A4646</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E2411E132DBE12764718C619DECAE202</key>
+		<key>D0D34D73AD3B27DF02FBE4F3B5B0C15C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>F8FAA4B294FDF5AD7B8065088C46268B</key>
+		<key>D9DAAF60E644C82F816CE411304480EB</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E5B5E5B27592CF2DAF1BDC7DFB4D816E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
