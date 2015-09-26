@@ -76,12 +76,10 @@
     UITableViewCell *selectedCell = (UITableViewCell *)sender;
     
     NSIndexPath *indexPath = [self.tableView indexPathForCell:selectedCell];
-    /*
-    UserMelody *melody = [self.melodyList objectAtIndex:indexPath.row];
+    MelodyGroup *melodyGroup = (MelodyGroup *)[self.groupList objectAtIndex:indexPath.row];
     
-    LoopViewController *loopVC = (LoopViewController *)segue.destinationViewController;
-    loopVC.selectedUserMelody = melody;
-     */
+    MelodyPickerController *vc = (MelodyPickerController *)segue.destinationViewController;
+    vc.melodyList = [melodyGroup.melodies allObjects];
     
     
 }

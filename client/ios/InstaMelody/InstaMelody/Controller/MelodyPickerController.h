@@ -1,5 +1,5 @@
 //
-//  MelodyGroupController.h
+//  MelodyPickerController.h
 //  InstaMelody
 //
 //  Created by Ahmed Bakir on 9/26/15.
@@ -7,14 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MelodyGroup.h"
-#import "DataManager.h"
-#import "MelodyPickerController.h"
+#import "Melody.h"
 
-@interface MelodyGroupController : UIViewController
+@interface MelodyPickerController : UIViewController
+
+@property (nonatomic, strong) NSArray *melodyList;
 
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 
--(IBAction)cancel:(id)sender;
+-(IBAction)done:(id)sender;
 
 @end

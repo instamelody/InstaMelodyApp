@@ -35,6 +35,7 @@
 		872BB5A11B74CAD1004CDBE7 /* AwesomeMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BB59F1B74CAD1004CDBE7 /* AwesomeMenuItem.m */; };
 		873FCFE51BB7355F00CE2B44 /* MelodyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 873FCFE41BB7355F00CE2B44 /* MelodyCell.m */; };
 		873FCFEA1BB73C9400CE2B44 /* MelodyGroupController.m in Sources */ = {isa = PBXBuildFile; fileRef = 873FCFE91BB73C9400CE2B44 /* MelodyGroupController.m */; };
+		873FCFED1BB7412C00CE2B44 /* MelodyPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 873FCFEC1BB7412C00CE2B44 /* MelodyPickerController.m */; };
 		87538B7D1BB72BE500F7F9D8 /* UsersCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87538B7C1BB72BE500F7F9D8 /* UsersCell.m */; };
 		87538B801BB72C6400F7F9D8 /* UserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87538B7F1BB72C6400F7F9D8 /* UserCell.m */; };
 		875C19FE1BB5F3B3007B14DE /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 875C19FD1BB5F3B3007B14DE /* FontAwesome.ttf */; };
@@ -126,6 +127,8 @@
 		873FCFE41BB7355F00CE2B44 /* MelodyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MelodyCell.m; path = View/MelodyCell.m; sourceTree = "<group>"; };
 		873FCFE81BB73C9400CE2B44 /* MelodyGroupController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MelodyGroupController.h; sourceTree = "<group>"; };
 		873FCFE91BB73C9400CE2B44 /* MelodyGroupController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MelodyGroupController.m; sourceTree = "<group>"; };
+		873FCFEB1BB7412C00CE2B44 /* MelodyPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MelodyPickerController.h; sourceTree = "<group>"; };
+		873FCFEC1BB7412C00CE2B44 /* MelodyPickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MelodyPickerController.m; sourceTree = "<group>"; };
 		87538B7B1BB72BE500F7F9D8 /* UsersCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UsersCell.h; sourceTree = "<group>"; };
 		87538B7C1BB72BE500F7F9D8 /* UsersCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UsersCell.m; sourceTree = "<group>"; };
 		87538B7E1BB72C6400F7F9D8 /* UserCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserCell.h; path = View/UserCell.h; sourceTree = "<group>"; };
@@ -306,6 +309,8 @@
 			children = (
 				873FCFE81BB73C9400CE2B44 /* MelodyGroupController.h */,
 				873FCFE91BB73C9400CE2B44 /* MelodyGroupController.m */,
+				873FCFEB1BB7412C00CE2B44 /* MelodyPickerController.h */,
+				873FCFEC1BB7412C00CE2B44 /* MelodyPickerController.m */,
 			);
 			name = "melody picker";
 			sourceTree = "<group>";
@@ -591,6 +596,7 @@
 				8718CDC41BA7778C00FE6F23 /* NetworkManager.m in Sources */,
 				8707F9F51B4476BD004B4C20 /* AFNetworkReachabilityManager.m in Sources */,
 				8707F9FA1B4476BD004B4C20 /* AFURLSessionManager.m in Sources */,
+				873FCFED1BB7412C00CE2B44 /* MelodyPickerController.m in Sources */,
 				8707F9F81B4476BD004B4C20 /* AFURLRequestSerialization.m in Sources */,
 				8707F9F91B4476BD004B4C20 /* AFURLResponseSerialization.m in Sources */,
 				8707F9B81B446F57004B4C20 /* AppDelegate.m in Sources */,
