@@ -1717,6 +1717,7 @@
                                     <outlet property="denyButton" destination="c4V-Fj-v06" id="qGS-FF-xay"/>
                                     <outlet property="nameLabel" destination="Y0i-r9-LvI" id="3M8-zU-Ilm"/>
                                     <outlet property="profileImageView" destination="nks-ZE-lUZ" id="qar-Zs-aar"/>
+                                    <segue destination="x3v-Jb-UfZ" kind="show" id="iJg-m6-OlB"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -2322,6 +2323,7 @@
         <image name="store" width="59" height="55"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="iJg-m6-OlB"/>
         <segue reference="42P-9A-i60"/>
     </inferredMetricsTieBreakers>
 </document>
