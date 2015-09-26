@@ -399,7 +399,7 @@
 #pragma mark - fetch operations
 
 - (NSArray *)friendList {
-    return [Friend MR_findAll];
+    return [Friend MR_findAllSortedBy:@"firstName" ascending:YES];
 }
 
 -(NSArray *)userMelodyList {
