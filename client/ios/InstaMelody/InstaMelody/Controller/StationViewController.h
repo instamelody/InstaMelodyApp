@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Friend.h"
 
 @interface StationViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate>
 
@@ -20,6 +21,6 @@
 @property IBOutlet UIButton *vipButton;
 @property IBOutlet UIButton *fanButton;
 
-
+@property Friend *selectedFriend;
 
 @end

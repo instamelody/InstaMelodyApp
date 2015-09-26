@@ -13,6 +13,7 @@
 #import "UIFont+FontAwesome.h"
 #import "NSString+FontAwesome.h"
 #import "DataManager.h"
+#import "StationViewController.h"
 
 @interface FriendsTableViewController ()
 
@@ -178,15 +179,24 @@
 }
 */
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    
+    if ([segue.identifier isEqualToString:@"showFriendStation"]) {
+        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        
+        if (indexPath.section == 0) {
+            Friend *selectedFriend = [self.friendsList objectAtIndex:indexPath.row];
+            StationViewController *stationVC = (StationViewController *)segue.destinationViewController;
+            stationVC.selectedFriend = selectedFriend;
+        }
+    }
 }
-*/
 
 #pragma mark - web actions
 

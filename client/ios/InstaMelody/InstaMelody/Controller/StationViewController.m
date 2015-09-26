@@ -36,49 +36,45 @@
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if ([defaults objectForKey:@"authToken"] !=  nil) {
-        self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", [defaults objectForKey:@"FirstName"], [defaults objectForKey:@"LastName"]];
-        
-        //self.displayNameLabel.text = [NSString stringWithFormat:@"@%@", [defaults objectForKey:@"DisplayName"]];
-        
-    }
     
-    if ([defaults objectForKey:@"ProfileFilePath"] != nil) {
+    
+    if (self.selectedFriend == nil) {
+        
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        if ([defaults objectForKey:@"authToken"] !=  nil) {
+            self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", [defaults objectForKey:@"FirstName"], [defaults objectForKey:@"LastName"]];
+            
+            //self.displayNameLabel.text = [NSString stringWithFormat:@"@%@", [defaults objectForKey:@"DisplayName"]];
+            
+        }
+        
+        if ([defaults objectForKey:@"ProfileFilePath"] != nil) {
+            
+            NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+            
+            NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
+            NSString *imageName = [[defaults objectForKey:@"ProfileFilePath"] lastPathComponent];
+            
+            NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
+            self.profileImageView.image = [UIImage imageWithContentsOfFile:imagePath];
+        }
         
         
-        /*
-         
-         //image path
-         
-         NSFileManager *fileManager = [NSFileManager defaultManager];
-         
-         NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-         
-         NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
-         
-         NSString *remotePath =  [defaults objectForKey:@"ProfileFilePath"];
-         
-         NSString *fileName = [remotePath lastPathComponent];
-         NSString *pathString = [profilePath stringByAppendingPathComponent:fileName];
-         
-         UIImage *remoteImage = [UIImage imageWithContentsOfFile:pathString];
-         
-         if ([fileManager fileExistsAtPath:pathString]) {
-         
-         self.profileImageView.image = remoteImage;
-         }
-         
-         
-         */
+    } else {
+
+        self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", self.selectedFriend.firstName, self.selectedFriend.lastName];
+        
+        self.title = [NSString stringWithFormat:@"%@'s Station", self.selectedFriend.displayName];
+        
         NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
         
         NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
-        NSString *imageName = [[defaults objectForKey:@"ProfileFilePath"] lastPathComponent];
+        NSString *imageName = [self.selectedFriend.profileFilePath lastPathComponent];
         
         NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
         self.profileImageView.image = [UIImage imageWithContentsOfFile:imagePath];
     }
+    
 }
 
 - (void)didReceiveMemoryWarning {
