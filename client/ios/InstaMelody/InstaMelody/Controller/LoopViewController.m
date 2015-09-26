@@ -28,12 +28,16 @@
 
 @property (nonatomic, strong) AVAudioRecorder *recorder;
 
+@property NSUserDefaults *defaults;
+
 @end
 
 @implementation LoopViewController
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.defaults = [NSUserDefaults standardUserDefaults];
     
     self.groupArray = [[DataManager sharedManager] melodyGroupList];
     [self roundView:self.profileImageView];
@@ -124,19 +128,14 @@
     self.shareButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:35.0f];
     self.playLoopButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:25.0f];
     self.playLoop2Button.titleLabel.font = [UIFont fontAwesomeFontOfSize:25.0f];
+    self.volumeButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:35.0f];
     
     [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAPlay] forState:UIControlStateNormal];
     [self.playLoopButton setTitle:[NSString fontAwesomeIconStringForEnum:FARefresh] forState:UIControlStateNormal];
     
     [self.playLoop2Button setTitle:[NSString fontAwesomeIconStringForEnum:FARefresh] forState:UIControlStateNormal];
-    [self.shareButton setTitle:[NSString fontAwesomeIconStringForEnum:FAShare] forState:UIControlStateNormal];
-    
-    /*
-    [self.volumeBarButtonItem setTitleTextAttributes:@{
-                                         NSFontAttributeName: [UIFont fontAwesomeFontOfSize:20.0f]
-                                         } forState:UIControlStateNormal];
-    [self.volumeBarButtonItem setTitle:[NSString fontAwesomeIconStringForEnum:FAIconVolumeUp]];
-     */
+    [self.shareButton setTitle:[NSString fontAwesomeIconStringForEnum:FAShareSquare] forState:UIControlStateNormal];
+    [self.volumeButton setTitle:[NSString fontAwesomeIconStringForEnum:FAVolumeUp] forState:UIControlStateNormal];
     
     
 }
@@ -224,6 +223,10 @@
 
 -(IBAction)showVolumeSettings:(id)sender {
     
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    VolumeViewController *vc = [sb instantiateViewControllerWithIdentifier:@"VolumeViewController"];
+    [self presentViewController:vc animated:YES completion:nil];
+
 }
 
 -(IBAction)toggleLoop:(id)sender {
@@ -245,6 +248,9 @@
 
 
 -(IBAction)playLoop:(id)sender {
+    
+    NSNumber *volume = [self.defaults objectForKey:@"melodyVolume"];
+    
     NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     
     NSString *pathString = [NSString stringWithFormat:@"%@/Melodies/%@", documentsPath, self.selectedMelody.fileName];
@@ -262,7 +268,7 @@
         
         [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAPlay] forState:UIControlStateNormal];
         [self.bgPlayer setNumberOfLoops:-1];
-        [self.bgPlayer setVolume:0.4f];
+        [self.bgPlayer setVolume:[volume floatValue]];
         [self.bgPlayer play];
         
         //self.timer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(updatePlaybackProgress) userInfo:nil repeats:YES];
@@ -274,6 +280,7 @@
 }
 
 -(IBAction)playLoop2:(id)sender {
+    NSNumber *volume = [self.defaults objectForKey:@"melodyVolume"];
     NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     
     NSString *pathString = [NSString stringWithFormat:@"%@/Melodies/%@", documentsPath, self.selectedMelody2.fileName];
@@ -291,7 +298,7 @@
         
         [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAPlay] forState:UIControlStateNormal];
         [self.bgPlayer2 setNumberOfLoops:-1];
-        [self.bgPlayer2 setVolume:0.4f];
+        [self.bgPlayer2 setVolume:[volume floatValue]];
         [self.bgPlayer2 play];
         
         //self.timer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(updatePlaybackProgress) userInfo:nil repeats:YES];
@@ -304,6 +311,7 @@
 
 -(IBAction)playRecording:(id)sender {
     
+    NSNumber *volume = [self.defaults objectForKey:@"micVolume"];
     //pathString = [pathString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     
     NSURL *docURL = self.currentRecordingURL;
@@ -316,6 +324,8 @@
     if (error == nil) {
         
         [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAStop] forState:UIControlStateNormal];
+        [self.fgPlayer setVolume:volume.floatValue];
+        
         [self.fgPlayer play];
         
         self.timer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(updatePlaybackProgress) userInfo:nil repeats:YES];

@@ -76,6 +76,12 @@
     
     [[UIBarButtonItem appearance] setTitleTextAttributes:buttonTextAttributes forState:UIControlStateNormal];
     
+    if ([defaults objectForKey:@"micVolume"] == nil) {
+        [defaults setObject:[NSNumber numberWithFloat:0.5] forKey:@"micVolume"];
+        [defaults setObject:[NSNumber numberWithFloat:0.5] forKey:@"melodyVolume"];
+        [defaults synchronize];
+    }
+    
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[NSString fontAwesomeIconStringForEnum:FACog] style:UIBarButtonItemStylePlain target:self action:@selector(showVolume:)];
     
     [self createMenu];

@@ -39,6 +39,14 @@
     
     self.micVolUpLabel.text = [NSString fontAwesomeIconStringForEnum:FAVolumeUp];
     self.melodyVolUpLabel.text = [NSString fontAwesomeIconStringForEnum:FAVolumeUp];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if ([defaults objectForKey:@"micVolume"] != nil) {
+        NSNumber *micVolume = [defaults objectForKey:@"micVolume"];
+        NSNumber *melodyVolume = [defaults objectForKey:@"melodyVolume"];
+        [self.micSlider setValue:micVolume.floatValue];
+        [self.melodySlider setValue:melodyVolume.floatValue];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -58,7 +66,13 @@
 
 
 -(IBAction)done:(id)sender {
-    //save new settings to defaults
+    //save new settings to defaults'
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:[NSNumber numberWithFloat:self.micSlider.value] forKey:@"micVolume"];
+    [defaults setObject:[NSNumber numberWithFloat:self.melodySlider.value] forKey:@"melodyVolume"];
+    [defaults synchronize];
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

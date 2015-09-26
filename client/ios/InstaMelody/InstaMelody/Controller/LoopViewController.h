@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "DACircularProgressView.h"
+#import "VolumeViewController.h"
 #import <AVFoundation/AVFoundation.h>
 #import "DataManager.h"
 #import "MelodyGroup.h"
@@ -32,6 +33,7 @@
 @property (nonatomic, strong) IBOutlet UIButton *playLoopButton;
 @property (nonatomic, strong) IBOutlet UIButton *playLoop2Button;
 @property (nonatomic, strong) IBOutlet UIButton *shareButton;
+@property (nonatomic, strong) IBOutlet UIButton *volumeButton;
 
 @property (nonatomic, strong) IBOutlet UIButton *recordButton;
 @property (nonatomic, strong) IBOutlet UIButton *playButton;
