@@ -86,6 +86,8 @@
     self.incomingMelodyBubbleImageData = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor colorWithRed:191/255.0f green:139/255.0f blue:226/255.0f alpha:0.4f]];
     self.outgoingMelodyBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor colorWithRed:191/255.0f green:139/255.0f blue:226/255.0f alpha:0.2f]];
     
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[NSString fontAwesomeIconStringForEnum:FAEllipsisV] style:UIBarButtonItemStylePlain target:self action:@selector(showVolume:)];
+    
     [self loadMessages];
     
 }
@@ -731,6 +733,11 @@
 #pragma mark - actions 
 
 -(IBAction)playLoop:(id)sender
+{
+    
+}
+
+-(IBAction)showVolume:(id)sender
 {
     
 }

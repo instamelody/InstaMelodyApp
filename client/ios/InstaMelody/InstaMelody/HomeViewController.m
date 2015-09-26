@@ -62,8 +62,21 @@
                                                [UIFont fontWithName:@"Helvetica Neue Light" size:20.0],
                                                NSFontAttributeName,
                                                nil];
+    
+    NSDictionary *buttonTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                               [UIColor colorWithRed:191/255.0f green:139/255.0f blue:226/255.0f alpha:1.0f],
+                                               NSForegroundColorAttributeName,
+                                               [UIFont fontWithName:@"FontAwesome" size:20.0],
+                                               NSFontAttributeName,
+                                               nil];
+    
+    
     [self.navigationController.navigationBar setTitleTextAttributes:navbarTitleTextAttributes];
     [self.navigationController.navigationBar setTintColor:[UIColor colorWithRed:191/255.0f green:139/255.0f blue:226/255.0f alpha:1.0f]];
+    
+    [[UIBarButtonItem appearance] setTitleTextAttributes:buttonTextAttributes forState:UIControlStateNormal];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[NSString fontAwesomeIconStringForEnum:FACog] style:UIBarButtonItemStylePlain target:self action:@selector(showVolume:)];
     
     [self createMenu];
 }
@@ -133,6 +146,11 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+-(IBAction)showVolume:(id)sender
+{
+    
+}
 
 -(IBAction)showSettings:(id)sender {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];

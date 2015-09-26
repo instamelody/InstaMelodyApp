@@ -10,6 +10,8 @@
 #import "AwesomeMenu.h"
 #import "LoopViewController.h"
 #import "NetworkManager.h"
+#import "UIFont+FontAwesome.h"
+#import "NSString+FontAwesome.h"
 
 @interface HomeViewController : UIViewController <AwesomeMenuDelegate, UIImagePickerControllerDelegate, LoopDelegate>
 

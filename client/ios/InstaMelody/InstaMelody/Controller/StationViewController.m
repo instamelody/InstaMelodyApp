@@ -75,11 +75,20 @@
         self.profileImageView.image = [UIImage imageWithContentsOfFile:imagePath];
     }
     
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[NSString fontAwesomeIconStringForEnum:FACog] style:UIBarButtonItemStylePlain target:self action:@selector(showVolume:)];
+    
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - actions
+
+-(IBAction)showVolume:(id)sender
+{
+    
 }
 
 #pragma mark - collection view
