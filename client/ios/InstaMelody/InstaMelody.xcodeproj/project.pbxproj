@@ -94,6 +94,8 @@
 		87D472351B749891008075B8 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D472341B749891008075B8 /* HomeViewController.m */; };
 		87D472381B74A719008075B8 /* FriendsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D472371B74A719008075B8 /* FriendsTableViewController.m */; };
 		87DA195F1B72872A00941DCE /* SignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87DA195E1B72872A00941DCE /* SignInViewController.m */; };
+		87EBFB431BB6154900AA5F70 /* StationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87EBFB421BB6154900AA5F70 /* StationViewController.m */; };
+		87EBFB461BB64C7900AA5F70 /* StationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87EBFB451BB64C7900AA5F70 /* StationCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -280,6 +282,10 @@
 		87DA195D1B72872A00941DCE /* SignInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignInViewController.h; sourceTree = SOURCE_ROOT; };
 		87DA195E1B72872A00941DCE /* SignInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignInViewController.m; sourceTree = SOURCE_ROOT; };
 		87EAC92D1B74183D00935178 /* constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = constants.h; sourceTree = "<group>"; };
+		87EBFB411BB6154900AA5F70 /* StationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StationViewController.h; sourceTree = "<group>"; };
+		87EBFB421BB6154900AA5F70 /* StationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StationViewController.m; sourceTree = "<group>"; };
+		87EBFB441BB64C7900AA5F70 /* StationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StationCell.h; path = View/StationCell.h; sourceTree = "<group>"; };
+		87EBFB451BB64C7900AA5F70 /* StationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StationCell.m; path = View/StationCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -641,6 +647,8 @@
 				879881F51B9A137800AF5B8B /* Chat */,
 				87D472361B74A719008075B8 /* FriendsTableViewController.h */,
 				87D472371B74A719008075B8 /* FriendsTableViewController.m */,
+				87EBFB411BB6154900AA5F70 /* StationViewController.h */,
+				87EBFB421BB6154900AA5F70 /* StationViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -669,6 +677,8 @@
 				872BB5671B74AD26004CDBE7 /* FriendCell.m */,
 				872BB5691B74B56C004CDBE7 /* ChatCell.h */,
 				872BB56A1B74B56C004CDBE7 /* ChatCell.m */,
+				87EBFB441BB64C7900AA5F70 /* StationCell.h */,
+				87EBFB451BB64C7900AA5F70 /* StationCell.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -915,7 +925,9 @@
 				87D472351B749891008075B8 /* HomeViewController.m in Sources */,
 				874C882A1B4ADB3B0069A041 /* JSQMessagesAvatarImageFactory.m in Sources */,
 				87175C591B4ADF9E00C042E4 /* DemoModelData.m in Sources */,
+				87EBFB461BB64C7900AA5F70 /* StationCell.m in Sources */,
 				874C88201B4ADB3B0069A041 /* JSQSystemSoundPlayer+JSQMessages.m in Sources */,
+				87EBFB431BB6154900AA5F70 /* StationViewController.m in Sources */,
 				874C88341B4ADB3B0069A041 /* JSQMessage.m in Sources */,
 				874C88321B4ADB3B0069A041 /* JSQLocationMediaItem.m in Sources */,
 				874C88361B4ADB3B0069A041 /* JSQMessagesBubbleImage.m in Sources */,
