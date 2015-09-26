@@ -380,6 +380,7 @@
 {
     NSLog(@"Tapped message bubble!");
     
+    /*
     JSQMessage *message = (JSQMessage *)[self.messages objectAtIndex:indexPath.row];
     NSString *tag = message.tag;
     
@@ -402,6 +403,9 @@
         }
         
     }
+     */
+    
+    
     /*
     NSArray *messageArray = [self.chatDict objectForKey:@"Messages"];
     NSDictionary *messageDict = [messageArray objectAtIndex:indexPath.row];
@@ -616,7 +620,7 @@
     JSQMessage *photoMessage = [JSQMessage messageWithSenderId:senderId
                                                    displayName:senderName
                                                          media:photoItem];
-    photoMessage.tag = melodyId;
+    //photoMessage.tag = melodyId;
     [self.messages addObject:photoMessage];
 }
 

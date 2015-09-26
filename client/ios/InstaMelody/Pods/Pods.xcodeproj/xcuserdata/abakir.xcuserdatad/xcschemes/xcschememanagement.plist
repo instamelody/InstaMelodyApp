@@ -19,6 +19,16 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>JSQMessagesViewController.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>JSQSystemSoundPlayer.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>MGSwipeTableCell.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -37,32 +47,42 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>11A004108E8F34C77C384CCD85AF2AF1</key>
+		<key>75A528E5DDDCEC8881AE4B3295EE8228</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>14F8950855508DC7707E4A78B7808DF2</key>
+		<key>7C3E3F8D7DA95AECBC2681527B4A94E7</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>2E69E8D1D128B9F61B8A74675F707DE3</key>
+		<key>8B1573820029AF9F9F2790D56EF76025</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E78C03C03F923E4552962B2EC819E413</key>
+		<key>99DF6CDE2F2BB1C7E8EEEF1E0BE65EB2</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>EB8BD6D2B98BFF654E3CB1127837AEA9</key>
+		<key>B35B1C3CDDB50E289B24F7B070359B3C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>F8853AD5FAD142924EC5542194807091</key>
+		<key>C4A49E4CB53AFCBAABB1CBC6D87B8320</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E2411E132DBE12764718C619DECAE202</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F8FAA4B294FDF5AD7B8065088C46268B</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -7,4 +7,5 @@ target 'InstaMelody' do
   pod 'DACircularProgress'
   pod 'CLTokenInputView'
   pod 'MGSwipeTableCell'
+  pod 'JSQMessagesViewController'
 end
