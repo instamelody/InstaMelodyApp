@@ -823,7 +823,13 @@
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TopicCell" forIndexPath:indexPath];
             return cell;
         } else {
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MelodyCell" forIndexPath:indexPath];
+            
+            MelodyCell *cell = (MelodyCell *)[tableView dequeueReusableCellWithIdentifier:@"MelodyCell" forIndexPath:indexPath];
+            
+            cell.tokenInputView.placeholderText = @"Add melodies";
+            
+            cell.tokenInputView.accessoryView = [self contactAddButton];
+            
             return cell;
         }
         
@@ -833,7 +839,12 @@
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TopicCell" forIndexPath:indexPath];
             return cell;
         } else {
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MelodyCell" forIndexPath:indexPath];
+            MelodyCell *cell = (MelodyCell *)[tableView dequeueReusableCellWithIdentifier:@"MelodyCell" forIndexPath:indexPath];
+            
+            cell.tokenInputView.placeholderText = @"Add melodies";
+            
+            cell.tokenInputView.accessoryView = [self contactAddButton];
+            
             return cell;
         }
 
@@ -908,5 +919,32 @@
     return cell;
 }
 
+#pragma mark - token delegate
+
+#pragma mark - Demo Buttons
+- (UIButton *)contactAddButton
+{
+    UIButton *contactAddButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
+    [contactAddButton addTarget:self action:@selector(onAccessoryContactAddButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    return contactAddButton;
+}
+
+- (void)onAccessoryContactAddButtonTapped:(id)sender
+{
+    
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UINavigationController *vc = (UINavigationController *)[sb instantiateViewControllerWithIdentifier:@"MelodyGroupNavController"];
+    //vc.delegate = self;
+    [self presentViewController:vc animated:YES completion:nil];
+    
+    /*
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Accessory View Button"
+                                                        message:@"This view is optional and can be a UIButton, etc."
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Okay"
+                                              otherButtonTitles:nil];
+    [alertView show];
+     */
+}
 
 @end

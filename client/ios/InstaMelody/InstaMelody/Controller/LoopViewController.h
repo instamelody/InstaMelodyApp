@@ -14,9 +14,11 @@
 #import "MelodyGroup.h"
 #import "UserMelody.h"
 #import "UserCell.h"
+#import "MelodyCell.h"
 #import "UIImageView+Letters.h"
+#import "CLTokenInputView.h"
 
-@protocol LoopDelegate <NSObject, UITableViewDataSource, UITableViewDelegate>
+@protocol LoopDelegate <NSObject, UITableViewDataSource, UITableViewDelegate, CLTokenInputViewDelegate>
 
 -(void)didFinishWithInfo:(NSDictionary *)userDict;
 -(void)cancel;
