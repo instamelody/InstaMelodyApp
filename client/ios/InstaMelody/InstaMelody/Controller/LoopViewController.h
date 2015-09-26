@@ -15,6 +15,7 @@
 #import "UserMelody.h"
 #import "UserCell.h"
 #import "MelodyCell.h"
+#import "StatusCell.h"
 #import "UIImageView+Letters.h"
 #import "CLTokenInputView.h"
 

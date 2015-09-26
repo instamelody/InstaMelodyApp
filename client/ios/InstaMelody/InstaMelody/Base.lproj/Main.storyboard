@@ -489,7 +489,7 @@
             </objects>
             <point key="canvasLocation" x="3129" y="85"/>
         </scene>
-        <!--Loop-->
+        <!--Delegate-->
         <scene sceneID="ZjU-ua-LkB">
             <objects>
                 <viewController storyboardIdentifier="LoopViewController" id="zFq-Vd-UtH" customClass="LoopViewController" sceneMemberID="viewController">
@@ -617,7 +617,7 @@
                                 </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="112" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="bUH-Oi-60g">
-                                <rect key="frame" x="140" y="40" width="320" height="352"/>
+                                <rect key="frame" x="140" y="84" width="320" height="308"/>
                                 <animations/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="tintColor" red="0.74901960779999999" green="0.5450980392" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
@@ -792,6 +792,9 @@
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="qQa-CI-Bu7"/>
                                                     </constraints>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="zFq-Vd-UtH" id="2pq-sL-AXU"/>
+                                                    </connections>
                                                 </view>
                                             </subviews>
                                             <animations/>
@@ -808,6 +811,59 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <connections>
                                             <outlet property="tokenInputView" destination="NgT-8I-p5X" id="lnd-24-MGh"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StatusCell" id="V3F-u5-9il" customClass="StatusCell">
+                                        <rect key="frame" x="0.0" y="325" width="320" height="112"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="V3F-u5-9il" id="Hor-1g-SqO">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="112"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Status:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eMc-D3-Ptb">
+                                                    <rect key="frame" x="12" y="16" width="300" height="19"/>
+                                                    <animations/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="19" id="9hH-Hk-c1X"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loop loaded!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2x7-dd-wtA">
+                                                    <rect key="frame" x="12" y="39" width="300" height="19"/>
+                                                    <animations/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="19" id="B3A-eT-gik"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-LightItalic" family="Helvetica Neue" pointSize="16"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w6Y-x2-fXX">
+                                                    <rect key="frame" x="12" y="74" width="300" height="30"/>
+                                                    <animations/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                                    <state key="normal" title="Preview melodies">
+                                                        <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                    </state>
+                                                </button>
+                                            </subviews>
+                                            <animations/>
+                                            <constraints>
+                                                <constraint firstItem="eMc-D3-Ptb" firstAttribute="leading" secondItem="Hor-1g-SqO" secondAttribute="leadingMargin" constant="4" id="3ON-Zs-CND"/>
+                                                <constraint firstItem="2x7-dd-wtA" firstAttribute="trailing" secondItem="Hor-1g-SqO" secondAttribute="trailingMargin" id="5kq-UU-R2l"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="eMc-D3-Ptb" secondAttribute="trailing" id="YYA-4Z-t3f"/>
+                                                <constraint firstItem="2x7-dd-wtA" firstAttribute="leading" secondItem="Hor-1g-SqO" secondAttribute="leadingMargin" constant="4" id="ZpQ-3j-vnA"/>
+                                                <constraint firstItem="2x7-dd-wtA" firstAttribute="top" secondItem="eMc-D3-Ptb" secondAttribute="bottom" constant="4" id="apP-4W-zP1"/>
+                                                <constraint firstItem="eMc-D3-Ptb" firstAttribute="top" secondItem="Hor-1g-SqO" secondAttribute="topMargin" constant="8" id="m6e-zt-lLp"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <animations/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <connections>
+                                            <outlet property="playButton" destination="w6Y-x2-fXX" id="NOx-Qb-Weh"/>
+                                            <outlet property="statusLabel" destination="2x7-dd-wtA" id="LHS-Q8-Mwu"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -1175,6 +1231,9 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <segue destination="M3b-v7-3nS" kind="show" id="yya-7u-QIn"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ejy-fK-OI7">
                                         <rect key="frame" x="220" y="0.0" width="100" height="100"/>
@@ -1656,12 +1715,12 @@
                                 <rect key="frame" x="0.0" y="-2" width="600" height="602"/>
                                 <animations/>
                             </imageView>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="101" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="KWT-Ls-UHr">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="101" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="KWT-Ls-UHr">
                                 <rect key="frame" x="0.0" y="123" width="600" height="477"/>
                                 <animations/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MelodyItemCell" textLabel="FFn-q1-R2U" detailTextLabel="pX5-z4-DQZ" imageView="EdE-qr-btJ" rowHeight="101" style="IBUITableViewCellStyleSubtitle" id="d7f-UQ-RpR">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MelodyCell" textLabel="FFn-q1-R2U" detailTextLabel="pX5-z4-DQZ" imageView="EdE-qr-btJ" rowHeight="101" style="IBUITableViewCellStyleSubtitle" id="d7f-UQ-RpR">
                                         <rect key="frame" x="0.0" y="22" width="600" height="101"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="d7f-UQ-RpR" id="FoZ-le-mcK">
@@ -1703,7 +1762,7 @@
                                     <outlet property="delegate" destination="M3b-v7-3nS" id="idJ-lN-zpi"/>
                                 </connections>
                             </tableView>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="2pD-Ql-WIv">
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="2pD-Ql-WIv">
                                 <rect key="frame" x="174" y="81" width="252" height="29"/>
                                 <animations/>
                                 <constraints>
@@ -1724,7 +1783,7 @@
                             <constraint firstItem="Pzv-6T-rbj" firstAttribute="leading" secondItem="VaL-OY-KeD" secondAttribute="leading" id="61Q-If-sXS"/>
                             <constraint firstAttribute="centerX" secondItem="2pD-Ql-WIv" secondAttribute="centerX" id="F4M-AZ-5T3"/>
                             <constraint firstAttribute="trailing" secondItem="Pzv-6T-rbj" secondAttribute="trailing" id="JBy-C0-9WC"/>
-                            <constraint firstItem="Pzv-6T-rbj" firstAttribute="top" secondItem="bW7-pn-ecl" secondAttribute="bottom" constant="-22" id="KOy-lQ-8TF"/>
+                            <constraint firstItem="Pzv-6T-rbj" firstAttribute="top" secondItem="bW7-pn-ecl" secondAttribute="bottom" constant="-66" id="KOy-lQ-8TF"/>
                             <constraint firstItem="vrX-NE-AuI" firstAttribute="top" secondItem="Pzv-6T-rbj" secondAttribute="bottom" id="Lxu-d9-rLr"/>
                             <constraint firstItem="2pD-Ql-WIv" firstAttribute="top" secondItem="bW7-pn-ecl" secondAttribute="bottom" constant="17" id="Mvy-EE-bZE"/>
                             <constraint firstItem="KWT-Ls-UHr" firstAttribute="leading" secondItem="VaL-OY-KeD" secondAttribute="leading" id="aHd-a3-5I0"/>
@@ -1733,7 +1792,7 @@
                             <constraint firstItem="KWT-Ls-UHr" firstAttribute="top" secondItem="2pD-Ql-WIv" secondAttribute="bottom" constant="14" id="oEN-Pr-E3K"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Recordings" id="I3y-NR-1F1"/>
+                    <navigationItem key="navigationItem" title="Raw Loops" id="I3y-NR-1F1"/>
                     <connections>
                         <outlet property="filterControl" destination="2pD-Ql-WIv" id="wiC-Ao-Zq5"/>
                         <outlet property="tableView" destination="KWT-Ls-UHr" id="rYH-fV-z48"/>
@@ -2622,7 +2681,7 @@
         <image name="store" width="59" height="55"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="iJg-m6-OlB"/>
+        <segue reference="H8W-zy-Sy3"/>
         <segue reference="42P-9A-i60"/>
     </inferredMetricsTieBreakers>
 </document>

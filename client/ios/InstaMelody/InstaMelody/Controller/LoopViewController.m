@@ -495,7 +495,7 @@
 
     
     
-    if ([self.fgPlayer isPlaying]) {
+    if ([self.fgPlayer isPlaying] || [self.bgPlayer isPlaying]) {
         
         [self.fgPlayer stop];
         [self.bgPlayer stop];
@@ -536,7 +536,7 @@
         [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAStop] forState:UIControlStateNormal];
     } else {
         
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"No loop selected" message:@"Please select a loop" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"No melodies selected" message:@"Please select a melody" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
         [alert addAction:okAction];
         [self presentViewController:alert animated:YES completion:nil];
@@ -597,14 +597,14 @@
     if ([fileManager fileExistsAtPath:pathString]) {
         //
         
-        self.loopStatusLabel.text = @"Loop loaded!";
+        self.loopStatusLabel.text = @"Melody loaded!";
         
         //self.playButton.hidden = NO;
         
     } else {
         //else, download, show progress, set loaded, set play button
         
-        self.loopStatusLabel.text = @"Loop downloading (0%)";
+        self.loopStatusLabel.text = @"Melody downloading (0%)";
         
         [self downloadFile:melody.filePathUrlString toPath:pathString];
     }
@@ -651,14 +651,14 @@
     if ([fileManager fileExistsAtPath:pathString]) {
         //
         
-        self.loopStatusLabel.text = @"Loop loaded!";
+        self.loopStatusLabel.text = @"Melody loaded!";
         
         //self.playButton.hidden = NO;
         
     } else {
         //else, download, show progress, set loaded, set play button
         
-        self.loopStatusLabel.text = @"Loop downloading (0%)";
+        self.loopStatusLabel.text = @"Melody downloading (0%)";
         
         [self downloadFile:melody.filePathUrlString toPath:pathString];
     }
@@ -709,12 +709,12 @@
         
         if (error == nil) {
             NSLog(@"File downloaded to: %@", filePath);
-            self.loopStatusLabel.text = @"Loop loaded!";
+            self.loopStatusLabel.text = @"Melody loaded!";
             
             //self.playButton.hidden = NO;
         } else {
             NSLog(@"Download error: %@", error.description);
-            self.loopStatusLabel.text = @"Error loading loop";
+            self.loopStatusLabel.text = @"Error loading melody";
         }
         [progress removeObserver:self forKeyPath:@"fractionCompleted" context:NULL];
     }];
@@ -839,9 +839,9 @@
     // Return the number of rows in the section.
     
     if (self.selectedLoop != nil) {
-        return 3;
+        return 4;
     }
-    return 2;
+    return 3;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -854,23 +854,8 @@
         } else if (indexPath.row == 1) {
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TopicCell" forIndexPath:indexPath];
             return cell;
-        } else {
+        } else if (indexPath.row == 1) {
             
-            MelodyCell *cell = (MelodyCell *)[tableView dequeueReusableCellWithIdentifier:@"MelodyCell" forIndexPath:indexPath];
-            
-            cell.tokenInputView.placeholderText = @"Add melodies";
-            
-            cell.tokenInputView.accessoryView = [self contactAddButton];
-            
-            return cell;
-        }
-        
-    } else {
-        
-        if (indexPath.row == 0) {
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TopicCell" forIndexPath:indexPath];
-            return cell;
-        } else {
             MelodyCell *cell = (MelodyCell *)[tableView dequeueReusableCellWithIdentifier:@"MelodyCell" forIndexPath:indexPath];
             
             cell.tokenInputView.tag = 99;
@@ -880,6 +865,36 @@
             cell.tokenInputView.accessoryView = [self contactAddButton];
             
             return cell;
+        } else {
+            StatusCell *cell = (StatusCell *)[tableView dequeueReusableCellWithIdentifier:@"StatusCell" forIndexPath:indexPath];
+            self.loopStatusLabel = cell.statusLabel;
+            [cell.playButton addTarget:self action:@selector(togglePlayback:) forControlEvents:UIControlEventTouchUpInside];
+            return cell;
+            
+        }
+        
+    } else {
+        
+        if (indexPath.row == 0) {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TopicCell" forIndexPath:indexPath];
+            return cell;
+        } else if (indexPath.row == 1) {
+            MelodyCell *cell = (MelodyCell *)[tableView dequeueReusableCellWithIdentifier:@"MelodyCell" forIndexPath:indexPath];
+            
+            cell.tokenInputView.tag = 99;
+            
+            cell.tokenInputView.placeholderText = @"Add melodies";
+            
+            cell.tokenInputView.accessoryView = [self contactAddButton];
+            
+            return cell;
+        } else {
+            
+            StatusCell *cell = (StatusCell *)[tableView dequeueReusableCellWithIdentifier:@"StatusCell" forIndexPath:indexPath];
+            self.loopStatusLabel = cell.statusLabel;
+            [cell.playButton addTarget:self action:@selector(togglePlayback:) forControlEvents:UIControlEventTouchUpInside];
+            return cell;
+            
         }
 
     }
@@ -985,6 +1000,9 @@
     } else if ([self.selectedMelody2.melodyName isEqualToString:name]) {
         self.selectedMelody2 = nil;
     }
+    
+    [self.view endEditing:YES];
+    
 }
 
 /*
