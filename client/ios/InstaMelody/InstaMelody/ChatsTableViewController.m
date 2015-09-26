@@ -255,6 +255,43 @@
     }];
 }
 
+-(void)deleteChatWithIndex:(NSIndexPath *)indexPath {
+    
+    NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
+    
+    NSDictionary *chatDict = [self.chatsArray objectAtIndex:indexPath.row];
+    
+    NSString *chatId = [chatDict objectForKey:@"Id"];
+    
+    NSDictionary *parameters = @{@"Token": token, @"Chat": @{@"Id": chatId}};
+    
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/Message/Chat/Delete", API_BASE_URL];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"You have removed yourself from a chat" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+        
+        [self refreshChats];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
+            
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            
+            NSLog(@"%@",ErrorResponse);
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
+        }
+    }];
+}
+
 #pragma mark - button actions
 
 
@@ -286,6 +323,7 @@
         MGSwipeButton * del = [MGSwipeButton buttonWithTitle:[NSString fontAwesomeIconStringForEnum:FAtrash] backgroundColor:[UIColor lightGrayColor] padding:padding callback:^BOOL(MGSwipeTableCell *sender) {
             
             //do stuff
+            [self deleteChatWithIndex:[self.tableView indexPathForCell:sender]];
             
             return NO; //don't autohide to improve delete animation
         }];
