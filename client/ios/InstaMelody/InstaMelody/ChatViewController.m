@@ -572,6 +572,49 @@
     }
 }
 
+-(void)getLoop:(NSString *)loopId {
+    
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/Melody/Loop", API_BASE_URL];
+    
+    NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    NSDictionary *parameters = @{@"token": token, @"id": loopId};
+    
+    [manager GET:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        
+        if ([responseObject isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *responseDict = (NSDictionary *)responseObject;
+            
+            NSArray *parts = [responseDict objectForKey:@"Parts"];
+            if (parts.count > 0) {
+                [self.playerView setHidden:NO];
+            } else {
+                [self.playerView setHidden:YES];
+            }
+            
+            self.loopTitleLabel.text = [responseDict objectForKey:@"Name"];
+            
+        }
+        //NSDictionary *responseDict = (NSDictionary *)responseObject;
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
+            
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            
+            NSLog(@"%@",ErrorResponse);
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
+        }
+    }];
+
+}
 
 
 -(void)loadMessages {
@@ -649,6 +692,21 @@
     
     self.messages = [NSMutableArray arrayWithArray:sortedArray];
     [self.collectionView reloadData];
+    
+    [self loadLoop];
+    
+}
+
+-(void)loadLoop {
+    if ([self.chatDict objectForKey:@"ChatLoopId"] != nil) {
+        [self getLoop:[self.chatDict objectForKey:@"ChatLoopId"]];
+    }
+    
+    [self.micButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+    [self.micButton addTarget:self action:@selector(createLoop:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.playButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+    [self.playButton addTarget:self action:@selector(createLoop:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 -(void)createPhotoMessageWithSenderId:(NSString *)senderId andName:(NSString *)senderName andPath:(NSString *)path {
@@ -668,6 +726,13 @@
                                                          media:photoItem];
     //photoMessage.tag = melodyId;
     [self.messages addObject:photoMessage];
+}
+
+#pragma mark - actions 
+
+-(IBAction)playLoop:(id)sender
+{
+    
 }
 
 #pragma mark - loop delegate

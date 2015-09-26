@@ -47,6 +47,8 @@
 		87D472351B749891008075B8 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D472341B749891008075B8 /* HomeViewController.m */; };
 		87D472381B74A719008075B8 /* FriendsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D472371B74A719008075B8 /* FriendsTableViewController.m */; };
 		87DA195F1B72872A00941DCE /* SignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87DA195E1B72872A00941DCE /* SignInViewController.m */; };
+		87E6F4741BB6936D009E3EA8 /* IMMessagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87E6F4721BB6936D009E3EA8 /* IMMessagesViewController.m */; settings = {ASSET_TAGS = (); }; };
+		87E6F4751BB6936D009E3EA8 /* IMMessagesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87E6F4731BB6936D009E3EA8 /* IMMessagesViewController.xib */; settings = {ASSET_TAGS = (); }; };
 		87EBFB431BB6154900AA5F70 /* StationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87EBFB421BB6154900AA5F70 /* StationViewController.m */; };
 		87EBFB461BB64C7900AA5F70 /* StationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87EBFB451BB64C7900AA5F70 /* StationCell.m */; };
 /* End PBXBuildFile section */
@@ -140,6 +142,9 @@
 		87D472371B74A719008075B8 /* FriendsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendsTableViewController.m; sourceTree = SOURCE_ROOT; };
 		87DA195D1B72872A00941DCE /* SignInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignInViewController.h; sourceTree = SOURCE_ROOT; };
 		87DA195E1B72872A00941DCE /* SignInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignInViewController.m; sourceTree = SOURCE_ROOT; };
+		87E6F4711BB6936D009E3EA8 /* IMMessagesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IMMessagesViewController.h; sourceTree = "<group>"; };
+		87E6F4721BB6936D009E3EA8 /* IMMessagesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IMMessagesViewController.m; sourceTree = "<group>"; };
+		87E6F4731BB6936D009E3EA8 /* IMMessagesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IMMessagesViewController.xib; sourceTree = "<group>"; };
 		87EAC92D1B74183D00935178 /* constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = constants.h; sourceTree = "<group>"; };
 		87EBFB411BB6154900AA5F70 /* StationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StationViewController.h; sourceTree = "<group>"; };
 		87EBFB421BB6154900AA5F70 /* StationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StationViewController.m; sourceTree = "<group>"; };
@@ -328,6 +333,9 @@
 			isa = PBXGroup;
 			children = (
 				8737469F1B729C2B0006F2A9 /* login process */,
+				87E6F4711BB6936D009E3EA8 /* IMMessagesViewController.h */,
+				87E6F4721BB6936D009E3EA8 /* IMMessagesViewController.m */,
+				87E6F4731BB6936D009E3EA8 /* IMMessagesViewController.xib */,
 				87CFE8C41B82AAA3009A4B6D /* LoopViewController.h */,
 				87CFE8C51B82AAA3009A4B6D /* LoopViewController.m */,
 				878FAD5E1BAC6E1D00260D5B /* UserMelodyListViewController.h */,
@@ -468,6 +476,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				87E6F4751BB6936D009E3EA8 /* IMMessagesViewController.xib in Resources */,
 				87915E8B1B9F4AC300628937 /* placeholder.png in Resources */,
 				8707F9C11B446F57004B4C20 /* Main.storyboard in Resources */,
 				8707F9C61B446F57004B4C20 /* LaunchScreen.xib in Resources */,
@@ -560,6 +569,7 @@
 				879CCC541B81D2870031FDCC /* Model.xcdatamodeld in Sources */,
 				878FAD601BAC6E1D00260D5B /* UserMelodyListViewController.m in Sources */,
 				879CCC5D1B81D6460031FDCC /* DataManager.m in Sources */,
+				87E6F4741BB6936D009E3EA8 /* IMMessagesViewController.m in Sources */,
 				87175C531B4ADCEA00C042E4 /* ChatsTableViewController.m in Sources */,
 				872BB5681B74AD26004CDBE7 /* FriendCell.m in Sources */,
 				8707F9F61B4476BD004B4C20 /* AFSecurityPolicy.m in Sources */,

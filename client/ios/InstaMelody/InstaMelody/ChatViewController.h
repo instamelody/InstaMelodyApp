@@ -7,10 +7,11 @@
 //
 
 #import "JSQMessagesViewController.h"
+#import "IMMessagesViewController.h"
 #import "LoopViewController.h"
 #import "NetworkManager.h"
 
-@interface ChatViewController : JSQMessagesViewController <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, LoopDelegate>
+@interface ChatViewController : IMMessagesViewController <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, LoopDelegate>
 
 @property (nonatomic, strong) NSDictionary *chatDict;
 
