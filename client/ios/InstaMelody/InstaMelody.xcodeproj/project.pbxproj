@@ -33,13 +33,15 @@
 		872BB56E1B74BC36004CDBE7 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BB56D1B74BC36004CDBE7 /* ChatViewController.m */; };
 		872BB5A01B74CAD1004CDBE7 /* AwesomeMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BB59D1B74CAD1004CDBE7 /* AwesomeMenu.m */; };
 		872BB5A11B74CAD1004CDBE7 /* AwesomeMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BB59F1B74CAD1004CDBE7 /* AwesomeMenuItem.m */; };
+		87538B7D1BB72BE500F7F9D8 /* UsersCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87538B7C1BB72BE500F7F9D8 /* UsersCell.m */; };
+		87538B801BB72C6400F7F9D8 /* UserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87538B7F1BB72C6400F7F9D8 /* UserCell.m */; };
 		875C19FE1BB5F3B3007B14DE /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 875C19FD1BB5F3B3007B14DE /* FontAwesome.ttf */; };
 		878FAD601BAC6E1D00260D5B /* UserMelodyListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 878FAD5F1BAC6E1D00260D5B /* UserMelodyListViewController.m */; };
 		87915E8B1B9F4AC300628937 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 87915E8A1B9F4AC300628937 /* placeholder.png */; };
 		879CCC541B81D2870031FDCC /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 879CCC521B81D2870031FDCC /* Model.xcdatamodeld */; };
 		879CCC5A1B81D4860031FDCC /* Friend.m in Sources */ = {isa = PBXBuildFile; fileRef = 879CCC591B81D4860031FDCC /* Friend.m */; };
 		879CCC5D1B81D6460031FDCC /* DataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 879CCC5C1B81D6460031FDCC /* DataManager.m */; };
-		87AF84751BB6B17500FCD3E1 /* VolumeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87AF84741BB6B17500FCD3E1 /* VolumeViewController.m */; settings = {ASSET_TAGS = (); }; };
+		87AF84751BB6B17500FCD3E1 /* VolumeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87AF84741BB6B17500FCD3E1 /* VolumeViewController.m */; };
 		87C84E9C1BAC848400A99239 /* UserMelody.m in Sources */ = {isa = PBXBuildFile; fileRef = 87C84E991BAC848400A99239 /* UserMelody.m */; };
 		87C84E9D1BAC848400A99239 /* UserMelodyPart.m in Sources */ = {isa = PBXBuildFile; fileRef = 87C84E9B1BAC848400A99239 /* UserMelodyPart.m */; };
 		87CFE8BC1B829426009A4B6D /* MelodyGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 87CFE8BB1B829426009A4B6D /* MelodyGroup.m */; };
@@ -48,8 +50,8 @@
 		87D472351B749891008075B8 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D472341B749891008075B8 /* HomeViewController.m */; };
 		87D472381B74A719008075B8 /* FriendsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D472371B74A719008075B8 /* FriendsTableViewController.m */; };
 		87DA195F1B72872A00941DCE /* SignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87DA195E1B72872A00941DCE /* SignInViewController.m */; };
-		87E6F4741BB6936D009E3EA8 /* IMMessagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87E6F4721BB6936D009E3EA8 /* IMMessagesViewController.m */; settings = {ASSET_TAGS = (); }; };
-		87E6F4751BB6936D009E3EA8 /* IMMessagesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87E6F4731BB6936D009E3EA8 /* IMMessagesViewController.xib */; settings = {ASSET_TAGS = (); }; };
+		87E6F4741BB6936D009E3EA8 /* IMMessagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87E6F4721BB6936D009E3EA8 /* IMMessagesViewController.m */; };
+		87E6F4751BB6936D009E3EA8 /* IMMessagesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87E6F4731BB6936D009E3EA8 /* IMMessagesViewController.xib */; };
 		87EBFB431BB6154900AA5F70 /* StationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87EBFB421BB6154900AA5F70 /* StationViewController.m */; };
 		87EBFB461BB64C7900AA5F70 /* StationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87EBFB451BB64C7900AA5F70 /* StationCell.m */; };
 /* End PBXBuildFile section */
@@ -118,6 +120,10 @@
 		872BB59D1B74CAD1004CDBE7 /* AwesomeMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AwesomeMenu.m; sourceTree = "<group>"; };
 		872BB59E1B74CAD1004CDBE7 /* AwesomeMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AwesomeMenuItem.h; sourceTree = "<group>"; };
 		872BB59F1B74CAD1004CDBE7 /* AwesomeMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AwesomeMenuItem.m; sourceTree = "<group>"; };
+		87538B7B1BB72BE500F7F9D8 /* UsersCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UsersCell.h; sourceTree = "<group>"; };
+		87538B7C1BB72BE500F7F9D8 /* UsersCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UsersCell.m; sourceTree = "<group>"; };
+		87538B7E1BB72C6400F7F9D8 /* UserCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserCell.h; path = View/UserCell.h; sourceTree = "<group>"; };
+		87538B7F1BB72C6400F7F9D8 /* UserCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserCell.m; path = View/UserCell.m; sourceTree = "<group>"; };
 		875C19FD1BB5F3B3007B14DE /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.ttf; path = Pods/FontAwesome/Resources/FontAwesome.ttf; sourceTree = "<group>"; };
 		878FAD5E1BAC6E1D00260D5B /* UserMelodyListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserMelodyListViewController.h; sourceTree = "<group>"; };
 		878FAD5F1BAC6E1D00260D5B /* UserMelodyListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserMelodyListViewController.m; sourceTree = "<group>"; };
@@ -376,6 +382,10 @@
 				872BB56A1B74B56C004CDBE7 /* ChatCell.m */,
 				87EBFB441BB64C7900AA5F70 /* StationCell.h */,
 				87EBFB451BB64C7900AA5F70 /* StationCell.m */,
+				87538B7B1BB72BE500F7F9D8 /* UsersCell.h */,
+				87538B7C1BB72BE500F7F9D8 /* UsersCell.m */,
+				87538B7E1BB72C6400F7F9D8 /* UserCell.h */,
+				87538B7F1BB72C6400F7F9D8 /* UserCell.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -577,11 +587,13 @@
 				87E6F4741BB6936D009E3EA8 /* IMMessagesViewController.m in Sources */,
 				87AF84751BB6B17500FCD3E1 /* VolumeViewController.m in Sources */,
 				87175C531B4ADCEA00C042E4 /* ChatsTableViewController.m in Sources */,
+				87538B801BB72C6400F7F9D8 /* UserCell.m in Sources */,
 				872BB5681B74AD26004CDBE7 /* FriendCell.m in Sources */,
 				8707F9F61B4476BD004B4C20 /* AFSecurityPolicy.m in Sources */,
 				8707F9B51B446F57004B4C20 /* main.m in Sources */,
 				872BB56B1B74B56C004CDBE7 /* ChatCell.m in Sources */,
 				8707F9DD1B4475E9004B4C20 /* SignUpViewController.m in Sources */,
+				87538B7D1BB72BE500F7F9D8 /* UsersCell.m in Sources */,
 				8707F9F41B4476BD004B4C20 /* AFHTTPSessionManager.m in Sources */,
 				87D472351B749891008075B8 /* HomeViewController.m in Sources */,
 				87EBFB461BB64C7900AA5F70 /* StationCell.m in Sources */,

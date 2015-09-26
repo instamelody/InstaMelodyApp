@@ -600,7 +600,7 @@
             }
             
             self.loopTitleLabel.text = [responseDict objectForKey:@"Name"];
-            
+            self.loopDict = responseDict;
         }
         //NSDictionary *responseDict = (NSDictionary *)responseObject;
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -700,15 +700,19 @@
 }
 
 -(void)loadLoop {
-    if ([self.chatDict objectForKey:@"ChatLoopId"] != nil) {
-        [self getLoop:[self.chatDict objectForKey:@"ChatLoopId"]];
+    NSString *loopId = [self.chatDict objectForKey:@"ChatLoopId"];
+    
+    if (loopId != nil) {
+        [self getLoop:loopId];
+        
+        [self.micButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [self.micButton addTarget:self action:@selector(showLoop) forControlEvents:UIControlEventTouchUpInside];
+        
+        [self.playButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [self.playButton addTarget:self action:@selector(play:) forControlEvents:UIControlEventTouchUpInside];
+        
     }
     
-    [self.micButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-    [self.micButton addTarget:self action:@selector(createLoop:) forControlEvents:UIControlEventTouchUpInside];
-    
-    [self.playButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-    [self.playButton addTarget:self action:@selector(createLoop:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 -(void)createPhotoMessageWithSenderId:(NSString *)senderId andName:(NSString *)senderName andPath:(NSString *)path {
@@ -745,6 +749,14 @@
 }
 
 #pragma mark - loop delegate
+
+-(void)showLoop {
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    LoopViewController *vc = (LoopViewController *)[sb instantiateViewControllerWithIdentifier:@"LoopViewController"];
+    vc.delegate = self;
+    vc.selectedLoop = self.loopDict;
+    [self.navigationController pushViewController:vc animated:YES];
+}
 
 -(IBAction)createLoop:(id)sender {
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
@@ -986,7 +998,5 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     }
     
 }
-
-
 
 @end

@@ -13,9 +13,9 @@
 #import "DataManager.h"
 #import "MelodyGroup.h"
 #import "UserMelody.h"
+#import "UserCell.h"
 
-
-@protocol LoopDelegate <NSObject>
+@protocol LoopDelegate <NSObject, UITableViewDataSource, UITableViewDelegate>
 
 -(void)didFinishWithInfo:(NSDictionary *)userDict;
 -(void)cancel;
@@ -24,6 +24,7 @@
 
 @interface LoopViewController : UIViewController <AVAudioPlayerDelegate>
 
+@property (nonatomic, strong) NSDictionary *selectedLoop;
 @property (nonatomic, strong) UserMelody *selectedUserMelody;
 
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *volumeBarButtonItem;
@@ -48,6 +49,8 @@
 
 @property (nonatomic, strong) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, strong) IBOutlet UICollectionView *participantsView;
+
+@property (nonatomic, strong) IBOutlet UITableView *tableView;
 
 @property (nonatomic, strong) id <LoopDelegate> delegate;
 

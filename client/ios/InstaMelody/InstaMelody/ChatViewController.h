@@ -12,8 +12,9 @@
 #import "NetworkManager.h"
 #import "VolumeViewController.h"
 
-@interface ChatViewController : IMMessagesViewController <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, LoopDelegate>
+@interface ChatViewController : IMMessagesViewController <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, LoopDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
 
 @property (nonatomic, strong) NSDictionary *chatDict;
+@property (nonatomic, strong) NSDictionary *loopDict;
 
 @end

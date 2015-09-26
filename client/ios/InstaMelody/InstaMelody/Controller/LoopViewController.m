@@ -27,6 +27,7 @@
 @property (nonatomic, strong)  NSDate *startTime;
 
 @property (nonatomic, strong) AVAudioRecorder *recorder;
+@property (nonatomic, strong) NSArray *partArray;
 
 @property NSUserDefaults *defaults;
 
@@ -50,6 +51,11 @@
     self.progressView.trackTintColor = [UIColor clearColor];
     self.progressView.progressTintColor = [UIColor colorWithRed:1/255.0f green:174/255.0f blue:255/255.0f alpha:1.0f];
     self.progressView.thicknessRatio = 0.1f;
+    
+    if (self.selectedLoop !=nil) {
+        self.partArray = [self.selectedLoop objectForKey:@"Parts"];
+    }
+    
     
     if (self.selectedUserMelody != nil) {
         
@@ -789,5 +795,122 @@
         }
     }
 }
+
+#pragma mark - Table view data source
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    // Return the number of sections.
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    // Return the number of rows in the section.
+    
+    if (self.selectedLoop != nil) {
+        return 3;
+    }
+    return 2;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (self.selectedLoop != nil) {
+        
+        if (indexPath.row == 0) {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserCollectionCell" forIndexPath:indexPath];
+            return cell;
+        } else if (indexPath.row == 1) {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TopicCell" forIndexPath:indexPath];
+            return cell;
+        } else {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MelodyCell" forIndexPath:indexPath];
+            return cell;
+        }
+        
+    } else {
+        
+        if (indexPath.row == 0) {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TopicCell" forIndexPath:indexPath];
+            return cell;
+        } else {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MelodyCell" forIndexPath:indexPath];
+            return cell;
+        }
+
+    }
+    
+    /*
+    UserMelody *userMelody = (UserMelody *)[self.melodyList objectAtIndex:indexPath.row];
+    
+    //NSDictionary *friendDict = [self.friendsList objectAtIndex:indexPath.row];
+    
+    cell.textLabel.text = userMelody.userMelodyName;
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%ld Parts", userMelody.parts.count];
+    cell.backgroundColor = [UIColor clearColor];*/
+    
+    return nil;
+}
+
+#pragma mark - UICollectionView Datasource
+// 1
+- (NSInteger)collectionView:(UICollectionView *)view numberOfItemsInSection:(NSInteger)section {
+    
+    if (self.partArray != nil) {
+        return [self.partArray count];
+    }
+    return 0;
+}
+
+- (NSInteger)numberOfSectionsInCollectionView: (UICollectionView *)collectionView {
+    if (self.partArray != nil) {
+        return 1;
+    }
+    return 0;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    UserCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"UserCell" forIndexPath:indexPath];
+    
+    cell.imageView.layer.cornerRadius = cell.imageView.frame.size.height / 2;
+    cell.imageView.layer.masksToBounds = YES;
+    
+    NSDictionary *partDict = [self.partArray objectAtIndex:indexPath.row];
+    
+    NSDictionary *melodyDict = [partDict objectForKey:@"UserMelody"];
+    
+    NSString *userId = [melodyDict objectForKey:@"UserId"];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    NSString *myUserId = [defaults objectForKey:@"Id"];
+    
+    if ([userId isEqualToString:myUserId]) {
+        cell.nameLabel.text = @"Me";
+        
+        NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+        
+        NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
+        NSString *imageName = [[defaults objectForKey:@"ProfileFilePath"] lastPathComponent];
+        
+        NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
+        cell.imageView.image = [UIImage imageWithContentsOfFile:imagePath];
+        
+    } else {
+        Friend *friend = [Friend MR_findFirstByAttribute:@"userId" withValue:userId];
+        
+        cell.nameLabel.text = friend.firstName;
+        //cell.backgroundColor = [UIColor whiteColor];
+        
+        /*
+         cell.shareButton.titleLabel.font  = [UIFont fontAwesomeFontOfSize:20.0f];
+         cell.likeButton.titleLabel.font  = [UIFont fontAwesomeFontOfSize:20.0f];
+         
+         [cell.shareButton setTitle:[NSString fontAwesomeIconStringForEnum:FAShareSquareO] forState:UIControlStateNormal];
+         [cell.likeButton setTitle:[NSString fontAwesomeIconStringForEnum:FAHeartO] forState:UIControlStateNormal];*/
+    }
+
+    return cell;
+}
+
 
 @end
