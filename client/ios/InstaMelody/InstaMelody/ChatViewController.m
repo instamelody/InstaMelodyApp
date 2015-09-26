@@ -22,6 +22,10 @@
 
 @property (strong, nonatomic) JSQMessagesBubbleImage *incomingBubbleImageData;
 
+@property (strong, nonatomic) JSQMessagesBubbleImage *outgoingMelodyBubbleImageData;
+
+@property (strong, nonatomic) JSQMessagesBubbleImage *incomingMelodyBubbleImageData;
+
 @property (strong, nonatomic) NSDateFormatter *dateFormatter;
 
 @end
@@ -77,7 +81,10 @@
     //self.incomingBubbleImageData = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor colorWithRed:112/255.0f green:104/255.0f blue:105/255.0f alpha:0.4f]];
     
     self.incomingBubbleImageData = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor colorWithRed:255/255.0f green:255/255.0f blue:255/255.0f alpha:0.4f]];
-        self.outgoingBubbleImageData = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor colorWithRed:255/255.0f green:255/255.0f blue:255/255.0f alpha:0.2f]];
+    self.outgoingBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor colorWithRed:255/255.0f green:255/255.0f blue:255/255.0f alpha:0.2f]];
+    
+    self.incomingMelodyBubbleImageData = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor colorWithRed:191/255.0f green:139/255.0f blue:226/255.0f alpha:0.4f]];
+    self.outgoingMelodyBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor colorWithRed:191/255.0f green:139/255.0f blue:226/255.0f alpha:0.2f]];
     
     [self loadMessages];
     
@@ -117,7 +124,16 @@
     JSQMessage *message = [self.messages objectAtIndex:indexPath.item];
     
     if ([message.senderId isEqualToString:self.senderId]) {
+        
+        if ([message.text containsString:@"added to the loop"]) {
+            return self.outgoingMelodyBubbleImageData;
+        }
+        
         return self.outgoingBubbleImageData;
+    }
+    
+    if ([message.text containsString:@"added to the loop"]) {
+        return self.incomingMelodyBubbleImageData;
     }
     
     return self.incomingBubbleImageData;
@@ -253,6 +269,7 @@
         
         cell.textView.linkTextAttributes = @{ NSForegroundColorAttributeName : cell.textView.textColor,
                                               NSUnderlineStyleAttributeName : @(NSUnderlineStyleSingle | NSUnderlinePatternSolid) };
+        
     }
     
     return cell;
@@ -548,10 +565,19 @@
                 if ([[messageContent objectForKey:@"UserMelody"] isKindOfClass:[NSDictionary class]]) {
                     //melody message
                     NSLog(@"i have a melody message");
+
+                    NSString *textString = [NSString stringWithFormat:@"%@ has added to the loop!", senderName];
                     
-                    NSString *userMelody = [[messageContent objectForKey:@"UserMelody"] objectForKey:@"Id"];
+                    if ([senderName isEqualToString:@"Me"]) {
+                        textString = @"You have added to the loop!";
+                    }
                     
-                    [self createPlaceholderWithSenderId:self.senderId andName:self.senderDisplayName andMelodyId:userMelody];
+                    JSQMessage *message = [[JSQMessage alloc] initWithSenderId:senderId
+                                                             senderDisplayName:senderName
+                                                                          date:date
+                                                                          text:textString];
+                    [self.messages addObject:message];
+                    
                     
                 } else {
                     //text message
