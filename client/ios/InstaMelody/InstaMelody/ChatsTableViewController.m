@@ -15,6 +15,10 @@
 #import <MagicalRecord/MagicalRecord.h>
 #import "Friend.h"
 
+#import "UIFont+FontAwesome.h"
+#import "NSString+FontAwesome.h"
+#import "DataManager.h"
+
 @interface ChatsTableViewController ()
 
 @property (nonatomic, strong) NSArray *chatsArray;
@@ -74,6 +78,7 @@
  
     ChatCell *cell = (ChatCell *)[tableView dequeueReusableCellWithIdentifier:@"ChatCell" forIndexPath:indexPath];
     
+    cell.delegate = self;
     cell.profileImageView.layer.cornerRadius = cell.profileImageView.frame.size.height / 2;
     cell.profileImageView.layer.masksToBounds = YES;
     
@@ -257,5 +262,55 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+#pragma mark Swipe Delegate
+
+-(BOOL) swipeTableCell:(MGSwipeTableCell*) cell canSwipe:(MGSwipeDirection) direction;
+{
+    return YES;
+}
+
+-(NSArray*) swipeTableCell:(MGSwipeTableCell*) cell swipeButtonsForDirection:(MGSwipeDirection)direction
+             swipeSettings:(MGSwipeSettings*) swipeSettings expansionSettings:(MGSwipeExpansionSettings*) expansionSettings
+{
+    
+    swipeSettings.transition = MGSwipeTransitionBorder;
+    expansionSettings.buttonIndex = 0;
+    
+    if (direction == MGSwipeDirectionRightToLeft) {
+        
+        expansionSettings.fillOnTrigger = YES;
+        expansionSettings.threshold = 1.1;
+        
+        CGFloat padding = 15;
+        
+        MGSwipeButton * del = [MGSwipeButton buttonWithTitle:[NSString fontAwesomeIconStringForEnum:FAtrash] backgroundColor:[UIColor lightGrayColor] padding:padding callback:^BOOL(MGSwipeTableCell *sender) {
+            
+            //do stuff
+            
+            return NO; //don't autohide to improve delete animation
+        }];
+        
+        del.titleLabel.font = [UIFont fontAwesomeFontOfSize:20.0f];
+        
+        
+        return @[del];
+    }
+    
+    return nil;
+    
+}
+
+-(void) swipeTableCell:(MGSwipeTableCell*) cell didChangeSwipeState:(MGSwipeState)state gestureIsActive:(BOOL)gestureIsActive
+{
+    NSString * str;
+    switch (state) {
+        case MGSwipeStateNone: str = @"None"; break;
+        case MGSwipeStateSwippingLeftToRight: str = @"SwippingLeftToRight"; break;
+        case MGSwipeStateSwippingRightToLeft: str = @"SwippingRightToLeft"; break;
+        case MGSwipeStateExpandingLeftToRight: str = @"ExpandingLeftToRight"; break;
+        case MGSwipeStateExpandingRightToLeft: str = @"ExpandingRightToLeft"; break;
+    }
+    NSLog(@"Swipe state: %@ ::: Gesture: %@", str, gestureIsActive ? @"Active" : @"Ended");
+}
 
 @end
