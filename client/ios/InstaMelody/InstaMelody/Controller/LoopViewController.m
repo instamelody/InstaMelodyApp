@@ -114,7 +114,20 @@
             CLToken *token = [[CLToken alloc] initWithDisplayText:name context:nil];
             CLTokenInputView *tokenInputView = (CLTokenInputView *)[self.tableView viewWithTag:99];
             
-            [tokenInputView addToken:token];
+            BOOL isToken1 = [name isEqualToString:self.selectedMelody.melodyName];
+            BOOL isToken2 = [name isEqualToString:self.selectedMelody2.melodyName];
+            
+            if (tokenInputView.allTokens.count < 3 && !isToken1 && !isToken2) {
+                
+                if (tokenInputView.allTokens.count == 0) {
+                    [self didSelectMelody:melody];
+                } else {
+                    [self didSelectMelody2:melody];
+                }
+                
+                [tokenInputView addToken:token];
+                
+            }
             
             //add melody
             
@@ -365,7 +378,7 @@
 
     NSMutableDictionary *userDict = [NSMutableDictionary new];
     [userDict setObject:[self.currentRecordingURL path] forKey:@"LoopURL"];
-    [userDict setObject:self.topicLabel.text forKey:@"Description"];
+    [userDict setObject:@"dev topic" forKey:@"Description"];
     [userDict setObject:@"Chat Melody" forKey:@"Name"];
     
     if (self.selectedMelody != nil) {
@@ -955,18 +968,26 @@
     }
     [self.tableView reloadData];
 }
+ */
 
+/*
 - (void)tokenInputView:(CLTokenInputView *)view didAddToken:(CLToken *)token
 {
     NSString *name = token.displayText;
-    [self.selectedNames addObject:name];
-}
+    //add to list
+}*/
 
 - (void)tokenInputView:(CLTokenInputView *)view didRemoveToken:(CLToken *)token
 {
     NSString *name = token.displayText;
-    [self.selectedNames removeObject:name];
+    if ([self.selectedMelody.melodyName isEqualToString:name]) {
+        self.selectedMelody = nil;
+    } else if ([self.selectedMelody2.melodyName isEqualToString:name]) {
+        self.selectedMelody2 = nil;
+    }
 }
+
+/*
 
 - (CLToken *)tokenInputView:(CLTokenInputView *)view tokenForText:(NSString *)text
 {
