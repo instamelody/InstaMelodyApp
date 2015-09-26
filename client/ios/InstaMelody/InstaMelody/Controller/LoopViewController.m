@@ -104,6 +104,25 @@
         }
     }
     
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"pickedMelody" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        //
+        
+        if (note.userInfo != nil) {
+            Melody *melody = [Melody MR_findFirstByAttribute:@"melodyId" withValue:[note.userInfo objectForKey:@"melodyId"]];
+            
+            NSString *name = melody.melodyName;
+            CLToken *token = [[CLToken alloc] initWithDisplayText:name context:nil];
+            CLTokenInputView *tokenInputView = (CLTokenInputView *)[self.tableView viewWithTag:99];
+            
+            [tokenInputView addToken:token];
+            
+            //add melody
+            
+        }
+    }];
+    
+    //[[NSNotificationCenter defaultCenter] postNotificationName:@"pickedMelody" object:nil userInfo:userDict];
+    
 }
 
 -(void)roundView:(UIView *)view {
@@ -841,6 +860,8 @@
         } else {
             MelodyCell *cell = (MelodyCell *)[tableView dequeueReusableCellWithIdentifier:@"MelodyCell" forIndexPath:indexPath];
             
+            cell.tokenInputView.tag = 99;
+            
             cell.tokenInputView.placeholderText = @"Add melodies";
             
             cell.tokenInputView.accessoryView = [self contactAddButton];
@@ -881,7 +902,6 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     UserCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"UserCell" forIndexPath:indexPath];
-    
     cell.imageView.layer.cornerRadius = cell.imageView.frame.size.height / 2;
     cell.imageView.layer.masksToBounds = YES;
     
@@ -920,6 +940,63 @@
 }
 
 #pragma mark - token delegate
+
+#pragma mark - CLTokenInputViewDelegate
+/*
+- (void)tokenInputView:(CLTokenInputView *)view didChangeText:(NSString *)text
+{
+    if ([text isEqualToString:@""]){
+        self.filteredNames = nil;
+        self.tableView.hidden = YES;
+    } else {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self contains[cd] %@", text];
+        self.filteredNames = [self.names filteredArrayUsingPredicate:predicate];
+        self.tableView.hidden = NO;
+    }
+    [self.tableView reloadData];
+}
+
+- (void)tokenInputView:(CLTokenInputView *)view didAddToken:(CLToken *)token
+{
+    NSString *name = token.displayText;
+    [self.selectedNames addObject:name];
+}
+
+- (void)tokenInputView:(CLTokenInputView *)view didRemoveToken:(CLToken *)token
+{
+    NSString *name = token.displayText;
+    [self.selectedNames removeObject:name];
+}
+
+- (CLToken *)tokenInputView:(CLTokenInputView *)view tokenForText:(NSString *)text
+{
+    if (self.filteredNames.count > 0) {
+        NSString *matchingName = self.filteredNames[0];
+        CLToken *match = [[CLToken alloc] initWithDisplayText:matchingName context:nil];
+        return match;
+    }
+    // TODO: Perhaps if the text is a valid phone number, or email address, create a token
+    // to "accept" it.
+    return nil;
+}
+
+- (void)tokenInputViewDidEndEditing:(CLTokenInputView *)view
+{
+    NSLog(@"token input view did end editing: %@", view);
+    view.accessoryView = nil;
+}
+
+- (void)tokenInputViewDidBeginEditing:(CLTokenInputView *)view
+{
+    
+    NSLog(@"token input view did begin editing: %@", view);
+    //view.accessoryView = [self contactAddButton];
+    [self.view removeConstraint:self.tableViewTopLayoutConstraint];
+    self.tableViewTopLayoutConstraint = [NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:view attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0];
+    [self.view addConstraint:self.tableViewTopLayoutConstraint];
+    [self.view layoutIfNeeded];
+}
+*/
 
 #pragma mark - Demo Buttons
 - (UIButton *)contactAddButton

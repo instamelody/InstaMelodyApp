@@ -63,6 +63,12 @@
     
     //pass back item
     
+    Melody *melody = (Melody *)[self.melodyList objectAtIndex:indexPath.row];
+    
+    NSDictionary *userDict = [NSDictionary dictionaryWithObject:melody.melodyId forKey:@"melodyId"];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"pickedMelody" object:nil userInfo:userDict];
+    
     [self done:nil];
 }
 
