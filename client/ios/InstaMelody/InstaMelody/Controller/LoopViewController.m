@@ -854,7 +854,7 @@
         } else if (indexPath.row == 1) {
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TopicCell" forIndexPath:indexPath];
             return cell;
-        } else if (indexPath.row == 1) {
+        } else if (indexPath.row == 2) {
             
             MelodyCell *cell = (MelodyCell *)[tableView dequeueReusableCellWithIdentifier:@"MelodyCell" forIndexPath:indexPath];
             
