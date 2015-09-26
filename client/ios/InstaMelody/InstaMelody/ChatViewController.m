@@ -739,7 +739,9 @@
 
 -(IBAction)showVolume:(id)sender
 {
-    
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    VolumeViewController *vc = [sb instantiateViewControllerWithIdentifier:@"VolumeViewController"];
+    [self presentViewController:vc animated:YES completion:nil];
 }
 
 #pragma mark - loop delegate

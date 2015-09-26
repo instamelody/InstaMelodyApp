@@ -39,6 +39,7 @@
 		879CCC541B81D2870031FDCC /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 879CCC521B81D2870031FDCC /* Model.xcdatamodeld */; };
 		879CCC5A1B81D4860031FDCC /* Friend.m in Sources */ = {isa = PBXBuildFile; fileRef = 879CCC591B81D4860031FDCC /* Friend.m */; };
 		879CCC5D1B81D6460031FDCC /* DataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 879CCC5C1B81D6460031FDCC /* DataManager.m */; };
+		87AF84751BB6B17500FCD3E1 /* VolumeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87AF84741BB6B17500FCD3E1 /* VolumeViewController.m */; settings = {ASSET_TAGS = (); }; };
 		87C84E9C1BAC848400A99239 /* UserMelody.m in Sources */ = {isa = PBXBuildFile; fileRef = 87C84E991BAC848400A99239 /* UserMelody.m */; };
 		87C84E9D1BAC848400A99239 /* UserMelodyPart.m in Sources */ = {isa = PBXBuildFile; fileRef = 87C84E9B1BAC848400A99239 /* UserMelodyPart.m */; };
 		87CFE8BC1B829426009A4B6D /* MelodyGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 87CFE8BB1B829426009A4B6D /* MelodyGroup.m */; };
@@ -126,6 +127,8 @@
 		879CCC591B81D4860031FDCC /* Friend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Friend.m; sourceTree = "<group>"; };
 		879CCC5B1B81D6460031FDCC /* DataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataManager.h; sourceTree = "<group>"; };
 		879CCC5C1B81D6460031FDCC /* DataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataManager.m; sourceTree = "<group>"; };
+		87AF84731BB6B17500FCD3E1 /* VolumeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VolumeViewController.h; sourceTree = "<group>"; };
+		87AF84741BB6B17500FCD3E1 /* VolumeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VolumeViewController.m; sourceTree = "<group>"; };
 		87C84E981BAC848400A99239 /* UserMelody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserMelody.h; sourceTree = "<group>"; };
 		87C84E991BAC848400A99239 /* UserMelody.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserMelody.m; sourceTree = "<group>"; };
 		87C84E9A1BAC848400A99239 /* UserMelodyPart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserMelodyPart.h; sourceTree = "<group>"; };
@@ -349,6 +352,8 @@
 				87D472371B74A719008075B8 /* FriendsTableViewController.m */,
 				87EBFB411BB6154900AA5F70 /* StationViewController.h */,
 				87EBFB421BB6154900AA5F70 /* StationViewController.m */,
+				87AF84731BB6B17500FCD3E1 /* VolumeViewController.h */,
+				87AF84741BB6B17500FCD3E1 /* VolumeViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -570,6 +575,7 @@
 				878FAD601BAC6E1D00260D5B /* UserMelodyListViewController.m in Sources */,
 				879CCC5D1B81D6460031FDCC /* DataManager.m in Sources */,
 				87E6F4741BB6936D009E3EA8 /* IMMessagesViewController.m in Sources */,
+				87AF84751BB6B17500FCD3E1 /* VolumeViewController.m in Sources */,
 				87175C531B4ADCEA00C042E4 /* ChatsTableViewController.m in Sources */,
 				872BB5681B74AD26004CDBE7 /* FriendCell.m in Sources */,
 				8707F9F61B4476BD004B4C20 /* AFSecurityPolicy.m in Sources */,

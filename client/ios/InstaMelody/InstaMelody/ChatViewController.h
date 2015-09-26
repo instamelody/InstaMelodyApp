@@ -10,6 +10,7 @@
 #import "IMMessagesViewController.h"
 #import "LoopViewController.h"
 #import "NetworkManager.h"
+#import "VolumeViewController.h"
 
 @interface ChatViewController : IMMessagesViewController <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, LoopDelegate>
 
