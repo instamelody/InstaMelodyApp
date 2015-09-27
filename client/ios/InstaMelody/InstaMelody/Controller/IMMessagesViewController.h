@@ -17,5 +17,6 @@
 @property IBOutlet UIButton *playButton;
 @property IBOutlet UIButton *micButton;
 @property IBOutlet UILabel *loopTitleLabel;
+@property IBOutlet UILabel *statusLabel;
 
 @end

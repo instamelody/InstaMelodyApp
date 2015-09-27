@@ -11,8 +11,9 @@
 #import "LoopViewController.h"
 #import "NetworkManager.h"
 #import "VolumeViewController.h"
+#import <AVFoundation/AVFoundation.h>
 
-@interface ChatViewController : IMMessagesViewController <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, LoopDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
+@interface ChatViewController : IMMessagesViewController <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, LoopDelegate, UICollectionViewDataSource, UICollectionViewDelegate, AVAudioPlayerDelegate>
 
 @property (nonatomic, strong) NSDictionary *chatDict;
 @property (nonatomic, strong) NSDictionary *loopDict;
