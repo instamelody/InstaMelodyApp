@@ -76,6 +76,7 @@
     <Compile Include="Station.cs" />
     <Compile Include="StationCategory.cs" />
     <Compile Include="StationFollower.cs" />
+    <Compile Include="StationLike.cs" />
     <Compile Include="StationMessage.cs" />
     <Compile Include="StationMessageUserLike.cs" />
     <Compile Include="User.cs" />

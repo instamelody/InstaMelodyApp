@@ -312,6 +312,7 @@ CREATE TABLE dbo.Stations
     CONSTRAINT FK_Stations_StationImageId FOREIGN KEY (StationImageId)
 		REFERENCES Images (Id),
 	Name varchar(128) NOT NULL,
+	IsPublished bit NOT NULL DEFAULT 0,
 	DateCreated datetime NOT NULL,
 	DateModified datetime NOT NULL,
 	IsDeleted bit NOT NULL DEFAULT 0)
@@ -325,6 +326,18 @@ CREATE TABLE dbo.StationCategories
 	CategoryId int NOT NULL,
 	CONSTRAINT FK_StationCategories_CategoryId FOREIGN KEY (CategoryId)
 		REFERENCES Categories (Id),
+	DateCreated datetime NOT NULL,
+	IsDeleted bit NOT NULL DEFAULT 0)
+GO
+
+CREATE TABLE dbo.StationLikes
+	(Id int IDENTITY(1,1) PRIMARY KEY,
+	StationId int NOT NULL,
+	CONSTRAINT FK_StationLikes_StationId FOREIGN KEY (StationId)
+		REFERENCES Stations (Id),
+	UserId UNIQUEIDENTIFIER NOT NULL,
+	CONSTRAINT FK_StationLikes_UserId FOREIGN KEY (UserId)
+		REFERENCES Users (Id),
 	DateCreated datetime NOT NULL,
 	IsDeleted bit NOT NULL DEFAULT 0)
 GO

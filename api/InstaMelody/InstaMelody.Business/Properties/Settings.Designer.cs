@@ -211,5 +211,17 @@ namespace InstaMelody.Business.Properties {
                 return ((string)(this["APNSProdCertPassword"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        public int DefaultStationGetLimit {
+            get {
+                return ((int)(this["DefaultStationGetLimit"]));
+            }
+            set {
+                this["DefaultStationGetLimit"] = value;
+            }
+        }
     }
 }

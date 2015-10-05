@@ -153,6 +153,128 @@ namespace InstaMelody.API.Controllers
         }
 
         /// <summary>
+        /// Publishes the station.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route(Routes.RoutePublish)]
+        public HttpResponseMessage PublishStation(ApiRequest request)
+        {
+            HttpResponseMessage response;
+
+            if (request != null && request.Station != null)
+            {
+                try
+                {
+                    var station = request.Station.Id.Equals(default(int))
+                        ? request.Station.Name
+                        : request.Station.Id.ToString();
+                    InstaMelodyLogger.Log(
+                        string.Format("Publish Station - Station: {0}, Token: {1}",
+                            station, request.Token),
+                        LogLevel.Trace);
+
+                    var bll = new StationBll();
+
+                    var result = bll.PublishStation(request.Station, request.Token);
+                    if (result == null)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest,
+                            string.Format(Exceptions.FailedPublishStation, station));
+                    }
+                    else
+                    {
+                        response = this.Request.CreateResponse(HttpStatusCode.OK, result);
+                    }
+                }
+                catch (Exception exc)
+                {
+                    if (exc is UnauthorizedAccessException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, exc.Message);
+                    }
+                    else if (exc is DataException || exc is ArgumentException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, exc.Message);
+                    }
+                    else
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
+                    }
+                }
+            }
+            else
+            {
+                InstaMelodyLogger.Log("Received NULL PublishStation request", LogLevel.Trace);
+                response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.NullStations);
+            }
+
+            return response;
+        }
+
+        /// <summary>
+        /// Unpublishes the station.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route(Routes.RouteUnpublish)]
+        public HttpResponseMessage UnpublishStation(ApiRequest request)
+        {
+            HttpResponseMessage response;
+
+            if (request != null && request.Station != null)
+            {
+                try
+                {
+                    var station = request.Station.Id.Equals(default(int))
+                        ? request.Station.Name
+                        : request.Station.Id.ToString();
+                    InstaMelodyLogger.Log(
+                        string.Format("Unpublish Station - Station: {0}, Token: {1}",
+                            station, request.Token),
+                        LogLevel.Trace);
+
+                    var bll = new StationBll();
+
+                    var result = bll.UnpublishStation(request.Station, request.Token);
+                    if (result == null)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest,
+                            string.Format(Exceptions.FailedUnpublishStation, station));
+                    }
+                    else
+                    {
+                        response = this.Request.CreateResponse(HttpStatusCode.OK, result);
+                    }
+                }
+                catch (Exception exc)
+                {
+                    if (exc is UnauthorizedAccessException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, exc.Message);
+                    }
+                    else if (exc is DataException || exc is ArgumentException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, exc.Message);
+                    }
+                    else
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
+                    }
+                }
+            }
+            else
+            {
+                InstaMelodyLogger.Log("Received NULL UnpublishStation request", LogLevel.Trace);
+                response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.NullStations);
+            }
+
+            return response;
+        }
+
+        /// <summary>
         /// Deletes the station.
         /// </summary>
         /// <param name="request">The request.</param>
@@ -380,6 +502,76 @@ namespace InstaMelody.API.Controllers
         }
 
         /// <summary>
+        /// Gets the top stations.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route(Routes.RouteTop)]
+        public HttpResponseMessage GetTopStations()
+        {
+            HttpResponseMessage response;
+
+            var nvc = HttpUtility.ParseQueryString(Request.RequestUri.Query);
+
+            Guid _token;
+            var token = nvc["token"];
+            Guid.TryParse(token, out _token);
+
+            int _limit;
+            var limit = nvc["limit"];
+            int.TryParse(limit, out _limit);
+
+            if (_token.Equals(default(Guid)))
+            {
+                InstaMelodyLogger.Log("Received NULL GetTopStations request", LogLevel.Trace);
+                response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized,
+                    Exceptions.FailedAuthentication);
+            }
+            else
+            {
+                try
+                {
+                    // Log call
+                    InstaMelodyLogger.Log(
+                        string.Format("Get Top Stations - Token: {0}", _token),
+                        LogLevel.Trace);
+
+                    var bll = new StationBll();
+                    var result = (_limit > 0)
+                        ? bll.GetTopStations(_token, _limit)
+                        : bll.GetTopStations(_token);
+
+                    if (result == null)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.FailedGetStations);
+                    }
+                    else
+                    {
+                        response = this.Request.CreateResponse(HttpStatusCode.OK, result);
+                    }
+                }
+                catch (Exception exc)
+                {
+                    if (exc is UnauthorizedAccessException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, exc.Message);
+                    }
+                    else if (exc is DataException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, exc.Message);
+                    }
+                    else
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
+                    }
+
+                }
+            }
+
+            return response;
+        }
+
+        /// <summary>
         /// Gets all stations.
         /// </summary>
         /// <returns></returns>
@@ -507,6 +699,128 @@ namespace InstaMelody.API.Controllers
                     }
                     
                 }
+            }
+
+            return response;
+        }
+
+        /// <summary>
+        /// Likes the station.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route(Routes.RouteLike)]
+        public HttpResponseMessage LikeStation(ApiRequest request)
+        {
+            HttpResponseMessage response;
+
+            if (request != null && request.Station != null)
+            {
+                try
+                {
+                    var station = request.Station.Id.Equals(default(int))
+                        ? request.Station.Name
+                        : request.Station.Id.ToString();
+                    InstaMelodyLogger.Log(
+                        string.Format("Like Station - Station: {0}, Token: {1}",
+                            station, request.Token),
+                        LogLevel.Trace);
+
+                    var bll = new StationBll();
+
+                    var result = bll.LikeUnlikeStation(request.Station, request.Token, isLike: true);
+                    if (result == null)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest,
+                            string.Format(Exceptions.FailedLikeStation, station));
+                    }
+                    else
+                    {
+                        response = this.Request.CreateResponse(HttpStatusCode.OK, result);
+                    }
+                }
+                catch (Exception exc)
+                {
+                    if (exc is UnauthorizedAccessException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, exc.Message);
+                    }
+                    else if (exc is DataException || exc is ArgumentException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, exc.Message);
+                    }
+                    else
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
+                    }
+                }
+            }
+            else
+            {
+                InstaMelodyLogger.Log("Received NULL LikeStation request", LogLevel.Trace);
+                response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.NullStations);
+            }
+
+            return response;
+        }
+
+        /// <summary>
+        /// Unlikes the station.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route(Routes.RouteUnlike)]
+        public HttpResponseMessage UnlikeStation(ApiRequest request)
+        {
+            HttpResponseMessage response;
+
+            if (request != null && request.Station != null)
+            {
+                try
+                {
+                    var station = request.Station.Id.Equals(default(int))
+                        ? request.Station.Name
+                        : request.Station.Id.ToString();
+                    InstaMelodyLogger.Log(
+                        string.Format("Unlike Station - Station: {0}, Token: {1}",
+                            station, request.Token),
+                        LogLevel.Trace);
+
+                    var bll = new StationBll();
+
+                    var result = bll.LikeUnlikeStation(request.Station, request.Token);
+                    if (result == null)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest,
+                            string.Format(Exceptions.FailedUnlikeStation, station));
+                    }
+                    else
+                    {
+                        response = this.Request.CreateResponse(HttpStatusCode.OK, result);
+                    }
+                }
+                catch (Exception exc)
+                {
+                    if (exc is UnauthorizedAccessException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, exc.Message);
+                    }
+                    else if (exc is DataException || exc is ArgumentException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, exc.Message);
+                    }
+                    else
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
+                    }
+                }
+            }
+            else
+            {
+                InstaMelodyLogger.Log("Received NULL UnlikeStation request", LogLevel.Trace);
+                response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.NullStations);
             }
 
             return response;

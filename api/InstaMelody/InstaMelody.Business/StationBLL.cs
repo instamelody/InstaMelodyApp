@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using InstaMelody.Business.Properties;
 using InstaMelody.Data;
 using InstaMelody.Infrastructure;
 using InstaMelody.Model;
@@ -27,40 +28,9 @@ namespace InstaMelody.Business
         /// <exception cref="System.ArgumentException">A Station with the provided information already exists.</exception>
         public object CreateStation(Station station, Guid sessionToken, Image image = null, IList<Category> categories = null)
         {
-            var sessionUser = Utilities.GetUserBySession(sessionToken);
+            Utilities.GetUserBySession(sessionToken);
 
-            // check input for validation errors
-            var validationErrors = Model.Utilities.Validate(station).ToList();
-            if (validationErrors.Any())
-            {
-                var sb = new StringBuilder();
-                foreach (var error in validationErrors)
-                {
-                    sb.AppendFormat("{0}; ", error);
-                }
-                throw new ArgumentException(sb.ToString());
-            }
-
-            var clonedStation = station.Clone();
-
-            clonedStation.UserId = sessionUser.Id;
-
-            var foundStation = TryGetStation(clonedStation);
-            if (foundStation != null)
-            {
-                InstaMelodyLogger.Log(
-                    string.Format("A Station with the provided information already exists. Station Name: {0}, Station Owner Id: {1}",
-                        foundStation.Name, foundStation.UserId), LogLevel.Error);
-                throw new ArgumentException("A Station with the provided information already exists.");
-            }
-
-            clonedStation.DateCreated = DateTime.UtcNow;
-            clonedStation.DateModified = DateTime.UtcNow;
-            clonedStation.IsDeleted = false;
-
-            // create station
-            var dal = new Stations();
-            var createdStation = dal.CreateStation(clonedStation);
+            var createdStation = CreateStation(station);
 
             // add station to categories
             if (categories != null && categories.Any())
@@ -108,7 +78,7 @@ namespace InstaMelody.Business
                 throw new DataException("Could not find requested Station.");
             }
 
-            return GetStationWithImageAndCategories(foundStation);
+            return GetStationWithRelationshipProperties(foundStation);
         }
 
         /// <summary>
@@ -130,7 +100,7 @@ namespace InstaMelody.Business
                 throw new DataException("Cannot find requested Stations.");
             }
 
-            return stations.Select(GetStationWithImageAndCategories).ToList();
+            return stations.Select(GetStationWithRelationshipProperties).ToList();
         }
 
         /// <summary>
@@ -167,7 +137,7 @@ namespace InstaMelody.Business
                 throw new DataException("Cannot find requested Stations.");
             }
 
-            return stations.Select(GetStationWithImageAndCategories).ToList();
+            return stations.Select(GetStationWithRelationshipProperties).ToList();
         }
 
         /// <summary>
@@ -191,7 +161,7 @@ namespace InstaMelody.Business
                 throw new DataException("Cannot find requested Stations.");
             }
 
-            return stations.Select(GetStationWithImageAndCategories).ToList();
+            return stations.Select(GetStationWithRelationshipProperties).ToList();
         }
 
         /// <summary>
@@ -228,7 +198,7 @@ namespace InstaMelody.Business
                 throw new DataException("Cannot find requested Stations.");
             }
 
-            return stations.Select(GetStationWithImageAndCategories).ToList();
+            return stations.Select(GetStationWithRelationshipProperties).ToList();
         }
 
         /// <summary>
@@ -316,6 +286,100 @@ namespace InstaMelody.Business
                 Station = updatedStation,
                 FileUploadToken = addedImage.Item2
             };
+        }
+
+        /// <summary>
+        /// Publishes the station.
+        /// </summary>
+        /// <param name="station">The station.</param>
+        /// <param name="sessionToken">The session token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Data.DataException">Could not find requested Station.</exception>
+        /// <exception cref="System.UnauthorizedAccessException">Requestor does not have access to publish Station.</exception>
+        public Station PublishStation(Station station, Guid sessionToken)
+        {
+            var sessionUser = Utilities.GetUserBySession(sessionToken);
+
+            var foundStation = TryGetStation(station, sessionUser.Id);
+            if (foundStation == null)
+            {
+                InstaMelodyLogger.Log(
+                    string.Format("Could not find requested Station. Station Id: {0}, Station Name: {1}",
+                        station.Id, station.Name), LogLevel.Error);
+                throw new DataException("Could not find requested Station.");
+            }
+
+            // check if requestor is owner of station
+            if (!foundStation.UserId.Equals(sessionUser.Id))
+            {
+                InstaMelodyLogger.Log(
+                    string.Format("Requestor does not have access to publish Station. Station Id: {0}, Token: {1}",
+                        station.Id, sessionToken), LogLevel.Error);
+                throw new UnauthorizedAccessException("Requestor does not have access to publish Station.");
+            }
+
+            // TODO: check if requestor has subscription
+
+            // publish station
+            var dal = new Stations();
+            var publishedStation = dal.PublishStation(foundStation.Id);
+
+            return GetStationWithRelationshipProperties(publishedStation);
+        }
+
+        /// <summary>
+        /// Unpublishes the station.
+        /// </summary>
+        /// <param name="station">The station.</param>
+        /// <param name="sessionToken">The session token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Data.DataException">Could not find requested Station.</exception>
+        /// <exception cref="System.UnauthorizedAccessException">Requestor does not have access to unpublish Station.</exception>
+        public Station UnpublishStation(Station station, Guid sessionToken)
+        {
+            var sessionUser = Utilities.GetUserBySession(sessionToken);
+
+            var foundStation = TryGetStation(station, sessionUser.Id);
+            if (foundStation == null)
+            {
+                InstaMelodyLogger.Log(
+                    string.Format("Could not find requested Station. Station Id: {0}, Station Name: {1}",
+                        station.Id, station.Name), LogLevel.Error);
+                throw new DataException("Could not find requested Station.");
+            }
+
+            // check if requestor is owner of station
+            if (!foundStation.UserId.Equals(sessionUser.Id))
+            {
+                InstaMelodyLogger.Log(
+                    string.Format("Requestor does not have access to unpublish Station. Station Id: {0}, Token: {1}",
+                        station.Id, sessionToken), LogLevel.Error);
+                throw new UnauthorizedAccessException("Requestor does not have access to unpublish Station.");
+            }
+
+            // publish station
+            var dal = new Stations();
+            var unpublishedStation = dal.UnpublishStation(foundStation.Id);
+
+            return GetStationWithRelationshipProperties(unpublishedStation);
+        }
+
+        /// <summary>
+        /// Gets the top stations.
+        /// </summary>
+        /// <param name="sessionToken">The session token.</param>
+        /// <param name="limit">The limit.</param>
+        /// <returns></returns>
+        public IList<Station> GetTopStations(Guid sessionToken, int? limit = null)
+        {
+            Utilities.GetUserBySession(sessionToken);
+
+            var dal = new Stations();
+            var stations = limit != null 
+                ? dal.GetMostLikedStations((int)limit) 
+                : dal.GetMostLikedStations(Settings.Default.DefaultStationGetLimit);
+
+            return stations.Select(GetStationWithRelationshipProperties).ToList();
         }
 
         /// <summary>
@@ -419,6 +483,48 @@ namespace InstaMelody.Business
         }
 
         /// <summary>
+        /// Likes the unlike station.
+        /// </summary>
+        /// <param name="station">The station.</param>
+        /// <param name="sessionToken">The session token.</param>
+        /// <param name="isLike">if set to <c>true</c> [is like].</param>
+        /// <returns></returns>
+        /// <exception cref="System.Data.DataException">Could not find requested Station.</exception>
+        public Station LikeUnlikeStation(Station station, Guid sessionToken, bool isLike = false)
+        {
+            var sessionUser = Utilities.GetUserBySession(sessionToken);
+
+            var foundStation = TryGetStation(station, sessionUser.Id);
+            if (foundStation == null)
+            {
+                InstaMelodyLogger.Log(
+                    string.Format("Could not find requested Station. Station Id: {0}, Station Name: {1}",
+                        station.Id, station.Name), LogLevel.Error);
+                throw new DataException("Could not find requested Station.");
+            }
+
+            // check to see if user likes station
+            var dal = new Stations();
+            var isLiked = dal.IsStationLikedByUser(foundStation.Id, sessionUser.Id);
+
+            // like or unlike station
+            if ((isLike && isLiked) || (!isLike && !isLiked))
+            {
+                // return station
+                return GetStationWithRelationshipProperties(foundStation);
+            }
+
+            if (isLike)
+            {
+                var likedStation = dal.LikeStation(foundStation.Id, sessionUser.Id);
+                return GetStationWithRelationshipProperties(likedStation);
+            }
+
+            var unlikedStation = dal.UnlikeStation(foundStation.Id, sessionUser.Id);
+            return GetStationWithRelationshipProperties(unlikedStation);
+        }
+
+        /// <summary>
         /// Follows the station.
         /// </summary>
         /// <param name="station">The station.</param>
@@ -441,7 +547,7 @@ namespace InstaMelody.Business
             var dal = new Stations();
             dal.FollowStation(sessionUser.Id, foundStation.Id);
 
-            return GetStationWithImageAndCategories(foundStation);
+            return GetStationWithRelationshipProperties(foundStation);
         }
 
         /// <summary>
@@ -467,7 +573,7 @@ namespace InstaMelody.Business
             var dal = new Stations();
             dal.UnfollowStation(sessionUser.Id, foundStation.Id);
 
-            return GetStationWithImageAndCategories(foundStation);
+            return GetStationWithRelationshipProperties(foundStation);
         }
 
         /// <summary>
@@ -787,12 +893,16 @@ namespace InstaMelody.Business
         /// </summary>
         /// <param name="station">The station.</param>
         /// <returns></returns>
-        private Station GetStationWithImageAndCategories(Station station)
+        private Station GetStationWithRelationshipProperties(Station station)
         {
-            var stationWithImage = GetStationWithImage(station);
-            stationWithImage.Categories = GetAllStationCategories(station.Id);
+            var foundStation = GetStationWithImage(station);
+            foundStation.Categories = GetAllStationCategories(station.Id);
 
-            return stationWithImage;
+            if (!station.Likes.Equals(int.MinValue)) return foundStation;
+
+            var dal = new Stations();
+            foundStation.Likes = dal.GetLikesCountForStation(foundStation.Id);
+            return foundStation;
         }
 
         /// <summary>
@@ -1171,5 +1281,51 @@ namespace InstaMelody.Business
         }
 
         #endregion Private Methods
+
+        #region Internal Methods
+
+        /// <summary>
+        /// Creates the station.
+        /// </summary>
+        /// <param name="station">The station.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException">A Station with the provided information already exists.</exception>
+        internal Station CreateStation(Station station)
+        {
+            // check input for validation errors
+            var validationErrors = Model.Utilities.Validate(station).ToList();
+            if (validationErrors.Any())
+            {
+                var sb = new StringBuilder();
+                foreach (var error in validationErrors)
+                {
+                    sb.AppendFormat("{0}; ", error);
+                }
+                throw new ArgumentException(sb.ToString());
+            }
+
+            var clonedStation = station.Clone();
+
+            var foundStation = TryGetStation(clonedStation);
+            if (foundStation != null)
+            {
+                InstaMelodyLogger.Log(
+                    string.Format("A Station with the provided information already exists. Station Name: {0}, Station Owner Id: {1}",
+                        foundStation.Name, foundStation.UserId), LogLevel.Error);
+                throw new ArgumentException("A Station with the provided information already exists.");
+            }
+
+            clonedStation.DateCreated = DateTime.UtcNow;
+            clonedStation.DateModified = DateTime.UtcNow;
+            clonedStation.IsDeleted = false;
+
+            // create station
+            var dal = new Stations();
+            var createdStation = dal.CreateStation(clonedStation);
+
+            return createdStation;
+        }
+
+        #endregion Internal Methods
     }
 }
