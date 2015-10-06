@@ -521,6 +521,10 @@ namespace InstaMelody.API.Controllers
             var limit = nvc["limit"];
             int.TryParse(limit, out _limit);
 
+            int _catId;
+            var catId = nvc["categoryId"];
+            int.TryParse(catId, out _catId);
+
             if (_token.Equals(default(Guid)))
             {
                 InstaMelodyLogger.Log("Received NULL GetTopStations request", LogLevel.Trace);
@@ -537,9 +541,7 @@ namespace InstaMelody.API.Controllers
                         LogLevel.Trace);
 
                     var bll = new StationBll();
-                    var result = (_limit > 0)
-                        ? bll.GetTopStations(_token, _limit)
-                        : bll.GetTopStations(_token);
+                    var result = bll.GetTopStations(_token, _catId, _limit);
 
                     if (result == null)
                     {

@@ -65,7 +65,7 @@
     <Setting Name="APNSProdCertPassword" Type="System.String" Scope="Application">
       <Value Profile="(Default)">instamelody</Value>
     </Setting>
-    <Setting Name="DefaultStationGetLimit" Type="System.Int32" Scope="User">
+    <Setting Name="DefaultStationGetLimit" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">50</Value>
     </Setting>
   </Settings>

@@ -212,15 +212,12 @@ namespace InstaMelody.Business.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("50")]
         public int DefaultStationGetLimit {
             get {
                 return ((int)(this["DefaultStationGetLimit"]));
-            }
-            set {
-                this["DefaultStationGetLimit"] = value;
             }
         }
     }

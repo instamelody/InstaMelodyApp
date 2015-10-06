@@ -260,7 +260,7 @@ namespace InstaMelody.Business
                     Name = string.Format("{0}'s Station", addedUser.DisplayName ?? addedUser.FirstName)
                 }); 
 
-            SendNewUserEmail(addedUser);
+            //SendNewUserEmail(addedUser);
 
             return GetUserWithImage(addedUser);
         }

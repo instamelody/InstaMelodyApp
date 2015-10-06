@@ -1,0 +1,19 @@
+// REQUEST - POST https://api.instamelody.com/v1.0/Station/Unlike
+{	"Token": "bc0c8b2d-8342-4ba5-b135-6b5e07cb0669",	"Station":	{	    "Id": 7	}}
+
+// RESPONSE - HTTP/1.1 200 OK
+{
+  "Id": 7,
+  "UserId": "00e9a9dc-39d1-4019-8ad8-4f56100bef18",
+  "StationImageId": null,
+  "Name": "jeff4test's Station",
+  "IsPublished": true,
+  "DateCreated": "2015-10-06T17:42:11.223",
+  "DateModified": "2015-10-06T17:42:11.223",
+  "IsDeleted": false,
+  "Image": null,
+  "Categories": null,
+  "Followers": null,
+  "Messages": null,
+  "Likes": 0
+}

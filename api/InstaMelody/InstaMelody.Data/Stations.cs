@@ -517,7 +517,7 @@ namespace InstaMelody.Data
         public Station LikeStation(int stationId, Guid userId)
         {
             var query = @"INSERT INTO dbo.StationLikes (StationId, UserId, DateCreated)
-                        VALUES (@StationId, @CategoryId, @DateCreated)";
+                        VALUES (@StationId, @UserId, @DateCreated)";
 
             var parameters = new List<SqlParameter>
             {
@@ -709,11 +709,14 @@ namespace InstaMelody.Data
         /// <returns></returns>
         public IList<Station> GetMostLikedStations(int limit = int.MaxValue)
         {
-            var query = @"SELECT TOP(@Limit) s.*, COUNT(l.StationId) Likes
-                        FROM StationLikes l
-                        RIGHT JOIN Stations s
+            var query = @"SELECT TOP(@Limit) s.*, 
+                            COUNT(CASE l.IsDeleted 
+                                    WHEN 0 THEN 1 
+                                    ELSE NULL END) Likes
+                        FROM  Stations s
+                        LEFT JOIN StationLikes l
                         ON s.Id = l.StationId
-                        WHERE s.IsDeleted = 0 AND s.IsPublished = 1 AND (l.IsDeleted = 0 OR l.IsDeleted IS NULL)
+                        WHERE s.IsDeleted = 0 AND s.IsPublished = 1
                         GROUP BY l.StationId, s.Id, s.UserId, s.StationImageId, 
                             s.DateCreated, s.DateModified, s.IsPublished, s.IsDeleted, s.Name
                         ORDER BY Likes DESC, s.Name";
@@ -724,6 +727,49 @@ namespace InstaMelody.Data
                 {
                     ParameterName = "Limit",
                     Value = limit,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                }
+            };
+
+            return GetRecordSet<Station>(query, parameters.ToArray());
+        }
+
+        /// <summary>
+        /// Gets the most liked stations by category.
+        /// </summary>
+        /// <param name="categoryId">The category identifier.</param>
+        /// <param name="limit">The limit.</param>
+        /// <returns></returns>
+        public IList<Station> GetMostLikedStationsByCategory(int categoryId, int limit = int.MaxValue)
+        {
+            var query = @"SELECT TOP(@Limit) s.*, 
+                            COUNT(CASE l.IsDeleted 
+                                    WHEN 0 THEN 1 
+                                    ELSE NULL END) Likes
+                        FROM  Stations s
+                        FULL JOIN StationCategories c
+                        ON s.Id = c.StationId
+                        LEFT JOIN StationLikes l
+                        ON s.Id = l.StationId
+                        WHERE s.IsDeleted = 0 AND s.IsPublished = 1 AND  c.CategoryId = @CategoryId
+                        GROUP BY l.StationId, s.Id, s.UserId, s.StationImageId, 
+                            s.DateCreated, s.DateModified, s.IsPublished, s.IsDeleted, s.Name
+                        ORDER BY Likes DESC, s.Name";
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "Limit",
+                    Value = limit,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "CategoryId",
+                    Value = categoryId,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
                 }

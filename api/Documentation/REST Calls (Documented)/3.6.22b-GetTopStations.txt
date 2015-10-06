@@ -1,0 +1,37 @@
+// EXAMPLE B - Get Top Liked Stations With Defined Limit
+
+// REQUEST - GET https://api.instamelody.com/v1.0/Station/Top?token=bc0c8b2d-8342-4ba5-b135-6b5e07cb0669&limit=2
+
+// RESPONSE - HTTP/1.1 200 OK
+[
+  {
+    "Id": 1,
+    "UserId": "19e58bf2-ed1e-49af-bb4e-4acadeeed51e",
+    "StationImageId": null,
+    "Name": "Test 1",
+    "IsPublished": true,
+    "DateCreated": "2015-10-05T00:00:00",
+    "DateModified": "2015-10-05T00:00:00",
+    "IsDeleted": false,
+    "Image": null,
+    "Categories": null,
+    "Followers": null,
+    "Messages": null,
+    "Likes": 9
+  },
+  {
+    "Id": 7,
+    "UserId": "00e9a9dc-39d1-4019-8ad8-4f56100bef18",
+    "StationImageId": null,
+    "Name": "jeff4test's Station",
+    "IsPublished": true,
+    "DateCreated": "2015-10-06T17:42:11.223",
+    "DateModified": "2015-10-06T17:42:11.223",
+    "IsDeleted": false,
+    "Image": null,
+    "Categories": null,
+    "Followers": null,
+    "Messages": null,
+    "Likes": 1
+  }
+]

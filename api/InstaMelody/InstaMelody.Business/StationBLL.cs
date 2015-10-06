@@ -368,15 +368,25 @@ namespace InstaMelody.Business
         /// Gets the top stations.
         /// </summary>
         /// <param name="sessionToken">The session token.</param>
+        /// <param name="categoryId">The category identifier.</param>
         /// <param name="limit">The limit.</param>
         /// <returns></returns>
-        public IList<Station> GetTopStations(Guid sessionToken, int? limit = null)
+        public IList<Station> GetTopStations(Guid sessionToken, int categoryId = 0, int limit = 0)
         {
             Utilities.GetUserBySession(sessionToken);
 
             var dal = new Stations();
-            var stations = limit != null 
-                ? dal.GetMostLikedStations((int)limit) 
+            if (categoryId > 0)
+            {
+                var catStations = (limit.Equals(0))
+                    ? dal.GetMostLikedStationsByCategory(categoryId, limit)
+                    : dal.GetMostLikedStationsByCategory(categoryId, Settings.Default.DefaultStationGetLimit);
+
+                return catStations.Select(GetStationWithRelationshipProperties).ToList();
+            }
+
+            var stations = (limit.Equals(0))
+                ? dal.GetMostLikedStations(limit) 
                 : dal.GetMostLikedStations(Settings.Default.DefaultStationGetLimit);
 
             return stations.Select(GetStationWithRelationshipProperties).ToList();
@@ -503,6 +513,14 @@ namespace InstaMelody.Business
                 throw new DataException("Could not find requested Station.");
             }
 
+            if (!foundStation.IsPublished)
+            {
+                InstaMelodyLogger.Log(
+                    string.Format("Can not like a Station that is not published. Station Id: {0}, Station Name: {1}",
+                        station.Id, station.Name), LogLevel.Error);
+                throw new DataException("Can not like a Station that is not published.");
+            }
+
             // check to see if user likes station
             var dal = new Stations();
             var isLiked = dal.IsStationLikedByUser(foundStation.Id, sessionUser.Id);
@@ -542,6 +560,14 @@ namespace InstaMelody.Business
                     string.Format("Station not found. Station Id: {0}, Name: {1}",
                         station.Id, station.Name), LogLevel.Error);
                 throw new ArgumentException("Station not found.");
+            }
+
+            if (!foundStation.IsPublished)
+            {
+                InstaMelodyLogger.Log(
+                    string.Format("Can not follow a Station that is not published. Station Id: {0}, Station Name: {1}",
+                        station.Id, station.Name), LogLevel.Error);
+                throw new DataException("Can not follow a Station that is not published.");
             }
 
             var dal = new Stations();
@@ -898,7 +924,7 @@ namespace InstaMelody.Business
             var foundStation = GetStationWithImage(station);
             foundStation.Categories = GetAllStationCategories(station.Id);
 
-            if (!station.Likes.Equals(int.MinValue)) return foundStation;
+            if (!station.Likes.Equals(0)) return foundStation;
 
             var dal = new Stations();
             foundStation.Likes = dal.GetLikesCountForStation(foundStation.Id);
