@@ -251,7 +251,16 @@ namespace InstaMelody.Business
             // remove sensitive information
             addedUser = addedUser.StripSensitiveInfo();
 
-            SendNewUserEmail(addedUser);
+            // Create User Station
+            var stationBll = new StationBll();
+            stationBll.CreateStation(
+                new Station
+                {
+                    UserId = addedUser.Id,
+                    Name = string.Format("{0}'s Station", addedUser.DisplayName ?? addedUser.FirstName)
+                }); 
+
+            //SendNewUserEmail(addedUser);
 
             return GetUserWithImage(addedUser);
         }

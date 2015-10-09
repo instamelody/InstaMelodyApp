@@ -237,6 +237,31 @@
         public const string RouteUnfollow = "Unfollow";
 
         /// <summary>
+        /// The route like
+        /// </summary>
+        public const string RouteLike = "Like";
+
+        /// <summary>
+        /// The route unlike
+        /// </summary>
+        public const string RouteUnlike = "Unlike";
+
+        /// <summary>
+        /// The route publish
+        /// </summary>
+        public const string RoutePublish = "Publish";
+
+        /// <summary>
+        /// The route unpublish
+        /// </summary>
+        public const string RouteUnpublish = "Unpublish";
+
+        /// <summary>
+        /// The route top
+        /// </summary>
+        public const string RouteTop = "Top";
+
+        /// <summary>
         /// The route followers
         /// </summary>
         public const string RouteFollowers = "Followers";

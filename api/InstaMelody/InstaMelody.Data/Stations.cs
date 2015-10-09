@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using InstaMelody.Model;
 
 namespace InstaMelody.Data
@@ -69,10 +70,16 @@ namespace InstaMelody.Data
         /// Gets all stations.
         /// </summary>
         /// <returns></returns>
-        public IList<Station> GetAllStations()
+        public IList<Station> GetAllStations(bool includeUnpublished = false)
         {
             var query = @"SELECT * FROM dbo.Stations
+                        WHERE IsDeleted = 0 AND IsPublished = 1";
+
+            if (includeUnpublished)
+            {
+                query = @"SELECT * FROM dbo.Stations
                         WHERE IsDeleted = 0";
+            }
 
             return GetRecordSet<Station>(query);
         }
@@ -99,6 +106,60 @@ namespace InstaMelody.Data
             };
 
             return GetRecord<Station>(query, parameters.ToArray());
+        }
+
+        /// <summary>
+        /// Publishes the station.
+        /// </summary>
+        /// <param name="stationId">The station identifier.</param>
+        /// <returns></returns>
+        public Station PublishStation(int stationId)
+        {
+            var query = @"UPDATE dbo.Stations
+                        SET IsPublished = 1
+                        WHERE IsDeleted = 0 AND Id = @StationId";
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "StationId",
+                    Value = stationId,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                }
+            };
+
+            ExecuteNonQuery(query, parameters.ToArray());
+
+            return GetStationById(stationId);
+        }
+
+        /// <summary>
+        /// Unpublishes the station.
+        /// </summary>
+        /// <param name="stationId">The station identifier.</param>
+        /// <returns></returns>
+        public Station UnpublishStation(int stationId)
+        {
+            var query = @"UPDATE dbo.Stations
+                        SET IsPublished = 0
+                        WHERE IsDeleted = 0 AND Id = @StationId";
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "StationId",
+                    Value = stationId,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                }
+            };
+
+            ExecuteNonQuery(query, parameters.ToArray());
+
+            return GetStationById(stationId);
         }
 
         /// <summary>
@@ -444,6 +505,280 @@ namespace InstaMelody.Data
         }
 
         #endregion Station Categories
+
+        #region Station Likes
+
+        /// <summary>
+        /// Likes the station.
+        /// </summary>
+        /// <param name="stationId">The station identifier.</param>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns></returns>
+        public Station LikeStation(int stationId, Guid userId)
+        {
+            var query = @"INSERT INTO dbo.StationLikes (StationId, UserId, DateCreated)
+                        VALUES (@StationId, @UserId, @DateCreated)";
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "StationId",
+                    Value = stationId,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "UserId",
+                    Value = userId,
+                    SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "DateCreated",
+                    Value = DateTime.UtcNow,
+                    SqlDbType = SqlDbType.DateTime,
+                    Direction = ParameterDirection.Input
+                }
+            };
+
+            ExecuteNonQuery(query, parameters.ToArray());
+
+            return GetStationById(stationId);
+        }
+
+        /// <summary>
+        /// Unlikes the station.
+        /// </summary>
+        /// <param name="stationId">The station identifier.</param>
+        /// <param name="userId">The user identifier.</param>
+        public Station UnlikeStation(int stationId, Guid userId)
+        {
+            var query = @"UPDATE dbo.StationLikes
+                        SET IsDeleted = 1
+                        WHERE StationId = @StationId AND UserId = @UserId";
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "StationId",
+                    Value = stationId,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "UserId",
+                    Value = userId,
+                    SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                }
+            };
+
+            ExecuteNonQuery(query, parameters.ToArray());
+
+            return GetStationById(stationId);
+        }
+
+        /// <summary>
+        /// Determines whether [is station liked by user] [the specified station identifier].
+        /// </summary>
+        /// <param name="stationId">The station identifier.</param>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Data.DataException">Failed to retrieve likes for Station and User.</exception>
+        public bool IsStationLikedByUser(int stationId, Guid userId)
+        {
+            var query = @"SELECT COUNT(*) FROM dbo.StationLikes
+                        WHERE StationId = @StationId AND UserId = @UserId AND IsDeleted = 0";
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "StationId",
+                    Value = stationId,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "UserId",
+                    Value = userId,
+                    SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                }
+            };
+
+            var obj = ExecuteScalar(query, parameters.ToArray());
+            if (!Convert.IsDBNull(obj))
+            {
+                return Convert.ToInt32(obj) > 0;
+            }
+            throw new DataException("Failed to retrieve likes for Station and User.");
+        }
+
+        /// <summary>
+        /// Gets the likes by station.
+        /// </summary>
+        /// <param name="stationId">The station identifier.</param>
+        /// <returns></returns>
+        public IList<StationLike> GetLikesByStation(int stationId)
+        {
+            var query = @"SELECT * FROM dbo.StationLikes
+                        WHERE StationId = @StationId AND IsDeleted = 0";
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "StationId",
+                    Value = stationId,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                }
+            };
+
+            return GetRecordSet<StationLike>(query, parameters.ToArray());
+        }
+
+        /// <summary>
+        /// Gets the likes count for station.
+        /// </summary>
+        /// <param name="stationId">The station identifier.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Data.DataException"></exception>
+        public int GetLikesCountForStation(int stationId)
+        {
+            var query = @"SELECT COUNT(Id) FROM dbo.StationLikes
+                        WHERE StationId = @StationId AND IsDeleted = 0";
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "StationId",
+                    Value = stationId,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                }
+            };
+
+            var obj = ExecuteScalar(query, parameters.ToArray());
+            if (!Convert.IsDBNull(obj))
+            {
+                return Convert.ToInt32(obj);
+            }
+            throw new DataException(string.Format("Failed to get a count of likes for Station Id: {0}.", stationId));
+        }
+
+        /// <summary>
+        /// Gets the liked stations by user.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns></returns>
+        public IList<Station> GetLikedStationsByUser(Guid userId)
+        {
+            var query = @"SELECT s.* FROM Stations s
+                        INNER JOIN StationLikes l
+                        ON s.Id = l.StationId
+                        WHERE l.UserId = @UserId 
+                        AND l.IsDeleted = 0 AND s.IsDeleted = 0";
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "UserId",
+                    Value = userId,
+                    SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                }
+            };
+
+            return GetRecordSet<Station>(query, parameters.ToArray());
+        }
+
+        /// <summary>
+        /// Gets the most liked stations.
+        /// </summary>
+        /// <param name="limit">The limit.</param>
+        /// <returns></returns>
+        public IList<Station> GetMostLikedStations(int limit = int.MaxValue)
+        {
+            var query = @"SELECT TOP(@Limit) s.*, 
+                            COUNT(CASE l.IsDeleted 
+                                    WHEN 0 THEN 1 
+                                    ELSE NULL END) Likes
+                        FROM  Stations s
+                        LEFT JOIN StationLikes l
+                        ON s.Id = l.StationId
+                        WHERE s.IsDeleted = 0 AND s.IsPublished = 1
+                        GROUP BY l.StationId, s.Id, s.UserId, s.StationImageId, 
+                            s.DateCreated, s.DateModified, s.IsPublished, s.IsDeleted, s.Name
+                        ORDER BY Likes DESC, s.Name";
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "Limit",
+                    Value = limit,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                }
+            };
+
+            return GetRecordSet<Station>(query, parameters.ToArray());
+        }
+
+        /// <summary>
+        /// Gets the most liked stations by category.
+        /// </summary>
+        /// <param name="categoryId">The category identifier.</param>
+        /// <param name="limit">The limit.</param>
+        /// <returns></returns>
+        public IList<Station> GetMostLikedStationsByCategory(int categoryId, int limit = int.MaxValue)
+        {
+            var query = @"SELECT TOP(@Limit) s.*, 
+                            COUNT(CASE l.IsDeleted 
+                                    WHEN 0 THEN 1 
+                                    ELSE NULL END) Likes
+                        FROM  Stations s
+                        FULL JOIN StationCategories c
+                        ON s.Id = c.StationId
+                        LEFT JOIN StationLikes l
+                        ON s.Id = l.StationId
+                        WHERE s.IsDeleted = 0 AND s.IsPublished = 1 AND  c.CategoryId = @CategoryId
+                        GROUP BY l.StationId, s.Id, s.UserId, s.StationImageId, 
+                            s.DateCreated, s.DateModified, s.IsPublished, s.IsDeleted, s.Name
+                        ORDER BY Likes DESC, s.Name";
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "Limit",
+                    Value = limit,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "CategoryId",
+                    Value = categoryId,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                }
+            };
+
+            return GetRecordSet<Station>(query, parameters.ToArray());
+        }
+
+        #endregion Station Likes
 
         #region Station Followers
 

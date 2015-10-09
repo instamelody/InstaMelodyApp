@@ -17,6 +17,8 @@ namespace InstaMelody.Model
         [MinLength(5, ErrorMessage = "Name must be at least 5 characters")]
         public string Name { get; set; }
 
+        public bool IsPublished { get; set; }
+
         public DateTime DateCreated { get; set; }
 
         public DateTime DateModified { get; set; }
@@ -32,6 +34,8 @@ namespace InstaMelody.Model
         public IList<User> Followers { get; set; }
 
         public IList<StationMessage> Messages { get; set; }
+
+        public int Likes { get; set; }
 
         #endregion Relationship Properties
 

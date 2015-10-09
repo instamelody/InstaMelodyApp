@@ -153,6 +153,16 @@
         public const string FailedRemoveCategories = "Failed to remove Categories from Station: {0}.";
 
         /// <summary>
+        /// The failed publish station
+        /// </summary>
+        public const string FailedPublishStation = "Failed to publish Station: {0}.";
+
+        /// <summary>
+        /// The failed unpublish station
+        /// </summary>
+        public const string FailedUnpublishStation = "Failed to unpublish Station: {0}.";
+
+        /// <summary>
         /// The failed follow station
         /// </summary>
         public const string FailedFollowStation = "Failed to follow Station: {0}.";
@@ -163,9 +173,24 @@
         public const string FailedUnfollowStation = "Failed to un-follow Station: {0}.";
 
         /// <summary>
+        /// The failed like station
+        /// </summary>
+        public const string FailedLikeStation = "Failed to like Station: {0}.";
+
+        /// <summary>
+        /// The failed unlike station
+        /// </summary>
+        public const string FailedUnlikeStation = "Failed to unlike Station: {0}.";
+
+        /// <summary>
         /// The failed get stations
         /// </summary>
-        public const string FailedGetStations = "Failed to get stations.";
+        public const string FailedGetStations = "Failed to get Stations.";
+
+        /// <summary>
+        /// The failed get top stations
+        /// </summary>
+        public const string FailedGetTopStations = "Failed to get the top Stations.";
 
         /// <summary>
         /// The failed get station followers
