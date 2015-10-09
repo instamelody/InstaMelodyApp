@@ -45,6 +45,7 @@
 		879CCC541B81D2870031FDCC /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 879CCC521B81D2870031FDCC /* Model.xcdatamodeld */; };
 		879CCC5A1B81D4860031FDCC /* Friend.m in Sources */ = {isa = PBXBuildFile; fileRef = 879CCC591B81D4860031FDCC /* Friend.m */; };
 		879CCC5D1B81D6460031FDCC /* DataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 879CCC5C1B81D6460031FDCC /* DataManager.m */; };
+		87A8A63E1BC83A19009AF895 /* century-gothic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 87A8A63D1BC83A19009AF895 /* century-gothic.ttf */; settings = {ASSET_TAGS = (); }; };
 		87AF84751BB6B17500FCD3E1 /* VolumeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87AF84741BB6B17500FCD3E1 /* VolumeViewController.m */; };
 		87C84E9C1BAC848400A99239 /* UserMelody.m in Sources */ = {isa = PBXBuildFile; fileRef = 87C84E991BAC848400A99239 /* UserMelody.m */; };
 		87C84E9D1BAC848400A99239 /* UserMelodyPart.m in Sources */ = {isa = PBXBuildFile; fileRef = 87C84E9B1BAC848400A99239 /* UserMelodyPart.m */; };
@@ -145,6 +146,7 @@
 		879CCC591B81D4860031FDCC /* Friend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Friend.m; sourceTree = "<group>"; };
 		879CCC5B1B81D6460031FDCC /* DataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataManager.h; sourceTree = "<group>"; };
 		879CCC5C1B81D6460031FDCC /* DataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataManager.m; sourceTree = "<group>"; };
+		87A8A63D1BC83A19009AF895 /* century-gothic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "century-gothic.ttf"; sourceTree = "<group>"; };
 		87AF84731BB6B17500FCD3E1 /* VolumeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VolumeViewController.h; sourceTree = "<group>"; };
 		87AF84741BB6B17500FCD3E1 /* VolumeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VolumeViewController.m; sourceTree = "<group>"; };
 		87C84E981BAC848400A99239 /* UserMelody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserMelody.h; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 		8707F9A61B446F57004B4C20 = {
 			isa = PBXGroup;
 			children = (
+				87A8A63D1BC83A19009AF895 /* century-gothic.ttf */,
 				875C19FD1BB5F3B3007B14DE /* FontAwesome.ttf */,
 				8707F9B11B446F57004B4C20 /* InstaMelody */,
 				8707F9CE1B446F57004B4C20 /* InstaMelodyTests */,
@@ -524,6 +527,7 @@
 				8707F9C11B446F57004B4C20 /* Main.storyboard in Resources */,
 				8707F9C61B446F57004B4C20 /* LaunchScreen.xib in Resources */,
 				8707F9C31B446F57004B4C20 /* Images.xcassets in Resources */,
+				87A8A63E1BC83A19009AF895 /* century-gothic.ttf in Resources */,
 				875C19FE1BB5F3B3007B14DE /* FontAwesome.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
