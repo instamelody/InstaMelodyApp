@@ -2794,7 +2794,7 @@
         <image name="library" width="70" height="70"/>
         <image name="live" width="96" height="40"/>
         <image name="messenger" width="70" height="70"/>
-        <image name="mic" width="104" height="104"/>
+        <image name="mic" width="107" height="108"/>
         <image name="placeholder" width="164" height="156"/>
         <image name="play" width="89" height="89"/>
         <image name="profileBack" width="237" height="98"/>

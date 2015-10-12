@@ -413,6 +413,8 @@
             [self.bgPlayer2 stop];
         }
         
+        [self.recordButton setImage:[UIImage imageNamed:@"redo"] forState:UIControlStateNormal];
+        
         [self.timer invalidate];
         
         self.playButton.hidden = NO;
@@ -478,6 +480,8 @@
                 
                 self.startTime = [NSDate date];
                 self.timer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(updateRecordProgress) userInfo:nil repeats:YES];
+                
+                [self.recordButton setImage:[UIImage imageNamed:@"stop"] forState:UIControlStateNormal];
                 
                 /*
                 if (self.selectedMelody != nil) {
