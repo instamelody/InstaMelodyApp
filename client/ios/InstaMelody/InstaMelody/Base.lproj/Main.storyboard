@@ -2743,7 +2743,7 @@
     <resources>
         <image name="InstaMelodyCircle" width="147" height="148"/>
         <image name="Profile" width="208" height="208"/>
-        <image name="blurBlue" width="640" height="1136"/>
+        <image name="blurBlue" width="557" height="991"/>
         <image name="blurGreen" width="557" height="991"/>
         <image name="blurRed" width="373" height="664"/>
         <image name="edit" width="43" height="43"/>

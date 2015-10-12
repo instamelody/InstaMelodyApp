@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "Friend.h"
+#import "AwesomeMenu.h"
+#import "LoopViewController.h"
 
-@interface StationViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate>
+@interface StationViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, AwesomeMenuDelegate>
 
 @property IBOutlet UIView *profileView;
 @property IBOutlet UIImageView *profileImageView;
