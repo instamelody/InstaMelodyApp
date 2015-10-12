@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "messenger.png",
+      "filename" : "following.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "messenger2.png",
+      "filename" : "following2.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "messenger3.png",
+      "filename" : "following3.png",
       "scale" : "3x"
     }
   ],
