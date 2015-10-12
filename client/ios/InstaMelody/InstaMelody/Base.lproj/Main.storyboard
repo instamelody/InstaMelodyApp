@@ -51,6 +51,15 @@
             <string>CenturyGothic</string>
             <string>CenturyGothic</string>
             <string>CenturyGothic</string>
+            <string>CenturyGothic</string>
+            <string>CenturyGothic</string>
+            <string>CenturyGothic</string>
+            <string>CenturyGothic</string>
+            <string>CenturyGothic</string>
+            <string>CenturyGothic</string>
+            <string>CenturyGothic</string>
+            <string>CenturyGothic</string>
+            <string>CenturyGothic</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -663,7 +672,7 @@
                                     <action selector="share:" destination="zFq-Vd-UtH" eventType="touchUpInside" id="6Kf-Cl-KeZ"/>
                                 </connections>
                             </button>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="112" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="bUH-Oi-60g">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="112" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="bUH-Oi-60g">
                                 <rect key="frame" x="140" y="40" width="320" height="352"/>
                                 <animations/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -1258,9 +1267,13 @@
                                             <constraint firstAttribute="height" constant="90" id="c3K-9e-vsX"/>
                                             <constraint firstAttribute="width" constant="90" id="d0v-Ke-Ts2"/>
                                         </constraints>
-                                        <state key="normal" title="Store" image="store">
+                                        <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="18"/>
+                                        <state key="normal" title="Feed" image="feed">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <segue destination="M3b-v7-3nS" kind="show" id="J9S-om-BA1"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3ZS-kI-L21">
                                         <rect key="frame" x="94" y="94" width="90" height="90"/>
@@ -1269,6 +1282,7 @@
                                             <constraint firstAttribute="width" constant="90" id="1Al-zm-fUk"/>
                                             <constraint firstAttribute="height" constant="90" id="pnK-j1-rUP"/>
                                         </constraints>
+                                        <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="18"/>
                                         <state key="normal" title="Store" image="store">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -1280,9 +1294,13 @@
                                             <constraint firstAttribute="height" constant="90" id="NqY-Pb-gqg"/>
                                             <constraint firstAttribute="width" constant="90" id="Umj-nF-QWy"/>
                                         </constraints>
-                                        <state key="normal" title="Store" image="store">
+                                        <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="18"/>
+                                        <state key="normal" title="Library" image="library">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <segue destination="dNr-Qm-aPx" kind="show" id="81c-TI-uh0"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JCZ-pk-VCL">
                                         <rect key="frame" x="187" y="187" width="90" height="90"/>
@@ -1291,9 +1309,13 @@
                                             <constraint firstAttribute="width" constant="90" id="2Xq-Uj-7x2"/>
                                             <constraint firstAttribute="height" constant="90" id="ysP-6i-h5W"/>
                                         </constraints>
-                                        <state key="normal" title="Store" image="store">
+                                        <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="18"/>
+                                        <state key="normal" title="Following" image="following">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <segue destination="vYc-MT-dDl" kind="show" id="tGu-ZW-2xd"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A6k-Z0-ZsI">
                                         <rect key="frame" x="0.0" y="0.0" width="90" height="90"/>
@@ -1302,9 +1324,13 @@
                                             <constraint firstAttribute="width" constant="90" id="PaI-aQ-mTa"/>
                                             <constraint firstAttribute="height" constant="90" id="rcs-E2-005"/>
                                         </constraints>
-                                        <state key="normal" title="Store" image="store">
+                                        <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="18"/>
+                                        <state key="normal" title="Station" image="station">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <segue destination="x3v-Jb-UfZ" kind="show" id="uus-fc-Z9E"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wz6-Qe-z0E">
                                         <rect key="frame" x="0.0" y="94" width="90" height="90"/>
@@ -1313,9 +1339,13 @@
                                             <constraint firstAttribute="height" constant="90" id="IZE-tq-fcV"/>
                                             <constraint firstAttribute="width" constant="90" id="nBy-aP-QSJ"/>
                                         </constraints>
-                                        <state key="normal" title="Store" image="store">
+                                        <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="18"/>
+                                        <state key="normal" title="Studio" image="studio">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <segue destination="zFq-Vd-UtH" kind="show" id="pIZ-0E-tZg"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qlx-qf-C6X">
                                         <rect key="frame" x="0.0" y="187" width="90" height="90"/>
@@ -1324,7 +1354,8 @@
                                             <constraint firstAttribute="width" constant="90" id="YmR-Tk-7qs"/>
                                             <constraint firstAttribute="height" constant="90" id="pJP-Sl-D5B"/>
                                         </constraints>
-                                        <state key="normal" title="Store" image="store">
+                                        <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="18"/>
+                                        <state key="normal" title="Showcase" image="showcase">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                     </button>
@@ -1335,9 +1366,13 @@
                                             <constraint firstAttribute="height" constant="90" id="HiO-Fr-ouc"/>
                                             <constraint firstAttribute="width" constant="90" id="dnJ-Ka-vgw"/>
                                         </constraints>
-                                        <state key="normal" title="Store" image="store">
+                                        <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="16"/>
+                                        <state key="normal" title="Messenger" image="messenger">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="showChats:" destination="xSn-CF-ntb" eventType="touchUpInside" id="GMa-vr-Ldt"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9oK-U5-ZBm">
                                         <rect key="frame" x="94" y="187" width="90" height="90"/>
@@ -1346,9 +1381,13 @@
                                             <constraint firstAttribute="height" constant="90" id="7mK-Yl-dlN"/>
                                             <constraint firstAttribute="width" constant="90" id="T23-zx-3de"/>
                                         </constraints>
-                                        <state key="normal" title="Store" image="store">
+                                        <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="18"/>
+                                        <state key="normal" title="Friends" image="friends">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <segue destination="vYc-MT-dDl" kind="show" id="QdI-fc-A95"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <animations/>
@@ -1409,9 +1448,18 @@
                     <navigationItem key="navigationItem" title="Profile" id="anY-73-bnU"/>
                     <connections>
                         <outlet property="displayNameLabel" destination="M5O-ye-LAW" id="T5t-B0-bas"/>
+                        <outlet property="feedButton" destination="vfm-YN-bbn" id="LyU-lD-fzs"/>
+                        <outlet property="followingButton" destination="JCZ-pk-VCL" id="HkI-lp-ZdW"/>
+                        <outlet property="friendsButton" destination="9oK-U5-ZBm" id="326-sb-Sqy"/>
+                        <outlet property="libraryButton" destination="oRO-lI-GxR" id="W5M-DD-HAl"/>
+                        <outlet property="messengerButton" destination="icB-UB-VSc" id="qC2-dC-OQf"/>
                         <outlet property="nameLabel" destination="soX-59-dIa" id="QCl-zc-nXW"/>
                         <outlet property="profileImageView" destination="01h-hF-xsz" id="Vc6-2Z-R62"/>
                         <outlet property="profileView" destination="BHt-nu-b7N" id="KKe-og-ZVe"/>
+                        <outlet property="showcaseButton" destination="qlx-qf-C6X" id="AMt-W1-96F"/>
+                        <outlet property="stationButton" destination="A6k-Z0-ZsI" id="gAN-kd-sjl"/>
+                        <outlet property="storeButton" destination="3ZS-kI-L21" id="g6U-jO-pFF"/>
+                        <outlet property="studioButton" destination="Wz6-Qe-z0E" id="5sX-3z-0zJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1kR-gV-spe" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1740,11 +1788,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blurBlue" translatesAutoresizingMaskIntoConstraints="NO" id="Pzv-6T-rbj">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="blurBlue" translatesAutoresizingMaskIntoConstraints="NO" id="Pzv-6T-rbj">
                                 <rect key="frame" x="0.0" y="-46" width="600" height="646"/>
                                 <animations/>
                             </imageView>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="101" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="KWT-Ls-UHr">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="101" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="KWT-Ls-UHr">
                                 <rect key="frame" x="0.0" y="79" width="600" height="521"/>
                                 <animations/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -1791,7 +1839,7 @@
                                     <outlet property="delegate" destination="M3b-v7-3nS" id="idJ-lN-zpi"/>
                                 </connections>
                             </tableView>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="2pD-Ql-WIv">
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="2pD-Ql-WIv">
                                 <rect key="frame" x="174" y="37" width="252" height="29"/>
                                 <animations/>
                                 <constraints>
@@ -1842,7 +1890,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FriendCell" rowHeight="100" id="K2y-Q6-fT8" customClass="FriendCell">
-                                <rect key="frame" x="0.0" y="22" width="600" height="100"/>
+                                <rect key="frame" x="0.0" y="86" width="600" height="100"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="K2y-Q6-fT8" id="szM-2O-Cvy">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="99"/>
@@ -2701,15 +2749,24 @@
         <image name="blurBlue" width="640" height="1136"/>
         <image name="blurGreen" width="557" height="991"/>
         <image name="edit" width="43" height="43"/>
+        <image name="feed" width="70" height="70"/>
+        <image name="following" width="70" height="70"/>
+        <image name="friends" width="70" height="70"/>
+        <image name="library" width="70" height="70"/>
         <image name="live" width="96" height="40"/>
+        <image name="messenger" width="70" height="70"/>
         <image name="mic" width="104" height="104"/>
         <image name="placeholder" width="164" height="156"/>
         <image name="play" width="89" height="89"/>
         <image name="profileBack" width="237" height="98"/>
         <image name="showcase" width="70" height="70"/>
+        <image name="station" width="70" height="70"/>
         <image name="store" width="70" height="70"/>
+        <image name="studio" width="70" height="70"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="42P-9A-i60"/>
+        <segue reference="tGu-ZW-2xd"/>
+        <segue reference="uus-fc-Z9E"/>
+        <segue reference="pIZ-0E-tZg"/>
     </inferredMetricsTieBreakers>
 </document>

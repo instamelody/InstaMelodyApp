@@ -96,6 +96,7 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[NSString fontAwesomeIconStringForEnum:FAEllipsisV] style:UIBarButtonItemStylePlain target:self action:@selector(showVolume:)];
     
     [self createMenu];
+    [self fixButtons];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -164,6 +165,36 @@
 }
 */
 
+-(void)fixButtons {
+    
+    [self centerButton:self.stationButton];
+    [self centerButton:self.feedButton];
+    [self centerButton:self.messengerButton];
+    [self centerButton:self.studioButton];
+    [self centerButton:self.storeButton];
+    [self centerButton:self.libraryButton];
+    [self centerButton:self.showcaseButton];
+    [self centerButton:self.friendsButton];
+    [self centerButton:self.followingButton];
+}
+
+-(void)centerButton:(UIButton *)button {
+    // the space between the image and text
+    CGFloat spacing = 6.0;
+    
+    // lower the text and push it left so it appears centered
+    //  below the image
+    CGSize imageSize = button.imageView.image.size;
+    button.titleEdgeInsets = UIEdgeInsetsMake(
+                                              0.0, - imageSize.width, - (imageSize.height + spacing), 0.0);
+    
+    // raise the image and push it right so it appears centered
+    //  above the text
+    CGSize titleSize = [button.titleLabel.text sizeWithAttributes:@{NSFontAttributeName: button.titleLabel.font}];
+    button.imageEdgeInsets = UIEdgeInsetsMake(
+                                              - (titleSize.height + spacing), 0.0, 0.0, - titleSize.width);
+}
+
 -(IBAction)showVolume:(id)sender
 {
     
@@ -209,7 +240,7 @@
     UIImage *chatImage = [UIImage imageNamed:@"chat"];
     UIImage *loopImage = [UIImage imageNamed:@"loop"];
     
-    micImage = [HomeViewController imageWithImage:micImage scaledToSize:CGSizeMake(75, 75)];
+    micImage = [HomeViewController imageWithImage:micImage scaledToSize:CGSizeMake(70, 70)];
     soloImage = [HomeViewController imageWithImage:soloImage scaledToSize:CGSizeMake(70, 70)];
     chatImage = [HomeViewController imageWithImage:chatImage scaledToSize:CGSizeMake(70, 70)];
     loopImage = [HomeViewController imageWithImage:loopImage scaledToSize:CGSizeMake(70, 70)];
@@ -238,7 +269,7 @@
     
     AwesomeMenu *menu = [[AwesomeMenu alloc] initWithFrame:self.view.bounds startItem:startItem menuItems:menuItems];
     menu.delegate = self;
-    menu.startPoint = CGPointMake(self.view.frame.size.width - 60, self.view.frame.size.height - 60);
+    menu.startPoint = CGPointMake(self.view.frame.size.width - 50, self.view.frame.size.height - 50);
     menu.menuWholeAngle = -1 * M_PI / 2;
     
     [self.view addSubview:menu];
