@@ -1298,9 +1298,6 @@
                                         <state key="normal" title="Library" image="library">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
-                                        <connections>
-                                            <segue destination="dNr-Qm-aPx" kind="show" id="81c-TI-uh0"/>
-                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JCZ-pk-VCL">
                                         <rect key="frame" x="187" y="187" width="90" height="90"/>
