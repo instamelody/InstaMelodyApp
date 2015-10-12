@@ -1475,7 +1475,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blurBlue" translatesAutoresizingMaskIntoConstraints="NO" id="ZHu-D2-1jk">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blurRed" translatesAutoresizingMaskIntoConstraints="NO" id="ZHu-D2-1jk">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <animations/>
                             </imageView>
@@ -2745,6 +2745,7 @@
         <image name="Profile" width="208" height="208"/>
         <image name="blurBlue" width="640" height="1136"/>
         <image name="blurGreen" width="557" height="991"/>
+        <image name="blurRed" width="373" height="664"/>
         <image name="edit" width="43" height="43"/>
         <image name="feed" width="70" height="70"/>
         <image name="following" width="70" height="70"/>
