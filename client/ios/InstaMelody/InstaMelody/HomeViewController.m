@@ -63,16 +63,27 @@
                                                NSFontAttributeName,
                                                nil];
     
+    
+    NSDictionary *buttonTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                          [UIColor whiteColor],
+                                          NSForegroundColorAttributeName,
+                                          [UIFont fontWithName:@"FontAwesome" size:20.0],
+                                          NSFontAttributeName,
+                                          nil];
+    
+    /*
     NSDictionary *buttonTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
                                                [UIColor colorWithRed:191/255.0f green:139/255.0f blue:226/255.0f alpha:1.0f],
                                                NSForegroundColorAttributeName,
                                                [UIFont fontWithName:@"FontAwesome" size:20.0],
                                                NSFontAttributeName,
                                                nil];
+     */
     
     
     [self.navigationController.navigationBar setTitleTextAttributes:navbarTitleTextAttributes];
-    [self.navigationController.navigationBar setTintColor:[UIColor colorWithRed:191/255.0f green:139/255.0f blue:226/255.0f alpha:1.0f]];
+    //[self.navigationController.navigationBar setTintColor:[UIColor colorWithRed:191/255.0f green:139/255.0f blue:226/255.0f alpha:1.0f]];
+    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     
     [[UIBarButtonItem appearance] setTitleTextAttributes:buttonTextAttributes forState:UIControlStateNormal];
     
@@ -82,7 +93,7 @@
         [defaults synchronize];
     }
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[NSString fontAwesomeIconStringForEnum:FACog] style:UIBarButtonItemStylePlain target:self action:@selector(showVolume:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[NSString fontAwesomeIconStringForEnum:FAEllipsisV] style:UIBarButtonItemStylePlain target:self action:@selector(showVolume:)];
     
     [self createMenu];
 }
