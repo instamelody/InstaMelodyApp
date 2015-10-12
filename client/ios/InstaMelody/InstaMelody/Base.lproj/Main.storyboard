@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="15B22c" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Upz-he-51Z">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="15B30a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Upz-he-51Z">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
@@ -1117,7 +1117,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blurBlue" translatesAutoresizingMaskIntoConstraints="NO" id="a17-WP-LFc">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blurGreen" translatesAutoresizingMaskIntoConstraints="NO" id="a17-WP-LFc">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <animations/>
                             </imageView>
@@ -1129,6 +1129,34 @@
                                     <constraint firstAttribute="height" constant="180" id="vzq-b5-Vsa"/>
                                 </constraints>
                             </view>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="live" translatesAutoresizingMaskIntoConstraints="NO" id="LP0-Td-iiH">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <animations/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="LP0-Td-iiH" secondAttribute="height" multiplier="33:14" id="kZS-vf-g4Y"/>
+                                    <constraint firstAttribute="height" constant="20" id="pUY-xi-iV3"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="kZS-vf-g4Y"/>
+                                        <exclude reference="pUY-xi-iV3"/>
+                                    </mask>
+                                </variation>
+                                <variation key="widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="kZS-vf-g4Y"/>
+                                        <include reference="pUY-xi-iV3"/>
+                                    </mask>
+                                </variation>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profileBack" translatesAutoresizingMaskIntoConstraints="NO" id="bwv-rN-l86">
+                                <rect key="frame" x="20" y="94" width="130" height="54"/>
+                                <animations/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="54" id="7To-Uz-qef"/>
+                                    <constraint firstAttribute="width" constant="130" id="D0R-p6-9JU"/>
+                                </constraints>
+                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Username" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="soX-59-dIa">
                                 <rect key="frame" x="156" y="125" width="416" height="21"/>
                                 <animations/>
@@ -1164,33 +1192,14 @@
                                         <rect key="frame" x="0.0" y="0.0" width="110" height="110"/>
                                         <animations/>
                                     </imageView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="33E-sB-90N">
-                                        <rect key="frame" x="0.0" y="79" width="110" height="31"/>
-                                        <animations/>
-                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="31" id="H6m-Kr-rZo"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                        <state key="normal" title="Change">
-                                            <color key="titleColor" red="0.70738781028252251" green="0.74944583856164326" blue="0.96003605769230771" alpha="1" colorSpace="calibratedRGB"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="changeProfilePic:" destination="xSn-CF-ntb" eventType="touchUpInside" id="l05-mE-aNk"/>
-                                        </connections>
-                                    </button>
                                 </subviews>
                                 <animations/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="01h-hF-xsz" secondAttribute="bottom" id="0Pz-pv-bbU"/>
                                     <constraint firstItem="01h-hF-xsz" firstAttribute="leading" secondItem="BHt-nu-b7N" secondAttribute="leading" id="19M-Cy-uT8"/>
                                     <constraint firstAttribute="width" constant="110" id="Fbj-i4-puv"/>
-                                    <constraint firstAttribute="trailing" secondItem="33E-sB-90N" secondAttribute="trailing" id="IQh-EJ-GK8"/>
-                                    <constraint firstItem="33E-sB-90N" firstAttribute="leading" secondItem="BHt-nu-b7N" secondAttribute="leading" id="VwC-fF-FUE"/>
                                     <constraint firstItem="01h-hF-xsz" firstAttribute="top" secondItem="BHt-nu-b7N" secondAttribute="top" id="ZVi-ex-sLU"/>
-                                    <constraint firstAttribute="bottom" secondItem="33E-sB-90N" secondAttribute="bottom" id="ff2-7c-i3D"/>
                                     <constraint firstAttribute="trailing" secondItem="01h-hF-xsz" secondAttribute="trailing" id="l6Y-4W-ZQU"/>
                                     <constraint firstAttribute="height" constant="110" id="qXD-3q-UmI"/>
                                 </constraints>
@@ -1380,6 +1389,33 @@
                                     <constraint firstAttribute="trailing" secondItem="gbh-7u-p5E" secondAttribute="trailing" id="y8N-y0-9gB"/>
                                 </constraints>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="33E-sB-90N">
+                                <rect key="frame" x="286" y="139" width="23" height="23"/>
+                                <animations/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="23" id="7O2-bu-SBC"/>
+                                    <constraint firstAttribute="width" constant="23" id="kXI-KV-kuC"/>
+                                </constraints>
+                                <state key="normal" image="edit">
+                                    <color key="titleColor" red="0.70738781028252251" green="0.74944583856164326" blue="0.96003605769230771" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="7O2-bu-SBC"/>
+                                        <exclude reference="kXI-KV-kuC"/>
+                                    </mask>
+                                </variation>
+                                <variation key="widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="7O2-bu-SBC"/>
+                                        <include reference="kXI-KV-kuC"/>
+                                    </mask>
+                                </variation>
+                                <connections>
+                                    <action selector="changeProfilePic:" destination="xSn-CF-ntb" eventType="touchUpInside" id="l05-mE-aNk"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1388,10 +1424,13 @@
                             <constraint firstAttribute="trailingMargin" secondItem="M5O-ye-LAW" secondAttribute="trailing" constant="8" id="4BX-4o-jiu"/>
                             <constraint firstAttribute="trailing" secondItem="a17-WP-LFc" secondAttribute="trailing" id="577-D6-YHF"/>
                             <constraint firstAttribute="centerX" secondItem="r6v-GZ-td4" secondAttribute="centerX" id="5T9-NK-awW"/>
+                            <constraint firstItem="bwv-rN-l86" firstAttribute="top" secondItem="EWk-BQ-F9s" secondAttribute="bottom" constant="30" id="7Mb-XF-Yg9"/>
                             <constraint firstItem="soX-59-dIa" firstAttribute="leading" secondItem="BHt-nu-b7N" secondAttribute="trailing" constant="16" id="ARb-ZI-WsB"/>
+                            <constraint firstItem="bwv-rN-l86" firstAttribute="leading" secondItem="Old-bD-bkH" secondAttribute="leadingMargin" id="Ar5-mN-jLR"/>
                             <constraint firstAttribute="trailingMargin" secondItem="soX-59-dIa" secondAttribute="trailing" constant="8" id="DD9-0W-IVB"/>
                             <constraint firstItem="R6W-lo-Rin" firstAttribute="top" secondItem="Old-bD-bkH" secondAttribute="top" id="I0i-Zq-ntI"/>
                             <constraint firstItem="a17-WP-LFc" firstAttribute="top" secondItem="EWk-BQ-F9s" secondAttribute="bottom" constant="-64" id="Ivj-Nj-qrf"/>
+                            <constraint firstItem="LP0-Td-iiH" firstAttribute="top" secondItem="EWk-BQ-F9s" secondAttribute="bottom" constant="4" id="Kxr-8z-9ba"/>
                             <constraint firstAttribute="bottom" secondItem="a17-WP-LFc" secondAttribute="bottom" id="LjO-uj-fiu"/>
                             <constraint firstItem="BHt-nu-b7N" firstAttribute="leading" secondItem="Old-bD-bkH" secondAttribute="leadingMargin" constant="10" id="PSy-1v-bXH"/>
                             <constraint firstItem="AcU-EH-pZ9" firstAttribute="leading" secondItem="Old-bD-bkH" secondAttribute="leading" id="T6p-2R-ile"/>
@@ -1399,12 +1438,39 @@
                             <constraint firstItem="M5O-ye-LAW" firstAttribute="leading" secondItem="BHt-nu-b7N" secondAttribute="trailing" constant="16" id="ZrI-SU-Zd6"/>
                             <constraint firstItem="BHt-nu-b7N" firstAttribute="top" secondItem="EWk-BQ-F9s" secondAttribute="bottom" constant="40" id="dJH-1T-U4U"/>
                             <constraint firstItem="r6v-GZ-td4" firstAttribute="top" secondItem="AcU-EH-pZ9" secondAttribute="bottom" constant="57" id="fcv-uF-Bjb"/>
+                            <constraint firstItem="AcU-EH-pZ9" firstAttribute="top" secondItem="33E-sB-90N" secondAttribute="bottom" constant="18" id="gxc-gf-MJa"/>
                             <constraint firstItem="soX-59-dIa" firstAttribute="top" secondItem="EWk-BQ-F9s" secondAttribute="bottom" constant="61" id="hgq-Rh-844"/>
                             <constraint firstAttribute="trailing" secondItem="R6W-lo-Rin" secondAttribute="trailing" id="i94-up-nwL"/>
+                            <constraint firstItem="LP0-Td-iiH" firstAttribute="centerX" secondItem="Old-bD-bkH" secondAttribute="centerX" id="mB2-bW-kNb"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="33E-sB-90N" secondAttribute="trailing" constant="46" id="prc-wh-pej">
+                                <variation key="widthClass=compact" constant="23"/>
+                            </constraint>
                             <constraint firstAttribute="trailing" secondItem="AcU-EH-pZ9" secondAttribute="trailing" id="prj-GI-hdC"/>
                             <constraint firstItem="a17-WP-LFc" firstAttribute="leading" secondItem="Old-bD-bkH" secondAttribute="leading" id="uZZ-MQ-QCo"/>
                             <constraint firstItem="R6W-lo-Rin" firstAttribute="leading" secondItem="Old-bD-bkH" secondAttribute="leading" id="xBi-E9-5Lh"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="LP0-Td-iiH"/>
+                            </mask>
+                            <mask key="constraints">
+                                <exclude reference="gxc-gf-MJa"/>
+                                <exclude reference="Kxr-8z-9ba"/>
+                                <exclude reference="mB2-bW-kNb"/>
+                                <exclude reference="prc-wh-pej"/>
+                            </mask>
+                        </variation>
+                        <variation key="widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="LP0-Td-iiH"/>
+                            </mask>
+                            <mask key="constraints">
+                                <include reference="gxc-gf-MJa"/>
+                                <include reference="Kxr-8z-9ba"/>
+                                <include reference="mB2-bW-kNb"/>
+                                <include reference="prc-wh-pej"/>
+                            </mask>
+                        </variation>
                     </view>
                     <navigationItem key="navigationItem" title="instaMelody" id="anY-73-bnU"/>
                     <connections>
@@ -1416,7 +1482,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1kR-gV-spe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="812" y="85"/>
+            <point key="canvasLocation" x="811.5" y="85"/>
         </scene>
         <!--My Station-->
         <scene sceneID="VhH-ns-yF8">
@@ -2696,14 +2762,18 @@
         <image name="InstaMelodyCircle" width="147" height="148"/>
         <image name="Profile" width="208" height="208"/>
         <image name="blurBlue" width="640" height="1136"/>
+        <image name="blurGreen" width="557" height="991"/>
+        <image name="edit" width="43" height="43"/>
         <image name="explore" width="59" height="59"/>
         <image name="friends" width="46" height="57"/>
         <image name="libraries" width="56" height="55"/>
+        <image name="live" width="96" height="40"/>
         <image name="messenger" width="53" height="55"/>
         <image name="mic" width="104" height="104"/>
         <image name="notifications" width="48" height="55"/>
         <image name="placeholder" width="164" height="156"/>
         <image name="play" width="89" height="89"/>
+        <image name="profileBack" width="237" height="98"/>
         <image name="settings" width="50" height="50"/>
         <image name="showcase" width="52" height="59"/>
         <image name="station" width="50" height="57"/>

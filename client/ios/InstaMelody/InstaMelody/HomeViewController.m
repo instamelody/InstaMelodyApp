@@ -59,7 +59,7 @@
     NSDictionary *navbarTitleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
                                                [UIColor whiteColor],
                                                NSForegroundColorAttributeName,
-                                               [UIFont fontWithName:@"Helvetica Neue Light" size:20.0],
+                                               [UIFont fontWithName:@"Century Gothic" size:18.0],
                                                NSFontAttributeName,
                                                nil];
     
@@ -199,9 +199,9 @@
     UIImage *loopImage = [UIImage imageNamed:@"loop"];
     
     micImage = [HomeViewController imageWithImage:micImage scaledToSize:CGSizeMake(75, 75)];
-    soloImage = [HomeViewController imageWithImage:soloImage scaledToSize:CGSizeMake(50, 50)];
-    chatImage = [HomeViewController imageWithImage:chatImage scaledToSize:CGSizeMake(50, 50)];
-    loopImage = [HomeViewController imageWithImage:loopImage scaledToSize:CGSizeMake(50, 50)];
+    soloImage = [HomeViewController imageWithImage:soloImage scaledToSize:CGSizeMake(70, 70)];
+    chatImage = [HomeViewController imageWithImage:chatImage scaledToSize:CGSizeMake(70, 70)];
+    loopImage = [HomeViewController imageWithImage:loopImage scaledToSize:CGSizeMake(70, 70)];
     
     // Default Menu
     
