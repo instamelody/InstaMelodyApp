@@ -918,6 +918,7 @@
         [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAPlayCircle] forState:UIControlStateNormal];
     } else {
         [self preload];
+        
     }
 }
 

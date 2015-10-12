@@ -268,10 +268,15 @@
 }
 
 -(IBAction)toggleLoop:(id)sender {
+    
+    UIButton *toggleBtn = (UIButton *)[self.view viewWithTag:5];
+    
     if ([self.bgPlayer isPlaying]) {
         [self.bgPlayer stop];
+        [toggleBtn setTitle:@"Preview melodies" forState:UIControlStateNormal];
     } else {
         [self playLoop:nil];
+        [toggleBtn setTitle:@"Stop" forState:UIControlStateNormal];
     }
 }
 
@@ -469,15 +474,18 @@
                 
                 [self.recorder record];
                 
+                [self toggleMelodies:nil];
+                
                 self.startTime = [NSDate date];
                 self.timer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(updateRecordProgress) userInfo:nil repeats:YES];
                 
+                /*
                 if (self.selectedMelody != nil) {
                     [self playLoop:nil];
                 }
                 if (self.selectedMelody2 != nil) {
                     [self playLoop2:nil];
-                }
+                }*/
             } else {
                 NSLog(@"error initializing audio recorder: %@",
                       [error description]);
@@ -488,6 +496,13 @@
         }
         
     }
+}
+
+-(IBAction)toggleMelodies:(id)sender {
+    
+    [self toggleLoop:nil];
+    [self toggleLoop2:nil];
+    
 }
 
 -(IBAction)togglePlayback:(id)sender {
@@ -868,7 +883,8 @@
         } else {
             StatusCell *cell = (StatusCell *)[tableView dequeueReusableCellWithIdentifier:@"StatusCell" forIndexPath:indexPath];
             self.loopStatusLabel = cell.statusLabel;
-            [cell.playButton addTarget:self action:@selector(togglePlayback:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.playButton setTag:5];
+            [cell.playButton addTarget:self action:@selector(toggleMelodies:) forControlEvents:UIControlEventTouchUpInside];
             return cell;
             
         }
@@ -892,7 +908,8 @@
             
             StatusCell *cell = (StatusCell *)[tableView dequeueReusableCellWithIdentifier:@"StatusCell" forIndexPath:indexPath];
             self.loopStatusLabel = cell.statusLabel;
-            [cell.playButton addTarget:self action:@selector(togglePlayback:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.playButton setTag:5];
+            [cell.playButton addTarget:self action:@selector(toggleMelodies:) forControlEvents:UIControlEventTouchUpInside];
             return cell;
             
         }
