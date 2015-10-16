@@ -174,17 +174,17 @@
     
     self.playButton.hidden = YES;
     
-    self.shareButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:35.0f];
+    //self.shareButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:35.0f];
     self.playLoopButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:25.0f];
     self.playLoop2Button.titleLabel.font = [UIFont fontAwesomeFontOfSize:25.0f];
-    self.volumeButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:35.0f];
+    //self.volumeButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:35.0f];
     
     [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAPlay] forState:UIControlStateNormal];
     [self.playLoopButton setTitle:[NSString fontAwesomeIconStringForEnum:FARefresh] forState:UIControlStateNormal];
     
     [self.playLoop2Button setTitle:[NSString fontAwesomeIconStringForEnum:FARefresh] forState:UIControlStateNormal];
-    [self.shareButton setTitle:[NSString fontAwesomeIconStringForEnum:FAShareSquare] forState:UIControlStateNormal];
-    [self.volumeButton setTitle:[NSString fontAwesomeIconStringForEnum:FAVolumeUp] forState:UIControlStateNormal];
+    //[self.shareButton setTitle:[NSString fontAwesomeIconStringForEnum:FAShare] forState:UIControlStateNormal];
+    //[self.volumeButton setTitle:[NSString fontAwesomeIconStringForEnum:FAVolumeUp] forState:UIControlStateNormal];
     
     
 }

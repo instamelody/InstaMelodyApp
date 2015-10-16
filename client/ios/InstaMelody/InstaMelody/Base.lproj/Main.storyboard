@@ -64,7 +64,6 @@
             <string>CenturyGothic</string>
             <string>CenturyGothic</string>
             <string>CenturyGothic</string>
-            <string>CenturyGothic</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -674,15 +673,14 @@
                                     <constraint firstAttribute="trailing" secondItem="XdP-JA-fd2" secondAttribute="trailing" id="z9S-vH-o6h"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uDF-4P-4Ou">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uDF-4P-4Ou">
                                 <rect key="frame" x="150" y="403" width="40" height="40"/>
                                 <animations/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="40" id="9Mf-8b-ge6"/>
                                     <constraint firstAttribute="height" constant="40" id="ueX-i6-m9l"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <state key="normal" title="V">
+                                <state key="normal" image="vol">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -702,22 +700,6 @@
                                 </state>
                                 <connections>
                                     <action selector="toggleRecording:" destination="zFq-Vd-UtH" eventType="touchUpInside" id="Ptp-n8-g9i"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="511-II-2sA">
-                                <rect key="frame" x="410" y="403" width="40" height="40"/>
-                                <animations/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="40" id="15f-Td-MEK"/>
-                                    <constraint firstAttribute="height" constant="40" id="s1q-ae-0Te"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <state key="normal" title="S">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="share:" destination="zFq-Vd-UtH" eventType="touchUpInside" id="6Kf-Cl-KeZ"/>
                                 </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="112" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="bUH-Oi-60g">
@@ -909,50 +891,43 @@
                                             <outlet property="tokenInputView" destination="NgT-8I-p5X" id="lnd-24-MGh"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StatusCell" id="V3F-u5-9il" customClass="StatusCell">
-                                        <rect key="frame" x="0.0" y="325" width="320" height="112"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StatusCell" rowHeight="86" id="V3F-u5-9il" customClass="StatusCell">
+                                        <rect key="frame" x="0.0" y="325" width="320" height="86"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="V3F-u5-9il" id="Hor-1g-SqO">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="112"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="86"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Status:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eMc-D3-Ptb">
-                                                    <rect key="frame" x="12" y="16" width="300" height="19"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loop loaded!" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="2x7-dd-wtA">
+                                                    <rect key="frame" x="159" y="12" width="153" height="31"/>
                                                     <animations/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="19" id="9hH-Hk-c1X"/>
+                                                        <constraint firstAttribute="width" constant="153" id="Hnk-eG-4EZ"/>
+                                                        <constraint firstAttribute="height" constant="31" id="ewW-pw-wBY"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="16"/>
+                                                    <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="15"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loop loaded!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2x7-dd-wtA">
-                                                    <rect key="frame" x="12" y="39" width="300" height="19"/>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w6Y-x2-fXX">
+                                                    <rect key="frame" x="8" y="12" width="132" height="31"/>
                                                     <animations/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="19" id="B3A-eT-gik"/>
+                                                        <constraint firstAttribute="height" constant="31" id="H2N-bO-l0a"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="16"/>
-                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w6Y-x2-fXX">
-                                                    <rect key="frame" x="12" y="74" width="300" height="30"/>
-                                                    <animations/>
-                                                    <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="17"/>
-                                                    <state key="normal" title="Preview melodies">
+                                                    <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="15"/>
+                                                    <state key="normal" title="Preview melody">
                                                         <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
                                                 </button>
                                             </subviews>
                                             <animations/>
                                             <constraints>
-                                                <constraint firstItem="eMc-D3-Ptb" firstAttribute="leading" secondItem="Hor-1g-SqO" secondAttribute="leadingMargin" constant="4" id="3ON-Zs-CND"/>
-                                                <constraint firstItem="2x7-dd-wtA" firstAttribute="trailing" secondItem="Hor-1g-SqO" secondAttribute="trailingMargin" id="5kq-UU-R2l"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="eMc-D3-Ptb" secondAttribute="trailing" id="YYA-4Z-t3f"/>
-                                                <constraint firstItem="2x7-dd-wtA" firstAttribute="leading" secondItem="Hor-1g-SqO" secondAttribute="leadingMargin" constant="4" id="ZpQ-3j-vnA"/>
-                                                <constraint firstItem="2x7-dd-wtA" firstAttribute="top" secondItem="eMc-D3-Ptb" secondAttribute="bottom" constant="4" id="apP-4W-zP1"/>
-                                                <constraint firstItem="eMc-D3-Ptb" firstAttribute="top" secondItem="Hor-1g-SqO" secondAttribute="topMargin" constant="8" id="m6e-zt-lLp"/>
+                                                <constraint firstItem="w6Y-x2-fXX" firstAttribute="top" secondItem="Hor-1g-SqO" secondAttribute="topMargin" constant="4" id="4CB-Ml-lsT"/>
+                                                <constraint firstItem="2x7-dd-wtA" firstAttribute="leading" secondItem="w6Y-x2-fXX" secondAttribute="trailing" constant="19" id="UDA-PG-E6m"/>
+                                                <constraint firstItem="2x7-dd-wtA" firstAttribute="top" secondItem="Hor-1g-SqO" secondAttribute="topMargin" constant="4" id="YYh-AD-Vvo"/>
+                                                <constraint firstItem="w6Y-x2-fXX" firstAttribute="leading" secondItem="Hor-1g-SqO" secondAttribute="leadingMargin" id="d71-R2-TGP"/>
+                                                <constraint firstItem="2x7-dd-wtA" firstAttribute="trailing" secondItem="Hor-1g-SqO" secondAttribute="trailingMargin" id="fc5-Lr-faH"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <animations/>
@@ -968,6 +943,21 @@
                                     <outlet property="delegate" destination="zFq-Vd-UtH" id="j6W-O8-8ph"/>
                                 </connections>
                             </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="511-II-2sA">
+                                <rect key="frame" x="410" y="403" width="40" height="40"/>
+                                <animations/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="40" id="15f-Td-MEK"/>
+                                    <constraint firstAttribute="height" constant="40" id="s1q-ae-0Te"/>
+                                </constraints>
+                                <state key="normal" image="share">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="share:" destination="zFq-Vd-UtH" eventType="touchUpInside" id="6Kf-Cl-KeZ"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -2914,10 +2904,12 @@
         <image name="placeholder" width="164" height="156"/>
         <image name="play" width="89" height="89"/>
         <image name="profileBack" width="237" height="98"/>
+        <image name="share" width="47" height="47"/>
         <image name="showcase" width="70" height="70"/>
         <image name="station" width="70" height="70"/>
         <image name="store" width="70" height="70"/>
         <image name="studio" width="70" height="70"/>
+        <image name="vol" width="47" height="47"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="iJg-m6-OlB"/>
