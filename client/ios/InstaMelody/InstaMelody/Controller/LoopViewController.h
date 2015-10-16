@@ -17,6 +17,7 @@
 #import "MelodyCell.h"
 #import "TopicCell.h"
 #import "StatusCell.h"
+#import "UsersCell.h"
 #import "UIImageView+Letters.h"
 #import "CLTokenInputView.h"
 
@@ -61,6 +62,8 @@
 
 @property (nonatomic, strong) id <LoopDelegate> delegate;
 
+@property (nonatomic, strong) NSDictionary *loopDict;
+
 -(IBAction)showVolumeSettings:(id)sender;
 -(IBAction)share:(id)sender;
 -(IBAction)chooseLoop:(id)sender;
@@ -73,6 +76,9 @@
 
 -(IBAction)toggleLoop:(id)sender;
 -(IBAction)toggleLoop2:(id)sender;
+
+-(IBAction)back:(id)sender;
+-(IBAction)forward:(id)sender;
 
 
 @end

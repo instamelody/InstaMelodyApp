@@ -10,6 +10,7 @@
 #import "NSString+FontAwesome.h"
 #import "UIFont+FontAwesome.h"
 #import "AFURLSessionManager.h"
+#import "AFHTTPRequestOperationManager.h"
 #import "constants.h"
 
 @interface LoopViewController ()
@@ -29,7 +30,8 @@
 @property (nonatomic, strong)  NSDate *startTime;
 
 @property (nonatomic, strong) AVAudioRecorder *recorder;
-@property (nonatomic, strong) NSArray *partArray;
+@property (nonatomic, strong) NSMutableArray *partArray;
+@property NSInteger currentPartIndex;
 
 @property NSUserDefaults *defaults;
 
@@ -54,9 +56,14 @@
     self.progressView.progressTintColor = [UIColor colorWithRed:1/255.0f green:174/255.0f blue:255/255.0f alpha:1.0f];
     self.progressView.thicknessRatio = 0.1f;
     
+     if (self.selectedLoop !=nil) {
+         [self getLoop:[self.selectedLoop objectForKey:@"Id"]];
+     }
+    
+    /*
     if (self.selectedLoop !=nil) {
         self.partArray = [self.selectedLoop objectForKey:@"Parts"];
-    }
+    }*/
     
     
     if (self.selectedUserMelody != nil) {
@@ -147,6 +154,174 @@
     
     //[[NSNotificationCenter defaultCenter] postNotificationName:@"pickedMelody" object:nil userInfo:userDict];
     
+}
+
+-(void)getLoop:(NSString *)loopId {
+    
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/Melody/Loop", API_BASE_URL];
+    
+    NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    NSDictionary *parameters = @{@"token": token, @"id": loopId};
+    
+    [manager GET:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        
+        if ([responseObject isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *responseDict = (NSDictionary *)responseObject;
+            
+            NSArray *parts = [responseDict objectForKey:@"Parts"];
+            if (parts.count > 0) {
+                [self.playButton setHidden:NO];
+            } else {
+                [self.playButton setHidden:YES];
+            }
+
+            /*
+            [self.statusButton setTitle:@"Ready to play" forState:UIControlStateNormal];
+            [self.loopTitleButton setTitle:[responseDict objectForKey:@"Name"] forState:UIControlStateNormal];
+            
+             */
+            
+            self.loopDict = responseDict;
+            
+            [self buildPartArray];
+        }
+        //NSDictionary *responseDict = (NSDictionary *)responseObject;
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
+            
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            
+            NSLog(@"%@",ErrorResponse);
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
+        }
+    }];
+    
+}
+
+-(void)buildPartArray {
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    NSArray *rawParts = [self.loopDict objectForKey:@"Parts"];
+    
+    self.partArray = [NSMutableArray new];
+    
+    for (NSDictionary *part in rawParts) {
+        
+        NSLog(@"got here");
+        NSMutableDictionary *partDict = [NSMutableDictionary dictionary];
+        
+        NSDictionary *userMelodyDict = [part objectForKey:@"UserMelody"];
+        
+        [partDict setObject:[userMelodyDict objectForKey:@"UserId"] forKey:@"UserId"];
+        
+        if ([[part objectForKey:@"UserId"] isEqualToString:[defaults objectForKey:@"Id"]]) {
+            [partDict setObject:@"My part" forKey:@"PartName"];
+        } else {
+            Friend *friend = [Friend MR_findFirstByAttribute:@"userId" withValue:[part objectForKey:@"UserId"]];
+            if (friend !=nil) {
+                [partDict setObject:[NSString stringWithFormat:@"%@'s part", friend.displayName] forKey:@"PartName"];
+            } else {
+                [partDict setObject:@"Friend's part" forKey:@"PartName"];
+            }
+        }
+        
+        //get user name
+        NSArray *subPartArray = [userMelodyDict objectForKey:@"Parts"];
+        
+        NSMutableArray *fileArray = [NSMutableArray new];
+        
+        for (NSDictionary *subPart in subPartArray) {
+            [fileArray addObject:[subPart objectForKey:@"FilePath"]];
+        }
+        
+        [partDict setObject:fileArray forKey:@"Files"];
+        [self.partArray addObject:partDict];
+        
+    }
+    
+    [self downloadAllFiles];
+    
+    UICollectionView *collectionView = (UICollectionView *)[self.tableView viewWithTag:97];
+    [collectionView reloadData];
+    
+}
+
+-(void)downloadAllFiles {
+    for (NSDictionary *part in self.partArray) {
+        NSArray *files = [part objectForKey:@"Files"];
+        
+        for (NSString *filePath in files) {
+            
+            NSArray *paths =
+            NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                NSUserDomainMask, YES);
+            NSString *documentsPath = [paths objectAtIndex:0];
+            
+            if ([filePath containsString:@"recording"]) {
+                
+                NSString *recordingPath = [documentsPath stringByAppendingPathComponent:@"Recordings"];
+                
+                if (![[NSFileManager defaultManager] fileExistsAtPath:recordingPath]){
+                    
+                    NSError* error;
+                    if(  [[NSFileManager defaultManager] createDirectoryAtPath:recordingPath withIntermediateDirectories:NO attributes:nil error:&error]) {
+                        
+                        NSLog(@"success creating folder");
+                        
+                    } else {
+                        NSLog(@"[%@] ERROR: attempting to write create MyFolder directory", [self class]);
+                        NSAssert( FALSE, @"Failed to create directory maybe out of disk space?");
+                    }
+                    
+                }
+                
+                NSString *localFilePath = [recordingPath stringByAppendingPathComponent:[filePath lastPathComponent]];
+                
+                if ([[NSFileManager defaultManager] fileExistsAtPath:localFilePath]){
+                    self.currentRecordingURL = [NSURL URLWithString:localFilePath];
+                } else {
+                    [self downloadRecording:filePath toPath:localFilePath];
+                }
+                
+            } else {
+                
+                NSString *melodyPath = [documentsPath stringByAppendingPathComponent:@"Melodies"];
+                
+                NSString *localFilePath = [melodyPath stringByAppendingPathComponent:[filePath lastPathComponent]];
+                
+                if (![[NSFileManager defaultManager] fileExistsAtPath:melodyPath]){
+                    
+                    NSError* error;
+                    if(  [[NSFileManager defaultManager] createDirectoryAtPath:melodyPath withIntermediateDirectories:NO attributes:nil error:&error]) {
+                        
+                        NSLog(@"success creating folder");
+                        
+                    } else {
+                        NSLog(@"[%@] ERROR: attempting to write create MyFolder directory", [self class]);
+                        NSAssert( FALSE, @"Failed to create directory maybe out of disk space?");
+                    }
+                    
+                }
+                
+                if ([[NSFileManager defaultManager] fileExistsAtPath:localFilePath]){
+                    NSLog(@"file already downloaded");
+                } else {
+                    [self downloadFile:filePath toPath:localFilePath];
+                }
+                
+            }
+        }
+    }
 }
 
 -(void)roundView:(UIView *)view {
@@ -364,7 +539,6 @@
         [self.bgPlayer setVolume:[volume floatValue]];
         [self.bgPlayer play];
         
-        //self.timer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(updatePlaybackProgress) userInfo:nil repeats:YES];
     } else {
         NSLog(@"Error loading file: %@", [error description]);
         
@@ -394,7 +568,6 @@
         [self.bgPlayer2 setVolume:[volume floatValue]];
         [self.bgPlayer2 play];
         
-        //self.timer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(updatePlaybackProgress) userInfo:nil repeats:YES];
     } else {
         NSLog(@"Error loading file: %@", [error description]);
         
@@ -425,7 +598,7 @@
         [self.bgPlayer3 setVolume:[volume floatValue]];
         [self.bgPlayer3 play];
         
-        //self.timer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(updatePlaybackProgress) userInfo:nil repeats:YES];
+
     } else {
         NSLog(@"Error loading file: %@", [error description]);
         
@@ -452,7 +625,7 @@
         
         [self.fgPlayer play];
         
-        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(updatePlaybackProgress) userInfo:nil repeats:YES];
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(updatePlaybackProgress) userInfo:nil repeats:YES];
     } else {
         NSLog(@"Error loading file: %@", [error description]);
         
@@ -491,6 +664,17 @@
         [alertView show];
     }
     
+}
+
+
+-(IBAction)back:(id)sender {
+    //check if part > 0
+    //skip to prv
+}
+
+-(IBAction)forward:(id)sender {
+    //check if part < max
+    //skip to next
 }
 
 -(IBAction)toggleRecording:(id)sender {
@@ -622,7 +806,7 @@
 -(IBAction)togglePlayback:(id)sender {
     //sdf
 
-    
+    self.currentPartIndex = 0;
     
     if ([self.fgPlayer isPlaying] || [self.bgPlayer isPlaying]) {
         
@@ -662,6 +846,98 @@
         
         
     }
+}
+
+-(void)preload {
+    
+    NSArray *paths =
+    NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                        NSUserDomainMask, YES);
+    NSString *documentsPath = [paths objectAtIndex:0];
+    
+    NSArray *files = [[self.partArray objectAtIndex:self.currentPartIndex] objectForKey:@"Files"];
+    for (NSString *filePath in files) {
+        if ([filePath containsString:@"recording"]) {
+            
+            NSString *recordingPath = [documentsPath stringByAppendingPathComponent:@"Recordings"];
+            
+            if (![[NSFileManager defaultManager] fileExistsAtPath:recordingPath]){
+                
+                NSError* error;
+                if(  [[NSFileManager defaultManager] createDirectoryAtPath:recordingPath withIntermediateDirectories:NO attributes:nil error:&error]) {
+                    
+                    NSLog(@"success creating folder");
+                    
+                } else {
+                    NSLog(@"[%@] ERROR: attempting to write create MyFolder directory", [self class]);
+                    NSAssert( FALSE, @"Failed to create directory maybe out of disk space?");
+                }
+                
+            }
+            
+            NSString *localFilePath = [recordingPath stringByAppendingPathComponent:[filePath lastPathComponent]];
+            
+            if ([[NSFileManager defaultManager] fileExistsAtPath:localFilePath]){
+                self.currentRecordingURL = [NSURL URLWithString:localFilePath];
+            } else {
+                [self downloadRecording:filePath toPath:localFilePath];
+            }
+            
+        } else {
+            
+            int count = 0;
+            
+            NSString *melodyPath = [documentsPath stringByAppendingPathComponent:@"Melodies"];
+            
+            NSString *localFilePath = [melodyPath stringByAppendingPathComponent:[filePath lastPathComponent]];
+            
+            if (![[NSFileManager defaultManager] fileExistsAtPath:melodyPath]){
+                
+                NSError* error;
+                if(  [[NSFileManager defaultManager] createDirectoryAtPath:melodyPath withIntermediateDirectories:NO attributes:nil error:&error]) {
+                    
+                    NSLog(@"success creating folder");
+                    
+                } else {
+                    NSLog(@"[%@] ERROR: attempting to write create MyFolder directory", [self class]);
+                    NSAssert( FALSE, @"Failed to create directory maybe out of disk space?");
+                }
+                
+            }
+            
+            if (count == 0) {
+                
+                if ([[NSFileManager defaultManager] fileExistsAtPath:localFilePath]){
+                    NSLog(@"file already downloaded");
+                    
+                    count++;
+                    
+                }
+                
+            } else if (count == 1 ){
+                if ([[NSFileManager defaultManager] fileExistsAtPath:localFilePath]){
+                    NSLog(@"file already downloaded");
+                    
+                    count++;
+                    
+                }
+            } else if (count == 2 ){
+                if ([[NSFileManager defaultManager] fileExistsAtPath:localFilePath]){
+                    NSLog(@"file already downloaded");
+                    
+                    count++;
+                    
+                }
+            }
+        }
+    }
+    
+    [self playEverything];
+    
+    NSString *stringText = [NSString stringWithFormat:@"%@ %ld", [[self.partArray objectAtIndex:self.currentPartIndex] objectForKey:@"PartName"], (self.currentPartIndex+1)];
+    
+    //[self.statusButton setTitle:stringText forState:UIControlStateNormal];
+    
 }
 
 -(void)playEverything {
@@ -1014,6 +1290,8 @@
 
 -(void)audioPlayerDidFinishPlaying: (AVAudioPlayer *)player successfully:(BOOL)flag
 {
+    
+    /*
     if (flag) {
         [self.timer invalidate];
         
@@ -1022,6 +1300,24 @@
             [self.bgPlayer stop];
             [self.bgPlayer2 stop];
             [self.bgPlayer3 stop];
+        }
+    }
+     */
+    
+    
+    if (flag) {
+        [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+        
+        [self.timer invalidate];
+        if (player == self.fgPlayer) {
+            [self.bgPlayer stop];
+            [self.bgPlayer2 stop];
+            [self.bgPlayer3 stop];
+        }
+        
+        if (self.selectedLoop && self.currentPartIndex < self.partArray.count - 1) {
+            self.currentPartIndex++;
+            [self preload];
         }
     }
 }
@@ -1047,7 +1343,8 @@
     if (self.selectedLoop != nil) {
         
         if (indexPath.row == 0) {
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserCollectionCell" forIndexPath:indexPath];
+            UsersCell *cell = (UsersCell *)[tableView dequeueReusableCellWithIdentifier:@"UserCollectionCell" forIndexPath:indexPath];
+            cell.collectionView.tag = 97;
             return cell;
         } else if (indexPath.row == 1) {
             TopicCell *cell = (TopicCell *)[tableView dequeueReusableCellWithIdentifier:@"TopicCell" forIndexPath:indexPath];
@@ -1156,9 +1453,9 @@
     
     NSDictionary *partDict = [self.partArray objectAtIndex:indexPath.row];
     
-    NSDictionary *melodyDict = [partDict objectForKey:@"UserMelody"];
+    //NSDictionary *melodyDict = [partDict objectForKey:@"UserMelody"];
     
-    NSString *userId = [melodyDict objectForKey:@"UserId"];
+    NSString *userId = [partDict objectForKey:@"UserId"];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     

@@ -30,9 +30,11 @@
 
 @property (nonatomic, strong) AVAudioPlayer *bgPlayer;
 @property (nonatomic, strong) AVAudioPlayer *bgPlayer2;
+@property (nonatomic, strong) AVAudioPlayer *bgPlayer3;
 @property (nonatomic, strong) AVAudioPlayer *fgPlayer;
 @property (nonatomic, strong) NSString *selectedMelodyPath;
 @property (nonatomic, strong) NSString *selectedMelodyPath2;
+@property (nonatomic, strong) NSString *selectedMelodyPath3;
 
 @property (nonatomic, strong) NSMutableArray *partArray;
 
@@ -921,6 +923,7 @@
         [self.fgPlayer stop];
         [self.bgPlayer stop];
         [self.bgPlayer2 stop];
+        [self.bgPlayer3 stop];
         [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAPlayCircle] forState:UIControlStateNormal];
         
         [self.micButton setTitle:[NSString fontAwesomeIconStringForEnum:FAMicrophone] forState:UIControlStateNormal];
@@ -1018,6 +1021,15 @@
                     count++;
                     
                 }
+            } else if (count == 2 ){
+                if ([[NSFileManager defaultManager] fileExistsAtPath:localFilePath]){
+                    NSLog(@"file already downloaded");
+                    
+                    self.selectedMelodyPath3 = localFilePath;
+                    
+                    count++;
+                    
+                }
             }
         }
     }
@@ -1031,19 +1043,22 @@
 }
 
 -(void)playEverything {
-    if (self.selectedMelodyPath != nil && self.selectedMelodyPath2 != nil)
-    {
-        [self playRecording:nil];
+    
+    [self playRecording:nil];
+    
+    if (self.selectedMelodyPath != nil) {
         [self playLoop:nil];
-        [self playLoop2:nil];
-        
-        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAStop] forState:UIControlStateNormal];
-    } else if (self.selectedMelodyPath != nil) {
-        [self playRecording:nil];
-        [self playLoop:nil];
-        
-        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAStop] forState:UIControlStateNormal];
     }
+    
+    if (self.selectedMelodyPath2 != nil) {
+        [self playLoop2:nil];
+    }
+    
+    if (self.selectedMelodyPath3 != nil) {
+        [self playLoop3:nil];
+    }
+    
+    [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAStop] forState:UIControlStateNormal];
 }
 
 
@@ -1054,6 +1069,7 @@
         if (player == self.fgPlayer) {
             [self.bgPlayer stop];
             [self.bgPlayer2 stop];
+            [self.bgPlayer3 stop];
         }
         
         if (self.currentPartIndex < self.partArray.count - 1) {
@@ -1480,6 +1496,36 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         [self.bgPlayer2 setNumberOfLoops:-1];
         [self.bgPlayer2 setVolume:[volume floatValue]];
         [self.bgPlayer2 play];
+        
+        //self.timer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(updatePlaybackProgress) userInfo:nil repeats:YES];
+    } else {
+        NSLog(@"Error loading file: %@", [error description]);
+        
+    }
+    
+}
+
+-(IBAction)playLoop3:(id)sender {
+    NSNumber *volume = [self.defaults objectForKey:@"melodyVolume"];
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    
+    NSString *pathString = self.selectedMelodyPath2;
+    
+    //pathString = [pathString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    
+    NSURL *docURL = [NSURL fileURLWithPath:pathString];
+    
+    NSError *error = nil;
+    
+    self.bgPlayer3 = [[AVAudioPlayer alloc] initWithContentsOfURL:docURL error:&error];
+    self.bgPlayer3.delegate = self;
+    
+    if (error == nil) {
+        
+        //[self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAPlay] forState:UIControlStateNormal];
+        [self.bgPlayer3 setNumberOfLoops:-1];
+        [self.bgPlayer3 setVolume:[volume floatValue]];
+        [self.bgPlayer3 play];
         
         //self.timer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(updatePlaybackProgress) userInfo:nil repeats:YES];
     } else {
