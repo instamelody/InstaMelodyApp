@@ -162,11 +162,11 @@
     NSDate *now = [NSDate date];
     NSTimeInterval interval = [now timeIntervalSinceDate:self.startTime];
     
-    if (interval > 10) {
+    if (interval > RECORDING_LIMIT) {
         self.startTime = [NSDate date];
         interval = 0;
     }
-    [self.progressView setProgress:interval/10.0f animated:YES];
+    [self.progressView setProgress:interval/RECORDING_LIMIT animated:YES];
 }
 
 -(void)applyFontAwesome {
@@ -482,21 +482,7 @@
 -(IBAction)toggleRecording:(id)sender {
     if (self.recorder.isRecording) {
         
-        [self.recorder stop];
-        
-        if ([self.bgPlayer isPlaying]) {
-            [self.bgPlayer stop];
-        }
-        
-        if ([self.bgPlayer2 isPlaying]) {
-            [self.bgPlayer2 stop];
-        }
-        
-        [self.recordButton setImage:[UIImage imageNamed:@"redo"] forState:UIControlStateNormal];
-        
-        [self.timer invalidate];
-        
-        self.playButton.hidden = NO;
+        [self stopRecording];
         
     } else {
         NSError *error;
@@ -562,6 +548,8 @@
                 
                 [self.recordButton setImage:[UIImage imageNamed:@"stop"] forState:UIControlStateNormal];
                 
+                [self performSelector:@selector(stopRecording) withObject:self afterDelay:RECORDING_LIMIT];
+                
                 /*
                 if (self.selectedMelody != nil) {
                     [self playLoop:nil];
@@ -579,6 +567,33 @@
         }
         
     }
+}
+
+-(void)stopRecording {
+    
+    if ([self.recorder isRecording]) {
+        [self.recorder stop];
+        
+        if ([self.bgPlayer isPlaying]) {
+            [self.bgPlayer stop];
+        }
+        
+        if ([self.bgPlayer2 isPlaying]) {
+            [self.bgPlayer2 stop];
+        }
+        
+        
+        if ([self.bgPlayer3 isPlaying]) {
+            [self.bgPlayer3 stop];
+        }
+        
+        [self.recordButton setImage:[UIImage imageNamed:@"redo"] forState:UIControlStateNormal];
+        
+        [self.timer invalidate];
+        
+        self.playButton.hidden = NO;
+    }
+
 }
 
 -(IBAction)toggleMelodies:(id)sender {

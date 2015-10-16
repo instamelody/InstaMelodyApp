@@ -1,5 +1,5 @@
 PODS:
-  - CLTokenInputView (1.1.0)
+  - CLTokenInputView (2.1.0)
   - DACircularProgress (2.3.1)
   - FontAwesome (4.3.0)
   - JSQMessagesViewController (7.2.0):
@@ -21,7 +21,7 @@ DEPENDENCIES:
   - UIImageView-Letters
 
 SPEC CHECKSUMS:
-  CLTokenInputView: 36a7519de77b3de1c7af24d9e105054d1fac8ee7
+  CLTokenInputView: dc40041faf76102cf96dede1635d93bd0f115a0d
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   FontAwesome: 341b52261cad8254017da3ddfc01d67c87c0ca88
   JSQMessagesViewController: 73cab48aa92fc2d512f3b6724f3425cc47a19eb5
@@ -31,4 +31,4 @@ SPEC CHECKSUMS:
   MGSwipeTableCell: a51fa670c01f0aa048f12af040acebf315223137
   UIImageView-Letters: f62db28076797adf3560ab7410647dc6899b9eef
 
-COCOAPODS: 0.38.2
+COCOAPODS: 0.39.0

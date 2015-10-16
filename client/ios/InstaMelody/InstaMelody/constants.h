@@ -13,5 +13,6 @@
 #define DOWNLOAD_BASE_URL @"https://api.instamelody.com"
 
 #define VERTICAL_SHIFT 60
+#define RECORDING_LIMIT 30.0f
 
 #endif
