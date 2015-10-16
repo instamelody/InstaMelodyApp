@@ -613,8 +613,8 @@
                 [self.playerView setHidden:YES];
             }
             
-            self.statusLabel.text = @"Ready to play";
-            self.loopTitleLabel.text = [responseDict objectForKey:@"Name"];
+            [self.statusButton setTitle:@"Ready to play" forState:UIControlStateNormal];
+            [self.loopTitleButton setTitle:[responseDict objectForKey:@"Name"] forState:UIControlStateNormal];
             self.loopDict = responseDict;
             
             [self buildPartArray];
@@ -724,6 +724,12 @@
         
         [self.micButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         [self.micButton addTarget:self action:@selector(showLoop) forControlEvents:UIControlEventTouchUpInside];
+        
+        [self.statusButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [self.statusButton addTarget:self action:@selector(showLoop) forControlEvents:UIControlEventTouchUpInside];
+        
+        [self.loopTitleButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [self.loopTitleButton addTarget:self action:@selector(showLoop) forControlEvents:UIControlEventTouchUpInside];
         
         [self.playButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         [self.playButton addTarget:self action:@selector(togglePlayback:) forControlEvents:UIControlEventTouchUpInside];
@@ -916,14 +922,26 @@
         [self.bgPlayer stop];
         [self.bgPlayer2 stop];
         [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAPlayCircle] forState:UIControlStateNormal];
+        
+        [self.micButton setTitle:[NSString fontAwesomeIconStringForEnum:FAMicrophone] forState:UIControlStateNormal];
+        [self.micButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [self.micButton addTarget:self action:@selector(togglePlayback:) forControlEvents:UIControlEventTouchUpInside];
+        
     } else {
         [self preload];
         
     }
 }
 
+-(void)skip:(id)sender {
+    [self audioPlayerDidFinishPlaying:self.fgPlayer successfully:YES];
+}
+
 -(void)preload {
     [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAStop] forState:UIControlStateNormal];
+    [self.micButton setTitle:[NSString fontAwesomeIconStringForEnum:FAFastForward] forState:UIControlStateNormal];
+    [self.micButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+    [self.micButton addTarget:self action:@selector(skip:) forControlEvents:UIControlEventTouchUpInside];
     
     NSArray *paths =
     NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
@@ -1007,7 +1025,8 @@
     [self playEverything];
     
     NSString *stringText = [NSString stringWithFormat:@"%@ %ld", [[self.partArray objectAtIndex:self.currentPartIndex] objectForKey:@"PartName"], (self.currentPartIndex+1)];
-    self.statusLabel.text = stringText;
+    
+    [self.statusButton setTitle:stringText forState:UIControlStateNormal];
     
 }
 
@@ -1041,7 +1060,7 @@
             self.currentPartIndex++;
             [self preload];
         } else {
-            self.statusLabel.text = @"Finished";
+            [self.statusButton setTitle:@"Finished" forState:UIControlStateNormal];
         }
     }
 }
@@ -1308,12 +1327,12 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         
         if (error == nil) {
             NSLog(@"File downloaded to: %@", filePath);
-            self.statusLabel.text = @"Melody loaded!";
+            [self.statusButton setTitle:@"Melody loaded" forState:UIControlStateNormal];
             
             //self.playButton.hidden = NO;
         } else {
             NSLog(@"Download error: %@", error.description);
-            self.statusLabel.text = @"Error loading melody";
+            [self.statusButton setTitle:@"Error loading melody" forState:UIControlStateNormal];
         }
         [progress removeObserver:self forKeyPath:@"fractionCompleted" context:NULL];
     }];
@@ -1370,14 +1389,14 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         
         if (error == nil) {
             NSLog(@"File downloaded to: %@", filePath);
-            self.statusLabel.text = @"Recording loaded!";
+            [self.statusButton setTitle:@"Recording loaded!" forState:UIControlStateNormal];
             
             self.currentRecordingURL = filePath;
             
             //self.playButton.hidden = NO;
         } else {
             NSLog(@"Download error: %@", error.description);
-            self.statusLabel.text = @"Error loading recording";
+            [self.statusButton setTitle:@"Error loading recording" forState:UIControlStateNormal];
         }
         [progress removeObserver:self forKeyPath:@"fractionCompleted" context:NULL];
     }];
@@ -1397,7 +1416,8 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         dispatch_async(dispatch_get_main_queue(), ^{
             //Wants to update UI or perform any task on main thread.
             double percent = progress.fractionCompleted * 100.0;
-            self.statusLabel.text = [NSString stringWithFormat:@"Downloading (%.0f%%)", percent];
+            [self.statusButton setTitle:[NSString stringWithFormat:@"Downloading (%.0f%%)", percent] forState:UIControlStateNormal];
+
         });
         
         NSLog(@"Progress… %f", progress.fractionCompleted);

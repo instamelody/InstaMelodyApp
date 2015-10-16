@@ -16,7 +16,7 @@
 @property IBOutlet UIView *playerView;
 @property IBOutlet UIButton *playButton;
 @property IBOutlet UIButton *micButton;
-@property IBOutlet UILabel *loopTitleLabel;
-@property IBOutlet UILabel *statusLabel;
+@property IBOutlet UIButton *loopTitleButton;
+@property IBOutlet UIButton *statusButton;
 
 @end
