@@ -74,7 +74,7 @@
 
 -(IBAction)submit:(id)sender {
     
-    if (![self.nameField.text isEqualToString:@""] && ![self.messageField.text isEqualToString:@""] ) {
+    if (![self.nameField.text isEqualToString:@""] && ![self.messageField.text isEqualToString:@""] && ![self.topicField.text isEqualToString:@""] ) {
         
         
         NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];

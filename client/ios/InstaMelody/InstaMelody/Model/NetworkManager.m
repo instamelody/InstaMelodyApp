@@ -123,15 +123,18 @@
     
     NSString *recordingPath = [userDict objectForKey:@"LoopURL"];
     NSString *recordingName = [recordingPath lastPathComponent];
-    
+    NSString *melodyName = [userDict objectForKey:@"Name"];
+    NSString *description = [userDict objectForKey:@"Description"];
     
     //step 1 - get file token
     NSString *token =  [defaults objectForKey:@"authToken"];
+    NSString *userName =  [defaults objectForKey:@"DisplayName"];
     
     NSMutableArray *partArray = [NSMutableArray new];
     
     NSNumber *firstId = [userDict objectForKey:@"MelodyId1"];
     NSNumber *secondId = [userDict objectForKey:@"MelodyId2"];
+    NSNumber *thirdId = [userDict objectForKey:@"MelodyId3"];
     
     if (firstId) {
         NSDictionary *entry = [NSDictionary dictionaryWithObject:firstId forKey:@"Id"];
@@ -143,10 +146,26 @@
         [partArray addObject:entry];
     }
     
+    
+    if (thirdId) {
+        NSDictionary *entry = [NSDictionary dictionaryWithObject:thirdId forKey:@"Id"];
+        [partArray addObject:entry];
+
+    }
+    
     NSMutableDictionary *recordingDict = [NSMutableDictionary dictionary];
     
-    [recordingDict setObject:[NSString stringWithFormat:@"%d", (int)unixTime] forKey:@"Name"];
-    [recordingDict setObject:[userDict objectForKey:@"Description"] forKey:@"Description"];
+    if (melodyName == nil) {
+        melodyName = [NSString stringWithFormat:@"%@'s Loop", userName];
+    }
+    
+    if (description == nil) {
+        description = [NSString stringWithFormat:@"%@'s Loop", userName];
+    }
+    
+    
+    [recordingDict setObject:melodyName forKey:@"Name"];
+    [recordingDict setObject:description forKey:@"Description"];
     [recordingDict setObject:recordingName forKey:@"FileName"];
     [partArray addObject:recordingDict];
     

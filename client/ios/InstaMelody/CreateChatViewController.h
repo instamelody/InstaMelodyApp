@@ -13,6 +13,7 @@
 
 @property (nonatomic, strong) IBOutlet UITextField *nameField;
 @property (nonatomic, strong) IBOutlet UITextField *messageField;
+@property (nonatomic, strong) IBOutlet UITextField *topicField;
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *tokenInputTopSpace;
 @property (strong, nonatomic) IBOutlet CLTokenInputView *tokenInputView;

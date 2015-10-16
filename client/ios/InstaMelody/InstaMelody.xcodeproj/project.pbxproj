@@ -47,6 +47,7 @@
 		879CCC5A1B81D4860031FDCC /* Friend.m in Sources */ = {isa = PBXBuildFile; fileRef = 879CCC591B81D4860031FDCC /* Friend.m */; };
 		879CCC5D1B81D6460031FDCC /* DataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 879CCC5C1B81D6460031FDCC /* DataManager.m */; };
 		87A8A63E1BC83A19009AF895 /* century-gothic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 87A8A63D1BC83A19009AF895 /* century-gothic.ttf */; settings = {ASSET_TAGS = (); }; };
+		87A972C81BD168B20016C6EA /* TopicCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87A972C71BD168B20016C6EA /* TopicCell.m */; settings = {ASSET_TAGS = (); }; };
 		87AF84751BB6B17500FCD3E1 /* VolumeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87AF84741BB6B17500FCD3E1 /* VolumeViewController.m */; };
 		87C84E9C1BAC848400A99239 /* UserMelody.m in Sources */ = {isa = PBXBuildFile; fileRef = 87C84E991BAC848400A99239 /* UserMelody.m */; };
 		87C84E9D1BAC848400A99239 /* UserMelodyPart.m in Sources */ = {isa = PBXBuildFile; fileRef = 87C84E9B1BAC848400A99239 /* UserMelodyPart.m */; };
@@ -150,6 +151,8 @@
 		879CCC5B1B81D6460031FDCC /* DataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataManager.h; sourceTree = "<group>"; };
 		879CCC5C1B81D6460031FDCC /* DataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataManager.m; sourceTree = "<group>"; };
 		87A8A63D1BC83A19009AF895 /* century-gothic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "century-gothic.ttf"; sourceTree = "<group>"; };
+		87A972C61BD168B20016C6EA /* TopicCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopicCell.h; sourceTree = "<group>"; };
+		87A972C71BD168B20016C6EA /* TopicCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TopicCell.m; sourceTree = "<group>"; };
 		87AF84731BB6B17500FCD3E1 /* VolumeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VolumeViewController.h; sourceTree = "<group>"; };
 		87AF84741BB6B17500FCD3E1 /* VolumeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VolumeViewController.m; sourceTree = "<group>"; };
 		87C84E981BAC848400A99239 /* UserMelody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserMelody.h; sourceTree = "<group>"; };
@@ -422,6 +425,8 @@
 				873FCFE41BB7355F00CE2B44 /* MelodyCell.m */,
 				873FCFEE1BB750BE00CE2B44 /* StatusCell.h */,
 				873FCFEF1BB750BE00CE2B44 /* StatusCell.m */,
+				87A972C61BD168B20016C6EA /* TopicCell.h */,
+				87A972C71BD168B20016C6EA /* TopicCell.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -642,6 +647,7 @@
 				87EBFB431BB6154900AA5F70 /* StationViewController.m in Sources */,
 				87CFE8C61B82AAA3009A4B6D /* LoopViewController.m in Sources */,
 				87098F601B74E88000C3E7C9 /* CreateChatViewController.m in Sources */,
+				87A972C81BD168B20016C6EA /* TopicCell.m in Sources */,
 				87CFE8BC1B829426009A4B6D /* MelodyGroup.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

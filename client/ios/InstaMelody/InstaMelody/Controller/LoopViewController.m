@@ -456,27 +456,35 @@
 
 -(IBAction)save:(id)sender {
 
-    NSMutableDictionary *userDict = [NSMutableDictionary new];
-    [userDict setObject:[self.currentRecordingURL path] forKey:@"LoopURL"];
-    [userDict setObject:@"dev topic" forKey:@"Description"];
-    [userDict setObject:@"Chat Melody" forKey:@"Name"];
+    UITextField *topicField = (UITextField *)[self.tableView viewWithTag:98];
     
-    if (self.selectedMelody != nil) {
-        [userDict setObject:self.selectedMelody.melodyId forKey:@"MelodyId1"];
+    if (![topicField.text isEqualToString:@""]) {
+        NSMutableDictionary *userDict = [NSMutableDictionary new];
+        [userDict setObject:[self.currentRecordingURL path] forKey:@"LoopURL"];
+        //[userDict setObject:@"dev topic" forKey:@"Description"];
+        [userDict setObject:topicField.text forKey:@"Name"];
+        
+        if (self.selectedMelody != nil) {
+            [userDict setObject:self.selectedMelody.melodyId forKey:@"MelodyId1"];
+        }
+        
+        if (self.selectedMelody2 != nil) {
+            [userDict setObject:self.selectedMelody2.melodyId forKey:@"MelodyId2"];
+        }
+        
+        if (self.selectedMelody3 != nil) {
+            [userDict setObject:self.selectedMelody3.melodyId forKey:@"MelodyId3"];
+        }
+        
+        
+        [self.delegate didFinishWithInfo:userDict];
+        
+        [self.navigationController popViewControllerAnimated:YES];
+    } else {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter a loop topic" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
     }
     
-    if (self.selectedMelody2 != nil) {
-        [userDict setObject:self.selectedMelody2.melodyId forKey:@"MelodyId2"];
-    }
-    
-    if (self.selectedMelody3 != nil) {
-        [userDict setObject:self.selectedMelody3.melodyId forKey:@"MelodyId3"];
-    }
-    
-    
-    [self.delegate didFinishWithInfo:userDict];
-    
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(IBAction)toggleRecording:(id)sender {
@@ -1034,13 +1042,23 @@
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserCollectionCell" forIndexPath:indexPath];
             return cell;
         } else if (indexPath.row == 1) {
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TopicCell" forIndexPath:indexPath];
+            TopicCell *cell = (TopicCell *)[tableView dequeueReusableCellWithIdentifier:@"TopicCell" forIndexPath:indexPath];
+            cell.topicField.tag = 98;
+            
+            if (self.selectedUserMelody != nil) {
+                cell.topicField.text = self.selectedUserMelody.userMelodyName;
+                [cell.topicField setEnabled:NO];
+                [cell.topicField setBackgroundColor:[UIColor lightGrayColor]];
+            }
             return cell;
         } else if (indexPath.row == 2) {
             
             MelodyCell *cell = (MelodyCell *)[tableView dequeueReusableCellWithIdentifier:@"MelodyCell" forIndexPath:indexPath];
             
             cell.tokenInputView.tag = 99;
+            
+            cell.tokenInputView.layer.cornerRadius = 4.0f;
+            cell.tokenInputView.layer.masksToBounds = YES;
             
             cell.tokenInputView.placeholderText = @"Add melodies";
             
@@ -1059,12 +1077,23 @@
     } else {
         
         if (indexPath.row == 0) {
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TopicCell" forIndexPath:indexPath];
+            TopicCell *cell = (TopicCell *)[tableView dequeueReusableCellWithIdentifier:@"TopicCell" forIndexPath:indexPath];
+            cell.topicField.tag = 98;
+            if (self.selectedUserMelody != nil) {
+                cell.topicField.text = self.selectedUserMelody.userMelodyName;
+                [cell.topicField setEnabled:NO];
+                [cell.topicField setBackgroundColor:[UIColor lightGrayColor]];
+            }
+            
             return cell;
         } else if (indexPath.row == 1) {
             MelodyCell *cell = (MelodyCell *)[tableView dequeueReusableCellWithIdentifier:@"MelodyCell" forIndexPath:indexPath];
             
             cell.tokenInputView.tag = 99;
+            
+            
+            cell.tokenInputView.layer.cornerRadius = 4.0f;
+            cell.tokenInputView.layer.masksToBounds = YES;
             
             cell.tokenInputView.placeholderText = @"Add melodies";
             

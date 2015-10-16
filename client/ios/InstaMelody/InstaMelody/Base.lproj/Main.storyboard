@@ -586,6 +586,7 @@
                         <outlet property="messageField" destination="jOd-ZH-3Kt" id="twD-Ij-dWn"/>
                         <outlet property="tableView" destination="8Tj-sZ-jvu" id="OeM-4t-UQf"/>
                         <outlet property="tokenInputView" destination="DhI-OZ-MCp" id="CEt-xu-fMe"/>
+                        <outlet property="topicField" destination="9Ps-rr-Ake" id="Ok3-aT-sxv"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3PL-Yx-O3h" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -595,7 +596,7 @@
         <!--Delegate-->
         <scene sceneID="ZjU-ua-LkB">
             <objects>
-                <viewController storyboardIdentifier="LoopViewController" id="zFq-Vd-UtH" customClass="LoopViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoopViewController" title="Studio" id="zFq-Vd-UtH" customClass="LoopViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="CWy-Cc-vkl"/>
                         <viewControllerLayoutGuide type="bottom" id="QZq-bZ-yWq"/>
@@ -736,11 +737,11 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="112"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Included in this loop:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="34L-AV-Y1F">
-                                                    <rect key="frame" x="12" y="8" width="300" height="16"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="INCLUDED IN MELODY MESSAGE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="34L-AV-Y1F">
+                                                    <rect key="frame" x="12" y="8" width="300" height="20"/>
                                                     <animations/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="16" id="Iq7-2k-9LT"/>
+                                                        <constraint firstAttribute="height" constant="20" id="Iq7-2k-9LT"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="16"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -819,57 +820,49 @@
                                             <outlet property="collectionView" destination="fn4-zu-uEz" id="ClP-S4-wSp"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="TopicCell" rowHeight="90" id="bI3-GG-jyB">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="TopicCell" rowHeight="90" id="bI3-GG-jyB" customClass="TopicCell">
                                         <rect key="frame" x="0.0" y="140" width="320" height="90"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bI3-GG-jyB" id="Wj8-fP-YZ0">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="90"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loop Topic:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vLw-P9-MbC">
-                                                    <rect key="frame" x="12" y="20" width="300" height="16"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TOPIC" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vLw-P9-MbC">
+                                                    <rect key="frame" x="12" y="20" width="300" height="20"/>
                                                     <animations/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="16" id="R8V-oo-2QP"/>
+                                                        <constraint firstAttribute="height" constant="20" id="R8V-oo-2QP"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="16"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <view alpha="0.75" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g5r-Bh-0TB">
-                                                    <rect key="frame" x="8" y="48" width="304" height="36"/>
-                                                    <animations/>
-                                                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="36" id="0la-fr-gAS"/>
-                                                    </constraints>
-                                                </view>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loop Topic" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bap-LR-2mV">
-                                                    <rect key="frame" x="17" y="51" width="286" height="30"/>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="36" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Loop Topic" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LMo-BP-Z1V">
+                                                    <rect key="frame" x="8" y="48" width="304" height="40"/>
                                                     <animations/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="30" id="bjY-Kc-lUy"/>
+                                                        <constraint firstAttribute="height" constant="40" id="C3m-Gf-geW"/>
+                                                        <constraint firstAttribute="width" constant="304" id="sQz-OQ-3Uq"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="15"/>
-                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
+                                                    <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                </textField>
                                             </subviews>
                                             <animations/>
                                             <constraints>
                                                 <constraint firstItem="vLw-P9-MbC" firstAttribute="trailing" secondItem="Wj8-fP-YZ0" secondAttribute="trailingMargin" id="0yt-xl-BEb"/>
                                                 <constraint firstItem="vLw-P9-MbC" firstAttribute="leading" secondItem="Wj8-fP-YZ0" secondAttribute="leadingMargin" constant="4" id="13X-75-yNp"/>
-                                                <constraint firstItem="Bap-LR-2mV" firstAttribute="leading" secondItem="Wj8-fP-YZ0" secondAttribute="leadingMargin" constant="9" id="2xw-Gy-pGX"/>
                                                 <constraint firstItem="vLw-P9-MbC" firstAttribute="top" secondItem="Wj8-fP-YZ0" secondAttribute="topMargin" constant="12" id="Lxo-Xp-SlZ"/>
-                                                <constraint firstItem="g5r-Bh-0TB" firstAttribute="trailing" secondItem="Wj8-fP-YZ0" secondAttribute="trailingMargin" id="P6V-el-Fn0"/>
-                                                <constraint firstItem="Bap-LR-2mV" firstAttribute="top" secondItem="vLw-P9-MbC" secondAttribute="bottom" constant="15" id="fAV-mb-Brd"/>
-                                                <constraint firstItem="g5r-Bh-0TB" firstAttribute="top" secondItem="vLw-P9-MbC" secondAttribute="bottom" constant="12" id="orh-tQ-Dsj"/>
-                                                <constraint firstItem="g5r-Bh-0TB" firstAttribute="leading" secondItem="Wj8-fP-YZ0" secondAttribute="leadingMargin" id="sfl-7c-c7d"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="Bap-LR-2mV" secondAttribute="trailing" constant="9" id="toT-xz-82z"/>
+                                                <constraint firstItem="LMo-BP-Z1V" firstAttribute="leading" secondItem="Wj8-fP-YZ0" secondAttribute="leadingMargin" id="QVS-mC-FtR"/>
+                                                <constraint firstItem="LMo-BP-Z1V" firstAttribute="trailing" secondItem="Wj8-fP-YZ0" secondAttribute="trailingMargin" id="SIr-rC-nPp"/>
+                                                <constraint firstItem="LMo-BP-Z1V" firstAttribute="top" secondItem="vLw-P9-MbC" secondAttribute="bottom" constant="8" id="oIo-D3-vX7"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <animations/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <connections>
+                                            <outlet property="topicField" destination="LMo-BP-Z1V" id="7ON-IM-TVo"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MelodyCell" rowHeight="95" id="wy5-C8-2bm" customClass="MelodyCell">
                                         <rect key="frame" x="0.0" y="230" width="320" height="95"/>
@@ -878,11 +871,11 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="95"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Melodies" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9wn-OS-NDh">
-                                                    <rect key="frame" x="12" y="12" width="300" height="16"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MELODY" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9wn-OS-NDh">
+                                                    <rect key="frame" x="12" y="12" width="300" height="20"/>
                                                     <animations/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="16" id="1KN-NI-mTw"/>
+                                                        <constraint firstAttribute="height" constant="20" id="1KN-NI-mTw"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="16"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -905,7 +898,7 @@
                                                 <constraint firstItem="9wn-OS-NDh" firstAttribute="trailing" secondItem="okf-Qx-bjV" secondAttribute="trailingMargin" id="9Ok-bf-L1v"/>
                                                 <constraint firstItem="9wn-OS-NDh" firstAttribute="top" secondItem="okf-Qx-bjV" secondAttribute="topMargin" constant="4" id="H11-gT-qvh"/>
                                                 <constraint firstItem="9wn-OS-NDh" firstAttribute="leading" secondItem="okf-Qx-bjV" secondAttribute="leadingMargin" constant="4" id="UyT-bj-t2I"/>
-                                                <constraint firstItem="NgT-8I-p5X" firstAttribute="top" secondItem="9wn-OS-NDh" secondAttribute="bottom" constant="12" id="uDv-m0-jcm"/>
+                                                <constraint firstItem="NgT-8I-p5X" firstAttribute="top" secondItem="9wn-OS-NDh" secondAttribute="bottom" constant="8" id="uDv-m0-jcm"/>
                                                 <constraint firstItem="NgT-8I-p5X" firstAttribute="leading" secondItem="okf-Qx-bjV" secondAttribute="leadingMargin" id="xEf-2T-6Q1"/>
                                                 <constraint firstItem="NgT-8I-p5X" firstAttribute="trailing" secondItem="okf-Qx-bjV" secondAttribute="trailingMargin" id="zlN-7m-lWX"/>
                                             </constraints>
@@ -1859,10 +1852,10 @@
             </objects>
             <point key="canvasLocation" x="796" y="1540"/>
         </scene>
-        <!--My Station-->
+        <!--Raw Loops-->
         <scene sceneID="Mxs-I5-Wxq">
             <objects>
-                <viewController title="My Station" id="M3b-v7-3nS" customClass="UserMelodyListViewController" sceneMemberID="viewController">
+                <viewController id="M3b-v7-3nS" customClass="UserMelodyListViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="bW7-pn-ecl"/>
                         <viewControllerLayoutGuide type="bottom" id="vrX-NE-AuI"/>
@@ -2928,6 +2921,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="iJg-m6-OlB"/>
-        <segue reference="42P-9A-i60"/>
+        <segue reference="p0p-hV-u3V"/>
     </inferredMetricsTieBreakers>
 </document>

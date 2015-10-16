@@ -15,6 +15,7 @@
 #import "UserMelody.h"
 #import "UserCell.h"
 #import "MelodyCell.h"
+#import "TopicCell.h"
 #import "StatusCell.h"
 #import "UIImageView+Letters.h"
 #import "CLTokenInputView.h"
@@ -43,7 +44,6 @@
 @property (nonatomic, strong) IBOutlet UIButton *recordButton;
 @property (nonatomic, strong) IBOutlet UIButton *playButton;
 
-@property (nonatomic, strong) IBOutlet UILabel *topicLabel;
 @property (nonatomic, strong) IBOutlet UILabel *loopStatusLabel;
 
 @property (nonatomic, strong) IBOutlet UIView *consoleView;
