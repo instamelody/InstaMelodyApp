@@ -12,4 +12,6 @@
 #define API_BASE_URL @"https://api.instamelody.com/v1.0"
 #define DOWNLOAD_BASE_URL @"https://api.instamelody.com"
 
+#define VERTICAL_SHIFT 60
+
 #endif
