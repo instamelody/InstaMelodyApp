@@ -625,7 +625,7 @@
         
         [self.fgPlayer play];
         
-        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(updatePlaybackProgress) userInfo:nil repeats:YES];
+        //self.timer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(updatePlaybackProgress) userInfo:nil repeats:YES];
     } else {
         NSLog(@"Error loading file: %@", [error description]);
         
@@ -669,12 +669,21 @@
 
 -(IBAction)back:(id)sender {
     //check if part > 0
-    //skip to prv
+    
+    if (self.currentPartIndex > 0) {
+         //skip to prv
+        self.currentPartIndex-=2;
+        [self audioPlayerDidFinishPlaying:self.fgPlayer successfully:YES];
+    }
 }
 
 -(IBAction)forward:(id)sender {
     //check if part < max
     //skip to next
+    if (self.currentPartIndex < self.partArray.count) {
+        //self.currentPartIndex++;
+        [self audioPlayerDidFinishPlaying:self.fgPlayer successfully:YES];
+    }
 }
 
 -(IBAction)toggleRecording:(id)sender {
@@ -1290,19 +1299,6 @@
 
 -(void)audioPlayerDidFinishPlaying: (AVAudioPlayer *)player successfully:(BOOL)flag
 {
-    
-    /*
-    if (flag) {
-        [self.timer invalidate];
-        
-        [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
-        if (player == self.fgPlayer) {
-            [self.bgPlayer stop];
-            [self.bgPlayer2 stop];
-            [self.bgPlayer3 stop];
-        }
-    }
-     */
     
     
     if (flag) {

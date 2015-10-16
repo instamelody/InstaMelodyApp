@@ -684,6 +684,9 @@
                                 <state key="normal" title="F">
                                     <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="forward:" destination="zFq-Vd-UtH" eventType="touchUpInside" id="6NG-mS-JM3"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1mI-Mj-5Wh">
                                 <rect key="frame" x="147" y="451" width="40" height="40"/>
@@ -695,6 +698,9 @@
                                 <state key="normal" title="B">
                                     <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="back:" destination="zFq-Vd-UtH" eventType="touchUpInside" id="Cx9-Oz-bw7"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uDF-4P-4Ou">
                                 <rect key="frame" x="150" y="383" width="40" height="40"/>
