@@ -15,6 +15,8 @@
 @property (nonatomic, strong) IBOutlet UIButton *denyButton;
 @property (nonatomic, strong) IBOutlet UIImageView *profileImageView;
 @property (nonatomic, strong) IBOutlet UILabel *nameLabel;
+@property (nonatomic, strong) IBOutlet UILabel *detailLabel;
+
 
 
 @end

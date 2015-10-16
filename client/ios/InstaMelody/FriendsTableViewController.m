@@ -98,6 +98,8 @@
         
         cell.nameLabel.text = friend.displayName;
         
+        cell.detailLabel.text = [NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName];
+        
         cell.profileImageView.image = [UIImage imageNamed:@"Profile"];
         
         if (friend.profileFilePath != nil && ![friend.profileFilePath isEqualToString:@""]) {
@@ -143,6 +145,21 @@
     return @"People I've added";
        */
     return @"Pending Friend Requests";
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    // Background color
+    view.tintColor = [UIColor lightGrayColor];
+    
+    // Text Color
+    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+    [header.textLabel setTextColor:[UIColor whiteColor]];
+    [header.textLabel setFont:[UIFont fontWithName:@"Century Gothic" size:18.0f]];
+    
+    // Another way to set the background color
+    // Note: does not preserve gradient effect of original header
+    // header.contentView.backgroundColor = [UIColor blackColor];
 }
 
 /*
