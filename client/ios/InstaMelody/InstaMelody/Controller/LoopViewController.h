@@ -44,6 +44,9 @@
 @property (nonatomic, strong) IBOutlet UIButton *recordButton;
 @property (nonatomic, strong) IBOutlet UIButton *playButton;
 
+@property (nonatomic, strong) IBOutlet UIButton *forwardButton;
+@property (nonatomic, strong) IBOutlet UIButton *backwardButton;
+
 @property (nonatomic, strong) IBOutlet UILabel *loopStatusLabel;
 
 @property (nonatomic, strong) IBOutlet UIView *consoleView;
