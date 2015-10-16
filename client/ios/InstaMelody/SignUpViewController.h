@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "M13ProgressHUD.h"
+#import "M13ProgressViewRing.h"
 
 @interface SignUpViewController : UIViewController <UITextFieldDelegate>
 

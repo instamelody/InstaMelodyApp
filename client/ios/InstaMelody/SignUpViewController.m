@@ -11,6 +11,7 @@
 #import "constants.h"
 
 @interface SignUpViewController ()
+    @property M13ProgressHUD *HUD;
 
 @end
 
@@ -26,6 +27,12 @@
     self.firstNameField.delegate = self;
     self.lastNameField.delegate = self;
     self.emailAddressField.delegate = self;
+    
+    self.HUD = [[M13ProgressHUD alloc] initWithProgressView:[[M13ProgressViewRing alloc] init]];
+    self.HUD.progressViewSize = CGSizeMake(60.0, 60.0);
+    self.HUD.animationPoint = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height / 2);
+    UIWindow *window = [[[UIApplication sharedApplication] windows] objectAtIndex:0];
+    [window addSubview:self.HUD];
     
 }
 
@@ -58,10 +65,18 @@
          [[AFHTTPRequestSerializer serializer] requestWithMethod:@"POST" URLString:URLString parameters:parameters];
          */
         
+        self.HUD.indeterminate = YES;
+        self.HUD.status = @"Signing up";
+        [self.HUD show:YES];
+        
+        
         NSString *requestUrl = [NSString stringWithFormat:@"%@/User/New", API_BASE_URL];
         
         [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"JSON: %@", responseObject);
+            
+            [self.HUD hide:YES];
+            
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"You are now a user" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [alertView show];
             
@@ -75,6 +90,8 @@
                 }
             }];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            
+            [self.HUD hide:YES];
 
             if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
                 NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];

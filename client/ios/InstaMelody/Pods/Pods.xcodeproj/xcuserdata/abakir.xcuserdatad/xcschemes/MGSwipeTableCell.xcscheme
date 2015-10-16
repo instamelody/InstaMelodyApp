@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "BAA115508322B6625ED92B08"
+               BlueprintIdentifier = "5285378432CDBB2C242C6942"
                BuildableName = "MGSwipeTableCell.framework"
                BlueprintName = "MGSwipeTableCell"
                ReferencedContainer = "container:Pods.xcodeproj">

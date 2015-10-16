@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "876325741FFA1C3A160756D7"
+               BlueprintIdentifier = "593F1DB64E6D86C49696BBE7"
                BuildableName = "FontAwesome.framework"
                BlueprintName = "FontAwesome"
                ReferencedContainer = "container:Pods.xcodeproj">

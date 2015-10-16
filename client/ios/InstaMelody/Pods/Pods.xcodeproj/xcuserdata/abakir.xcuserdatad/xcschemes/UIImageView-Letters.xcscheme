@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3095252C310CBA4B1F437E58"
+               BlueprintIdentifier = "17C489D7C4E9A6D5997626BB"
                BuildableName = "UIImageView_Letters.framework"
                BlueprintName = "UIImageView-Letters"
                ReferencedContainer = "container:Pods.xcodeproj">

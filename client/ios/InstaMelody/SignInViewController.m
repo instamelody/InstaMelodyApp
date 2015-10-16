@@ -16,7 +16,7 @@
 #import "FAImageView.h"
 
 @interface SignInViewController ()
-
+    @property M13ProgressHUD *HUD;
 @end
 
 @implementation SignInViewController
@@ -33,6 +33,12 @@
     
     self.userField.delegate = self;
     self.passField.delegate = self;
+    
+    self.HUD = [[M13ProgressHUD alloc] initWithProgressView:[[M13ProgressViewRing alloc] init]];
+    self.HUD.progressViewSize = CGSizeMake(60.0, 60.0);
+    self.HUD.animationPoint = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height / 2);
+    UIWindow *window = [[[UIApplication sharedApplication] windows] objectAtIndex:0];
+    [window addSubview:self.HUD];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -56,7 +62,9 @@
     
     if (![self.userField.text isEqualToString:@""] && ![self.passField.text isEqualToString:@""] ) {
         
-        
+        self.HUD.indeterminate = YES;
+        self.HUD.status = @"Logging in";
+        [self.HUD show:YES];
         
         NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"DisplayName": self.userField.text, @"Password": self.passField.text}];
         
@@ -105,6 +113,7 @@
 }
 
 -(IBAction)cancel:(id)sender {
+    [self.HUD hide:YES];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -149,6 +158,9 @@
         //NSDictionary *responseDict = (NSDictionary *)responseObject;
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
+            
+            [self.HUD hide:YES];
+            
             NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
             
             NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];

@@ -9,4 +9,5 @@ target 'InstaMelody' do
   pod 'MGSwipeTableCell'
   pod 'JSQMessagesViewController'
   pod 'UIImageView-Letters'
+  pod 'M13ProgressSuite'
 end
