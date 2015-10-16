@@ -17,10 +17,12 @@
 @property (nonatomic, strong) NSArray *groupArray;
 @property (nonatomic, strong) Melody *selectedMelody;
 @property (nonatomic, strong) Melody *selectedMelody2;
+@property (nonatomic, strong) Melody *selectedMelody3;
 @property (nonatomic, strong) NSURL *currentRecordingURL;
 
 @property (nonatomic, strong) AVAudioPlayer *bgPlayer;
 @property (nonatomic, strong) AVAudioPlayer *bgPlayer2;
+@property (nonatomic, strong) AVAudioPlayer *bgPlayer3;
 @property (nonatomic, strong) AVAudioPlayer *fgPlayer;
 
 @property (nonatomic, strong) NSTimer *timer;
@@ -116,13 +118,22 @@
             
             BOOL isToken1 = [name isEqualToString:self.selectedMelody.melodyName];
             BOOL isToken2 = [name isEqualToString:self.selectedMelody2.melodyName];
+            BOOL isToken3 = [name isEqualToString:self.selectedMelody3.melodyName];
             
-            if (tokenInputView.allTokens.count < 3 && !isToken1 && !isToken2) {
+            if (tokenInputView.allTokens.count < 4 && !isToken1 && !isToken2 && !isToken3) {
                 
-                if (tokenInputView.allTokens.count == 0) {
-                    [self didSelectMelody:melody];
-                } else {
-                    [self didSelectMelody2:melody];
+                switch (tokenInputView.allTokens.count) {
+                    case 0:
+                        [self didSelectMelody:melody];
+                        break;
+                    case 1:
+                        [self didSelectMelody2:melody];
+                        break;
+                    case 2:
+                        [self didSelectMelody3:melody];
+                        break;
+                    default:
+                        break;
                 }
                 
                 [tokenInputView addToken:token];
@@ -226,6 +237,31 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
+
+-(IBAction)chooseLoop3:(id)sender {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Loops" message:@"Choose a loop" preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    MelodyGroup *group = self.groupArray[0];
+    
+    if (group != nil) {
+        
+        for (Melody *melody in group.melodies) {
+            UIAlertAction *action = [UIAlertAction actionWithTitle:melody.melodyName style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                //make the button do something
+                [self didSelectMelody3:melody];
+                
+            }];
+            [alert addAction:action];
+            
+        }
+        
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDestructive handler:nil];
+        [alert addAction:cancelAction];
+    }
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
 -(IBAction)share:(id)sender {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Share to" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     UIAlertAction *fbAction = [UIAlertAction actionWithTitle:@"Facebook" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
@@ -286,6 +322,15 @@
         [self.bgPlayer2 stop];
     } else {
         [self playLoop2:nil];
+    }
+}
+
+
+-(IBAction)toggleLoop3:(id)sender {
+    if ([self.bgPlayer3 isPlaying]) {
+        [self.bgPlayer3 stop];
+    } else {
+        [self playLoop3:nil];
     }
 }
 
@@ -352,6 +397,36 @@
     
 }
 
+-(IBAction)playLoop3:(id)sender {
+    NSNumber *volume = [self.defaults objectForKey:@"melodyVolume"];
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    
+    NSString *pathString = [NSString stringWithFormat:@"%@/Melodies/%@", documentsPath, self.selectedMelody3.fileName];
+    
+    //pathString = [pathString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    
+    NSURL *docURL = [NSURL fileURLWithPath:pathString];
+    
+    NSError *error = nil;
+    
+    self.bgPlayer3 = [[AVAudioPlayer alloc] initWithContentsOfURL:docURL error:&error];
+    self.bgPlayer3.delegate = self;
+    
+    if (error == nil) {
+        
+        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAPlay] forState:UIControlStateNormal];
+        [self.bgPlayer3 setNumberOfLoops:-1];
+        [self.bgPlayer3 setVolume:[volume floatValue]];
+        [self.bgPlayer3 play];
+        
+        //self.timer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(updatePlaybackProgress) userInfo:nil repeats:YES];
+    } else {
+        NSLog(@"Error loading file: %@", [error description]);
+        
+    }
+    
+}
+
 -(IBAction)playRecording:(id)sender {
     
     NSNumber *volume = [self.defaults objectForKey:@"micVolume"];
@@ -392,6 +467,10 @@
     
     if (self.selectedMelody2 != nil) {
         [userDict setObject:self.selectedMelody2.melodyId forKey:@"MelodyId2"];
+    }
+    
+    if (self.selectedMelody3 != nil) {
+        [userDict setObject:self.selectedMelody3.melodyId forKey:@"MelodyId3"];
     }
     
     
@@ -506,6 +585,8 @@
     
     [self toggleLoop:nil];
     [self toggleLoop2:nil];
+    [self toggleLoop3:nil];
+    
     
 }
 
@@ -519,6 +600,7 @@
         [self.fgPlayer stop];
         [self.bgPlayer stop];
         [self.bgPlayer2 stop];
+        [self.bgPlayer3 stop];
         [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAPlay] forState:UIControlStateNormal];
         
         [self.timer invalidate];
@@ -541,26 +623,22 @@
 }
 
 -(void)playEverything {
-    if (self.selectedMelody != nil && self.selectedMelody2 != nil)
-    {
-        [self playRecording:nil];
+    
+    [self playRecording:nil];
+    
+    if (self.selectedMelody != nil) {
         [self playLoop:nil];
-        [self playLoop2:nil];
-        
-        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAStop] forState:UIControlStateNormal];
-    } else if (self.selectedMelody != nil) {
-        [self playRecording:nil];
-        [self playLoop:nil];
-        
-        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAStop] forState:UIControlStateNormal];
-    } else {
-        
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"No melodies selected" message:@"Please select a melody" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
-        [alert addAction:okAction];
-        [self presentViewController:alert animated:YES completion:nil];
-        
     }
+    
+    if (self.selectedMelody2 != nil) {
+        [self playLoop2:nil];
+    }
+    
+    if (self.selectedMelody3 != nil) {
+        [self playLoop3:nil];
+    }
+    
+    [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAStop] forState:UIControlStateNormal];
 }
 
 -(void)didSelectMelody:(Melody *)melody {
@@ -573,6 +651,11 @@
     [self.chooseLoop2Button setTitle:melody.melodyName forState:UIControlStateNormal];
     
     [self loadMelody2:melody];
+}
+
+-(void)didSelectMelody3:(Melody *)melody {
+    
+    [self loadMelody3:melody];
 }
 
 -(void)loadMelody:(Melody *)melody {
@@ -665,6 +748,58 @@
     //NSString *filePath = [documentsPath stringByAppendingPathComponent:pathString];
     
     self.selectedMelody2 = melody;
+    
+    //if file exists, load, set status = loaded,
+    if ([fileManager fileExistsAtPath:pathString]) {
+        //
+        
+        self.loopStatusLabel.text = @"Melody loaded!";
+        
+        //self.playButton.hidden = NO;
+        
+    } else {
+        //else, download, show progress, set loaded, set play button
+        
+        self.loopStatusLabel.text = @"Melody downloading (0%)";
+        
+        [self downloadFile:melody.filePathUrlString toPath:pathString];
+    }
+}
+
+-(void)loadMelody3:(Melody *)melody {
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    
+    NSString *melodyPath = [documentsPath stringByAppendingPathComponent:@"Melodies"];
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:melodyPath]){
+        
+        NSError* error;
+        if(  [[NSFileManager defaultManager] createDirectoryAtPath:melodyPath withIntermediateDirectories:NO attributes:nil error:&error]) {
+            
+            NSLog(@"success creating folder");
+            
+        } else {
+            NSLog(@"[%@] ERROR: attempting to write create MyFolder directory", [self class]);
+            NSAssert( FALSE, @"Failed to create directory maybe out of disk space?");
+        }
+        
+    }
+    
+    
+    NSURL *docURL = [NSURL fileURLWithPath:documentsPath];
+    NSArray *contents = [fileManager contentsOfDirectoryAtURL:docURL
+                                   includingPropertiesForKeys:@[]
+                                                      options:NSDirectoryEnumerationSkipsHiddenFiles
+                                                        error:nil];
+    
+    
+    
+    NSString *pathString = [melodyPath stringByAppendingPathComponent:melody.fileName];
+    
+    self.selectedMelody3 = melody;
     
     //if file exists, load, set status = loaded,
     if ([fileManager fileExistsAtPath:pathString]) {
@@ -1020,6 +1155,8 @@
         self.selectedMelody = nil;
     } else if ([self.selectedMelody2.melodyName isEqualToString:name]) {
         self.selectedMelody2 = nil;
+    }  else if ([self.selectedMelody3.melodyName isEqualToString:name]) {
+        self.selectedMelody3 = nil;
     }
     
     [self.view endEditing:YES];

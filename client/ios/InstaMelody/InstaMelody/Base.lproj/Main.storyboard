@@ -999,7 +999,7 @@
                             <constraint firstItem="Mhi-0z-3EO" firstAttribute="top" secondItem="uDF-4P-4Ou" secondAttribute="bottom" constant="7" id="xCd-dl-c5x"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Loop" id="vsC-Yg-ig1">
+                    <navigationItem key="navigationItem" title="Studio" id="vsC-Yg-ig1">
                         <barButtonItem key="rightBarButtonItem" title="Save" id="czj-c1-ryE">
                             <connections>
                                 <action selector="save:" destination="zFq-Vd-UtH" id="E5J-tU-Bix"/>
