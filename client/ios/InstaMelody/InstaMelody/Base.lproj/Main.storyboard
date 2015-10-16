@@ -634,11 +634,14 @@
                                                     <constraint firstAttribute="height" constant="100" id="cFS-0V-7fB"/>
                                                 </constraints>
                                             </imageView>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ObB-It-L2l">
-                                                <rect key="frame" x="0.0" y="0.0" width="115" height="115"/>
+                                            <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ObB-It-L2l">
+                                                <rect key="frame" x="33" y="33" width="50" height="50"/>
                                                 <animations/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                <state key="normal" title="P">
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="GIa-va-c8p"/>
+                                                    <constraint firstAttribute="width" constant="50" id="fzM-Zw-ihc"/>
+                                                </constraints>
+                                                <state key="normal" image="play">
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <connections>
@@ -651,12 +654,10 @@
                                         <constraints>
                                             <constraint firstAttribute="centerY" secondItem="Not-UM-Ow1" secondAttribute="centerY" id="6Z0-Wh-eZk"/>
                                             <constraint firstAttribute="width" constant="115" id="8qK-Ds-Lqn"/>
-                                            <constraint firstAttribute="bottom" secondItem="ObB-It-L2l" secondAttribute="bottom" id="Azu-8I-KoI"/>
                                             <constraint firstAttribute="centerX" secondItem="Not-UM-Ow1" secondAttribute="centerX" id="OXj-hq-FG7"/>
-                                            <constraint firstAttribute="trailing" secondItem="ObB-It-L2l" secondAttribute="trailing" id="Qhy-RR-K77"/>
-                                            <constraint firstItem="ObB-It-L2l" firstAttribute="top" secondItem="WV3-gz-0cc" secondAttribute="top" id="bwg-Eo-xxA"/>
                                             <constraint firstAttribute="height" constant="115" id="ew2-xF-P4o"/>
-                                            <constraint firstItem="ObB-It-L2l" firstAttribute="leading" secondItem="WV3-gz-0cc" secondAttribute="leading" id="pan-Rr-6Mz"/>
+                                            <constraint firstItem="ObB-It-L2l" firstAttribute="centerY" secondItem="WV3-gz-0cc" secondAttribute="centerY" id="fCh-g1-ZeA"/>
+                                            <constraint firstItem="ObB-It-L2l" firstAttribute="centerX" secondItem="WV3-gz-0cc" secondAttribute="centerX" id="zY4-ld-Xvj"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -749,11 +750,11 @@
                                 </constraints>
                                 <color key="sectionIndexColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="UserCollectionCell" rowHeight="112" id="0ua-Zf-vWL" customClass="UsersCell">
-                                        <rect key="frame" x="0.0" y="28" width="320" height="112"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="UserCollectionCell" rowHeight="111" id="0ua-Zf-vWL" customClass="UsersCell">
+                                        <rect key="frame" x="0.0" y="28" width="320" height="111"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0ua-Zf-vWL" id="EOB-J6-oUA">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="112"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="111"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="INCLUDED IN MELODY MESSAGE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="34L-AV-Y1F">
@@ -839,11 +840,11 @@
                                             <outlet property="collectionView" destination="fn4-zu-uEz" id="ClP-S4-wSp"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="TopicCell" rowHeight="90" id="bI3-GG-jyB" customClass="TopicCell">
-                                        <rect key="frame" x="0.0" y="140" width="320" height="90"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="TopicCell" rowHeight="87" id="bI3-GG-jyB" customClass="TopicCell">
+                                        <rect key="frame" x="0.0" y="139" width="320" height="87"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bI3-GG-jyB" id="Wj8-fP-YZ0">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="90"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="87"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TOPIC" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vLw-P9-MbC">
@@ -883,11 +884,11 @@
                                             <outlet property="topicField" destination="LMo-BP-Z1V" id="7ON-IM-TVo"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MelodyCell" rowHeight="95" id="wy5-C8-2bm" customClass="MelodyCell">
-                                        <rect key="frame" x="0.0" y="230" width="320" height="95"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MelodyCell" rowHeight="91" id="wy5-C8-2bm" customClass="MelodyCell">
+                                        <rect key="frame" x="0.0" y="226" width="320" height="91"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="wy5-C8-2bm" id="okf-Qx-bjV">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="95"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="91"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MELODY" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9wn-OS-NDh">
@@ -928,11 +929,11 @@
                                             <outlet property="tokenInputView" destination="NgT-8I-p5X" id="lnd-24-MGh"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StatusCell" rowHeight="86" id="V3F-u5-9il" customClass="StatusCell">
-                                        <rect key="frame" x="0.0" y="325" width="320" height="86"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StatusCell" rowHeight="59" id="V3F-u5-9il" customClass="StatusCell">
+                                        <rect key="frame" x="0.0" y="317" width="320" height="59"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="V3F-u5-9il" id="Hor-1g-SqO">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="86"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="59"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loop loaded!" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="2x7-dd-wtA">

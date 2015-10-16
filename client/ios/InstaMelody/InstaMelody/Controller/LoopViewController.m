@@ -170,9 +170,11 @@
 }
 
 -(void)applyFontAwesome {
-    self.playButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:50.0f];
+    //self.playButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:50.0f];
     
-    self.playButton.hidden = YES;
+    if (self.selectedUserMelody != nil) {
+        self.playButton.hidden = YES;
+    }
     
     self.playLoopButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:25.0f];
     self.playLoop2Button.titleLabel.font = [UIFont fontAwesomeFontOfSize:25.0f];
@@ -180,7 +182,7 @@
     self.forwardButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:40.0f];
     self.backwardButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:40.0f];
     
-    [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAPlay] forState:UIControlStateNormal];
+    [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
     [self.playLoopButton setTitle:[NSString fontAwesomeIconStringForEnum:FARefresh] forState:UIControlStateNormal];
     
     [self.playLoop2Button setTitle:[NSString fontAwesomeIconStringForEnum:FARefresh] forState:UIControlStateNormal];
@@ -357,7 +359,7 @@
     
     if (error == nil) {
         
-        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAPlay] forState:UIControlStateNormal];
+        [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
         [self.bgPlayer setNumberOfLoops:-1];
         [self.bgPlayer setVolume:[volume floatValue]];
         [self.bgPlayer play];
@@ -387,7 +389,7 @@
     
     if (error == nil) {
         
-        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAPlay] forState:UIControlStateNormal];
+        [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
         [self.bgPlayer2 setNumberOfLoops:-1];
         [self.bgPlayer2 setVolume:[volume floatValue]];
         [self.bgPlayer2 play];
@@ -417,7 +419,8 @@
     
     if (error == nil) {
         
-        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAPlay] forState:UIControlStateNormal];
+        [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+        
         [self.bgPlayer3 setNumberOfLoops:-1];
         [self.bgPlayer3 setVolume:[volume floatValue]];
         [self.bgPlayer3 play];
@@ -444,7 +447,7 @@
     
     if (error == nil) {
         
-        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAStop] forState:UIControlStateNormal];
+        [self.playButton setImage:[UIImage imageNamed:@"stop"] forState:UIControlStateNormal];
         [self.fgPlayer setVolume:volume.floatValue];
         
         [self.fgPlayer play];
@@ -627,7 +630,7 @@
         [self.bgPlayer stop];
         [self.bgPlayer2 stop];
         [self.bgPlayer3 stop];
-        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAPlay] forState:UIControlStateNormal];
+        [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
         
         [self.timer invalidate];
     } else {
@@ -677,7 +680,7 @@
         [self playLoop3:nil];
     }
     
-    [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAStop] forState:UIControlStateNormal];
+    [self.playButton setImage:[UIImage imageNamed:@"stop"] forState:UIControlStateNormal];
 }
 
 -(void)didSelectMelody:(Melody *)melody {
@@ -1013,10 +1016,12 @@
 {
     if (flag) {
         [self.timer invalidate];
-        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAPlay] forState:UIControlStateNormal];
+        
+        [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
         if (player == self.fgPlayer) {
             [self.bgPlayer stop];
             [self.bgPlayer2 stop];
+            [self.bgPlayer3 stop];
         }
     }
 }
