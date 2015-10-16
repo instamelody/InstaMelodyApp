@@ -39,6 +39,7 @@
 		873FCFF01BB750BE00CE2B44 /* StatusCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 873FCFEF1BB750BE00CE2B44 /* StatusCell.m */; };
 		87538B7D1BB72BE500F7F9D8 /* UsersCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87538B7C1BB72BE500F7F9D8 /* UsersCell.m */; };
 		87538B801BB72C6400F7F9D8 /* UserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87538B7F1BB72C6400F7F9D8 /* UserCell.m */; };
+		8754A8BC1BD13D340060B078 /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8754A8BB1BD13D340060B078 /* NotificationsViewController.m */; settings = {ASSET_TAGS = (); }; };
 		875C19FE1BB5F3B3007B14DE /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 875C19FD1BB5F3B3007B14DE /* FontAwesome.ttf */; };
 		878FAD601BAC6E1D00260D5B /* UserMelodyListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 878FAD5F1BAC6E1D00260D5B /* UserMelodyListViewController.m */; };
 		87915E8B1B9F4AC300628937 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 87915E8A1B9F4AC300628937 /* placeholder.png */; };
@@ -137,6 +138,8 @@
 		87538B7C1BB72BE500F7F9D8 /* UsersCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UsersCell.m; sourceTree = "<group>"; };
 		87538B7E1BB72C6400F7F9D8 /* UserCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserCell.h; path = View/UserCell.h; sourceTree = "<group>"; };
 		87538B7F1BB72C6400F7F9D8 /* UserCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserCell.m; path = View/UserCell.m; sourceTree = "<group>"; };
+		8754A8BA1BD13D340060B078 /* NotificationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationsViewController.h; sourceTree = "<group>"; };
+		8754A8BB1BD13D340060B078 /* NotificationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsViewController.m; sourceTree = "<group>"; };
 		875C19FD1BB5F3B3007B14DE /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.ttf; path = Pods/FontAwesome/Resources/FontAwesome.ttf; sourceTree = "<group>"; };
 		878FAD5E1BAC6E1D00260D5B /* UserMelodyListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserMelodyListViewController.h; sourceTree = "<group>"; };
 		878FAD5F1BAC6E1D00260D5B /* UserMelodyListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserMelodyListViewController.m; sourceTree = "<group>"; };
@@ -387,6 +390,8 @@
 				87EBFB421BB6154900AA5F70 /* StationViewController.m */,
 				87AF84731BB6B17500FCD3E1 /* VolumeViewController.h */,
 				87AF84741BB6B17500FCD3E1 /* VolumeViewController.m */,
+				8754A8BA1BD13D340060B078 /* NotificationsViewController.h */,
+				8754A8BB1BD13D340060B078 /* NotificationsViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -607,6 +612,7 @@
 				8707F9FA1B4476BD004B4C20 /* AFURLSessionManager.m in Sources */,
 				873FCFED1BB7412C00CE2B44 /* MelodyPickerController.m in Sources */,
 				873FCFF01BB750BE00CE2B44 /* StatusCell.m in Sources */,
+				8754A8BC1BD13D340060B078 /* NotificationsViewController.m in Sources */,
 				8707F9F81B4476BD004B4C20 /* AFURLRequestSerialization.m in Sources */,
 				8707F9F91B4476BD004B4C20 /* AFURLResponseSerialization.m in Sources */,
 				8707F9B81B446F57004B4C20 /* AppDelegate.m in Sources */,
