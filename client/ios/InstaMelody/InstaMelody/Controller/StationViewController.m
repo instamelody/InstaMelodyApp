@@ -145,9 +145,9 @@
     UIImage *loopImage = [UIImage imageNamed:@"loop"];
     
     micImage = [self imageWithImage:micImage scaledToSize:CGSizeMake(70, 70)];
-    soloImage = [self imageWithImage:soloImage scaledToSize:CGSizeMake(70, 70)];
-    chatImage = [self imageWithImage:chatImage scaledToSize:CGSizeMake(70, 70)];
-    loopImage = [self imageWithImage:loopImage scaledToSize:CGSizeMake(70, 70)];
+    soloImage = [self imageWithImage:soloImage scaledToSize:CGSizeMake(60, 60)];
+    chatImage = [self imageWithImage:chatImage scaledToSize:CGSizeMake(60, 60)];
+    loopImage = [self imageWithImage:loopImage scaledToSize:CGSizeMake(60, 60)];
     
     // Default Menu
     

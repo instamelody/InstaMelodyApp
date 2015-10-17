@@ -241,9 +241,9 @@
     UIImage *loopImage = [UIImage imageNamed:@"loop"];
     
     micImage = [HomeViewController imageWithImage:micImage scaledToSize:CGSizeMake(70, 70)];
-    soloImage = [HomeViewController imageWithImage:soloImage scaledToSize:CGSizeMake(70, 70)];
-    chatImage = [HomeViewController imageWithImage:chatImage scaledToSize:CGSizeMake(70, 70)];
-    loopImage = [HomeViewController imageWithImage:loopImage scaledToSize:CGSizeMake(70, 70)];
+    soloImage = [HomeViewController imageWithImage:soloImage scaledToSize:CGSizeMake(60, 60)];
+    chatImage = [HomeViewController imageWithImage:chatImage scaledToSize:CGSizeMake(60, 60)];
+    loopImage = [HomeViewController imageWithImage:loopImage scaledToSize:CGSizeMake(60, 60)];
     
     // Default Menu
     
