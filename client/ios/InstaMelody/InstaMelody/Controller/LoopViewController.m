@@ -652,7 +652,7 @@
         
         [self.fgPlayer play];
         
-        //self.timer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(updatePlaybackProgress) userInfo:nil repeats:YES];
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(updatePlaybackProgress) userInfo:nil repeats:YES];
     } else {
         NSLog(@"Error loading file: %@", [error description]);
         
@@ -930,7 +930,7 @@
     
     int count = 0;
     
-    
+    self.progressView.progress = 0.0;
     for (NSString *partId in partIds) {
         
         //get and set recording
@@ -1381,6 +1381,7 @@
                 [self playEverything];
             } else {
                 [self.profileImageView setImage:[UIImage imageNamed:@"Profile"]];
+                self.progressView.progress = 0;
             }
         }
     }
