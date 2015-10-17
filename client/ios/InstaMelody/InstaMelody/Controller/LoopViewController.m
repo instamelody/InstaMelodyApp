@@ -884,6 +884,7 @@
 
 -(void)preload {
     
+    
     NSArray *paths =
     NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
                                         NSUserDomainMask, YES);
@@ -957,6 +958,46 @@
     NSString *stringText = [NSString stringWithFormat:@"%@ %ld", [[self.partArray objectAtIndex:self.currentPartIndex] objectForKey:@"PartName"], (self.currentPartIndex+1)];
     
     //[self.statusButton setTitle:stringText forState:UIControlStateNormal];
+    
+    //load friend pic here
+    NSString *userId = [[self.partArray objectAtIndex:self.currentPartIndex] objectForKey:@"UserId"];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    NSString *myUserId = [defaults objectForKey:@"Id"];
+    
+    if ([userId isEqualToString:myUserId]) {
+        
+        NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+        
+        NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
+        NSString *imageName = [[defaults objectForKey:@"ProfileFilePath"] lastPathComponent];
+        
+        NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
+        self.profileImageView.image = [UIImage imageWithContentsOfFile:imagePath];
+        
+    } else {
+        Friend *friend = [Friend MR_findFirstByAttribute:@"userId" withValue:userId];
+        
+        NSString *userName = [NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName];
+        
+        if (friend.profileFilePath != nil && ![friend.profileFilePath isEqualToString:@""]) {
+            
+            NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+            
+            NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
+            NSString *imageName = [friend.profileFilePath lastPathComponent];
+            
+            NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
+            self.profileImageView.image = [UIImage imageWithContentsOfFile:imagePath];
+            
+        } else {
+            NSString *userName = [NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName];
+            [self.profileImageView setImageWithString:userName color:nil circular:YES];
+        }
+        
+    }
+    
     
 }
 
@@ -1493,10 +1534,24 @@
     } else {
         Friend *friend = [Friend MR_findFirstByAttribute:@"userId" withValue:userId];
         
+        NSString *userName = [NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName];
         cell.nameLabel.text = friend.firstName;
         
-        NSString *userName = [NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName];
-        [cell.imageView setImageWithString:userName color:nil circular:YES];
+        if (friend.profileFilePath != nil && ![friend.profileFilePath isEqualToString:@""]) {
+            
+            NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+            
+            NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
+            NSString *imageName = [friend.profileFilePath lastPathComponent];
+            
+            NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
+            cell.imageView.image = [UIImage imageWithContentsOfFile:imagePath];
+            
+        } else {
+            NSString *userName = [NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName];
+            [cell.imageView setImageWithString:userName color:nil circular:YES];
+        }
+        
 
     }
 
