@@ -109,6 +109,14 @@
                 [self didSelectMelody2:melody];
                 count++;
                 
+            } else if (count == 2) {
+                //
+                
+                Melody *melody = [Melody MR_findFirstByAttribute:@"melodyId" withValue:part.partId];
+                
+                [self didSelectMelody3:melody];
+                count++;
+                
             }
         }
     }
@@ -222,12 +230,14 @@
         
         NSDictionary *userMelodyDict = [part objectForKey:@"UserMelody"];
         
-        [partDict setObject:[userMelodyDict objectForKey:@"UserId"] forKey:@"UserId"];
+        NSString *userId = [userMelodyDict objectForKey:@"UserId"];
+        
+        [partDict setObject:userId forKey:@"UserId"];
         
         if ([[part objectForKey:@"UserId"] isEqualToString:[defaults objectForKey:@"Id"]]) {
             [partDict setObject:@"My part" forKey:@"PartName"];
         } else {
-            Friend *friend = [Friend MR_findFirstByAttribute:@"userId" withValue:[part objectForKey:@"UserId"]];
+            Friend *friend = [Friend MR_findFirstByAttribute:@"userId" withValue:userId];
             if (friend !=nil) {
                 [partDict setObject:[NSString stringWithFormat:@"%@'s part", friend.displayName] forKey:@"PartName"];
             } else {
@@ -239,12 +249,20 @@
         NSArray *subPartArray = [userMelodyDict objectForKey:@"Parts"];
         
         NSMutableArray *fileArray = [NSMutableArray new];
+        NSMutableArray *partIdArray = [NSMutableArray new];
         
         for (NSDictionary *subPart in subPartArray) {
             [fileArray addObject:[subPart objectForKey:@"FilePath"]];
+            
+            BOOL isUserCreated = [[subPart objectForKey:@"IsUserCreated"] boolValue];
+            
+            if (!isUserCreated) {
+                [partIdArray addObject:[subPart objectForKey:@"Id"]];
+            }
         }
         
         [partDict setObject:fileArray forKey:@"Files"];
+        [partDict setObject:partIdArray forKey:@"Ids"];
         [self.partArray addObject:partDict];
         
     }
@@ -865,6 +883,7 @@
     NSString *documentsPath = [paths objectAtIndex:0];
     
     NSArray *files = [[self.partArray objectAtIndex:self.currentPartIndex] objectForKey:@"Files"];
+    NSArray *partIds = [[self.partArray objectAtIndex:self.currentPartIndex] objectForKey:@"Ids"];
     for (NSString *filePath in files) {
         if ([filePath containsString:@"recording"]) {
             
@@ -892,56 +911,41 @@
                 [self downloadRecording:filePath toPath:localFilePath];
             }
             
-        } else {
-            
-            int count = 0;
-            
-            NSString *melodyPath = [documentsPath stringByAppendingPathComponent:@"Melodies"];
-            
-            NSString *localFilePath = [melodyPath stringByAppendingPathComponent:[filePath lastPathComponent]];
-            
-            if (![[NSFileManager defaultManager] fileExistsAtPath:melodyPath]){
-                
-                NSError* error;
-                if(  [[NSFileManager defaultManager] createDirectoryAtPath:melodyPath withIntermediateDirectories:NO attributes:nil error:&error]) {
-                    
-                    NSLog(@"success creating folder");
-                    
-                } else {
-                    NSLog(@"[%@] ERROR: attempting to write create MyFolder directory", [self class]);
-                    NSAssert( FALSE, @"Failed to create directory maybe out of disk space?");
-                }
-                
-            }
-            
-            if (count == 0) {
-                
-                if ([[NSFileManager defaultManager] fileExistsAtPath:localFilePath]){
-                    NSLog(@"file already downloaded");
-                    
-                    count++;
-                    
-                }
-                
-            } else if (count == 1 ){
-                if ([[NSFileManager defaultManager] fileExistsAtPath:localFilePath]){
-                    NSLog(@"file already downloaded");
-                    
-                    count++;
-                    
-                }
-            } else if (count == 2 ){
-                if ([[NSFileManager defaultManager] fileExistsAtPath:localFilePath]){
-                    NSLog(@"file already downloaded");
-                    
-                    count++;
-                    
-                }
-            }
         }
+        
     }
     
-    [self playEverything];
+    int count = 0;
+    
+    
+    for (NSString *partId in partIds) {
+        
+        //get and set recording
+        
+        //part.fileName
+        
+        if (count == 0) {
+            Melody *melody = [Melody MR_findFirstByAttribute:@"melodyId" withValue:partId];
+            
+            //get and set system melodies
+            [self didSelectMelody:melody];
+        } else if (count == 1) {
+            //
+            
+            Melody *melody = [Melody MR_findFirstByAttribute:@"melodyId" withValue:partId];
+            
+            [self didSelectMelody2:melody];
+            
+        } else if (count == 2) {
+            //
+            
+            Melody *melody = [Melody MR_findFirstByAttribute:@"melodyId" withValue:partId];
+            
+            [self didSelectMelody3:melody];
+            
+        }
+        count = count+ 1;
+    }
     
     NSString *stringText = [NSString stringWithFormat:@"%@ %ld", [[self.partArray objectAtIndex:self.currentPartIndex] objectForKey:@"PartName"], (self.currentPartIndex+1)];
     
@@ -950,6 +954,10 @@
 }
 
 -(void)playEverything {
+    
+    if (self.selectedLoop != nil) {
+        [self preload];
+    }
     
     [self playRecording:nil];
     
@@ -1313,7 +1321,8 @@
         
         if (self.selectedLoop && self.currentPartIndex < self.partArray.count - 1) {
             self.currentPartIndex++;
-            [self preload];
+            //[self preload];
+            [self playEverything];
         }
     }
 }
