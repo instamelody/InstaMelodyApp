@@ -164,6 +164,13 @@
     
 }
 
+-(void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    if ([self.fgPlayer isPlaying]) {
+        [self togglePlayback:nil];
+    }
+}
+
 -(void)getLoop:(NSString *)loopId {
     
     NSString *requestUrl = [NSString stringWithFormat:@"%@/Melody/Loop", API_BASE_URL];
@@ -1354,6 +1361,12 @@
         } else if (indexPath.row == 1) {
             TopicCell *cell = (TopicCell *)[tableView dequeueReusableCellWithIdentifier:@"TopicCell" forIndexPath:indexPath];
             cell.topicField.tag = 98;
+            
+            if (self.selectedLoop !=nil) {
+                cell.topicField.text = [self.selectedLoop objectForKey:@"Name"];
+                [cell.topicField setEnabled:NO];
+                [cell.topicField setBackgroundColor:[UIColor lightGrayColor]];
+            }
             
             if (self.selectedUserMelody != nil) {
                 cell.topicField.text = self.selectedUserMelody.userMelodyName;

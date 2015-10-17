@@ -121,6 +121,11 @@
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"uploadDone" object:nil];
+    
+    if ([self.fgPlayer isPlaying]) {
+        [self togglePlayback:nil];
+        
+    }
 }
 
 #pragma mark - JSQMessages CollectionView DataSource
