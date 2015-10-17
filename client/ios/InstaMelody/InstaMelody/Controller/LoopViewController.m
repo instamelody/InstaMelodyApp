@@ -241,12 +241,14 @@
         
         [partDict setObject:userId forKey:@"UserId"];
         
-        if ([[part objectForKey:@"UserId"] isEqualToString:[defaults objectForKey:@"Id"]]) {
+        NSString *myUserId = [defaults objectForKey:@"Id"];
+        
+        if ([userId isEqualToString:myUserId]) {
             [partDict setObject:@"My part" forKey:@"PartName"];
         } else {
             Friend *friend = [Friend MR_findFirstByAttribute:@"userId" withValue:userId];
             if (friend !=nil) {
-                [partDict setObject:[NSString stringWithFormat:@"%@'s part", friend.displayName] forKey:@"PartName"];
+                [partDict setObject:[NSString stringWithFormat:@"%@'s part", friend.firstName] forKey:@"PartName"];
             } else {
                 [partDict setObject:@"Friend's part" forKey:@"PartName"];
             }
@@ -850,6 +852,8 @@
         [self.bgPlayer3 stop];
         [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
         
+        [self.profileImageView setImage:[UIImage imageNamed:@"Profile"]];
+        
         [self.timer invalidate];
     } else {
         
@@ -1367,10 +1371,15 @@
             [self.bgPlayer3 stop];
         }
         
-        if (self.selectedLoop && self.currentPartIndex < self.partArray.count - 1) {
-            self.currentPartIndex++;
-            //[self preload];
-            [self playEverything];
+        if (self.selectedLoop) {
+            
+            if (self.currentPartIndex < self.partArray.count - 1) {
+                self.currentPartIndex++;
+                //[self preload];
+                [self playEverything];
+            } else {
+                [self.profileImageView setImage:[UIImage imageNamed:@"Profile"]];
+            }
         }
     }
 }

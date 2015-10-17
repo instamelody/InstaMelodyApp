@@ -760,14 +760,19 @@
         
         NSDictionary *userMelodyDict = [part objectForKey:@"UserMelody"];
         
-        [partDict setObject:[userMelodyDict objectForKey:@"UserId"] forKey:@"UserId"];
+        NSString *userId = [userMelodyDict objectForKey:@"UserId"];
         
-        if ([[part objectForKey:@"UserId"] isEqualToString:[defaults objectForKey:@"Id"]]) {
+        [partDict setObject:userId forKey:@"UserId"];
+        //load friend pic here
+        
+        NSString *myUserId = [defaults objectForKey:@"Id"];
+        
+        if ([userId isEqualToString:myUserId]) {
             [partDict setObject:@"My part" forKey:@"PartName"];
         } else {
-            Friend *friend = [Friend MR_findFirstByAttribute:@"userId" withValue:[part objectForKey:@"UserId"]];
+            Friend *friend = [Friend MR_findFirstByAttribute:@"userId" withValue:userId];
             if (friend !=nil) {
-                [partDict setObject:[NSString stringWithFormat:@"%@'s part", friend.displayName] forKey:@"PartName"];
+                [partDict setObject:[NSString stringWithFormat:@"%@'s part", friend.firstName] forKey:@"PartName"];
             } else {
                 [partDict setObject:@"Friend's part" forKey:@"PartName"];
             }
@@ -1041,7 +1046,7 @@
     
     [self playEverything];
     
-    NSString *stringText = [NSString stringWithFormat:@"%@ %ld", [[self.partArray objectAtIndex:self.currentPartIndex] objectForKey:@"PartName"], (self.currentPartIndex+1)];
+    NSString *stringText = [NSString stringWithFormat:@"%@ (%ld/%ld)", [[self.partArray objectAtIndex:self.currentPartIndex] objectForKey:@"PartName"], (self.currentPartIndex+1), self.partArray.count];
     
     [self.statusButton setTitle:stringText forState:UIControlStateNormal];
     
