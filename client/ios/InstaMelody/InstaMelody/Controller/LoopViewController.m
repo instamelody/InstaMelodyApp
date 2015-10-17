@@ -32,6 +32,7 @@
 @property (nonatomic, strong) AVAudioRecorder *recorder;
 @property (nonatomic, strong) NSMutableArray *partArray;
 @property NSInteger currentPartIndex;
+@property BOOL goBack;
 
 @property NSUserDefaults *defaults;
 
@@ -41,6 +42,8 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.goBack = NO;
     
     self.defaults = [NSUserDefaults standardUserDefaults];
     
@@ -699,7 +702,7 @@
     
     if (self.currentPartIndex > 0) {
          //skip to prv
-        self.currentPartIndex-=2;
+        self.goBack = YES;
         [self audioPlayerDidFinishPlaying:self.fgPlayer successfully:YES];
     }
 }
@@ -1376,13 +1379,23 @@
         if (self.selectedLoop) {
             
             if (self.currentPartIndex < self.partArray.count - 1) {
-                self.currentPartIndex++;
+                
+                if (self.goBack) {
+                    self.currentPartIndex--;
+                    //[self preload];
+                    self.goBack = NO;
+                } else {
+                    self.currentPartIndex++;
+                }
                 //[self preload];
                 [self playEverything];
             } else {
                 [self.profileImageView setImage:[UIImage imageNamed:@"Profile"]];
                 self.progressView.progress = 0;
             }
+        } else {
+            [self.profileImageView setImage:[UIImage imageNamed:@"Profile"]];
+            self.progressView.progress = 0;
         }
     }
 }
