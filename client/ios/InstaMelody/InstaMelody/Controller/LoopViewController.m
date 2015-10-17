@@ -1378,7 +1378,9 @@
         
         if (self.selectedLoop) {
             
-            if (self.currentPartIndex < self.partArray.count - 1) {
+            NSInteger partCount = MAX(0, self.partArray.count -1);
+            
+            if (self.currentPartIndex < partCount) {
                 
                 if (self.goBack) {
                     self.currentPartIndex--;
@@ -1392,10 +1394,12 @@
             } else {
                 [self.profileImageView setImage:[UIImage imageNamed:@"Profile"]];
                 self.progressView.progress = 0;
+                self.currentPartIndex = 0;
             }
         } else {
             [self.profileImageView setImage:[UIImage imageNamed:@"Profile"]];
             self.progressView.progress = 0;
+            self.currentPartIndex = 0;
         }
     }
 }
@@ -1623,6 +1627,21 @@
     }
 
     return cell;
+}
+
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath  {
+    
+    if (indexPath.row != self.currentPartIndex) {
+        
+
+
+    }
+    
+    self.currentPartIndex = indexPath.row - 1 ;
+    [self audioPlayerDidFinishPlaying:self.fgPlayer successfully:YES];
+    
+    //if final item, add user to loop
+    
 }
 
 #pragma mark - token delegate
