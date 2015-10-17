@@ -64,6 +64,7 @@
             <string>CenturyGothic</string>
             <string>CenturyGothic</string>
             <string>CenturyGothic</string>
+            <string>CenturyGothic</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -702,6 +703,17 @@
                                     <action selector="back:" destination="zFq-Vd-UtH" eventType="touchUpInside" id="Cx9-Oz-bw7"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Press Play to Start" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4QL-Pf-TSi">
+                                <rect key="frame" x="225" y="530" width="150" height="21"/>
+                                <animations/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="1yn-ZQ-QIF"/>
+                                    <constraint firstAttribute="width" constant="150" id="wQO-Nd-hSW"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="13"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uDF-4P-4Ou">
                                 <rect key="frame" x="150" y="383" width="40" height="40"/>
                                 <animations/>
@@ -993,6 +1005,7 @@
                         <constraints>
                             <constraint firstItem="1oK-Yl-Pmf" firstAttribute="leading" secondItem="yIN-IG-5BF" secondAttribute="trailing" constant="28" id="1w0-Ub-ubC"/>
                             <constraint firstItem="Mhi-0z-3EO" firstAttribute="leading" secondItem="ks5-OL-PZD" secondAttribute="leading" id="2Ro-2v-zVJ"/>
+                            <constraint firstItem="8lD-vy-m4N" firstAttribute="leading" secondItem="4QL-Pf-TSi" secondAttribute="trailing" constant="15" id="360-JE-ztR"/>
                             <constraint firstItem="8lD-vy-m4N" firstAttribute="leading" secondItem="yIN-IG-5BF" secondAttribute="trailing" constant="15" id="5D2-KM-43k"/>
                             <constraint firstAttribute="trailing" secondItem="Mhi-0z-3EO" secondAttribute="trailing" id="6Tq-Ld-wma"/>
                             <constraint firstItem="yIN-IG-5BF" firstAttribute="leading" secondItem="uDF-4P-4Ou" secondAttribute="trailing" constant="35" id="LcM-8b-Ebm"/>
@@ -1003,6 +1016,7 @@
                             <constraint firstItem="SSO-pb-5Vs" firstAttribute="top" secondItem="ks5-OL-PZD" secondAttribute="top" id="c0H-ft-Vps"/>
                             <constraint firstItem="QZq-bZ-yWq" firstAttribute="top" secondItem="yIN-IG-5BF" secondAttribute="bottom" constant="70" id="c5F-sX-4uB"/>
                             <constraint firstItem="1mI-Mj-5Wh" firstAttribute="top" secondItem="uDF-4P-4Ou" secondAttribute="bottom" constant="28" id="d38-Eu-gqW"/>
+                            <constraint firstItem="4QL-Pf-TSi" firstAttribute="top" secondItem="yIN-IG-5BF" secondAttribute="bottom" id="doX-tw-XPI"/>
                             <constraint firstItem="1oK-Yl-Pmf" firstAttribute="top" secondItem="511-II-2sA" secondAttribute="bottom" constant="28" id="eTK-p2-VMd"/>
                             <constraint firstAttribute="centerX" secondItem="yIN-IG-5BF" secondAttribute="centerX" id="fWl-uG-9eC"/>
                             <constraint firstItem="Mhi-0z-3EO" firstAttribute="top" secondItem="511-II-2sA" secondAttribute="bottom" constant="7" id="h0m-YK-peM"/>
@@ -1029,6 +1043,7 @@
                         <outlet property="forwardButton" destination="1oK-Yl-Pmf" id="Ot2-wk-ZP0"/>
                         <outlet property="playButton" destination="ObB-It-L2l" id="gRN-0e-5bJ"/>
                         <outlet property="profileImageView" destination="Not-UM-Ow1" id="ZxR-tc-QV5"/>
+                        <outlet property="progressLabel" destination="4QL-Pf-TSi" id="mI1-Qa-H3I"/>
                         <outlet property="progressView" destination="XdP-JA-fd2" id="tie-lA-UZv"/>
                         <outlet property="recordButton" destination="8lD-vy-m4N" id="eCo-hG-Mkx"/>
                         <outlet property="shareButton" destination="511-II-2sA" id="cWl-xp-Q6T"/>

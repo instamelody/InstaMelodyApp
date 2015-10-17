@@ -853,6 +853,7 @@
         [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
         
         [self.profileImageView setImage:[UIImage imageNamed:@"Profile"]];
+        [self.progressLabel setText:@"Press Play to Start"];
         
         [self.timer invalidate];
     } else {
@@ -959,9 +960,10 @@
         count = count+ 1;
     }
     
-    NSString *stringText = [NSString stringWithFormat:@"%@ %ld", [[self.partArray objectAtIndex:self.currentPartIndex] objectForKey:@"PartName"], (self.currentPartIndex+1)];
     
-    //[self.statusButton setTitle:stringText forState:UIControlStateNormal];
+    NSString *stringText = [NSString stringWithFormat:@"%@ (%ld/%ld)", [[self.partArray objectAtIndex:self.currentPartIndex] objectForKey:@"PartName"], (self.currentPartIndex+1), self.partArray.count];
+    
+    [self.progressLabel setText:stringText];
     
     //load friend pic here
     NSString *userId = [[self.partArray objectAtIndex:self.currentPartIndex] objectForKey:@"UserId"];

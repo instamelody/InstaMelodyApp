@@ -49,6 +49,7 @@
 @property (nonatomic, strong) IBOutlet UIButton *backwardButton;
 
 @property (nonatomic, strong) IBOutlet UILabel *loopStatusLabel;
+@property (nonatomic, strong) IBOutlet UILabel *progressLabel;
 
 @property (nonatomic, strong) IBOutlet UIView *consoleView;
 @property (nonatomic, strong) IBOutlet UIView *centerConsoleView;
