@@ -1416,6 +1416,48 @@
     return 3;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CGFloat height = 40.0f;
+
+    if (self.selectedLoop != nil) {
+        switch (indexPath.row) {
+            case 0:
+                //
+                height = 111.0f;
+                break;
+            case 1:
+                height = 87.0f;
+                break;
+            case 2:
+                height = 91.0f;
+                break;
+            case 3:
+                height = 59.0f;
+                break;
+            default:
+                break;
+        }
+    } else {
+        switch (indexPath.row) {
+            case 0:
+                //
+                height = 87.0f;
+                break;
+            case 1:
+                height = 91.0f;
+                break;
+            case 2:
+                height = 59.0f;
+                break;
+            default:
+                break;
+        }
+    }
+    
+    return height;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (self.selectedLoop != nil) {
