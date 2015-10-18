@@ -40,6 +40,16 @@
     
     NSString *recordingPath = [userDict objectForKey:@"LoopURL"];
     NSString *recordingName = [recordingPath lastPathComponent];
+    NSString *loopName = [userDict objectForKey:@"Name"];
+    NSString *description = [userDict objectForKey:@"Description"];
+    
+    if (loopName == nil) {
+        loopName = [NSString stringWithFormat:@"%d", (int)unixTime];
+    }
+    
+    if (description == nil) {
+        description = [NSString stringWithFormat:@"%d", (int)unixTime];
+    }
     
     
     //step 1 - get file token
@@ -62,8 +72,8 @@
     
     NSMutableDictionary *recordingDict = [NSMutableDictionary dictionary];
     
-    [recordingDict setObject:[NSString stringWithFormat:@"%d", (int)unixTime] forKey:@"Name"];
-    [recordingDict setObject:[userDict objectForKey:@"Description"] forKey:@"Description"];
+    [recordingDict setObject:loopName forKey:@"Name"];
+    [recordingDict setObject:description forKey:@"Description"];
     [recordingDict setObject:recordingName forKey:@"FileName"];
     [partArray addObject:recordingDict];
     
