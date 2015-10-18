@@ -113,7 +113,7 @@
     [super viewDidAppear:animated];
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"uploadDone" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-        [self loadMessages];
+        [self refreshMessages];
     }];
     
 }
@@ -626,6 +626,52 @@
             
             [self buildPartArray];
         }
+        //NSDictionary *responseDict = (NSDictionary *)responseObject;
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
+            
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            
+            NSLog(@"%@",ErrorResponse);
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
+        }
+    }];
+
+}
+
+-(void)refreshMessages {
+    
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/Message/Chat", API_BASE_URL];
+    
+    //https://api.instamelody.com/v1.0/Message/Chat?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&id=74f4fad4-e98d-4495-9ebf-728cefa6fed9
+    
+    NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    NSDictionary *parameters = @{@"token": token, @"id" : [self.chatDict objectForKey:@"Id"]};
+    
+    [manager GET:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        
+        /*
+        NSArray *tempChats = (NSArray *)responseObject;
+        
+        NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateModified" ascending:NO];
+        NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
+        NSArray *sortedArray = [tempChats sortedArrayUsingDescriptors:descriptors];
+        
+        self.chatDict = sortedArray;
+        */
+        self.chatDict = (NSDictionary *)responseObject;
+        
+        [self loadMessages];
+        
         //NSDictionary *responseDict = (NSDictionary *)responseObject;
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
@@ -1295,7 +1341,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
             if (error == nil) {
                 NSLog(@"File downloaded to: %@", filePath);
                 
-                [self loadMessages];
+                [self refreshMessages];
                 
             } else {
                 NSLog(@"Download error: %@", error.description);

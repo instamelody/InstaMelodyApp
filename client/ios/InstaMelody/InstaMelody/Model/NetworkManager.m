@@ -40,7 +40,8 @@
     
     NSString *recordingPath = [userDict objectForKey:@"LoopURL"];
     NSString *recordingName = [recordingPath lastPathComponent];
-    NSString *loopName = [userDict objectForKey:@"Name"];
+    //NSString *loopName = [userDict objectForKey:@"Name"];
+    NSString *loopName = nil; 
     NSString *description = [userDict objectForKey:@"Description"];
     
     if (loopName == nil) {
