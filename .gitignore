@@ -15,8 +15,8 @@ api/InstaMelody/InstaMelody.Tests/bin/*
 api/InstaMelody/InstaMelody.Tests/obj/*
 api/InstaMelody/TestResults/*
 api/InstaMelody/InstaMelody.API/logs/*
-client/ios/InstaMelody/InstaMelody.xcworkspace/xcuserdata/abakir.xcuserdatad/UserInterfaceState.xcuserstate
-client/ios/InstaMelody/InstaMelody.xcworkspace/xcuserdata/abakir.xcuserdatad/xcdebugger/Breakpoints_v2.xcbkptlist
+client/ios/InstaMelody/InstaMelody.xcworkspace/xcuserdata/abakir.xcuserdatad/*
+client/ios/InstaMelody/Pods/Pods.xcodeproj/xcuserdata/abakir.xcuserdatad/*
 CLTokenInputView.xcscheme
 DACircularProgress.xcscheme
 FontAwesome+iOS.xcscheme
