@@ -521,8 +521,11 @@
         [self.bgPlayer stop];
         [toggleBtn setTitle:@"Preview melodies" forState:UIControlStateNormal];
     } else {
-        [self playLoop:nil];
-        [toggleBtn setTitle:@"Stop" forState:UIControlStateNormal];
+        
+        if (self.selectedMelody != nil) {
+            
+            [self playLoop:nil];
+        }
     }
 }
 
@@ -531,7 +534,10 @@
     if ([self.bgPlayer2 isPlaying]) {
         [self.bgPlayer2 stop];
     } else {
-        [self playLoop2:nil];
+        
+        if (self.selectedMelody2 != nil) {
+            [self playLoop2:nil];
+        }
     }
 }
 
@@ -540,7 +546,9 @@
     if ([self.bgPlayer3 isPlaying]) {
         [self.bgPlayer3 stop];
     } else {
-        [self playLoop3:nil];
+        if (self.selectedMelody3 != nil) {
+            [self playLoop3:nil];
+        }
     }
 }
 
@@ -719,7 +727,10 @@
 -(IBAction)toggleRecording:(id)sender {
     if (self.recorder.isRecording) {
         
+        [self.timer invalidate];
         [self stopRecording];
+        
+        self.progressView.progress = 0;
         
     } else {
         NSError *error;
@@ -828,6 +839,8 @@
         
         [self.timer invalidate];
         
+        self.progressView.progress = 0;
+        
         self.playButton.hidden = NO;
     }
 
@@ -859,6 +872,7 @@
         [self.progressLabel setText:@"Press Play to Start"];
         
         [self.timer invalidate];
+        self.progressView.progress = 0;
     } else {
         
         NSError *error;
@@ -1370,6 +1384,9 @@
         [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
         
         [self.timer invalidate];
+        
+        self.progressView.progress = 0;
+        
         if (player == self.fgPlayer) {
             [self.bgPlayer stop];
             [self.bgPlayer2 stop];
