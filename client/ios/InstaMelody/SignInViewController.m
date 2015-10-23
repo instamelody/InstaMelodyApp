@@ -223,6 +223,8 @@
             if (error == nil) {
                 NSLog(@"File downloaded to: %@", filePath);
                 
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"downloadedProfile" object:nil];
+                
             } else {
                 NSLog(@"Download error: %@", error.description);
             }

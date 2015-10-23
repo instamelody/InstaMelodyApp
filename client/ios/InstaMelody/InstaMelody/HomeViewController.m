@@ -97,6 +97,10 @@
     
     [self createMenu];
     [self fixButtons];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"downloadedProfile" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        [self loadProfileImage];
+    }];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
