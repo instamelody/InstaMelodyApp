@@ -278,7 +278,7 @@
             
         } else {
             NSString *userName = [NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName];
-            [cell.coverImage setImageWithString:userName color:nil circular:YES];
+            //[cell.coverImage setImageWithString:userName color:nil circular:YES];
         }
         
         
