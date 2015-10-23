@@ -1433,6 +1433,8 @@
         if (error == nil) {
             NSLog(@"File downloaded to: %@", filePath);
             self.loopStatusLabel.text = @"Recording loaded!";
+            self.progressView.progress = 0.0;
+            [self.timer invalidate];
             
             self.currentRecordingURL = filePath;
             
