@@ -21,8 +21,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 
-    self.profileView.layer.cornerRadius = self.profileView.frame.size.height / 2;
-    self.profileView.layer.masksToBounds = YES;
+    self.profileImageView.layer.cornerRadius = self.profileImageView.frame.size.height / 2;
+    self.profileImageView.layer.masksToBounds = YES;
     self.filterControl.layer.cornerRadius = 4;
     self.filterControl.layer.masksToBounds = YES;
     
