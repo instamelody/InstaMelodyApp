@@ -15,4 +15,6 @@
 #define VERTICAL_SHIFT 60
 #define RECORDING_LIMIT 30.0f
 
+#define INSTA_BLUE [UIColor colorWithRed:1/255.0f green:174/255.0f blue:255/255.0f alpha:1.0f]
+
 #endif

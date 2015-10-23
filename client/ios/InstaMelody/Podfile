@@ -10,4 +10,5 @@ target 'InstaMelody' do
   pod 'JSQMessagesViewController'
   pod 'UIImageView-Letters'
   pod 'M13ProgressSuite'
+  pod 'EZAudio'
 end

@@ -86,22 +86,26 @@ strip_invalid_archs() {
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-InstaMelody/CLTokenInputView.framework"
   install_framework "Pods-InstaMelody/DACircularProgress.framework"
+  install_framework "Pods-InstaMelody/EZAudio.framework"
   install_framework "Pods-InstaMelody/FontAwesome.framework"
   install_framework "Pods-InstaMelody/JSQMessagesViewController.framework"
   install_framework "Pods-InstaMelody/JSQSystemSoundPlayer.framework"
   install_framework "Pods-InstaMelody/M13ProgressSuite.framework"
   install_framework "Pods-InstaMelody/MGSwipeTableCell.framework"
   install_framework "Pods-InstaMelody/MagicalRecord.framework"
+  install_framework "Pods-InstaMelody/TPCircularBuffer.framework"
   install_framework "Pods-InstaMelody/UIImageView_Letters.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-InstaMelody/CLTokenInputView.framework"
   install_framework "Pods-InstaMelody/DACircularProgress.framework"
+  install_framework "Pods-InstaMelody/EZAudio.framework"
   install_framework "Pods-InstaMelody/FontAwesome.framework"
   install_framework "Pods-InstaMelody/JSQMessagesViewController.framework"
   install_framework "Pods-InstaMelody/JSQSystemSoundPlayer.framework"
   install_framework "Pods-InstaMelody/M13ProgressSuite.framework"
   install_framework "Pods-InstaMelody/MGSwipeTableCell.framework"
   install_framework "Pods-InstaMelody/MagicalRecord.framework"
+  install_framework "Pods-InstaMelody/TPCircularBuffer.framework"
   install_framework "Pods-InstaMelody/UIImageView_Letters.framework"
 fi

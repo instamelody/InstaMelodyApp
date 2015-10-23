@@ -18,6 +18,7 @@
 #import "TopicCell.h"
 #import "StatusCell.h"
 #import "UsersCell.h"
+#import "EZAudio.h"
 #import "UIImageView+Letters.h"
 #import "CLTokenInputView.h"
 
@@ -28,7 +29,7 @@
 
 @end
 
-@interface LoopViewController : UIViewController <AVAudioPlayerDelegate>
+@interface LoopViewController : UIViewController <AVAudioPlayerDelegate, EZMicrophoneDelegate>
 
 @property (nonatomic, strong) NSDictionary *selectedLoop;
 @property (nonatomic, strong) UserMelody *selectedUserMelody;
@@ -64,6 +65,16 @@
 @property (nonatomic, strong) id <LoopDelegate> delegate;
 
 @property (nonatomic, strong) NSDictionary *loopDict;
+
+/**
+ The CoreGraphics based audio plot
+ */
+@property (nonatomic, weak) IBOutlet EZAudioPlot *audioPlot;
+
+/**
+ The microphone component
+ */
+@property (nonatomic, strong) EZMicrophone *microphone;
 
 -(IBAction)showVolumeSettings:(id)sender;
 -(IBAction)share:(id)sender;

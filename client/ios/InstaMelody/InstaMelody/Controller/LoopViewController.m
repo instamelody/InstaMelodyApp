@@ -34,6 +34,8 @@
 @property NSInteger currentPartIndex;
 @property BOOL goBack;
 
+@property (nonatomic, strong) NSArray *inputs;
+
 @property NSUserDefaults *defaults;
 
 @end
@@ -56,7 +58,7 @@
     
     self.progressView.roundedCorners = YES;
     self.progressView.trackTintColor = [UIColor clearColor];
-    self.progressView.progressTintColor = [UIColor colorWithRed:1/255.0f green:174/255.0f blue:255/255.0f alpha:1.0f];
+    self.progressView.progressTintColor = INSTA_BLUE;
     self.progressView.thicknessRatio = 0.1f;
     
      if (self.selectedLoop !=nil) {
@@ -165,6 +167,8 @@
     
     //[[NSNotificationCenter defaultCenter] postNotificationName:@"pickedMelody" object:nil userInfo:userDict];
     
+    [self initializeAudio];
+    
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
@@ -172,6 +176,29 @@
     if ([self.fgPlayer isPlaying]) {
         [self togglePlayback:nil];
     }
+}
+
+-(void)initializeAudio {
+    // Background color
+    self.audioPlot.backgroundColor = [UIColor blackColor];
+    
+    // Waveform color
+    self.audioPlot.color = INSTA_BLUE;
+    
+    // Plot type
+    self.audioPlot.plotType = EZPlotTypeBuffer;
+    //
+    // Create the microphone
+    //
+    self.microphone = [EZMicrophone microphoneWithDelegate:self];
+    
+    //
+    // Set up the microphone input UIPickerView items to select
+    // between different microphone inputs. Here what we're doing behind the hood
+    // is enumerating the available inputs provided by the AVAudioSession.
+    //
+    self.inputs = [EZAudioDevice inputDevices];
+    self.audioPlot.hidden = YES;
 }
 
 -(void)getLoop:(NSString *)loopId {
@@ -731,12 +758,23 @@
         [self stopRecording];
         
         self.progressView.progress = 0;
+        [self.microphone stopFetchingAudio];
+        self.profileImageView.hidden = NO;
+        self.audioPlot.hidden = YES;
+        self.playButton.hidden = NO;
         
     } else {
         NSError *error;
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
         [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord
                             error:&error];
+        
+        [self.microphone startFetchingAudio];
+        [self.microphone setDevice:self.inputs[0]];
+        self.profileImageView.hidden = YES;
+        self.audioPlot.hidden = NO;
+        self.playButton.hidden = YES;
+        
         if (error == nil) {
             NSArray *paths =
             NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
@@ -1757,6 +1795,84 @@
                                               otherButtonTitles:nil];
     [alertView show];
      */
+}
+
+//------------------------------------------------------------------------------
+#pragma mark - Utility
+//------------------------------------------------------------------------------
+
+/*
+ Give the visualization of the current buffer (this is almost exactly the openFrameworks audio input eample)
+ */
+- (void)drawBufferPlot
+{
+    self.audioPlot.plotType = EZPlotTypeBuffer;
+    self.audioPlot.shouldMirror = NO;
+    self.audioPlot.shouldFill = NO;
+}
+
+//------------------------------------------------------------------------------
+
+/*
+ Give the classic mirrored, rolling waveform look
+ */
+-(void)drawRollingPlot
+{
+    self.audioPlot.plotType = EZPlotTypeRolling;
+    self.audioPlot.shouldFill = YES;
+    self.audioPlot.shouldMirror = YES;
+}
+
+#pragma mark - EZMicrophoneDelegate
+#warning Thread Safety
+// Note that any callback that provides streamed audio data (like streaming
+// microphone input) happens on a separate audio thread that should not be
+// blocked. When we feed audio data into any of the UI components we need to
+// explicity create a GCD block on the main thread to properly get the UI
+// to work.
+- (void)microphone:(EZMicrophone *)microphone
+  hasAudioReceived:(float **)buffer
+    withBufferSize:(UInt32)bufferSize
+withNumberOfChannels:(UInt32)numberOfChannels
+{
+    // Getting audio data as an array of float buffer arrays. What does that mean?
+    // Because the audio is coming in as a stereo signal the data is split into
+    // a left and right channel. So buffer[0] corresponds to the float* data
+    // for the left channel while buffer[1] corresponds to the float* data
+    // for the right channel.
+    
+    // See the Thread Safety warning above, but in a nutshell these callbacks
+    // happen on a separate audio thread. We wrap any UI updating in a GCD block
+    // on the main thread to avoid blocking that audio flow.
+    __weak typeof (self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        // All the audio plot needs is the buffer data (float*) and the size.
+        // Internally the audio plot will handle all the drawing related code,
+        // history management, and freeing its own resources.
+        // Hence, one badass line of code gets you a pretty plot :)
+        [weakSelf.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
+    });
+}
+
+//------------------------------------------------------------------------------
+
+- (void)microphone:(EZMicrophone *)microphone hasAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription
+{
+    // The AudioStreamBasicDescription of the microphone stream. This is useful
+    // when configuring the EZRecorder or telling another component what
+    // audio format type to expect.
+    [EZAudioUtilities printASBD:audioStreamBasicDescription];
+}
+
+//------------------------------------------------------------------------------
+
+- (void)microphone:(EZMicrophone *)microphone
+     hasBufferList:(AudioBufferList *)bufferList
+    withBufferSize:(UInt32)bufferSize
+withNumberOfChannels:(UInt32)numberOfChannels
+{
+    // Getting audio data as a buffer list that can be directly fed into the
+    // EZRecorder or EZOutput. Say whattt...
 }
 
 @end

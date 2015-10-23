@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="15B38b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Upz-he-51Z">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Upz-he-51Z">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -627,6 +627,11 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WV3-gz-0cc">
                                         <rect key="frame" x="18" y="18" width="115" height="115"/>
                                         <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WWk-Qa-GgW" customClass="EZAudioPlot">
+                                                <rect key="frame" x="0.0" y="0.0" width="115" height="115"/>
+                                                <animations/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            </view>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Profile" translatesAutoresizingMaskIntoConstraints="NO" id="Not-UM-Ow1">
                                                 <rect key="frame" x="8" y="8" width="100" height="100"/>
                                                 <animations/>
@@ -655,9 +660,13 @@
                                         <constraints>
                                             <constraint firstAttribute="centerY" secondItem="Not-UM-Ow1" secondAttribute="centerY" id="6Z0-Wh-eZk"/>
                                             <constraint firstAttribute="width" constant="115" id="8qK-Ds-Lqn"/>
+                                            <constraint firstItem="WWk-Qa-GgW" firstAttribute="top" secondItem="WV3-gz-0cc" secondAttribute="top" id="IGD-Nf-cdl"/>
+                                            <constraint firstAttribute="trailing" secondItem="WWk-Qa-GgW" secondAttribute="trailing" id="Mk3-ri-xxM"/>
                                             <constraint firstAttribute="centerX" secondItem="Not-UM-Ow1" secondAttribute="centerX" id="OXj-hq-FG7"/>
+                                            <constraint firstAttribute="bottom" secondItem="WWk-Qa-GgW" secondAttribute="bottom" id="acq-iJ-C9x"/>
                                             <constraint firstAttribute="height" constant="115" id="ew2-xF-P4o"/>
                                             <constraint firstItem="ObB-It-L2l" firstAttribute="centerY" secondItem="WV3-gz-0cc" secondAttribute="centerY" id="fCh-g1-ZeA"/>
+                                            <constraint firstItem="WWk-Qa-GgW" firstAttribute="leading" secondItem="WV3-gz-0cc" secondAttribute="leading" id="gP6-aA-IBx"/>
                                             <constraint firstItem="ObB-It-L2l" firstAttribute="centerX" secondItem="WV3-gz-0cc" secondAttribute="centerX" id="zY4-ld-Xvj"/>
                                         </constraints>
                                     </view>
@@ -1037,6 +1046,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="audioPlot" destination="WWk-Qa-GgW" id="UID-St-EZq"/>
                         <outlet property="backwardButton" destination="1mI-Mj-5Wh" id="SLd-an-zDX"/>
                         <outlet property="centerConsoleView" destination="WV3-gz-0cc" id="LW0-GR-C4U"/>
                         <outlet property="consoleView" destination="yIN-IG-5BF" id="ZbM-pl-jbh"/>
