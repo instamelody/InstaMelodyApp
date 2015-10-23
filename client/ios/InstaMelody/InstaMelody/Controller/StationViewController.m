@@ -120,7 +120,12 @@
             NSDictionary *selectedStation = stationList[0];
             
             //self.loopArray = stationList;
-            //self.stationLabel.text = [selectedStation objectForKey:@"Name"];
+            dispatch_async(dispatch_get_main_queue(), ^(void){
+                //Run UI Updates
+                self.stationLabel.text = [selectedStation objectForKey:@"Name"];
+                
+            });
+            
             if (self.selectedFriend == nil) {
                 //get all my loops
                 [self fetchMyMelodies];
@@ -189,6 +194,10 @@
     
     
     self.loopArray = [[DataManager sharedManager] userMelodyList];
+    
+    if (self.loopArray.count > 20) {
+        self.loopArray = [self.loopArray subarrayWithRange:NSMakeRange(0, 20)];
+    }
     
     [self.collectionView reloadData];
 }
@@ -289,15 +298,37 @@
     return cell;
 }
 
-/*
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    
+    UserMelody *melody = (UserMelody *)[self.loopArray objectAtIndex:indexPath.row];
+    
+    if (melody != nil)  {
+        
+        UIStoryboard *mainSB = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        
+        LoopViewController *loopVC = (LoopViewController *)[mainSB instantiateViewControllerWithIdentifier:@"LoopViewController"];
+        loopVC.selectedUserMelody = melody;
+        
+        [self.navigationController pushViewController:loopVC animated:YES];
+        
+        
+    }
+}
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    
+    if ([segue.identifier isEqualToString:@"showStationLoop"]) {
+        
+
+        
+    }
+    
 }
-*/
 
 -(IBAction)showLoops:(id)sender {
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];

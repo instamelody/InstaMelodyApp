@@ -409,18 +409,27 @@
 }
 
 -(void)updatePlaybackProgress {
-    [self.progressView setProgress:self.fgPlayer.currentTime/self.fgPlayer.duration animated:YES];
+    
+    float oldProgress = self.progressView.progress;
+    float newProgress =self.fgPlayer.currentTime/self.fgPlayer.duration;
+    [self.progressView setProgress:MAX(oldProgress, newProgress)  animated:YES];
 }
 
 -(void)updateRecordProgress {
     NSDate *now = [NSDate date];
+    
+    
     NSTimeInterval interval = [now timeIntervalSinceDate:self.startTime];
     
     if (interval > RECORDING_LIMIT) {
         self.startTime = [NSDate date];
         interval = 0;
     }
-    [self.progressView setProgress:interval/RECORDING_LIMIT animated:YES];
+    
+    float oldProgress = self.progressView.progress;
+    float newProgress =interval/RECORDING_LIMIT;
+    
+    [self.progressView setProgress:MAX(oldProgress, newProgress) animated:YES];
 }
 
 -(void)applyFontAwesome {
@@ -717,7 +726,14 @@
         
         [self.fgPlayer play];
         
-        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(updatePlaybackProgress) userInfo:nil repeats:YES];
+        NSTimeInterval interval = 0.1;
+        
+        /*
+        if (self.fgPlayer.duration < 5.0) {
+            interval = 0.2;
+        }*/
+        
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(updatePlaybackProgress) userInfo:nil repeats:YES];
     } else {
         NSLog(@"Error loading file: %@", [error description]);
         
@@ -945,6 +961,10 @@
 -(IBAction)togglePlayback:(id)sender {
     //sdf
 
+    
+    [self.timer invalidate];
+    self.progressView.progress = 0;
+    
     UIButton *toggleBtn = (UIButton *)[self.view viewWithTag:5];
     self.currentPartIndex = 0;
     
@@ -958,9 +978,6 @@
         
         [self.profileImageView setImage:[UIImage imageNamed:@"Profile"]];
         [self.progressLabel setText:@"Press Play to Start"];
-        
-        [self.timer invalidate];
-        self.progressView.progress = 0;
         
         if (!self.isNewPart) {
             self.selectedMelody = nil;
