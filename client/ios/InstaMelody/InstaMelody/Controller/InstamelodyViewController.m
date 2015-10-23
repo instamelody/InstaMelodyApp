@@ -18,6 +18,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self createMenu];
+    
+    self.dateFormatter = [[NSDateFormatter alloc] init];
+    [self.dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+    [self.dateFormatter setTimeStyle:NSDateFormatterShortStyle];
 }
 
 - (void)didReceiveMemoryWarning {

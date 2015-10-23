@@ -32,5 +32,6 @@
 -(BOOL)isPremium;
 
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
+@property NSDateFormatter *melodyDateFormatter;
 
 @end

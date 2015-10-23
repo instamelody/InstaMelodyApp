@@ -18,14 +18,24 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedMyManager = [[self alloc] init];
-        sharedMyManager.dateFormatter =  [[NSDateFormatter alloc] init];
-        
         NSLocale *enUSPOSIXLocale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
+        
+        sharedMyManager.dateFormatter =  [[NSDateFormatter alloc] init];
         
         [sharedMyManager.dateFormatter setLocale:enUSPOSIXLocale];
         
         [sharedMyManager.dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
         [sharedMyManager.dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+        
+        sharedMyManager.melodyDateFormatter =  [[NSDateFormatter alloc] init];
+        
+        [sharedMyManager.melodyDateFormatter setLocale:enUSPOSIXLocale];
+        
+        [sharedMyManager.melodyDateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
+        [sharedMyManager.melodyDateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+        
+        
+        
     });
     return sharedMyManager;
 }
@@ -188,7 +198,7 @@
         
         //NSDictionary *responseDict = (NSDictionary *)responseObject;
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error fetching friends: %@", error);
+        NSLog(@"Error fetching meodies: %@", error);
         
     }];
 }
@@ -266,7 +276,7 @@
         
         //NSDictionary *responseDict = (NSDictionary *)responseObject;
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error fetching friends: %@", error);
+        NSLog(@"Error fetching user melodies: %@", error);
         
     }];
 }
@@ -312,7 +322,7 @@
         
         NSString *dateString = [melodyDict objectForKey:@"DateCreated"];
         dateString = [dateString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        NSDate *date = [self.dateFormatter dateFromString:dateString];
+        NSDate *date = [self.melodyDateFormatter dateFromString:dateString];
         
         newUserMelody.dateCreated = date;
         
