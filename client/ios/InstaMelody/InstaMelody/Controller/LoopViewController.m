@@ -569,10 +569,10 @@
     if ([self.bgPlayer isPlaying]) {
         [self.bgPlayer stop];
         [toggleBtn setTitle:@"Preview melodies" forState:UIControlStateNormal];
+        
     } else {
         
         if (self.selectedMelody != nil) {
-            
             [self playLoop:nil];
         }
     }
@@ -625,6 +625,11 @@
         [self.bgPlayer setNumberOfLoops:-1];
         [self.bgPlayer setVolume:[volume floatValue]];
         [self.bgPlayer play];
+        
+        if (self.isNewPart) {
+            UIButton *toggleBtn = (UIButton *)[self.view viewWithTag:5];
+            [toggleBtn setTitle:@"Stop melodies" forState:UIControlStateNormal];
+        }
         
     } else {
         NSLog(@"Error loading file: %@", [error description]);
@@ -788,9 +793,10 @@
     if (self.recorder.isRecording) {
         
         [self.timer invalidate];
+        self.progressView.progress = 0;
+        
         [self stopRecording];
         
-        self.progressView.progress = 0;
         [self.microphone stopFetchingAudio];
         self.profileImageView.hidden = NO;
         self.audioPlot.hidden = YES;
@@ -923,6 +929,9 @@
 
 -(IBAction)toggleMelodies:(id)sender {
     
+    UIButton *toggleBtn = (UIButton *)[self.view viewWithTag:5];
+    [toggleBtn setTitle:@"Preview melodies" forState:UIControlStateNormal];
+    
     [self toggleLoop:nil];
     [self toggleLoop2:nil];
     [self toggleLoop3:nil];
@@ -933,6 +942,7 @@
 -(IBAction)togglePlayback:(id)sender {
     //sdf
 
+    UIButton *toggleBtn = (UIButton *)[self.view viewWithTag:5];
     self.currentPartIndex = 0;
     
     if ([self.fgPlayer isPlaying] || [self.bgPlayer isPlaying]) {
@@ -954,6 +964,10 @@
             self.selectedMelody2 = nil;
             self.selectedMelody3 = nil;
         }
+        
+        [toggleBtn setTitle:@"Preview melodies" forState:UIControlStateNormal];
+        
+
     } else {
         
         NSError *error;
@@ -1463,14 +1477,15 @@
 -(void)audioPlayerDidFinishPlaying: (AVAudioPlayer *)player successfully:(BOOL)flag
 {
     
+    [self.timer invalidate];
+    self.progressView.progress = 0;
+    UIButton *toggleBtn = (UIButton *)[self.view viewWithTag:5];
+    [toggleBtn setTitle:@"Preview melodies" forState:UIControlStateNormal];
+    
     
     if (flag) {
         [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
-        
-        [self.timer invalidate];
-        
-        self.progressView.progress = 0;
-        
+
         if (player == self.fgPlayer) {
             [self.bgPlayer stop];
             [self.bgPlayer2 stop];
@@ -1494,13 +1509,11 @@
                 [self playEverything];
             } else {
                 [self.profileImageView setImage:[UIImage imageNamed:@"Profile"]];
-                self.progressView.progress = 0;
                 self.currentPartIndex = 0;
             }
             
         } else {
             [self.profileImageView setImage:[UIImage imageNamed:@"Profile"]];
-            self.progressView.progress = 0;
             self.currentPartIndex = 0;
         }
     }
@@ -1607,6 +1620,7 @@
             self.loopStatusLabel = cell.statusLabel;
             [cell.playButton setTag:5];
             [cell.playButton addTarget:self action:@selector(toggleMelodies:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.playButton setTitle:@"Preview melodies" forState:UIControlStateNormal];
             return cell;
             
         }
