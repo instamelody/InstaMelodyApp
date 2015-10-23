@@ -318,7 +318,10 @@
         MGSwipeButton * del = [MGSwipeButton buttonWithTitle:[NSString fontAwesomeIconStringForEnum:FAtrash] backgroundColor:[UIColor lightGrayColor] padding:padding callback:^BOOL(MGSwipeTableCell *sender) {
             
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Delete chat" message:@"Are you sure you want to delete this chat?" preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                //do stuff
+                [self.tableView reloadData];
+            }];
             
             UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 //do stuff
@@ -328,8 +331,6 @@
             [alert addAction:cancelAction];
             [alert addAction:okAction];
             [self presentViewController:alert animated:YES completion:nil];
-            
-            
             
             return NO; //don't autohide to improve delete animation
         }];
