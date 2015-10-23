@@ -49,7 +49,7 @@
         if ([defaults objectForKey:@"authToken"] !=  nil) {
             self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", [defaults objectForKey:@"FirstName"], [defaults objectForKey:@"LastName"]];
             
-            //self.displayNameLabel.text = [NSString stringWithFormat:@"@%@", [defaults objectForKey:@"DisplayName"]];
+            self.stationLabel.text = @"My Station";
             
         }
         
@@ -70,6 +70,7 @@
         self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", self.selectedFriend.firstName, self.selectedFriend.lastName];
         
         self.title = [NSString stringWithFormat:@"%@'s Station", self.selectedFriend.displayName];
+        self.stationLabel.text = [NSString stringWithFormat:@"%@'s Station", self.selectedFriend.displayName];
         
         NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
         
