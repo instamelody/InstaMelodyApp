@@ -63,15 +63,7 @@
     
      if (self.selectedLoop !=nil) {
          [self getLoop:[self.selectedLoop objectForKey:@"Id"]];
-     }
-    
-    /*
-    if (self.selectedLoop !=nil) {
-        self.partArray = [self.selectedLoop objectForKey:@"Parts"];
-    }*/
-    
-    
-    if (self.selectedUserMelody != nil) {
+     } else if (self.selectedUserMelody != nil) {
         
         int count = 0;
         NSLog(@"loaded with a melody");
@@ -124,7 +116,30 @@
                 
             }
         }
-    }
+     } else {
+         //load friend pic here
+         
+         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+         
+         NSString *myUserId = [defaults objectForKey:@"Id"];
+         
+         NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+         
+         NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
+         NSString *imageName = [[defaults objectForKey:@"ProfileFilePath"] lastPathComponent];
+         
+         if (imageName != nil) {
+            
+             NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
+             self.profileImageView.image = [UIImage imageWithContentsOfFile:imagePath];
+             
+         }
+         
+         self.playButton.hidden = YES;
+         self.progressLabel.text = @"Press Record to Start";
+         self.backwardButton.hidden = YES;
+         self.forwardButton.hidden = YES;
+     }
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"pickedMelody" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
         //
