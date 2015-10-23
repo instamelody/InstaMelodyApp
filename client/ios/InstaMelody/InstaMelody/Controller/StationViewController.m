@@ -73,8 +73,11 @@
         NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
         NSString *imageName = [self.selectedFriend.profileFilePath lastPathComponent];
         
-        NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
-        self.profileImageView.image = [UIImage imageWithContentsOfFile:imagePath];
+        if (imageName != nil) {
+            
+            NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
+            self.profileImageView.image = [UIImage imageWithContentsOfFile:imagePath];
+        }
     }
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[NSString fontAwesomeIconStringForEnum:FACog] style:UIBarButtonItemStylePlain target:self action:@selector(showVolume:)];
