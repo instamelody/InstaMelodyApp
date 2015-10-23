@@ -18,6 +18,7 @@
 @property IBOutlet UISegmentedControl *filterControl;
 @property IBOutlet UICollectionView *collectionView;
 @property IBOutlet UILabel *nameLabel;
+@property IBOutlet UIImageView *liveImageView;
 
 @property IBOutlet UIBarButtonItem *settingsButton;
 @property IBOutlet UIButton *vipButton;

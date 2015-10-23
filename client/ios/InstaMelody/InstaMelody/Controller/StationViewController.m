@@ -32,6 +32,8 @@
     [self.fanButton setTitle:[NSString fontAwesomeIconStringForEnum:FAThumbsUp] forState:UIControlStateNormal];
     [self.vipButton setTitle:[NSString fontAwesomeIconStringForEnum:FAStar] forState:UIControlStateNormal];
     
+    self.liveImageView.hidden = ![[DataManager sharedManager] isPremium];
+    
 }
 
 -(void)viewDidAppear:(BOOL)animated {

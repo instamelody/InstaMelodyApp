@@ -29,7 +29,7 @@
 @property (nonatomic, strong) IBOutlet UIButton *showcaseButton;
 @property (nonatomic, strong) IBOutlet UIButton *friendsButton;
 @property (nonatomic, strong) IBOutlet UIButton *followingButton;
-
+@property (nonatomic, strong) IBOutlet UIImageView *liveImageView;
 
 @property (nonatomic, strong) IBOutlet UIView *pathMenuView;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;

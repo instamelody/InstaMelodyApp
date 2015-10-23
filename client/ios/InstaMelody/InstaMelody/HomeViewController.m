@@ -122,6 +122,8 @@
         NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
         self.profileImageView.image = [UIImage imageWithContentsOfFile:imagePath];
     }
+    
+    self.liveImageView.hidden = ![[DataManager sharedManager] isPremium];
 }
 
 -(void)loadProfileImage {

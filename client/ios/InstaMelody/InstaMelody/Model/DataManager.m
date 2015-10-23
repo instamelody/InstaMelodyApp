@@ -31,6 +31,9 @@
 }
 
 
+-(BOOL)isPremium {
+    return false;
+}
 
 - (void)fetchFriends {
     NSString *requestUrl = [NSString stringWithFormat:@"%@/User/Friends", API_BASE_URL];

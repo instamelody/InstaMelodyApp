@@ -350,7 +350,7 @@
                                 <rect key="frame" x="0.0" y="86" width="600" height="110"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="H27-Z3-kTS" id="ZlZ-jV-Pyt">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="109.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="109"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="S9z-ld-Glk">
@@ -1092,11 +1092,11 @@
                                         <rect key="frame" x="0.0" y="28" width="600" height="74"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vB5-iA-OiS" id="F3A-gO-uyn">
-                                            <rect key="frame" x="0.0" y="0.0" width="567" height="73.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="567" height="73"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="qEp-wE-Mmz">
-                                                    <rect key="frame" x="15" y="0.0" width="550" height="73.5"/>
+                                                    <rect key="frame" x="15" y="0.0" width="550" height="73"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="16"/>
@@ -1176,11 +1176,11 @@
                                         <rect key="frame" x="0.0" y="28" width="600" height="71"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0k3-aa-dTd" id="JQE-ux-jxH">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="70.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="70"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="yPq-cu-1lB">
-                                                    <rect key="frame" x="15" y="0.0" width="570" height="70.5"/>
+                                                    <rect key="frame" x="15" y="0.0" width="570" height="70"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="16"/>
@@ -1558,6 +1558,7 @@
                         <outlet property="followingButton" destination="JCZ-pk-VCL" id="HkI-lp-ZdW"/>
                         <outlet property="friendsButton" destination="9oK-U5-ZBm" id="326-sb-Sqy"/>
                         <outlet property="libraryButton" destination="oRO-lI-GxR" id="W5M-DD-HAl"/>
+                        <outlet property="liveImageView" destination="LP0-Td-iiH" id="adQ-lK-emu"/>
                         <outlet property="messengerButton" destination="icB-UB-VSc" id="qC2-dC-OQf"/>
                         <outlet property="nameLabel" destination="soX-59-dIa" id="QCl-zc-nXW"/>
                         <outlet property="profileImageView" destination="01h-hF-xsz" id="Vc6-2Z-R62"/>
@@ -1596,8 +1597,8 @@
                                         <animations/>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
-                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6j3-Ia-mEM">
-                                        <rect key="frame" x="-6" y="72" width="330" height="228"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6j3-Ia-mEM">
+                                        <rect key="frame" x="135" y="72" width="330" height="228"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="live" translatesAutoresizingMaskIntoConstraints="NO" id="GuR-R3-ieV">
                                                 <rect key="frame" x="125" y="0.0" width="79" height="28"/>
@@ -1651,21 +1652,21 @@
                                                 </constraints>
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="My Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nd7-if-bhd">
-                                                <rect key="frame" x="65" y="178" width="200" height="21"/>
+                                                <rect key="frame" x="65" y="178" width="200" height="15"/>
                                                 <animations/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="200" id="4vL-0v-El4"/>
-                                                    <constraint firstAttribute="height" constant="21" id="Yoh-aR-RQQ"/>
+                                                    <constraint firstAttribute="height" constant="15" id="Yoh-aR-RQQ"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="13"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="My Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rh0-39-wV8">
-                                                <rect key="frame" x="65" y="199" width="200" height="18"/>
+                                                <rect key="frame" x="65" y="193" width="200" height="15"/>
                                                 <animations/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="18" id="Q5c-qR-Dhe"/>
+                                                    <constraint firstAttribute="height" constant="15" id="Q5c-qR-Dhe"/>
                                                     <constraint firstAttribute="width" constant="200" id="gUe-UH-iCa"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="11"/>
@@ -1695,7 +1696,7 @@
                                             <constraint firstAttribute="height" constant="228" id="OCx-0y-eIC"/>
                                             <constraint firstAttribute="width" constant="330" id="PfX-D2-hWY"/>
                                             <constraint firstItem="nd7-if-bhd" firstAttribute="centerX" secondItem="6j3-Ia-mEM" secondAttribute="centerX" id="U8f-1B-7j4"/>
-                                            <constraint firstAttribute="bottom" secondItem="Rh0-39-wV8" secondAttribute="bottom" constant="11" id="f2U-Yj-a0q"/>
+                                            <constraint firstAttribute="bottom" secondItem="Rh0-39-wV8" secondAttribute="bottom" constant="20" id="f2U-Yj-a0q"/>
                                             <constraint firstItem="GuR-R3-ieV" firstAttribute="centerX" secondItem="6j3-Ia-mEM" secondAttribute="centerX" id="kFh-UZ-M1S"/>
                                             <constraint firstItem="GuR-R3-ieV" firstAttribute="top" secondItem="6j3-Ia-mEM" secondAttribute="top" id="lZq-E7-noK"/>
                                             <constraint firstItem="Gdq-O5-PQ3" firstAttribute="top" secondItem="6j3-Ia-mEM" secondAttribute="top" constant="25" id="tBx-ZR-S7j"/>
@@ -1724,7 +1725,7 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="StationCell" id="JJD-cg-pGJ" customClass="StationCell">
-                                        <rect key="frame" x="0.0" y="0.5" width="170" height="260"/>
+                                        <rect key="frame" x="0.0" y="1" width="170" height="260"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="170" height="260"/>
@@ -1911,6 +1912,7 @@
                         <outlet property="collectionView" destination="hXL-zV-iwj" id="zNI-R9-69B"/>
                         <outlet property="fanButton" destination="Xsd-of-aDb" id="frq-94-WnF"/>
                         <outlet property="filterControl" destination="bIQ-Bv-1WQ" id="NIu-Tk-PiS"/>
+                        <outlet property="liveImageView" destination="GuR-R3-ieV" id="IjY-HS-vba"/>
                         <outlet property="nameLabel" destination="nd7-if-bhd" id="V6G-Hx-klY"/>
                         <outlet property="profileImageView" destination="2Qb-HI-ydh" id="x7r-gS-qUU"/>
                         <outlet property="profileView" destination="Nww-xj-glW" id="a4K-wB-5lu"/>
@@ -1946,11 +1948,11 @@
                                         <rect key="frame" x="0.0" y="22" width="600" height="101"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="d7f-UQ-RpR" id="FoZ-le-mcK">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="100.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="100"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="FFn-q1-R2U">
-                                                    <rect key="frame" x="100" y="34" width="29.5" height="20"/>
+                                                    <rect key="frame" x="100" y="33" width="30" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="16"/>
@@ -1958,7 +1960,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="pX5-z4-DQZ">
-                                                    <rect key="frame" x="100" y="54" width="39" height="13.5"/>
+                                                    <rect key="frame" x="100" y="53" width="39" height="14"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="11"/>
@@ -2038,7 +2040,7 @@
                                 <rect key="frame" x="0.0" y="86" width="600" height="100"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="K2y-Q6-fT8" id="szM-2O-Cvy">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="99.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="99"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y0i-r9-LvI">
@@ -2786,7 +2788,7 @@
                                 <rect key="frame" x="0.0" y="92" width="600" height="101"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="MhQ-vH-nNz" id="RXL-ME-0ua">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="100.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="100"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Profile" translatesAutoresizingMaskIntoConstraints="NO" id="nbL-IL-ic0">

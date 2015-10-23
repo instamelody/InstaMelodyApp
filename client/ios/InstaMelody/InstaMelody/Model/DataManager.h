@@ -29,6 +29,8 @@
 - (NSArray *)userMelodyList;
 -(void)fetchUserMelody:(NSString*)melodyId;
 
+-(BOOL)isPremium;
+
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
 @end
