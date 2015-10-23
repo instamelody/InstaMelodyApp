@@ -82,7 +82,7 @@
         [defaults synchronize];
     }
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[NSString fontAwesomeIconStringForEnum:FAEllipsisV] style:UIBarButtonItemStylePlain target:self action:@selector(showVolume:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[NSString fontAwesomeIconStringForEnum:FAEllipsisH] style:UIBarButtonItemStylePlain target:self action:@selector(showOptions:)];
     
     [self fixButtons];
     
@@ -191,9 +191,26 @@
                                               - (titleSize.height + spacing), 0.0, 0.0, - titleSize.width);
 }
 
--(IBAction)showVolume:(id)sender
+-(IBAction)showOptions:(id)sender
 {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"More Actions" message:@"" preferredStyle:UIAlertControllerStyleActionSheet];
     
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    
+    UIAlertAction *profileAction = [UIAlertAction actionWithTitle:@"Edit Profile" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        //show photo picker
+        [self changeProfilePic:nil];
+    }];
+    
+    UIAlertAction *logoutAction = [UIAlertAction actionWithTitle:@"Sign out" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        //show photo picker
+        [self signOut:nil];
+    }];
+    
+    [alert addAction:profileAction];
+    [alert addAction:logoutAction];
+    [alert addAction:cancelAction];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 -(IBAction)showSettings:(id)sender {
