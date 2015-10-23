@@ -1287,7 +1287,7 @@
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <connections>
-                                                    <segue destination="Pq6-4v-OYC" kind="show" id="MNP-ud-pEC"/>
+                                                    <segue destination="Pq6-4v-OYC" kind="show" identifier="showNotifSegue" id="MNP-ud-pEC"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A6k-Z0-ZsI">
@@ -1374,7 +1374,7 @@
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <connections>
-                                                    <segue destination="Pq6-4v-OYC" kind="show" id="BRo-Dx-5pM"/>
+                                                    <segue destination="Pq6-4v-OYC" kind="show" identifier="showNotifSegue" id="BRo-Dx-5pM"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3ZS-kI-L21">
@@ -2861,7 +2861,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dwd-Bc-FDQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="162" y="871"/>
+            <point key="canvasLocation" x="253" y="1047"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="PN4-7Z-ryz">
@@ -3007,6 +3007,6 @@
     <inferredMetricsTieBreakers>
         <segue reference="MNP-ud-pEC"/>
         <segue reference="uus-fc-Z9E"/>
-        <segue reference="42P-9A-i60"/>
+        <segue reference="pIZ-0E-tZg"/>
     </inferredMetricsTieBreakers>
 </document>
