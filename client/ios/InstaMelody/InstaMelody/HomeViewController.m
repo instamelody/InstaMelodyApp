@@ -220,7 +220,13 @@
         [self changeProfilePic:nil];
     }];
     
-    DAAlertAction *logoutAction = [DAAlertAction actionWithTitle:@"Sign out" style:DAAlertActionStyleDefault handler:^{
+    NSString *signoutTitle = @"Sign in";
+    
+    if (![[[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"] isEqualToString:@""]) {
+        signoutTitle = @"Sign out";
+    }
+    
+    DAAlertAction *logoutAction = [DAAlertAction actionWithTitle:signoutTitle style:DAAlertActionStyleDefault handler:^{
                 [self signOut:nil];
     }];
     
