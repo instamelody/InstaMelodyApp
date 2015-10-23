@@ -732,33 +732,36 @@
     
     if (![topicField.text isEqualToString:@""]) {
         
-        if (isPremium && self.selectedMelody2 == nil) {
-            NSMutableDictionary *userDict = [NSMutableDictionary new];
-            [userDict setObject:[self.currentRecordingURL path] forKey:@"LoopURL"];
-            //[userDict setObject:@"dev topic" forKey:@"Description"];
-            [userDict setObject:topicField.text forKey:@"Name"];
-            
-            if (self.selectedMelody != nil) {
-                [userDict setObject:self.selectedMelody.melodyId forKey:@"MelodyId1"];
-            }
-            
-            if (self.selectedMelody2 != nil) {
-                [userDict setObject:self.selectedMelody2.melodyId forKey:@"MelodyId2"];
-            }
-            
-            if (self.selectedMelody3 != nil) {
-                [userDict setObject:self.selectedMelody3.melodyId forKey:@"MelodyId3"];
-            }
-            
-            
-            [self.delegate didFinishWithInfo:userDict];
-            
-            [self.navigationController popViewControllerAnimated:YES];
-        } else {
+        NSMutableDictionary *userDict = [NSMutableDictionary new];
+        [userDict setObject:[self.currentRecordingURL path] forKey:@"LoopURL"];
+        //[userDict setObject:@"dev topic" forKey:@"Description"];
+        [userDict setObject:topicField.text forKey:@"Name"];
+        
+        if (self.selectedMelody != nil) {
+            [userDict setObject:self.selectedMelody.melodyId forKey:@"MelodyId1"];
+        }
+        
+        if (self.selectedMelody2 != nil) {
+            [userDict setObject:self.selectedMelody2.melodyId forKey:@"MelodyId2"];
+        }
+        
+        if (self.selectedMelody3 != nil) {
+            [userDict setObject:self.selectedMelody3.melodyId forKey:@"MelodyId3"];
+        }
+        
+        
+        if (!isPremium && self.selectedMelody2) {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Please upgrade" message:@"You must go premium to select more than 1 melody." preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
             [alert addAction:action];
             [self presentViewController:alert animated:YES completion:nil];
+        } else {
+            if (self.isNewPart) {
+                [self.delegate didFinishWithInfo:userDict];
+            }
+            
+            
+            [self.navigationController popViewControllerAnimated:YES];
         }
     } else {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:@"Please enter a loop topic" preferredStyle:UIAlertControllerStyleAlert];
