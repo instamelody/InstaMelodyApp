@@ -1258,23 +1258,8 @@
                                 <rect key="frame" x="0.0" y="180" width="600" height="420"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r6v-GZ-td4">
-                                        <rect key="frame" x="161" y="71" width="277" height="277"/>
+                                        <rect key="frame" x="161" y="58" width="277" height="277"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vfm-YN-bbn">
-                                                <rect key="frame" x="93" y="0.0" width="90" height="90"/>
-                                                <animations/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="90" id="c3K-9e-vsX"/>
-                                                    <constraint firstAttribute="width" constant="90" id="d0v-Ke-Ts2"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="15"/>
-                                                <state key="normal" title="Feed" image="feed">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                                <connections>
-                                                    <segue destination="M3b-v7-3nS" kind="show" id="J9S-om-BA1"/>
-                                                </connections>
-                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3ZS-kI-L21">
                                                 <rect key="frame" x="93" y="94" width="90" height="90"/>
                                                 <animations/>
@@ -1386,6 +1371,21 @@
                                                     <segue destination="vYc-MT-dDl" kind="show" id="QdI-fc-A95"/>
                                                 </connections>
                                             </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vfm-YN-bbn">
+                                                <rect key="frame" x="93" y="0.0" width="90" height="90"/>
+                                                <animations/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="90" id="c3K-9e-vsX"/>
+                                                    <constraint firstAttribute="width" constant="90" id="d0v-Ke-Ts2"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="15"/>
+                                                <state key="normal" title="Feed" image="feed">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <segue destination="M3b-v7-3nS" kind="show" id="J9S-om-BA1"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <animations/>
                                         <constraints>
@@ -1417,9 +1417,17 @@
                                 </subviews>
                                 <animations/>
                                 <constraints>
+                                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="r6v-GZ-td4" secondAttribute="bottom" constant="85" id="7OG-j3-R47"/>
+                                    <constraint firstItem="r6v-GZ-td4" firstAttribute="top" relation="greaterThanOrEqual" secondItem="FQ2-cX-yXa" secondAttribute="top" constant="58" id="HDf-Uz-1lA"/>
                                     <constraint firstItem="r6v-GZ-td4" firstAttribute="centerX" secondItem="FQ2-cX-yXa" secondAttribute="centerX" id="LJU-0A-yvY"/>
+                                    <constraint firstAttribute="bottom" relation="lessThanOrEqual" secondItem="r6v-GZ-td4" secondAttribute="bottom" constant="130" id="eaH-za-Lp8"/>
                                     <constraint firstItem="r6v-GZ-td4" firstAttribute="centerY" secondItem="FQ2-cX-yXa" secondAttribute="centerY" id="vJJ-TG-gTZ"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="vJJ-TG-gTZ"/>
+                                    </mask>
+                                </variation>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DYf-dD-zN9">
                                 <rect key="frame" x="150" y="84" width="300" height="142"/>
