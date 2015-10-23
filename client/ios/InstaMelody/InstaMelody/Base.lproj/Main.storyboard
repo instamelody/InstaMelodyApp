@@ -243,7 +243,7 @@
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <connections>
-                                                    <segue destination="nbi-tE-dvK" kind="show" id="SjU-KU-hD4"/>
+                                                    <segue destination="nbi-tE-dvK" kind="show" identifier="presentSignupSegue" id="SjU-KU-hD4"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -1924,6 +1924,7 @@
                         <outlet property="nameLabel" destination="nd7-if-bhd" id="V6G-Hx-klY"/>
                         <outlet property="profileImageView" destination="2Qb-HI-ydh" id="x7r-gS-qUU"/>
                         <outlet property="profileView" destination="Nww-xj-glW" id="a4K-wB-5lu"/>
+                        <outlet property="stationLabel" destination="Rh0-39-wV8" id="H7A-PR-OCX"/>
                         <outlet property="vipButton" destination="5jY-Ci-jUW" id="fGM-Wf-BDq"/>
                     </connections>
                 </viewController>

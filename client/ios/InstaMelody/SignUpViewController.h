@@ -9,9 +9,18 @@
 #import <UIKit/UIKit.h>
 #import "M13ProgressHUD.h"
 #import "M13ProgressViewRing.h"
+#import "AFHTTPRequestOperationManager.h"
+#import "AFURLSessionManager.h"
+
+@protocol SignUpDelegate <NSObject>
+
+-(void)finishedWithUserId:(NSString *)userId andPassword:(NSString *)password;
+
+@end
 
 @interface SignUpViewController : UIViewController <UITextFieldDelegate>
 
+@property id<SignUpDelegate> delegate;
 
 @property IBOutlet UITextField * usernameField;
 @property IBOutlet UITextField * passwordField;

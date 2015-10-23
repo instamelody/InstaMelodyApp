@@ -46,15 +46,17 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:@"presentSignupSegue"]) {
+        SignUpViewController *signupVC = (SignUpViewController *)segue.destinationViewController;
+        signupVC.delegate = self;
+    }
 }
-*/
 
 -(IBAction)signIn:(id)sender {
     
@@ -117,6 +119,14 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+#pragma mark - SIGN UP DELEGATE
+-(void)finishedWithUserId:(NSString *)userId andPassword:(NSString *)password {
+    self.userField.text = userId;
+    self.passField.text = password;
+    
+    [self signIn:nil];
+}
+
 -(void)getUserDetails:(NSString*)displayName {
     
     //https://api.instamelody.com/v1.0/User?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&displayName=testeraccount
@@ -148,7 +158,7 @@
             [[NSUserDefaults standardUserDefaults] setObject:[imageDict objectForKey:@"FilePath"] forKey:@"ProfileFilePath"];
         }
             
-        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"infoUpdated" object:nil];
         [[NSUserDefaults standardUserDefaults] synchronize];
         
         [self downloadProfilePhoto];

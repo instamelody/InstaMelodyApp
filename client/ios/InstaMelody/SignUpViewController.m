@@ -78,17 +78,20 @@
             [self.HUD hide:YES];
             
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"You are now a user" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [alertView show];
-            
-            NSDictionary *responseDict = (NSDictionary *)responseObject;
-            [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"Token"] forKey:@"authToken"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
+            //[alertView show];
             
             [self dismissViewControllerAnimated:YES completion:^{
+                
+                [self.delegate finishedWithUserId:self.usernameField.text andPassword:self.passwordField.text];
+                
+                            //self.delegate finished
+                /*
                 if (self.presentingViewController != nil) {
                     [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
                 }
+                 */
             }];
+
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             
             [self.HUD hide:YES];
@@ -146,6 +149,18 @@
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     [self.scrollView setContentOffset:CGPointZero animated:YES];
 }*/
+
+-(IBAction)cancel:(id)sender {
+    [self.HUD hide:YES];
+    
+    
+    
+    [self dismissViewControllerAnimated:YES completion:^{
+        if (self.presentingViewController != nil) {
+            [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
+        }
+    }];
+}
 
 
 @end
