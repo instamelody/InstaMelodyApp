@@ -685,7 +685,7 @@
     
     if (error == nil) {
         
-        [self.playButton setImage:[UIImage imageNamed:@"stop"] forState:UIControlStateNormal];
+        [self.playButton setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
         [self.fgPlayer setVolume:volume.floatValue];
         
         [self.fgPlayer play];
@@ -1082,7 +1082,7 @@
         [self playLoop3:nil];
     }
     
-    [self.playButton setImage:[UIImage imageNamed:@"stop"] forState:UIControlStateNormal];
+    [self.playButton setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
 }
 
 -(void)didSelectMelody:(Melody *)melody {
