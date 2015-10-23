@@ -11,4 +11,5 @@ target 'InstaMelody' do
   pod 'UIImageView-Letters'
   pod 'M13ProgressSuite'
   pod 'EZAudio'
+  pod 'DAAlertController'
 end

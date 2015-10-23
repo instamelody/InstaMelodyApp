@@ -1,5 +1,6 @@
 PODS:
   - CLTokenInputView (2.1.0)
+  - DAAlertController (0.1.4)
   - DACircularProgress (2.3.1)
   - EZAudio (1.1.2):
     - EZAudio/Full (= 1.1.2)
@@ -19,6 +20,7 @@ PODS:
 
 DEPENDENCIES:
   - CLTokenInputView
+  - DAAlertController
   - DACircularProgress
   - EZAudio
   - FontAwesome
@@ -30,6 +32,7 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   CLTokenInputView: dc40041faf76102cf96dede1635d93bd0f115a0d
+  DAAlertController: 4735313ec65d3d69f81fdd34d01308809680350f
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   EZAudio: 01373de2b1257b77be1bf13753fb1c4ea8a9777e
   FontAwesome: 341b52261cad8254017da3ddfc01d67c87c0ca88

@@ -85,6 +85,7 @@ strip_invalid_archs() {
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-InstaMelody/CLTokenInputView.framework"
+  install_framework "Pods-InstaMelody/DAAlertController.framework"
   install_framework "Pods-InstaMelody/DACircularProgress.framework"
   install_framework "Pods-InstaMelody/EZAudio.framework"
   install_framework "Pods-InstaMelody/FontAwesome.framework"
@@ -98,6 +99,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-InstaMelody/CLTokenInputView.framework"
+  install_framework "Pods-InstaMelody/DAAlertController.framework"
   install_framework "Pods-InstaMelody/DACircularProgress.framework"
   install_framework "Pods-InstaMelody/EZAudio.framework"
   install_framework "Pods-InstaMelody/FontAwesome.framework"

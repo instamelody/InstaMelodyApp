@@ -10,6 +10,7 @@
 #import "constants.h"
 #import "LoopViewController.h"
 #import "DataManager.h"
+#import "DAAlertController.h"
 
 @interface HomeViewController ()
 
@@ -193,24 +194,23 @@
 
 -(IBAction)showOptions:(id)sender
 {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"More Actions" message:@"" preferredStyle:UIAlertControllerStyleActionSheet];
     
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    DAAlertAction *cancelAction = [DAAlertAction actionWithTitle:@"Cancel" style:DAAlertActionStyleCancel handler:^{
+        NSLog(@"\"Cancel\" button tapped");
+    }];
     
-    UIAlertAction *profileAction = [UIAlertAction actionWithTitle:@"Edit Profile" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        //show photo picker
+    DAAlertAction *profileAction = [DAAlertAction actionWithTitle:@"Edit Profile" style:DAAlertActionStyleDefault handler:^{
         [self changeProfilePic:nil];
     }];
     
-    UIAlertAction *logoutAction = [UIAlertAction actionWithTitle:@"Sign out" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        //show photo picker
-        [self signOut:nil];
+    DAAlertAction *logoutAction = [DAAlertAction actionWithTitle:@"Sign out" style:DAAlertActionStyleDefault handler:^{
+                [self signOut:nil];
     }];
     
-    [alert addAction:profileAction];
-    [alert addAction:logoutAction];
-    [alert addAction:cancelAction];
-    [self presentViewController:alert animated:YES completion:nil];
+    NSArray *actions = @[profileAction, logoutAction, cancelAction];
+    
+    [DAAlertController showActionSheetInViewController:self fromBarButtonItem:sender withTitle:@"More options" message:@"" actions:actions permittedArrowDirections:UIPopoverArrowDirectionDown];
+    
 }
 
 -(IBAction)showSettings:(id)sender {
