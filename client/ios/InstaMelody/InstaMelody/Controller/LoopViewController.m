@@ -33,6 +33,7 @@
 @property (nonatomic, strong) NSMutableArray *partArray;
 @property NSInteger currentPartIndex;
 @property BOOL goBack;
+@property BOOL isNewPart;
 
 @property (nonatomic, strong) NSArray *inputs;
 
@@ -63,6 +64,9 @@
     
      if (self.selectedLoop !=nil) {
          [self getLoop:[self.selectedLoop objectForKey:@"Id"]];
+         
+        self.isNewPart = NO;
+         
      } else if (self.selectedUserMelody != nil) {
         
         int count = 0;
@@ -116,8 +120,10 @@
                 
             }
         }
+         
+        self.isNewPart = NO;
      } else {
-         //load friend pic here
+         //it's just me now
          
          NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
          
@@ -139,6 +145,7 @@
          self.progressLabel.text = @"Press Record to Start";
          self.backwardButton.hidden = YES;
          self.forwardButton.hidden = YES;
+         self.isNewPart = YES;
      }
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"pickedMelody" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
@@ -851,6 +858,10 @@
                 
                 self.currentRecordingURL = fileURL;
                 
+                if (self.selectedLoop || self.selectedUserMelody) {
+                    self.isNewPart = YES;
+                }
+                
                 [self.recorder record];
                 
                 [self toggleMelodies:nil];
@@ -937,6 +948,12 @@
         
         [self.timer invalidate];
         self.progressView.progress = 0;
+        
+        if (!self.isNewPart) {
+            self.selectedMelody = nil;
+            self.selectedMelody2 = nil;
+            self.selectedMelody3 = nil;
+        }
     } else {
         
         NSError *error;
@@ -1091,7 +1108,10 @@
 -(void)playEverything {
     
     if (self.selectedLoop != nil) {
-        [self preload];
+        
+        if (!self.isNewPart) {
+            [self preload];
+        }
     }
     
     [self playRecording:nil];
@@ -1457,7 +1477,7 @@
             [self.bgPlayer3 stop];
         }
         
-        if (self.selectedLoop) {
+        if (self.selectedLoop && !self.isNewPart) {
             
             NSInteger partCount = MAX(0, self.partArray.count -1);
             
@@ -1477,6 +1497,7 @@
                 self.progressView.progress = 0;
                 self.currentPartIndex = 0;
             }
+            
         } else {
             [self.profileImageView setImage:[UIImage imageNamed:@"Profile"]];
             self.progressView.progress = 0;
@@ -1717,6 +1738,8 @@
 
 
     }
+    
+    self.isNewPart = NO;
     
     self.currentPartIndex = indexPath.row - 1 ;
     [self audioPlayerDidFinishPlaying:self.fgPlayer successfully:YES];
