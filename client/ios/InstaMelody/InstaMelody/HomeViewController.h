@@ -7,13 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "AwesomeMenu.h"
 #import "LoopViewController.h"
 #import "NetworkManager.h"
 #import "UIFont+FontAwesome.h"
 #import "NSString+FontAwesome.h"
+#import "InstamelodyViewController.h"
 
-@interface HomeViewController : UIViewController <AwesomeMenuDelegate, UIImagePickerControllerDelegate, LoopDelegate>
+@interface HomeViewController : InstamelodyViewController <UIImagePickerControllerDelegate, LoopDelegate>
 
 @property (nonatomic, strong) IBOutlet UIView *profileView;
 @property (nonatomic, strong) IBOutlet UIImageView *profileImageView;

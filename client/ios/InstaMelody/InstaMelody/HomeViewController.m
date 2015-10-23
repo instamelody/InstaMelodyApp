@@ -17,17 +17,6 @@
 
 @implementation HomeViewController
 
-+ (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
-    //UIGraphicsBeginImageContext(newSize);
-    // In next line, pass 0.0 to use the current device's pixel scaling factor (and thus account for Retina resolution).
-    // Pass 1.0 to force exact pixel size.
-    UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
-    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
-    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return newImage;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -95,7 +84,6 @@
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[NSString fontAwesomeIconStringForEnum:FAEllipsisV] style:UIBarButtonItemStylePlain target:self action:@selector(showVolume:)];
     
-    [self createMenu];
     [self fixButtons];
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"downloadedProfile" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
@@ -212,6 +200,14 @@
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
 }
 
+-(IBAction)showLoops:(id)sender {
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    LoopViewController *loopVc = (LoopViewController *)[sb instantiateViewControllerWithIdentifier:@"LoopViewController"];
+    loopVc.delegate = self;
+    
+    [self.navigationController pushViewController:loopVc animated:YES];
+}
+
 -(IBAction)signOut:(id)sender {
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -239,86 +235,6 @@
     [self presentViewController:imagePicker animated:YES completion:^{
         NSLog(@"Image picker presented!");
     }];
-}
-
--(void)createMenu {
-    UIImage *micImage = [UIImage imageNamed:@"mic"];
-    
-    UIImage *soloImage = [UIImage imageNamed:@"solo"];
-    UIImage *chatImage = [UIImage imageNamed:@"chat"];
-    UIImage *loopImage = [UIImage imageNamed:@"loop"];
-    
-    micImage = [HomeViewController imageWithImage:micImage scaledToSize:CGSizeMake(70, 70)];
-    soloImage = [HomeViewController imageWithImage:soloImage scaledToSize:CGSizeMake(60, 60)];
-    chatImage = [HomeViewController imageWithImage:chatImage scaledToSize:CGSizeMake(60, 60)];
-    loopImage = [HomeViewController imageWithImage:loopImage scaledToSize:CGSizeMake(60, 60)];
-    
-    // Default Menu
-    
-    AwesomeMenuItem *starMenuItem1 = [[AwesomeMenuItem alloc] initWithImage:soloImage
-                                                           highlightedImage:soloImage
-                                                               ContentImage:nil
-                                                    highlightedContentImage:nil];
-    AwesomeMenuItem *starMenuItem2 = [[AwesomeMenuItem alloc] initWithImage:chatImage
-                                                           highlightedImage:chatImage
-                                                               ContentImage:nil
-                                                    highlightedContentImage:nil];
-    AwesomeMenuItem *starMenuItem3 = [[AwesomeMenuItem alloc] initWithImage:loopImage
-                                                           highlightedImage:loopImage
-                                                               ContentImage:nil
-                                                    highlightedContentImage:nil];
-    
-    NSArray *menuItems = [NSArray arrayWithObjects:starMenuItem1, starMenuItem2, starMenuItem3, nil];
-    
-    AwesomeMenuItem *startItem = [[AwesomeMenuItem alloc] initWithImage:micImage
-                                                       highlightedImage:micImage
-                                                           ContentImage:micImage
-                                                highlightedContentImage:micImage];
-    
-    AwesomeMenu *menu = [[AwesomeMenu alloc] initWithFrame:self.view.bounds startItem:startItem menuItems:menuItems];
-    menu.delegate = self;
-    menu.startPoint = CGPointMake(self.view.frame.size.width - 50, self.view.frame.size.height - 50);
-    menu.menuWholeAngle = -1 * M_PI / 2;
-    
-    [self.view addSubview:menu];
-
-}
-
-- (void)awesomeMenu:(AwesomeMenu *)menu didSelectIndex:(NSInteger)idx
-{
-    NSLog(@"Select the index : %ld",(long)idx);
-    
-    switch (idx) {
-        case 1:
-            [self showChats:nil];
-            break;
-        case 2:
-            [self showLoops:nil];
-            break;
-        default:
-            break;
-    }
-
-}
-- (void)awesomeMenuDidFinishAnimationClose:(AwesomeMenu *)menu {
-    NSLog(@"Menu was closed!");
-}
-- (void)awesomeMenuDidFinishAnimationOpen:(AwesomeMenu *)menu {
-    NSLog(@"Menu is open!");
-}
-
--(IBAction)showChats:(id)sender {
-    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    UIViewController *vc = [sb instantiateViewControllerWithIdentifier:@"ChatsTableViewController"];
-    [self.navigationController pushViewController:vc animated:YES];
-}
-
--(IBAction)showLoops:(id)sender {
-    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    LoopViewController *loopVc = (LoopViewController *)[sb instantiateViewControllerWithIdentifier:@"LoopViewController"];
-    loopVc.delegate = self;
-    
-    [self.navigationController pushViewController:loopVc animated:YES];
 }
 
 #pragma mark - loop delegate
