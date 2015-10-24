@@ -14,4 +14,6 @@
 
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 
+-(IBAction)change:(id)sender;
+
 @end
