@@ -66,6 +66,8 @@
             <string>CenturyGothic</string>
             <string>CenturyGothic</string>
             <string>CenturyGothic</string>
+            <string>CenturyGothic</string>
+            <string>CenturyGothic</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -3065,9 +3067,13 @@
                                 </constraints>
                                 <string key="text">Go VIP to unlock the full features of InstaMelody, including:
 
+
  * Record loops longer than 30 seconds
+
  * Add 3 background melodies to your loops
+
  * Full access to all melody packs
+
  * Share your loops with other users</string>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="14"/>
@@ -3097,7 +3103,62 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xz2-12-ktg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1070" y="-790"/>
+            <point key="canvasLocation" x="1072" y="-1192"/>
+        </scene>
+        <!--Table View Controller-->
+        <scene sceneID="c8Z-UX-cJr">
+            <objects>
+                <tableViewController id="35k-bW-TBd" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="79" sectionHeaderHeight="28" sectionFooterHeight="28" id="IaL-bk-gY8">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MelodyCell" textLabel="Z6J-Eh-Yew" detailTextLabel="iTC-09-alj" imageView="f6N-sX-EDr" rowHeight="101" style="IBUITableViewCellStyleSubtitle" id="Bd2-s8-K0c">
+                                <rect key="frame" x="0.0" y="28" width="600" height="101"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Bd2-s8-K0c" id="84W-Zl-OG2">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="100.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Z6J-Eh-Yew">
+                                            <rect key="frame" x="100" y="34" width="29.5" height="20"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <animations/>
+                                            <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="16"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="iTC-09-alj">
+                                            <rect key="frame" x="100" y="54" width="39" height="13.5"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <animations/>
+                                            <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="11"/>
+                                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="showcase" id="f6N-sX-EDr">
+                                            <rect key="frame" x="15" y="15" width="70" height="70"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <animations/>
+                                        </imageView>
+                                    </subviews>
+                                    <animations/>
+                                </tableViewCellContentView>
+                                <animations/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="35k-bW-TBd" id="PXc-Di-EQ0"/>
+                            <outlet property="delegate" destination="35k-bW-TBd" id="dt0-Cq-eRS"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FC3-mT-Mub" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1080" y="-582"/>
         </scene>
     </scenes>
     <resources>
