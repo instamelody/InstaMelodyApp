@@ -65,6 +65,7 @@
             <string>CenturyGothic</string>
             <string>CenturyGothic</string>
             <string>CenturyGothic</string>
+            <string>CenturyGothic</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -334,7 +335,69 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pQL-dO-dl1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1730" y="-686"/>
+            <point key="canvasLocation" x="4686" y="-302"/>
+        </scene>
+        <!--Store-->
+        <scene sceneID="VCt-1v-QT8">
+            <objects>
+                <viewController id="6CG-PD-y3j" customClass="StoreViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="tdI-3y-SxX"/>
+                        <viewControllerLayoutGuide type="bottom" id="6jt-fq-R0N"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="enf-wF-JbN">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blurRed" translatesAutoresizingMaskIntoConstraints="NO" id="C7j-Rb-P7h">
+                                <rect key="frame" x="0.0" y="-2" width="600" height="602"/>
+                                <animations/>
+                            </imageView>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W5f-4Q-lpy">
+                                <rect key="frame" x="0.0" y="126" width="600" height="474"/>
+                                <animations/>
+                                <connections>
+                                    <segue destination="F6Y-b6-Ue2" kind="embed" id="wUq-7a-1kk"/>
+                                </connections>
+                            </containerView>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="ogg-2S-vRk">
+                                <rect key="frame" x="160" y="81" width="280" height="29"/>
+                                <animations/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="28" id="ZYk-eZ-lcT"/>
+                                    <constraint firstAttribute="width" constant="280" id="mtd-1v-3rP"/>
+                                </constraints>
+                                <segments>
+                                    <segment title="Go Premium"/>
+                                    <segment title="Melody Packs"/>
+                                </segments>
+                                <color key="tintColor" red="0.98431372549999996" green="0.21176470589999999" blue="0.48627450979999998" alpha="1" colorSpace="calibratedRGB"/>
+                            </segmentedControl>
+                        </subviews>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="W5f-4Q-lpy" firstAttribute="top" secondItem="ogg-2S-vRk" secondAttribute="bottom" constant="17" id="HMX-II-TYs"/>
+                            <constraint firstItem="6jt-fq-R0N" firstAttribute="top" secondItem="W5f-4Q-lpy" secondAttribute="bottom" id="JSI-0X-0qd"/>
+                            <constraint firstItem="W5f-4Q-lpy" firstAttribute="leading" secondItem="enf-wF-JbN" secondAttribute="leading" id="Skc-vl-kyx"/>
+                            <constraint firstItem="C7j-Rb-P7h" firstAttribute="top" secondItem="tdI-3y-SxX" secondAttribute="bottom" constant="-66" id="Tsj-tI-SHW"/>
+                            <constraint firstItem="6jt-fq-R0N" firstAttribute="top" secondItem="C7j-Rb-P7h" secondAttribute="bottom" id="UDq-iP-Nv9"/>
+                            <constraint firstAttribute="trailing" secondItem="W5f-4Q-lpy" secondAttribute="trailing" id="Y5h-Bp-Gds"/>
+                            <constraint firstItem="C7j-Rb-P7h" firstAttribute="leading" secondItem="enf-wF-JbN" secondAttribute="leading" id="alG-Dw-TzM"/>
+                            <constraint firstItem="ogg-2S-vRk" firstAttribute="centerX" secondItem="enf-wF-JbN" secondAttribute="centerX" id="nL2-JX-T6K"/>
+                            <constraint firstItem="ogg-2S-vRk" firstAttribute="top" secondItem="tdI-3y-SxX" secondAttribute="bottom" constant="17" id="orD-I4-8QN"/>
+                            <constraint firstAttribute="trailing" secondItem="C7j-Rb-P7h" secondAttribute="trailing" id="tFn-pp-lYL"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Store" id="QqB-O3-0v0"/>
+                    <connections>
+                        <outlet property="segmentedControl" destination="ogg-2S-vRk" id="dsF-yN-tjy"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6xR-WM-Eo0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="349" y="-727"/>
         </scene>
         <!--Chats-->
         <scene sceneID="PKl-op-Eby">
@@ -431,7 +494,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Mkp-ei-FrD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1574" y="85"/>
+            <point key="canvasLocation" x="1224" y="91"/>
         </scene>
         <!--Delegate-->
         <scene sceneID="Fiz-Mw-9ys">
@@ -591,7 +654,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3PL-Yx-O3h" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3129" y="85"/>
+            <point key="canvasLocation" x="3001" y="91"/>
         </scene>
         <!--Delegate-->
         <scene sceneID="ZjU-ua-LkB">
@@ -1063,7 +1126,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qOQ-D8-rml" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3058" y="818"/>
+            <point key="canvasLocation" x="3001" y="1013"/>
         </scene>
         <!--Melody Groups-->
         <scene sceneID="21Q-iz-E50">
@@ -1148,7 +1211,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8xF-71-xam" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4646" y="818"/>
+            <point key="canvasLocation" x="4686" y="602"/>
         </scene>
         <!--Select a Melody-->
         <scene sceneID="ie8-ih-ZBR">
@@ -1220,7 +1283,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9wK-69-VqI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5410" y="818"/>
+            <point key="canvasLocation" x="5450" y="602"/>
         </scene>
         <!--Profile-->
         <scene sceneID="Dg1-Sm-aN7">
@@ -1388,6 +1451,9 @@
                                                 <state key="normal" title="Store" image="store">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
+                                                <connections>
+                                                    <segue destination="6CG-PD-y3j" kind="show" id="gM0-sz-VBr"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <animations/>
@@ -1582,7 +1648,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1kR-gV-spe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="811" y="85"/>
+            <point key="canvasLocation" x="349" y="91"/>
         </scene>
         <!--My Station-->
         <scene sceneID="VhH-ns-yF8">
@@ -1933,7 +1999,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cbm-im-hNs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="931" y="1608"/>
+            <point key="canvasLocation" x="1224" y="1790"/>
         </scene>
         <!--Library-->
         <scene sceneID="Mxs-I5-Wxq">
@@ -2039,7 +2105,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KLE-zN-Jhf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1930" y="1608"/>
+            <point key="canvasLocation" x="2090" y="1790"/>
         </scene>
         <!--Friends-->
         <scene sceneID="whu-lG-pLZ">
@@ -2160,7 +2226,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wIS-9y-tnr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1574" y="818"/>
+            <point key="canvasLocation" x="1224" y="1013"/>
         </scene>
         <!--Sign Up-->
         <scene sceneID="aDQ-r1-RaB">
@@ -2612,7 +2678,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tll-37-NcB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2433" y="-686"/>
+            <point key="canvasLocation" x="5450" y="-302"/>
         </scene>
         <!--Volume View Controller-->
         <scene sceneID="OJO-po-KaI">
@@ -2768,7 +2834,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rZC-Qf-X14" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3145" y="-686"/>
+            <point key="canvasLocation" x="4846" y="1490"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="9nu-Tv-a9Z">
@@ -2787,7 +2853,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QdF-2f-tAc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="0.0" y="85"/>
+            <point key="canvasLocation" x="-376" y="91"/>
         </scene>
         <!--Notifications-->
         <scene sceneID="m7A-Ll-wXo">
@@ -2864,7 +2930,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dwd-Bc-FDQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="253" y="1047"/>
+            <point key="canvasLocation" x="349" y="1013"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="PN4-7Z-ryz">
@@ -2883,7 +2949,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eIi-eK-CZw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="918" y="-686"/>
+            <point key="canvasLocation" x="3874" y="-302"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="htY-6L-nyL">
@@ -2902,7 +2968,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Gcw-FB-dnL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2317" y="818"/>
+            <point key="canvasLocation" x="2137" y="1013"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="t4W-bj-0GB">
@@ -2961,7 +3027,7 @@
                     </constraints>
                 </view>
             </objects>
-            <point key="canvasLocation" x="2317" y="85"/>
+            <point key="canvasLocation" x="2137" y="91"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="ZZq-4d-Jtr">
@@ -2980,7 +3046,58 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0FM-vt-pOo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3834" y="818"/>
+            <point key="canvasLocation" x="3874" y="602"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="SL7-QQ-B6S">
+            <objects>
+                <viewController id="F6Y-b6-Ue2" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="AP1-s2-uFv">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="474"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ycx-PY-woL">
+                                <rect key="frame" x="170" y="85.5" width="260" height="204"/>
+                                <animations/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="260" id="Ox6-dE-HOa"/>
+                                    <constraint firstAttribute="height" constant="204" id="mnG-wW-fkz"/>
+                                </constraints>
+                                <string key="text">Go VIP to unlock the full features of InstaMelody, including:
+
+ * Record loops longer than 30 seconds
+ * Add 3 background melodies to your loops
+ * Full access to all melody packs
+ * Share your loops with other users</string>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H3b-Pt-aSI">
+                                <rect key="frame" x="180" y="320" width="240" height="40"/>
+                                <animations/>
+                                <color key="backgroundColor" red="0.79340945512820515" green="0.40417223502811106" blue="0.41903207978361062" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="240" id="KNn-Fr-WlE"/>
+                                    <constraint firstAttribute="height" constant="40" id="cb5-3Q-ABb"/>
+                                </constraints>
+                                <state key="normal" title="Go VIP!">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                        </subviews>
+                        <animations/>
+                        <constraints>
+                            <constraint firstItem="H3b-Pt-aSI" firstAttribute="centerX" secondItem="AP1-s2-uFv" secondAttribute="centerX" id="13E-Wp-CyV"/>
+                            <constraint firstItem="H3b-Pt-aSI" firstAttribute="top" secondItem="ycx-PY-woL" secondAttribute="bottom" constant="30" id="5ct-fs-boI"/>
+                            <constraint firstItem="ycx-PY-woL" firstAttribute="centerY" secondItem="AP1-s2-uFv" secondAttribute="centerY" constant="-50" id="GBx-UA-12i"/>
+                            <constraint firstItem="ycx-PY-woL" firstAttribute="centerX" secondItem="AP1-s2-uFv" secondAttribute="centerX" id="xr8-eL-RWg"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Xz2-12-ktg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1070" y="-790"/>
         </scene>
     </scenes>
     <resources>
@@ -3008,8 +3125,8 @@
         <image name="vol" width="47" height="47"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="uus-fc-Z9E"/>
         <segue reference="BRo-Dx-5pM"/>
+        <segue reference="uus-fc-Z9E"/>
         <segue reference="42P-9A-i60"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0A10B9D513BF2A431F2FEB6C /* Pods_InstaMelody.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C4BFAFF7F0F445B4DF19637 /* Pods_InstaMelody.framework */; };
 		8706E62E1BDA14A80017E560 /* InstamelodyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8706E62D1BDA14A80017E560 /* InstamelodyViewController.m */; };
+		8706E6311BDB37BB0017E560 /* StoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8706E6301BDB37BB0017E560 /* StoreViewController.m */; };
 		8707F9B51B446F57004B4C20 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8707F9B41B446F57004B4C20 /* main.m */; };
 		8707F9B81B446F57004B4C20 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8707F9B71B446F57004B4C20 /* AppDelegate.m */; };
 		8707F9BB1B446F57004B4C20 /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8707F9BA1B446F57004B4C20 /* FirstViewController.m */; };
@@ -80,6 +81,8 @@
 		85A8BE665FB43D9DB14E6A1E /* Pods-InstaMelody.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InstaMelody.release.xcconfig"; path = "Pods/Target Support Files/Pods-InstaMelody/Pods-InstaMelody.release.xcconfig"; sourceTree = "<group>"; };
 		8706E62C1BDA14A80017E560 /* InstamelodyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InstamelodyViewController.h; sourceTree = "<group>"; };
 		8706E62D1BDA14A80017E560 /* InstamelodyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InstamelodyViewController.m; sourceTree = "<group>"; };
+		8706E62F1BDB37BB0017E560 /* StoreViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoreViewController.h; sourceTree = "<group>"; };
+		8706E6301BDB37BB0017E560 /* StoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoreViewController.m; sourceTree = "<group>"; };
 		8707F9AF1B446F57004B4C20 /* InstaMelody.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InstaMelody.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8707F9B31B446F57004B4C20 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8707F9B41B446F57004B4C20 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -400,6 +403,8 @@
 				8754A8BB1BD13D340060B078 /* NotificationsViewController.m */,
 				8706E62C1BDA14A80017E560 /* InstamelodyViewController.h */,
 				8706E62D1BDA14A80017E560 /* InstamelodyViewController.m */,
+				8706E62F1BDB37BB0017E560 /* StoreViewController.h */,
+				8706E6301BDB37BB0017E560 /* StoreViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -641,6 +646,7 @@
 				87AF84751BB6B17500FCD3E1 /* VolumeViewController.m in Sources */,
 				87175C531B4ADCEA00C042E4 /* ChatsTableViewController.m in Sources */,
 				87538B801BB72C6400F7F9D8 /* UserCell.m in Sources */,
+				8706E6311BDB37BB0017E560 /* StoreViewController.m in Sources */,
 				872BB5681B74AD26004CDBE7 /* FriendCell.m in Sources */,
 				8707F9F61B4476BD004B4C20 /* AFSecurityPolicy.m in Sources */,
 				8707F9B51B446F57004B4C20 /* main.m in Sources */,
