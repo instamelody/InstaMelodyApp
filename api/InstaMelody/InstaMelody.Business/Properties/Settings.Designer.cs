@@ -187,7 +187,7 @@ namespace InstaMelody.Business.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("DevAPNSCert.p12")]
+        [global::System.Configuration.DefaultSettingValueAttribute("production.p12")]
         public string APNSProdCertificate {
             get {
                 return ((string)(this["APNSProdCertificate"]));
