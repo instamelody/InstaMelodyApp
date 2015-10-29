@@ -12,7 +12,6 @@
 #import "AFURLSessionManager.h"
 #import "AFHTTPRequestOperationManager.h"
 #import "constants.h"
-#import "AudioSessionManager.h"
 
 @interface LoopViewController ()
 
