@@ -57,7 +57,7 @@
       <Value Profile="(Default)">DevAPNSCert.p12</Value>
     </Setting>
     <Setting Name="APNSProdCertificate" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">DevAPNSCert.p12</Value>
+      <Value Profile="(Default)">production.p12</Value>
     </Setting>
     <Setting Name="APNSDevCertPassword" Type="System.String" Scope="Application">
       <Value Profile="(Default)">instamelody</Value>

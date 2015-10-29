@@ -28,7 +28,12 @@ namespace InstaMelody.Business
         /// <exception cref="System.ArgumentException">A Station with the provided information already exists.</exception>
         public object CreateStation(Station station, Guid sessionToken, Image image = null, IList<Category> categories = null)
         {
-            Utilities.GetUserBySession(sessionToken);
+            var requestor = Utilities.GetUserBySession(sessionToken);
+
+            if (station.UserId.Equals(default(Guid)))
+            {
+                station.UserId = requestor.Id;
+            }
 
             var createdStation = CreateStation(station);
 
