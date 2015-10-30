@@ -62,6 +62,8 @@ namespace InstaMelody.Model
 
         public bool IsFemale { get; set; }
 
+        public DateTime DateOfBirth { get; set; }
+
         [StringLength(64, ErrorMessage = "Hash salt cannot exceed 64 characters")]
         public string HashSalt { get; set; }
 

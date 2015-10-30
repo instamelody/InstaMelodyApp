@@ -18,12 +18,12 @@ namespace InstaMelody.Data
         {
             user.Id = Guid.NewGuid();
 
-            var query = @"INSERT INTO dbo.Users (Id, UserImageId, EmailAddress, DisplayName, FirstName, LastName, PhoneNumber, IsFemale,
+            var query = @"INSERT INTO dbo.Users (Id, UserImageId, EmailAddress, DisplayName, FirstName, LastName, PhoneNumber, IsFemale, DateOfBirth
                         HashSalt, Password, TwitterUsername, TwitterUserId, TwitterToken, TwitterSecret, FacebookUserId, 
                         FacebookToken, LastLoginSuccess, LastLoginFailure, NumberLoginFailures, IsLocked,
                         DateCreated, DateModified, IsDeleted)
-                        VALUES(@UserId, @ImageId, @EmailAddress, @DisplayName, @FirstName, @LastName, @PhoneNumber, @IsFemale, @HashSalt, @Password, 
-                        @TwitterUsername, @TwitterUserId, @TwitterToken, @TwitterSecret, @FacebookUserId, @FacebookToken, 
+                        VALUES(@UserId, @ImageId, @EmailAddress, @DisplayName, @FirstName, @LastName, @PhoneNumber, @IsFemale, @DateOfBirth, 
+                        @HashSalt, @Password, @TwitterUsername, @TwitterUserId, @TwitterToken, @TwitterSecret, @FacebookUserId, @FacebookToken, 
                         @LastLoginSuccess, @LastLoginFailure, @NumberLoginFailures, @IsLocked, @DateCreated, @DateModified, 0)";
 
             var parameters = new List<SqlParameter>
@@ -82,6 +82,15 @@ namespace InstaMelody.Data
                     ParameterName = "IsFemale",
                     Value = user.IsFemale,
                     SqlDbType = SqlDbType.Bit,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "DateOfBirth",
+                    Value = user.DateOfBirth != null
+                        ? (object)user.DateOfBirth
+                        : DBNull.Value,
+                    SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
                 },
                 new SqlParameter
@@ -270,8 +279,8 @@ namespace InstaMelody.Data
         public User UpdateUser(Guid userId, User user)
         {
             var query = @"UPDATE dbo.Users SET EmailAddress = @EmailAddress, DisplayName = @DisplayName, 
-                    	FirstName = @FirstName, LastName = @LastName, IsFemale = @IsFemale, PhoneNumber = @PhoneNumber, 
-                    	TwitterUsername = @TwitterUsername, TwitterUserId = @TwitterUserId, 
+                    	FirstName = @FirstName, LastName = @LastName, IsFemale = @IsFemale, DateOfBirth = @DateOfBirth, 
+                        PhoneNumber = @PhoneNumber, TwitterUsername = @TwitterUsername, TwitterUserId = @TwitterUserId, 
                         TwitterToken = @TwitterToken, TwitterSecret = @TwitterSecret, 
                         FacebookUserId = @FacebookUserId, FacebookToken = @FacebookToken, 
                         DateModified = @DateModified
@@ -319,6 +328,15 @@ namespace InstaMelody.Data
                     ParameterName = "IsFemale",
                     Value = user.IsFemale,
                     SqlDbType = SqlDbType.Bit,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "DateOfBirth",
+                    Value = user.DateOfBirth != null
+                        ? (object)user.DateOfBirth
+                        : DBNull.Value,
+                    SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
                 },
                 new SqlParameter

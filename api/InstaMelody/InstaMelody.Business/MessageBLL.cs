@@ -444,9 +444,12 @@ namespace InstaMelody.Business
 
             // get chat users
             var users = GetUsersByChat(foundChat);
-            foreach (var user in users)
+            if (users != null)
             {
-                foundChat.Users.Add(user.StripSensitiveInfoForFriends());
+                foreach (var user in users)
+                {
+                    foundChat.Users.Add(user.StripSensitiveInfoForFriends());
+                }
             }
             
             // get chat messages

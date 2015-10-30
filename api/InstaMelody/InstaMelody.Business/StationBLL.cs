@@ -383,16 +383,24 @@ namespace InstaMelody.Business
             var dal = new Stations();
             if (categoryId > 0)
             {
-                var catStations = (limit.Equals(0))
+                var catStations = (!limit.Equals(0))
                     ? dal.GetMostLikedStationsByCategory(categoryId, limit)
                     : dal.GetMostLikedStationsByCategory(categoryId, Settings.Default.DefaultStationGetLimit);
+                if (catStations == null)
+                {
+                    return new List<Station>();
+                }
 
                 return catStations.Select(GetStationWithRelationshipProperties).ToList();
             }
 
-            var stations = (limit.Equals(0))
+            var stations = (!limit.Equals(0))
                 ? dal.GetMostLikedStations(limit) 
                 : dal.GetMostLikedStations(Settings.Default.DefaultStationGetLimit);
+            if (stations == null)
+            {
+                return new List<Station>();
+            }
 
             return stations.Select(GetStationWithRelationshipProperties).ToList();
         }
