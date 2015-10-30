@@ -234,6 +234,7 @@ CREATE TABLE dbo.Chats
 	ChatLoopId UNIQUEIDENTIFIER NULL,
 	CONSTRAINT FK_Chats_UserLoopId FOREIGN KEY (ChatLoopId)
 		REFERENCES UserLoops (Id),
+	Name varchar(128) NULL,
 	DateCreated datetime NOT NULL,
 	DateModified datetime NOT NULL,
 	IsDeleted bit NOT NULL DEFAULT 0)

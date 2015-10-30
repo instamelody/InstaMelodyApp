@@ -335,16 +335,16 @@ namespace InstaMelody.Business
                 throw new ArgumentException("Cannot create a new Loop without a Name.");
             }
 
-            var existing = dal.GetUserLoopByUserIdAndName(sessionUser.Id, loop.Name);
-            if (existing != null)
-            {
-                InstaMelodyLogger.Log(
-                    string.Format("The user has already created a Loop with a matching name. User Id: {0}, Loop Name: {1}",
-                        sessionUser.Id, loop.Name), LogLevel.Error);
-                throw new DataException(
-                    string.Format("The user has already created a Loop with the name: {0}.",
-                        existing.Name));
-            }
+            //var existing = dal.GetUserLoopByUserIdAndName(sessionUser.Id, loop.Name);
+            //if (existing != null)
+            //{
+            //    InstaMelodyLogger.Log(
+            //        string.Format("The user has already created a Loop with a matching name. User Id: {0}, Loop Name: {1}",
+            //            sessionUser.Id, loop.Name), LogLevel.Error);
+            //    throw new DataException(
+            //        string.Format("The user has already created a Loop with the name: {0}.",
+            //            existing.Name));
+            //}
 
             return CreateLoop(loop, sessionUser);
         }
@@ -829,16 +829,16 @@ namespace InstaMelody.Business
             CheckMelodies(parts);
 
             // find existing user melody
-            var existing = UserMelodyExistsWithName(sender.Id, userMelody.Name);
-            if (existing)
-            {
-                InstaMelodyLogger.Log(
-                    string.Format("A User-created Melody already exists with a matching name. Name: {0}, User Id: {1}", 
-                        userMelody.Name, sender.Id), LogLevel.Error);
-                throw new ArgumentException(
-                    string.Format("A User-created Melody already exists with the name: {0}.",
-                        userMelody.Name));
-            }
+            //var existing = UserMelodyExistsWithName(sender.Id, userMelody.Name);
+            //if (existing)
+            //{
+            //    InstaMelodyLogger.Log(
+            //        string.Format("A User-created Melody already exists with a matching name. Name: {0}, User Id: {1}", 
+            //            userMelody.Name, sender.Id), LogLevel.Error);
+            //    throw new ArgumentException(
+            //        string.Format("A User-created Melody already exists with the name: {0}.",
+            //            userMelody.Name));
+            //}
 
             // create new melody
             var createdMelody = CreateMelody(melody);
