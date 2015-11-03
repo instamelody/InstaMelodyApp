@@ -6,9 +6,9 @@ instaMelody-01
 
 
 RDP
-i: 104.130.230.164
-u: Administrator
-p: 5YWQpdKa6YMr
+ip: 104.130.230.164
+user: Administrator
+pass: 5YWQpdKa6YMr
 
 
 dbuser

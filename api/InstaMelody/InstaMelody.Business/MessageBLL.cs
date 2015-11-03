@@ -25,10 +25,11 @@ namespace InstaMelody.Business
         /// <param name="friend">The friend.</param>
         /// <param name="message">The message.</param>
         /// <param name="sessionToken">The session token.</param>
+        /// <param name="chatName">Name of the chat.</param>
         /// <returns></returns>
         /// <exception cref="System.UnauthorizedAccessException">Only Friends of the authenticated User can be added to a Chat.</exception>
         /// <exception cref="System.Data.DataException">Failed to create Chat.</exception>
-        public object StartChat(User friend, Message message, Guid sessionToken)
+        public object StartChat(User friend, Message message, Guid sessionToken, string chatName = null)
         {
             var sessionUser = Utilities.GetUserBySession(sessionToken);
 
@@ -46,7 +47,7 @@ namespace InstaMelody.Business
 
             // create chat
             var dal = new Chats();
-            var newChat = dal.CreateChat();
+            var newChat = dal.CreateChat(chatName);
             if (newChat == null)
             {
                 InstaMelodyLogger.Log(
@@ -104,17 +105,18 @@ namespace InstaMelody.Business
         /// <param name="users">The users.</param>
         /// <param name="message">The message.</param>
         /// <param name="sessionToken">The session token.</param>
+        /// <param name="chatName">Name of the chat.</param>
         /// <returns></returns>
-        /// <exception cref="System.UnauthorizedAccessException">Only Friends of the authenticated User can be added to a Chat.</exception>
         /// <exception cref="System.Data.DataException">Failed to create Chat.</exception>
-        public object StartChat(IList<User> users, Message message, Guid sessionToken)
+        /// <exception cref="System.UnauthorizedAccessException">Only Friends of the authenticated User can be added to a Chat.</exception>
+        public object StartChat(IList<User> users, Message message, Guid sessionToken, string chatName = null)
         {
             var sessionUser = Utilities.GetUserBySession(sessionToken);
             var userBll = new UserBll();
 
             // create chat
             var dal = new Chats();
-            var newChat = dal.CreateChat();
+            var newChat = dal.CreateChat(chatName);
             if (newChat == null)
             {
                 InstaMelodyLogger.Log(
@@ -444,9 +446,16 @@ namespace InstaMelody.Business
 
             // get chat users
             var users = GetUsersByChat(foundChat);
-            foreach (var user in users)
+            if (users != null)
             {
-                foundChat.Users.Add(user.StripSensitiveInfoForFriends());
+                foreach (var user in users)
+                {
+                    if (user == null)
+                    {
+                        continue;
+                    }
+                    foundChat.Users.Add(user.StripSensitiveInfoForFriends());
+                }
             }
             
             // get chat messages

@@ -14,6 +14,8 @@ namespace InstaMelody.Model
 
         public Guid UserId { get; set; }
 
+        public bool IsExplicit { get; set; }
+
         public DateTime DateCreated { get; set; }
 
         public bool IsDeleted { get; set; }

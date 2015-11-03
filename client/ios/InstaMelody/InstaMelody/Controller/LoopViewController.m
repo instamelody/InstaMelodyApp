@@ -822,10 +822,23 @@
         self.playButton.hidden = NO;
         
     } else {
-        NSError *error;
+        NSError *error = nil;
+        
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-        [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord
+        
+        if ([self isHeadsetPluggedIn]) {
+        
+            [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord
                             error:&error];
+        } else {
+        
+            [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:&error];
+        }
+        
+        /*
+        [[AudioSessionManager sharedInstance] changeMode:@"kAudioSessionManagerMode_Record"];
+        [[AudioSessionManager sharedInstance] start];
+         */
         
         [self.microphone startFetchingAudio];
         [self.microphone setDevice:self.inputs[0]];
@@ -990,10 +1003,16 @@
 
     } else {
         
-        NSError *error;
+        NSError *error = nil;
+
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
         [audioSession setCategory:AVAudioSessionCategoryPlayback
                             error:&error];
+        /*
+        [[AudioSessionManager sharedInstance] changeMode:@"kAudioSessionManagerMode_Playback"];
+        [[AudioSessionManager sharedInstance] start];
+         */
+        
         if (error == nil) {
             if ([self isHeadsetPluggedIn]) {
                 

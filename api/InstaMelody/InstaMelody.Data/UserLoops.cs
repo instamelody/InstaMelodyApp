@@ -19,8 +19,8 @@ namespace InstaMelody.Data
         {
             var userLoopId = Guid.NewGuid();
 
-            var query = @"INSERT INTO dbo.UserLoops (Id, Name, UserId, DateCreated, DateModified)
-                        VALUES (@UserMelodyId, @Name, @UserId, @DateCreated, @DateCreated)";
+            var query = @"INSERT INTO dbo.UserLoops (Id, Name, UserId, IsExplicit, DateCreated, DateModified)
+                        VALUES (@UserMelodyId, @Name, @UserId, @IsExplicit, @DateCreated, @DateCreated)";
 
             var parameters = new List<SqlParameter>
             {
@@ -43,6 +43,13 @@ namespace InstaMelody.Data
                     ParameterName = "Name",
                     Value = loop.Name,
                     SqlDbType = SqlDbType.VarChar,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "IsExplicit",
+                    Value = loop.IsExplicit,
+                    SqlDbType = SqlDbType.Bit,
                     Direction = ParameterDirection.Input
                 },
                 new SqlParameter

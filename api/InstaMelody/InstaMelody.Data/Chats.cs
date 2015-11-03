@@ -14,12 +14,12 @@ namespace InstaMelody.Data
         /// Creates the chat.
         /// </summary>
         /// <returns></returns>
-        public Chat CreateChat()
+        public Chat CreateChat(string name = null)
         {
             var chatId = Guid.NewGuid();
 
-            var query = @"INSERT INTO dbo.Chats (Id, DateCreated, DateModified)
-                        VALUES (@Id, @DateCreated, @DateCreated)";
+            var query = @"INSERT INTO dbo.Chats (Id, Name, DateCreated, DateModified)
+                        VALUES (@Id, @Name, @DateCreated, @DateCreated)";
 
             var parameters = new List<SqlParameter>
             {
@@ -28,6 +28,15 @@ namespace InstaMelody.Data
                     ParameterName = "Id",
                     Value = chatId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "Name",
+                    Value = name != null
+                        ? (object)name
+                        : DBNull.Value,
+                    SqlDbType = SqlDbType.VarChar,
                     Direction = ParameterDirection.Input
                 },
                 new SqlParameter
@@ -52,7 +61,7 @@ namespace InstaMelody.Data
         {
             //ChatLoopId
             var query = @"UPDATE dbo.Chats
-                        SET  DateModified = @DateModified
+                        SET DateModified = @DateModified
                         WHERE IsDeleted = 0 AND Id = @ChatId";
 
             var parameters = new List<SqlParameter>

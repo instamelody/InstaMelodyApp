@@ -20,8 +20,8 @@ namespace InstaMelody.Data
             var userMelodyId = Guid.NewGuid();
 
             var query = @"INSERT INTO dbo.UserMelodies
-                        (Id, Name, UserId, DateCreated)
-                        VALUES (@UserMelodyId, @Name, @UserId, @DateCreated)";
+                        (Id, Name, UserId, IsExplicit, DateCreated)
+                        VALUES (@UserMelodyId, @Name, @UserId, @IsExplicit, @DateCreated)";
 
             var parameters = new List<SqlParameter>
             {
@@ -44,6 +44,13 @@ namespace InstaMelody.Data
                     ParameterName = "Name",
                     Value = userMelody.Name,
                     SqlDbType = SqlDbType.VarChar,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "IsExplicit",
+                    Value = userMelody.IsExplicit,
+                    SqlDbType = SqlDbType.Bit,
                     Direction = ParameterDirection.Input
                 },
                 new SqlParameter

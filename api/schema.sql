@@ -27,6 +27,7 @@ CREATE TABLE dbo.Users
     LastName varchar(64) NULL,
     PhoneNumber varchar(28) NULL,
     IsFemale bit NOT NULL DEFAULT 0,
+    DateOfBirth datetime NULL,
     HashSalt varchar(64) NULL,
     Password varchar(255) NULL,
     IsSubscribed bit NOT NULL DEFAULT 0,
@@ -158,6 +159,7 @@ CREATE TABLE dbo.UserMelodies
 	UserId UNIQUEIDENTIFIER NOT NULL,
 	CONSTRAINT FK_UserMelodies_UserId FOREIGN KEY (UserId)
 		REFERENCES Users (Id),
+	IsExplicit bit NOT NULL DEFAULT 0,
 	DateCreated datetime NOT NULL,
 	IsDeleted bit NOT NULL DEFAULT 0)
 GO
@@ -180,6 +182,7 @@ CREATE TABLE dbo.UserLoops
 	UserId UNIQUEIDENTIFIER NOT NULL,
 	CONSTRAINT FK_UserLoops_UserId FOREIGN KEY (UserId)
 		REFERENCES Users (Id),
+	IsExplicit bit NOT NULL DEFAULT 0,
 	DateCreated datetime NOT NULL,
 	DateModified datetime NOT NULL,
 	IsDeleted bit NOT NULL DEFAULT 0)
@@ -231,6 +234,7 @@ CREATE TABLE dbo.Chats
 	ChatLoopId UNIQUEIDENTIFIER NULL,
 	CONSTRAINT FK_Chats_UserLoopId FOREIGN KEY (ChatLoopId)
 		REFERENCES UserLoops (Id),
+	Name varchar(128) NULL,
 	DateCreated datetime NOT NULL,
 	DateModified datetime NOT NULL,
 	IsDeleted bit NOT NULL DEFAULT 0)
