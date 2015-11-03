@@ -42,10 +42,16 @@
                         <constraint firstAttribute="height" constant="44" id="hG8-9U-QeL"/>
                     </constraints>
                     <items/>
+                    <color key="barTintColor" red="0.8108974358974359" green="0.8108974358974359" blue="0.8108974358974359" alpha="1" colorSpace="calibratedRGB"/>
                 </toolbar>
-                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zfl-Lf-Xxj">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zfl-Lf-Xxj">
                     <rect key="frame" x="0.0" y="508" width="600" height="48"/>
                     <subviews>
+                        <view alpha="0.34999999999999998" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r93-Tn-hPF">
+                            <rect key="frame" x="0.0" y="0.0" width="600" height="48"/>
+                            <animations/>
+                            <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        </view>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gwI-xx-p5L">
                             <rect key="frame" x="560" y="8" width="32" height="32"/>
                             <animations/>
@@ -54,7 +60,7 @@
                                 <constraint firstAttribute="height" constant="32" id="w0N-Pw-v54"/>
                             </constraints>
                             <state key="normal" title="M">
-                                <color key="titleColor" red="0.74901960779999999" green="0.5450980392" blue="0.8862745098" alpha="1" colorSpace="deviceRGB"/>
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k2m-WJ-OJb">
@@ -65,7 +71,7 @@
                                 <constraint firstAttribute="height" constant="32" id="qXn-0h-c3H"/>
                             </constraints>
                             <state key="normal" title="P">
-                                <color key="titleColor" red="0.74901960779999999" green="0.5450980392" blue="0.8862745098" alpha="1" colorSpace="deviceRGB"/>
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RZT-0U-D08">
@@ -76,7 +82,7 @@
                             </constraints>
                             <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="14"/>
                             <state key="normal" title="Loop Topic">
-                                <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pJp-2L-5gt">
@@ -84,18 +90,21 @@
                             <animations/>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                             <state key="normal" title="Status">
-                                <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                         </button>
                     </subviews>
                     <animations/>
-                    <color key="backgroundColor" red="0.90196078431372551" green="0.88627450980392153" blue="0.90588235294117647" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
+                        <constraint firstItem="r93-Tn-hPF" firstAttribute="top" secondItem="Zfl-Lf-Xxj" secondAttribute="top" id="BI9-JZ-BxL"/>
                         <constraint firstItem="gwI-xx-p5L" firstAttribute="leading" secondItem="RZT-0U-D08" secondAttribute="trailing" constant="12" id="BXY-5h-CLa"/>
+                        <constraint firstItem="r93-Tn-hPF" firstAttribute="leading" secondItem="Zfl-Lf-Xxj" secondAttribute="leading" id="CBv-fj-IbC"/>
                         <constraint firstAttribute="trailing" secondItem="gwI-xx-p5L" secondAttribute="trailing" constant="8" id="EIh-jF-OUH"/>
                         <constraint firstAttribute="bottom" secondItem="k2m-WJ-OJb" secondAttribute="bottom" constant="8" id="I4Z-Kn-z0x"/>
+                        <constraint firstAttribute="bottom" secondItem="r93-Tn-hPF" secondAttribute="bottom" id="NEI-7k-f7p"/>
                         <constraint firstItem="RZT-0U-D08" firstAttribute="top" secondItem="Zfl-Lf-Xxj" secondAttribute="top" constant="6" id="Xg0-2C-GPT"/>
                         <constraint firstItem="pJp-2L-5gt" firstAttribute="leading" secondItem="k2m-WJ-OJb" secondAttribute="trailing" constant="12" id="ajG-1y-624"/>
+                        <constraint firstAttribute="trailing" secondItem="r93-Tn-hPF" secondAttribute="trailing" id="dw5-cm-tdE"/>
                         <constraint firstItem="k2m-WJ-OJb" firstAttribute="top" secondItem="Zfl-Lf-Xxj" secondAttribute="top" constant="8" id="h8M-MI-iEn"/>
                         <constraint firstAttribute="height" constant="48" id="i36-3A-j5m"/>
                         <constraint firstItem="k2m-WJ-OJb" firstAttribute="leading" secondItem="Zfl-Lf-Xxj" secondAttribute="leading" constant="8" id="kDQ-n8-KAX"/>
@@ -108,7 +117,7 @@
                 </view>
             </subviews>
             <animations/>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="HSG-1O-4VS" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="0DJ-c1-5y3"/>
                 <constraint firstAttribute="bottom" secondItem="DVb-hh-ZVB" secondAttribute="bottom" id="B9Q-hi-se1"/>
