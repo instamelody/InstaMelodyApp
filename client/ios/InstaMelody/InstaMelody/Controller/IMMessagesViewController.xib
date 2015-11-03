@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9059" systemVersion="15C27e" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="century-gothic.ttf">
@@ -19,6 +19,8 @@
                 <outlet property="playButton" destination="k2m-WJ-OJb" id="uz4-M6-QOo"/>
                 <outlet property="playerView" destination="Zfl-Lf-Xxj" id="zdG-sq-TZG"/>
                 <outlet property="statusButton" destination="pJp-2L-5gt" id="UDc-vl-Z0t"/>
+                <outlet property="toolbarBottomLayoutGuide" destination="B9Q-hi-se1" id="h6s-7R-IZi"/>
+                <outlet property="toolbarHeightConstraint" destination="hG8-9U-QeL" id="8S8-YN-kli"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
