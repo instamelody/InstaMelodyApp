@@ -34,6 +34,15 @@
     UIWindow *window = [[[UIApplication sharedApplication] windows] objectAtIndex:0];
     [window addSubview:self.HUD];
     
+    self.genderField.layer.cornerRadius = 4.0f;
+    self.genderField.layer.masksToBounds = YES;
+    
+    UIFont *font = [UIFont fontWithName:@"Century Gothic" size:16.0f];
+    
+    NSDictionary *attributes = [NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName];
+    
+    [self.genderField setTitleTextAttributes:attributes forState:UIControlStateNormal];
+    [self.genderField setTitleTextAttributes:attributes forState:UIControlStateSelected];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -55,8 +64,10 @@
     
     if (![self.usernameField.text isEqualToString:@""] && ![self.passwordField.text isEqualToString:@""] && ![self.firstNameField.text isEqualToString:@""] && ![self.lastNameField.text isEqualToString:@""] && ![self.phoneNumberField.text isEqualToString:@""]) {
 
+        NSNumber *isFemale = self.genderField.enabled ? [NSNumber numberWithBool:NO] : [NSNumber numberWithBool:YES];
+        
         NSString *encodedEmail = [self.emailAddressField.text stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
-        NSDictionary *parameters = @{@"DisplayName": self.usernameField.text, @"Password": self.passwordField.text, @"FirstName": self.firstNameField.text, @"LastName": self.lastNameField.text, @"PhoneNumber" : self.phoneNumberField.text, @"EmailAddress" : encodedEmail};
+        NSDictionary *parameters = @{@"DisplayName": self.usernameField.text, @"Password": self.passwordField.text, @"FirstName": self.firstNameField.text, @"LastName": self.lastNameField.text, @"PhoneNumber" : self.phoneNumberField.text, @"EmailAddress" : encodedEmail, @"IsFemale": isFemale};
         
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         //[manager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];

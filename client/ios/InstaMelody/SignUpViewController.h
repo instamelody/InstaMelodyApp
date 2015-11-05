@@ -28,6 +28,7 @@
 @property IBOutlet UITextField * firstNameField;
 @property IBOutlet UITextField * lastNameField;
 @property IBOutlet UITextField * emailAddressField;
+@property IBOutlet UISegmentedControl * genderField;
 
 @property IBOutlet UIScrollView *scrollView;
 
