@@ -12,6 +12,7 @@
 
 @interface SignUpViewController ()
     @property M13ProgressHUD *HUD;
+    @property LTHMonthYearPickerView *monthYearPicker;
 
 @end
 
@@ -43,6 +44,24 @@
     
     [self.genderField setTitleTextAttributes:attributes forState:UIControlStateNormal];
     [self.genderField setTitleTextAttributes:attributes forState:UIControlStateSelected];
+    
+    NSDateFormatter *dateFormatter = [NSDateFormatter new];
+    [dateFormatter setDateFormat:@"MM / yyyy"];
+    NSDate *minDate = [dateFormatter dateFromString:[NSString stringWithFormat: @"%i / %i", 1, 1915]];
+    
+    self.monthYearPicker =  [[LTHMonthYearPickerView alloc]
+                        initWithDate: [NSDate date]
+                        shortMonths: NO
+                        numberedMonths: NO
+                        andToolbar: YES
+                        minDate: minDate
+                        andMaxDate:[NSDate date]];
+    
+    self.monthYearPicker.delegate = self;
+    
+    self.dobField.delegate = self;
+    self.dobField.inputView = self.monthYearPicker;
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -173,5 +192,45 @@
     }];
 }
 
+
+#pragma mark - LTHMonthYearPickerView Delegate
+- (void)pickerDidPressCancelWithInitialValues:(NSDictionary *)initialValues {
+    self.dobField.text = [NSString stringWithFormat:
+                           @"%@ / %@",
+                           initialValues[@"month"],
+                           initialValues[@"year"]];
+    [self.dobField resignFirstResponder];
+}
+
+
+- (void)pickerDidPressDoneWithMonth:(NSString *)month andYear:(NSString *)year {
+    self.dobField.text = [NSString stringWithFormat: @"%@ / %@", month, year];
+    [self.dobField resignFirstResponder];
+}
+
+
+- (void)pickerDidPressCancel {
+    [self.dobField resignFirstResponder];
+}
+
+
+- (void)pickerDidSelectRow:(NSInteger)row inComponent:(NSInteger)component {
+    NSLog(@"row: %zd in component: %zd", row, component);
+}
+
+
+- (void)pickerDidSelectMonth:(NSString *)month {
+    NSLog(@"month: %@ ", month);
+}
+
+
+- (void)pickerDidSelectYear:(NSString *)year {
+    NSLog(@"year: %@ ", year);
+}
+
+
+- (void)pickerDidSelectMonth:(NSString *)month andYear:(NSString *)year {
+    self.dobField.text = [NSString stringWithFormat: @"%@ / %@", month, year];
+}
 
 @end

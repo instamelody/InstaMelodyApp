@@ -78,6 +78,8 @@
             <string>CenturyGothic</string>
             <string>CenturyGothic</string>
             <string>CenturyGothic</string>
+            <string>CenturyGothic</string>
+            <string>CenturyGothic</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -2563,7 +2565,7 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="omB-hr-KNv">
-                                        <rect key="frame" x="20" y="443" width="260" height="50"/>
+                                        <rect key="frame" x="20" y="493" width="260" height="50"/>
                                         <subviews>
                                             <segmentedControl opaque="NO" alpha="0.80000000000000004" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="oxH-nf-ROk">
                                                 <rect key="frame" x="0.0" y="0.0" width="260" height="51"/>
@@ -2587,7 +2589,7 @@
                                         </constraints>
                                     </view>
                                     <button opaque="NO" alpha="0.55000001192092896" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hbk-QL-c8X">
-                                        <rect key="frame" x="20" y="515" width="260" height="45"/>
+                                        <rect key="frame" x="20" y="565" width="260" height="45"/>
                                         <animations/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
@@ -2604,7 +2606,7 @@
                                         </connections>
                                     </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="12J-CJ-TA0">
-                                        <rect key="frame" x="20" y="582" width="260" height="60"/>
+                                        <rect key="frame" x="20" y="632" width="260" height="60"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="By signing up you agree to our " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u5p-nP-bc7">
                                                 <rect key="frame" x="0.0" y="0.0" width="260" height="28"/>
@@ -2641,28 +2643,78 @@
                                             <constraint firstAttribute="bottom" secondItem="Zg0-VK-xOa" secondAttribute="bottom" constant="8" id="tvr-Y8-Hlz"/>
                                         </constraints>
                                     </view>
+                                    <view tag="16" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lgx-xL-iBN">
+                                        <rect key="frame" x="20" y="427" width="260" height="52"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k2r-VE-0ab">
+                                                <rect key="frame" x="0.0" y="50" width="260" height="1"/>
+                                                <animations/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="1" id="dQ8-J8-6BI"/>
+                                                    <constraint firstAttribute="height" constant="1" id="nbE-4v-Q7p"/>
+                                                </constraints>
+                                            </view>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date of Birth" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4cl-bI-Z2Y">
+                                                <rect key="frame" x="0.0" y="0.0" width="260" height="20"/>
+                                                <animations/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="20" id="mk3-fl-hVo"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="13"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <textField opaque="NO" clipsSubviews="YES" tag="6" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="MM/YYYY" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BtY-E1-6Fp">
+                                                <rect key="frame" x="0.0" y="24" width="260" height="22"/>
+                                                <animations/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="22" id="ccn-Mo-Wsv"/>
+                                                </constraints>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="16"/>
+                                                <textInputTraits key="textInputTraits"/>
+                                            </textField>
+                                        </subviews>
+                                        <animations/>
+                                        <constraints>
+                                            <constraint firstItem="k2r-VE-0ab" firstAttribute="leading" secondItem="lgx-xL-iBN" secondAttribute="leading" id="Fs9-J2-oxU"/>
+                                            <constraint firstItem="BtY-E1-6Fp" firstAttribute="leading" secondItem="lgx-xL-iBN" secondAttribute="leading" id="Hq2-dP-BPj"/>
+                                            <constraint firstAttribute="trailing" secondItem="k2r-VE-0ab" secondAttribute="trailing" id="L6T-kh-D0z"/>
+                                            <constraint firstAttribute="trailing" secondItem="4cl-bI-Z2Y" secondAttribute="trailing" id="dJA-uL-TxZ"/>
+                                            <constraint firstAttribute="trailing" secondItem="BtY-E1-6Fp" secondAttribute="trailing" id="gz6-sQ-pe5"/>
+                                            <constraint firstItem="4cl-bI-Z2Y" firstAttribute="top" secondItem="lgx-xL-iBN" secondAttribute="top" id="tty-pQ-Ysc"/>
+                                            <constraint firstItem="k2r-VE-0ab" firstAttribute="top" secondItem="BtY-E1-6Fp" secondAttribute="bottom" constant="4" id="u5b-PH-n56"/>
+                                            <constraint firstAttribute="bottom" secondItem="k2r-VE-0ab" secondAttribute="bottom" constant="1" id="z4K-pV-waz"/>
+                                            <constraint firstItem="4cl-bI-Z2Y" firstAttribute="leading" secondItem="lgx-xL-iBN" secondAttribute="leading" id="zt4-Fn-e52"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <animations/>
                                 <constraints>
+                                    <constraint firstItem="lgx-xL-iBN" firstAttribute="top" secondItem="8C7-en-b7j" secondAttribute="bottom" constant="14" id="59Z-ak-rt6"/>
                                     <constraint firstAttribute="centerX" secondItem="amD-iD-Tlh" secondAttribute="centerX" id="5fU-O9-ZaR"/>
                                     <constraint firstAttribute="centerX" secondItem="omB-hr-KNv" secondAttribute="centerX" id="7HW-l7-HHe"/>
                                     <constraint firstItem="01l-oD-CmQ" firstAttribute="top" secondItem="J2p-zQ-zmO" secondAttribute="bottom" constant="8" id="7Re-2o-wSJ"/>
+                                    <constraint firstAttribute="trailing" secondItem="lgx-xL-iBN" secondAttribute="trailing" constant="20" id="8o6-kx-Uft"/>
                                     <constraint firstItem="12J-CJ-TA0" firstAttribute="top" secondItem="Hbk-QL-c8X" secondAttribute="bottom" constant="22" id="8sU-Kc-DLl"/>
                                     <constraint firstAttribute="bottom" secondItem="12J-CJ-TA0" secondAttribute="bottom" constant="20" id="9xK-1G-LIc"/>
                                     <constraint firstAttribute="height" constant="600" id="EbH-SS-yrn"/>
                                     <constraint firstItem="J2p-zQ-zmO" firstAttribute="leading" secondItem="mej-wi-Crq" secondAttribute="leading" constant="20" id="MGO-L5-gv9"/>
                                     <constraint firstAttribute="centerX" secondItem="Hbk-QL-c8X" secondAttribute="centerX" id="QGu-uI-RZh"/>
+                                    <constraint firstItem="omB-hr-KNv" firstAttribute="top" secondItem="lgx-xL-iBN" secondAttribute="bottom" constant="14" id="QoM-1T-xXd"/>
                                     <constraint firstItem="neb-me-utk" firstAttribute="top" secondItem="amD-iD-Tlh" secondAttribute="bottom" constant="18" id="Skg-uk-8Dp"/>
                                     <constraint firstItem="8C7-en-b7j" firstAttribute="top" secondItem="neb-me-utk" secondAttribute="bottom" constant="21" id="ahR-eW-97z"/>
                                     <constraint firstAttribute="centerX" secondItem="neb-me-utk" secondAttribute="centerX" id="gcJ-Aw-23k"/>
                                     <constraint firstAttribute="trailing" secondItem="J2p-zQ-zmO" secondAttribute="trailing" constant="20" id="jqo-KM-gks"/>
                                     <constraint firstAttribute="centerX" secondItem="8C7-en-b7j" secondAttribute="centerX" id="pc9-9H-WZD"/>
-                                    <constraint firstItem="omB-hr-KNv" firstAttribute="top" secondItem="8C7-en-b7j" secondAttribute="bottom" constant="30" id="qd6-0k-sLS"/>
+                                    <constraint firstItem="omB-hr-KNv" firstAttribute="top" secondItem="8C7-en-b7j" secondAttribute="bottom" constant="80" id="qd6-0k-sLS"/>
                                     <constraint firstItem="Hbk-QL-c8X" firstAttribute="top" secondItem="omB-hr-KNv" secondAttribute="bottom" constant="22" id="tlj-Py-7Zz"/>
                                     <constraint firstItem="amD-iD-Tlh" firstAttribute="top" secondItem="01l-oD-CmQ" secondAttribute="bottom" constant="8" id="www-lq-IWf"/>
                                     <constraint firstItem="J2p-zQ-zmO" firstAttribute="top" secondItem="mej-wi-Crq" secondAttribute="top" constant="20" id="xQ0-7X-iUU"/>
                                     <constraint firstAttribute="width" constant="300" id="xom-EE-9E1"/>
                                     <constraint firstAttribute="centerX" secondItem="01l-oD-CmQ" secondAttribute="centerX" id="y5i-zJ-CHl"/>
+                                    <constraint firstItem="lgx-xL-iBN" firstAttribute="leading" secondItem="mej-wi-Crq" secondAttribute="leading" constant="20" id="yrg-IW-kzT"/>
                                     <constraint firstAttribute="centerX" secondItem="12J-CJ-TA0" secondAttribute="centerX" id="zW8-6p-soB"/>
                                 </constraints>
                             </scrollView>
@@ -2679,6 +2731,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Sign Up" id="LaS-SM-Mjc"/>
                     <connections>
+                        <outlet property="dobField" destination="BtY-E1-6Fp" id="SIR-Pm-6N4"/>
                         <outlet property="emailAddressField" destination="Hf9-dz-sgs" id="yfS-xq-f7c"/>
                         <outlet property="firstNameField" destination="zcH-Rh-ggR" id="ng2-X3-3Bs"/>
                         <outlet property="genderField" destination="oxH-nf-ROk" id="6pu-ky-GoY"/>

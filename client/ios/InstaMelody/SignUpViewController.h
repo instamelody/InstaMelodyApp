@@ -11,6 +11,7 @@
 #import "M13ProgressViewRing.h"
 #import "AFHTTPRequestOperationManager.h"
 #import "AFURLSessionManager.h"
+#import "LTHMonthYearPickerView.h"
 
 @protocol SignUpDelegate <NSObject>
 
@@ -18,7 +19,7 @@
 
 @end
 
-@interface SignUpViewController : UIViewController <UITextFieldDelegate>
+@interface SignUpViewController : UIViewController <UITextFieldDelegate, LTHMonthYearPickerViewDelegate>
 
 @property id<SignUpDelegate> delegate;
 
@@ -29,6 +30,7 @@
 @property IBOutlet UITextField * lastNameField;
 @property IBOutlet UITextField * emailAddressField;
 @property IBOutlet UISegmentedControl * genderField;
+@property IBOutlet UITextField *dobField;
 
 @property IBOutlet UIScrollView *scrollView;
 
