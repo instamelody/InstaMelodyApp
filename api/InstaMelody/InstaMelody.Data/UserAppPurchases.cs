@@ -40,9 +40,7 @@ namespace InstaMelody.Data
                 new SqlParameter
                 {
                     ParameterName = "DateCreated",
-                    Value = receipt.DateCreated > DateTime.MinValue
-                        ? receipt.DateCreated
-                        : DateTime.UtcNow,
+                    Value = DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
                 }

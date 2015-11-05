@@ -49,9 +49,7 @@ namespace InstaMelody.Data
                 new SqlParameter
                 {
                     ParameterName = "DateCreated",
-                    Value = station.DateCreated > DateTime.MinValue
-                        ? station.DateCreated
-                        : DateTime.UtcNow,
+                    Value = DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
                 }
@@ -265,9 +263,7 @@ namespace InstaMelody.Data
                 new SqlParameter
                 {
                     ParameterName = "DateModified",
-                    Value = station.DateModified > DateTime.MinValue
-                        ? station.DateModified
-                        : DateTime.UtcNow,
+                    Value = DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
                 }

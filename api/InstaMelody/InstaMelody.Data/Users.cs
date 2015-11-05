@@ -18,7 +18,7 @@ namespace InstaMelody.Data
         {
             user.Id = Guid.NewGuid();
 
-            var query = @"INSERT INTO dbo.Users (Id, UserImageId, EmailAddress, DisplayName, FirstName, LastName, PhoneNumber, IsFemale, DateOfBirth
+            var query = @"INSERT INTO dbo.Users (Id, UserImageId, EmailAddress, DisplayName, FirstName, LastName, PhoneNumber, IsFemale, DateOfBirth,
                         HashSalt, Password, TwitterUsername, TwitterUserId, TwitterToken, TwitterSecret, FacebookUserId, 
                         FacebookToken, LastLoginSuccess, LastLoginFailure, NumberLoginFailures, IsLocked,
                         DateCreated, DateModified, IsDeleted)
@@ -87,7 +87,7 @@ namespace InstaMelody.Data
                 new SqlParameter
                 {
                     ParameterName = "DateOfBirth",
-                    Value = user.DateOfBirth != null
+                    Value = (user.DateOfBirth != null && user.DateOfBirth > DateTime.MinValue)
                         ? (object)user.DateOfBirth
                         : DBNull.Value,
                     SqlDbType = SqlDbType.DateTime,
@@ -180,14 +180,14 @@ namespace InstaMelody.Data
                 new SqlParameter
                 {
                     ParameterName = "DateCreated",
-                    Value = user.DateCreated > DateTime.MinValue ? user.DateCreated : DateTime.UtcNow,
+                    Value = DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
                 },
                 new SqlParameter
                 {
                     ParameterName = "DateModified",
-                    Value = user.DateModified > DateTime.MinValue ? user.DateModified : DateTime.UtcNow,
+                    Value = DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
                 },
@@ -333,7 +333,7 @@ namespace InstaMelody.Data
                 new SqlParameter
                 {
                     ParameterName = "DateOfBirth",
-                    Value = user.DateOfBirth != null
+                    Value = (user.DateOfBirth != null && user.DateOfBirth > DateTime.MinValue)
                         ? (object)user.DateOfBirth
                         : DBNull.Value,
                     SqlDbType = SqlDbType.DateTime,
@@ -391,7 +391,7 @@ namespace InstaMelody.Data
                 new SqlParameter
                 {
                     ParameterName = "DateModified",
-                    Value = user.DateModified > DateTime.MinValue ? user.DateModified : DateTime.UtcNow,
+                    Value = DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
                 },

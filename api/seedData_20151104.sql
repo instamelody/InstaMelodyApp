@@ -1,3 +1,5 @@
+SET IDENTITY_INSERT dbo.FileGroups ON
+GO
 INSERT INTO dbo.FileGroups (Id, Name, DateCreated, DateModified) VALUES(1, 'Band Pack', '2015-11-04', '2015-11-04')
 INSERT INTO dbo.FileGroups (Id, Name, DateCreated, DateModified) VALUES(2, 'Birthday Pack', '2015-11-04', '2015-11-04')
 INSERT INTO dbo.FileGroups (Id, Name, DateCreated, DateModified) VALUES(3, 'Cinematic Pack', '2015-11-04', '2015-11-04')
@@ -70,8 +72,12 @@ INSERT INTO dbo.FileGroups (Id, Name, DateCreated, DateModified) VALUES(69, 'Wes
 INSERT INTO dbo.FileGroups (Id, Name, DateCreated, DateModified) VALUES(70, 'Whistler', '2015-11-04', '2015-11-04')
 INSERT INTO dbo.FileGroups (Id, Name, DateCreated, DateModified) VALUES(71, 'iMantra', '2015-11-04', '2015-11-04')
 GO
+SET IDENTITY_INSERT dbo.FileGroups OFF
+GO
 
 
+SET IDENTITY_INSERT dbo.Melodies ON
+GO
 INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(1, '001_Bass', '001_Bass.WAV', '2015-11-04', '2015-11-04')
 INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(2, '001_DJ_Scratch', '001_DJ_Scratch.WAV', '2015-11-04', '2015-11-04')
 INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(3, '001_Drums', '001_Drums.WAV', '2015-11-04', '2015-11-04')
@@ -329,6 +335,8 @@ INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(
 INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(251, 'Bass - iMantra', 'Bass - iMantra.wav', '2015-11-04', '2015-11-04')
 INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(252, 'Drums - iMantra', 'Drums - iMantra.wav', '2015-11-04', '2015-11-04')
 INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(253, 'Melody - iMantra', 'Melody - iMantra.wav', '2015-11-04', '2015-11-04')
+GO
+SET IDENTITY_INSERT dbo.Melodies OFF
 GO
 
 

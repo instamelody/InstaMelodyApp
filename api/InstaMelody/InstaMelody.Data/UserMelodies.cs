@@ -56,9 +56,7 @@ namespace InstaMelody.Data
                 new SqlParameter
                 {
                     ParameterName = "DateCreated",
-                    Value = userMelody.DateCreated > DateTime.MinValue
-                        ? userMelody.DateCreated
-                        : DateTime.UtcNow,
+                    Value = DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
                 }

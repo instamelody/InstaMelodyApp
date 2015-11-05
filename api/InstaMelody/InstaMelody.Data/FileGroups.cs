@@ -139,9 +139,7 @@ namespace InstaMelody.Data
                 new SqlParameter
                 {
                     ParameterName = "DateModified",
-                    Value = fileGroup.DateModified > DateTime.MinValue
-                        ? fileGroup.DateModified
-                        : DateTime.UtcNow,
+                    Value = DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
                 }

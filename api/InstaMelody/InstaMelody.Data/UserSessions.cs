@@ -253,14 +253,14 @@ namespace InstaMelody.Data
                 new SqlParameter
                 {
                     ParameterName = "LastActivity",
-                    Value = session.LastActivity > DateTime.MinValue ? session.LastActivity : DateTime.UtcNow,
+                    Value = DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
                 },
                 new SqlParameter
                 {
                     ParameterName = "DateCreated",
-                    Value = session.DateCreated > DateTime.MinValue ? session.DateCreated : DateTime.UtcNow,
+                    Value = DateTime.UtcNow,
                     SqlDbType = SqlDbType.DateTime,
                     Direction = ParameterDirection.Input
                 }
