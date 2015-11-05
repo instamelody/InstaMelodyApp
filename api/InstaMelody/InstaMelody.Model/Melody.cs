@@ -10,6 +10,8 @@ namespace InstaMelody.Model
 
         public bool IsUserCreated { get; set; }
 
+        public bool IsPremiumContent { get; set; }
+
         [Required(ErrorMessage = "Name is required.")]
         [StringLength(128, ErrorMessage = "Name cannot exceed 128 characters")]
         public string Name { get; set; }
@@ -27,24 +29,5 @@ namespace InstaMelody.Model
         public bool IsDeleted { get; set; }
 
         public string FilePath { get; set; }
-
-        /// <summary>
-        /// Parses from data reader.
-        /// </summary>
-        /// <param name="dataReader">The data reader.</param>
-        /// <returns></returns>
-        public Melody ParseFromDataReader(SqlDataReader dataReader)
-        {
-            this.Id = Convert.ToInt32(dataReader["Id"]);
-            this.IsUserCreated = Convert.ToBoolean(dataReader["IsUserCreated"]);
-            this.Name = Convert.ToString(dataReader["Name"]);
-            this.Description = Convert.ToString(dataReader["Description"]);
-            this.FileName = Convert.ToString(dataReader["FileName"]);
-            this.DateCreated = Convert.ToDateTime(dataReader["DateCreated"]);
-            this.DateModified = Convert.ToDateTime(dataReader["DateModified"]);
-            this.IsDeleted = Convert.ToBoolean(dataReader["IsDeleted"]);
-
-            return this;
-        }
     }
 }

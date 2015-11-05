@@ -121,6 +121,7 @@ GO
 CREATE TABLE dbo.Melodies
 	(Id int IDENTITY(1,1) PRIMARY KEY,
 	IsUserCreated bit NOT NULL DEFAULT 0,
+	IsPremiumContent bit NOT NULL DEFAULT 0,
 	Name varchar(128) NOT NULL,
 	Description text NULL,
 	FileName varchar(255) NOT NULL,

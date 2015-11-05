@@ -19,8 +19,8 @@ namespace InstaMelody.Data
         public Melody CreateMelody(Melody melody)
         {
             var query = @"INSERT INTO dbo.Melodies
-                        (Name, Description, FileName, IsUserCreated, DateCreated, DateModified)
-                        VALUES (@Name, @Description, @FileName, @IsUserCreated, @DateCreated, @DateCreated)
+                        (Name, Description, FileName, IsUserCreated, IsPremiumContent, DateCreated, DateModified)
+                        VALUES (@Name, @Description, @FileName, @IsUserCreated, @IsPremiumContent, @DateCreated, @DateCreated)
 
                         SELECT SCOPE_IDENTITY() AS [SCOPE_IDENTITY];";
 
@@ -53,6 +53,13 @@ namespace InstaMelody.Data
                 {
                     ParameterName = "IsUserCreated",
                     Value = melody.IsUserCreated,
+                    SqlDbType = SqlDbType.Bit,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "IsPremiumContent",
+                    Value = melody.IsPremiumContent,
                     SqlDbType = SqlDbType.Bit,
                     Direction = ParameterDirection.Input
                 },
@@ -201,7 +208,8 @@ namespace InstaMelody.Data
         {
             var query = @"UPDATE dbo.Melodies
                         SET Name = @Name, Description = @Description, FileName = @FileName,
-                        IsUserCreated = @IsUserCreated, DateModified = @DateModified
+                        IsUserCreated = @IsUserCreated, IsPremiumContent = @IsPremiumContent, 
+                        DateModified = @DateModified
                         WHERE IsDeleted = 0 AND Id = @MelodyId";
 
             var parameters = new List<SqlParameter>
@@ -240,6 +248,13 @@ namespace InstaMelody.Data
                 {
                     ParameterName = "IsUserCreated",
                     Value = melody.IsUserCreated,
+                    SqlDbType = SqlDbType.Bit,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "IsPremiumContent",
+                    Value = melody.IsPremiumContent,
                     SqlDbType = SqlDbType.Bit,
                     Direction = ParameterDirection.Input
                 },
