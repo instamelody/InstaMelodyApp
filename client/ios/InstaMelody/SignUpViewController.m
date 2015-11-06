@@ -9,10 +9,12 @@
 #import "SignUpViewController.h"
 #import "AFHTTPRequestOperationManager.h"
 #import "constants.h"
+#import "NetworkManager.h"
 
 @interface SignUpViewController ()
     @property M13ProgressHUD *HUD;
     @property LTHMonthYearPickerView *monthYearPicker;
+    @property UIImage *savedImage;
 
 @end
 
@@ -108,7 +110,11 @@
 }
 
 -(void)updateProfile {
+    if (self.savedImage != nil) {
+        [self prepareImage:self.savedImage];
+    }
     
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)createNewUser {
@@ -139,22 +145,19 @@
         [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"JSON: %@", responseObject);
             
-            [self.HUD hide:YES];
             
-            //UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"You are now a user" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            //[alertView show];
+            if (self.savedImage != nil) {
+                [self prepareImage:self.savedImage];
+            }
+            
+            [self.HUD hide:YES];
             
             [self dismissViewControllerAnimated:YES completion:^{
                 
                 [self.delegate finishedWithUserId:self.usernameField.text andPassword:self.passwordField.text];
                 
-                //self.delegate finished
-                /*
-                 if (self.presentingViewController != nil) {
-                 [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
-                 }
-                 */
             }];
+
             
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             
@@ -286,7 +289,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         NSLog(@"Image selected!");
     }];
     
-    [self prepareImage:selectedImage];
+    self.savedImage = selectedImage;
 }
 
 -(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
@@ -327,6 +330,8 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     resizedImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
+    [[NetworkManager sharedManager] updateProfilePicture:resizedImage];
 }
+
 
 @end
