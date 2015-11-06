@@ -52,7 +52,7 @@
     self.monthYearPicker =  [[LTHMonthYearPickerView alloc]
                         initWithDate: [NSDate date]
                         shortMonths: NO
-                        numberedMonths: NO
+                        numberedMonths: YES
                         andToolbar: YES
                         minDate: minDate
                         andMaxDate:[NSDate date]];
@@ -117,8 +117,10 @@
         
         NSNumber *isFemale = self.genderField.enabled ? [NSNumber numberWithBool:NO] : [NSNumber numberWithBool:YES];
         
+        NSString *monthYear = self.dobField.text;
+        
         NSString *encodedEmail = [self.emailAddressField.text stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
-        NSDictionary *parameters = @{@"DisplayName": self.usernameField.text, @"Password": self.passwordField.text, @"FirstName": self.firstNameField.text, @"LastName": self.lastNameField.text, @"PhoneNumber" : self.phoneNumberField.text, @"EmailAddress" : encodedEmail, @"IsFemale": isFemale};
+        NSDictionary *parameters = @{@"DisplayName": self.usernameField.text, @"Password": self.passwordField.text, @"FirstName": self.firstNameField.text, @"LastName": self.lastNameField.text, @"PhoneNumber" : self.phoneNumberField.text, @"EmailAddress" : encodedEmail, @"IsFemale": isFemale, @"DateOfBirth": monthYear};
         
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         //[manager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
@@ -235,7 +237,7 @@
 #pragma mark - LTHMonthYearPickerView Delegate
 - (void)pickerDidPressCancelWithInitialValues:(NSDictionary *)initialValues {
     self.dobField.text = [NSString stringWithFormat:
-                           @"%@ / %@",
+                           @"%@/%@",
                            initialValues[@"month"],
                            initialValues[@"year"]];
     [self.dobField resignFirstResponder];
@@ -243,7 +245,7 @@
 
 
 - (void)pickerDidPressDoneWithMonth:(NSString *)month andYear:(NSString *)year {
-    self.dobField.text = [NSString stringWithFormat: @"%@ / %@", month, year];
+    self.dobField.text = [NSString stringWithFormat: @"%@/%@", month, year];
     [self.dobField resignFirstResponder];
 }
 
@@ -269,7 +271,7 @@
 
 
 - (void)pickerDidSelectMonth:(NSString *)month andYear:(NSString *)year {
-    self.dobField.text = [NSString stringWithFormat: @"%@ / %@", month, year];
+    self.dobField.text = [NSString stringWithFormat: @"%@/%@", month, year];
 }
 
 #pragma mark - image picker delegate

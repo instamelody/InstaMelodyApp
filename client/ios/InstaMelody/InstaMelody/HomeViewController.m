@@ -266,6 +266,10 @@
     } else {
         
         [defaults setObject:@"" forKey:@"authToken"];
+        [defaults setObject:@"" forKey:@"FirstName"];
+        [defaults setObject:@"" forKey:@"LastName"];
+        [defaults setObject:@"" forKey:@"DisplayName"];
+        [defaults setObject:@"" forKey:@"ProfileFilePath"];
         [defaults synchronize];
     }
 }
