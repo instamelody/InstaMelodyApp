@@ -86,6 +86,9 @@
             <string>CenturyGothic</string>
             <string>CenturyGothic</string>
             <string>CenturyGothic</string>
+            <string>CenturyGothic</string>
+            <string>CenturyGothic</string>
+            <string>CenturyGothic</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -699,6 +702,80 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mhi-0z-3EO">
                                 <rect key="frame" x="0.0" y="430" width="600" height="170"/>
                                 <subviews>
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q6W-Ku-gBb">
+                                        <rect key="frame" x="0.0" y="124" width="600" height="46"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mqn-ca-1vw">
+                                                <rect key="frame" x="0.0" y="0.0" width="600" height="1"/>
+                                                <animations/>
+                                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="1" id="7f5-u0-Xcd"/>
+                                                </constraints>
+                                            </view>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2qj-eg-7dA">
+                                                <rect key="frame" x="525" y="8" width="60" height="30"/>
+                                                <animations/>
+                                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="60" id="MTT-Eh-qFM"/>
+                                                    <constraint firstAttribute="height" constant="30" id="TA4-q9-wF7"/>
+                                                </constraints>
+                                                <state key="normal" title="Join">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="join:" destination="zFq-Vd-UtH" eventType="touchUpInside" id="juC-YQ-uTU"/>
+                                                </connections>
+                                            </button>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="d7U-S8-Pmt">
+                                                <rect key="frame" x="8" y="8" width="30" height="30"/>
+                                                <animations/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="30" id="5Jf-bw-aam"/>
+                                                    <constraint firstAttribute="height" constant="30" id="LZS-1X-Vcj"/>
+                                                </constraints>
+                                            </imageView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dIJ-KD-dG6">
+                                                <rect key="frame" x="46" y="9" width="131" height="16"/>
+                                                <animations/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="131" id="If0-Dq-slS"/>
+                                                    <constraint firstAttribute="height" constant="16" id="fxY-si-oOa"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="15"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kGR-L8-wXK">
+                                                <rect key="frame" x="46" y="25" width="131" height="14"/>
+                                                <animations/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="14" id="M1e-Ne-fdF"/>
+                                                    <constraint firstAttribute="width" constant="131" id="SGk-fi-CZV"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="13"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <animations/>
+                                        <color key="backgroundColor" red="0.85490196080000003" green="0.85490196080000003" blue="0.85490196080000003" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstItem="mqn-ca-1vw" firstAttribute="top" secondItem="q6W-Ku-gBb" secondAttribute="top" id="0xa-q2-W0R"/>
+                                            <constraint firstItem="mqn-ca-1vw" firstAttribute="leading" secondItem="q6W-Ku-gBb" secondAttribute="leading" id="1av-To-1uJ"/>
+                                            <constraint firstAttribute="trailing" secondItem="mqn-ca-1vw" secondAttribute="trailing" id="1pE-Xf-ZtV"/>
+                                            <constraint firstAttribute="trailing" secondItem="2qj-eg-7dA" secondAttribute="trailing" constant="15" id="26h-et-eW1"/>
+                                            <constraint firstItem="d7U-S8-Pmt" firstAttribute="leading" secondItem="q6W-Ku-gBb" secondAttribute="leading" constant="8" id="4pH-fz-a3U"/>
+                                            <constraint firstItem="dIJ-KD-dG6" firstAttribute="leading" secondItem="d7U-S8-Pmt" secondAttribute="trailing" constant="8" id="71O-dt-RKb"/>
+                                            <constraint firstItem="kGR-L8-wXK" firstAttribute="leading" secondItem="d7U-S8-Pmt" secondAttribute="trailing" constant="8" id="9Lq-Jh-bSq"/>
+                                            <constraint firstItem="kGR-L8-wXK" firstAttribute="top" secondItem="dIJ-KD-dG6" secondAttribute="bottom" id="cdS-PI-0Pr"/>
+                                            <constraint firstItem="2qj-eg-7dA" firstAttribute="centerY" secondItem="q6W-Ku-gBb" secondAttribute="centerY" id="fVf-91-0NE"/>
+                                            <constraint firstItem="d7U-S8-Pmt" firstAttribute="centerY" secondItem="q6W-Ku-gBb" secondAttribute="centerY" id="fca-6b-Iph"/>
+                                            <constraint firstAttribute="height" constant="46" id="gqF-QI-5Ok"/>
+                                            <constraint firstItem="dIJ-KD-dG6" firstAttribute="top" secondItem="mqn-ca-1vw" secondAttribute="bottom" constant="8" id="sDS-Mp-ghj"/>
+                                        </constraints>
+                                    </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qks-ms-28B">
                                         <rect key="frame" x="0.0" y="124" width="600" height="46"/>
                                         <subviews>
@@ -824,18 +901,34 @@
                                             <constraint firstAttribute="width" constant="116" id="L3X-Da-S9J"/>
                                         </constraints>
                                     </view>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Moderator" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Mf-7X-YTP">
+                                        <rect key="frame" x="12" y="95" width="164" height="21"/>
+                                        <animations/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="164" id="3rj-lX-aVd"/>
+                                            <constraint firstAttribute="height" constant="21" id="RX0-QB-pdV"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="12"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <animations/>
                                 <color key="backgroundColor" red="0.88235294117647056" green="0.88235294117647056" blue="0.88235294117647056" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
+                                    <constraint firstItem="q6W-Ku-gBb" firstAttribute="top" secondItem="1Mf-7X-YTP" secondAttribute="bottom" constant="8" id="4vt-Ro-Bvq"/>
                                     <constraint firstAttribute="height" constant="170" id="5Mz-4f-uPC"/>
                                     <constraint firstItem="28P-is-qx9" firstAttribute="leading" secondItem="Mhi-0z-3EO" secondAttribute="leading" constant="8" id="8Ob-sS-JxJ"/>
                                     <constraint firstItem="28P-is-qx9" firstAttribute="top" secondItem="OPc-28-5Cq" secondAttribute="bottom" constant="8" id="FZp-xs-iHD"/>
+                                    <constraint firstAttribute="trailing" secondItem="q6W-Ku-gBb" secondAttribute="trailing" id="HoW-Yf-jIK"/>
+                                    <constraint firstItem="q6W-Ku-gBb" firstAttribute="leading" secondItem="Mhi-0z-3EO" secondAttribute="leading" id="KqY-sr-p7l"/>
                                     <constraint firstAttribute="trailing" secondItem="Qks-ms-28B" secondAttribute="trailing" id="Xhi-bu-RWS"/>
+                                    <constraint firstItem="1Mf-7X-YTP" firstAttribute="leading" secondItem="Mhi-0z-3EO" secondAttribute="leading" constant="12" id="ZIL-nr-2Au"/>
                                     <constraint firstAttribute="bottom" secondItem="Qks-ms-28B" secondAttribute="bottom" id="aoh-yv-O05"/>
                                     <constraint firstItem="Qks-ms-28B" firstAttribute="leading" secondItem="Mhi-0z-3EO" secondAttribute="leading" id="bK1-Ul-rB9"/>
                                     <constraint firstItem="OPc-28-5Cq" firstAttribute="leading" secondItem="Mhi-0z-3EO" secondAttribute="leading" constant="8" id="mhf-Ek-D7L"/>
                                     <constraint firstItem="Qks-ms-28B" firstAttribute="top" secondItem="28P-is-qx9" secondAttribute="bottom" constant="8" id="qCb-Qt-WKY"/>
+                                    <constraint firstAttribute="bottom" secondItem="q6W-Ku-gBb" secondAttribute="bottom" id="qXE-SQ-QHg"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yIN-IG-5BF">
@@ -1274,6 +1367,11 @@
                         <outlet property="explicitCheckbox" destination="UEg-on-v4N" id="sPV-ld-0Rs"/>
                         <outlet property="explicitView" destination="OPc-28-5Cq" id="9kR-fG-1h9"/>
                         <outlet property="forwardButton" destination="1oK-Yl-Pmf" id="Ot2-wk-ZP0"/>
+                        <outlet property="joinBar" destination="q6W-Ku-gBb" id="VMw-iu-MUx"/>
+                        <outlet property="joinBarModLabel" destination="1Mf-7X-YTP" id="sKy-XI-ZtD"/>
+                        <outlet property="joinBarProfile" destination="d7U-S8-Pmt" id="OPM-cM-lW2"/>
+                        <outlet property="joinBarStationLabel" destination="kGR-L8-wXK" id="i8B-Wi-Fpr"/>
+                        <outlet property="joinButton" destination="2qj-eg-7dA" id="fZP-hV-IJe"/>
                         <outlet property="playButton" destination="ObB-It-L2l" id="gRN-0e-5bJ"/>
                         <outlet property="profileImageView" destination="Not-UM-Ow1" id="ZxR-tc-QV5"/>
                         <outlet property="progressLabel" destination="4QL-Pf-TSi" id="mI1-Qa-H3I"/>

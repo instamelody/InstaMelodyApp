@@ -221,12 +221,19 @@
         self.saveBarStationLabel.text = [NSString stringWithFormat:@"@%@", [[NSUserDefaults standardUserDefaults] objectForKey:@"DisplayName"]];
         
         UITextField *topicField = (UITextField *)[self.tableView viewWithTag:98];
+        
+        self.joinBar.hidden = YES;
+        self.joinBarModLabel.hidden = YES;
     } else {
         self.saveBar.hidden = YES;
         self.recordButton.hidden = YES;
         
         self.publicView.hidden = YES;
         self.explicitView.hidden = YES;
+        
+        self.joinBar.hidden = NO;
+        self.joinBarModLabel.hidden = NO;
+        
         
     }
 }
@@ -494,6 +501,11 @@
     [self.backwardButton setTitle:[NSString fontAwesomeIconStringForEnum:FAFastBackward] forState:UIControlStateNormal];
     
     
+}
+
+-(IBAction)join:(id)sender {
+    self.isMyStudio = YES;
+    [self updateBarStatus];
 }
 
 -(IBAction)chooseLoop:(id)sender {

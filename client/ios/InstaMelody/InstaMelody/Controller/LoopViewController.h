@@ -57,8 +57,14 @@
 
 @property (nonatomic, strong) IBOutlet UILabel *saveBarTopicLabel;
 @property (nonatomic, strong) IBOutlet UILabel *saveBarStationLabel;
+@property (nonatomic, strong) IBOutlet UILabel *joinBarTopicLabel;
+@property (nonatomic, strong) IBOutlet UILabel *joinBarStationLabel;
+@property (nonatomic, strong) IBOutlet UILabel *joinBarModLabel;
+@property (nonatomic, strong) IBOutlet UIImageView *joinBarProfile;
+
 @property IBOutlet UIButton *saveBarDelete;
 @property IBOutlet UIButton *saveBarSave;
+@property IBOutlet UIButton *joinButton;
 
 
 @property (nonatomic, strong) IBOutlet UIView *publicView;
@@ -67,7 +73,10 @@
 @property IBOutlet BEMCheckBox *explicitCheckbox;
 
 
+
+
 @property (nonatomic, strong) IBOutlet UIView *saveBar;
+@property (nonatomic, strong) IBOutlet UIView *joinBar;
 @property (nonatomic, strong) IBOutlet UIView *consoleView;
 @property (nonatomic, strong) IBOutlet UIView *centerConsoleView;
 @property (nonatomic, strong) IBOutlet DACircularProgressView *progressView;
