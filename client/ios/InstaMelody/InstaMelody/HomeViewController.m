@@ -11,6 +11,7 @@
 #import "LoopViewController.h"
 #import "DataManager.h"
 #import "DAAlertController.h"
+#import "SignUpViewController.h"
 
 @interface HomeViewController ()
 
@@ -171,10 +172,19 @@
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
     
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
     if ([segue.identifier isEqualToString:@"showNotifSegue"]) {
         segue.destinationViewController.title = @"Notifications";
     } else if ([segue.identifier isEqualToString:@"showFeedSegue"]) {
         segue.destinationViewController.title = @"Feed";
+    } else if ([segue.identifier isEqualToString:@"editProfileSegue"]) {
+        
+        SignUpViewController *signupVC = (SignUpViewController *)segue.destinationViewController;
+        
+        signupVC.userInfo = @{@"FirstName": [defaults objectForKey:@"FirstName"], @"LastName": [defaults objectForKey:@"LastName"]};
+        signupVC.title = @"Edit Profile";
+        
     }
     
 }

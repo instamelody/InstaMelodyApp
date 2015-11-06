@@ -1569,7 +1569,7 @@
                                             <rect key="frame" x="705" y="141" width="23" height="23"/>
                                         </variation>
                                         <connections>
-                                            <action selector="changeProfilePic:" destination="xSn-CF-ntb" eventType="touchUpInside" id="l05-mE-aNk"/>
+                                            <segue destination="nbi-tE-dvK" kind="show" identifier="editProfileSegue" id="4ps-ka-4X8"/>
                                         </connections>
                                     </button>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="live" translatesAutoresizingMaskIntoConstraints="NO" id="LP0-Td-iiH">
@@ -2263,7 +2263,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blurBlue" translatesAutoresizingMaskIntoConstraints="NO" id="imw-mh-POj">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <rect key="frame" x="0.0" y="-62" width="600" height="662"/>
                                 <animations/>
                             </imageView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mej-wi-Crq">
@@ -2754,7 +2754,7 @@
                         <constraints>
                             <constraint firstAttribute="centerX" secondItem="mej-wi-Crq" secondAttribute="centerX" id="H6f-o3-urS"/>
                             <constraint firstItem="imw-mh-POj" firstAttribute="leading" secondItem="yXk-0S-l7s" secondAttribute="leading" id="NbF-jS-3HA"/>
-                            <constraint firstItem="imw-mh-POj" firstAttribute="top" secondItem="yXk-0S-l7s" secondAttribute="top" id="Pdb-5R-RWp"/>
+                            <constraint firstItem="imw-mh-POj" firstAttribute="top" secondItem="yXk-0S-l7s" secondAttribute="top" constant="-62" id="Pdb-5R-RWp"/>
                             <constraint firstItem="mej-wi-Crq" firstAttribute="top" secondItem="yXk-0S-l7s" secondAttribute="topMargin" constant="70" id="cNw-Xs-5bR"/>
                             <constraint firstItem="Rzf-kL-75q" firstAttribute="top" secondItem="imw-mh-POj" secondAttribute="bottom" id="fev-Ul-GjC"/>
                             <constraint firstAttribute="trailing" secondItem="imw-mh-POj" secondAttribute="trailing" id="nd6-x0-G0H"/>
@@ -2772,12 +2772,13 @@
                         <outlet property="profileButton" destination="C98-00-QkQ" id="Tju-WA-Knz"/>
                         <outlet property="profileView" destination="7Y7-lp-ylM" id="6SX-jz-LeK"/>
                         <outlet property="scrollView" destination="mej-wi-Crq" id="7RT-0N-fOM"/>
+                        <outlet property="submitButton" destination="Hbk-QL-c8X" id="vRu-6h-oHb"/>
                         <outlet property="usernameField" destination="ZsL-Ec-fGT" id="P5q-Pe-zvk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tll-37-NcB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5450" y="-302"/>
+            <point key="canvasLocation" x="5426" y="-302"/>
         </scene>
         <!--Terms of Service-->
         <scene sceneID="doT-ni-RLV">
@@ -3582,6 +3583,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="BRo-Dx-5pM"/>
+        <segue reference="4ps-ka-4X8"/>
         <segue reference="pIZ-0E-tZg"/>
         <segue reference="uus-fc-Z9E"/>
     </inferredMetricsTieBreakers>

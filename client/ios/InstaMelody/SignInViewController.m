@@ -101,6 +101,7 @@
                 
                 NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
                 
+                [self.HUD hide:YES];
                 NSLog(@"%@",ErrorResponse);
                 
                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];

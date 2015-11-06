@@ -65,6 +65,11 @@
     self.profileView.layer.cornerRadius = self.profileView.frame.size.height / 2;
     self.profileView.layer.masksToBounds = YES;
     
+    if (self.userInfo != nil) {
+        [self loadData];
+        [self.submitButton setTitle:@"Update" forState:UIControlStateNormal];
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -82,10 +87,34 @@
 }
 */
 
+-(void)loadData {
+    if ([self.userInfo objectForKey:@"FirstName"] != nil) {
+        self.firstNameField.text = [self.userInfo objectForKey:@"FirstName"];
+    }
+    
+    if ([self.userInfo objectForKey:@"LastName"] != nil) {
+        self.lastNameField.text = [self.userInfo objectForKey:@"LastName"];
+    }
+}
+
 - (IBAction)submit:(id)sender {
     
-    if (![self.usernameField.text isEqualToString:@""] && ![self.passwordField.text isEqualToString:@""] && ![self.firstNameField.text isEqualToString:@""] && ![self.lastNameField.text isEqualToString:@""] && ![self.phoneNumberField.text isEqualToString:@""]) {
+    if (self.userInfo == nil) {
+        [self createNewUser];
+    } else {
+        [self updateProfile];
+    }
+    
+}
 
+-(void)updateProfile {
+    
+}
+
+-(void)createNewUser {
+    
+    if (![self.usernameField.text isEqualToString:@""] && ![self.passwordField.text isEqualToString:@""] && ![self.firstNameField.text isEqualToString:@""] && ![self.lastNameField.text isEqualToString:@""] && ![self.phoneNumberField.text isEqualToString:@""]) {
+        
         NSNumber *isFemale = self.genderField.enabled ? [NSNumber numberWithBool:NO] : [NSNumber numberWithBool:YES];
         
         NSString *encodedEmail = [self.emailAddressField.text stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
@@ -117,18 +146,18 @@
                 
                 [self.delegate finishedWithUserId:self.usernameField.text andPassword:self.passwordField.text];
                 
-                            //self.delegate finished
+                //self.delegate finished
                 /*
-                if (self.presentingViewController != nil) {
-                    [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
-                }
+                 if (self.presentingViewController != nil) {
+                 [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
+                 }
                  */
             }];
-
+            
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             
             [self.HUD hide:YES];
-
+            
             if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
                 NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
                 
@@ -144,9 +173,7 @@
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please fill in all fields" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alertView show];
     }
-    
 }
-
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {

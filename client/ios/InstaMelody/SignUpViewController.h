@@ -32,7 +32,11 @@
 @property IBOutlet UISegmentedControl * genderField;
 @property IBOutlet UITextField *dobField;
 @property IBOutlet UIButton *profileButton;
+@property IBOutlet UIButton *submitButton;
 @property IBOutlet UIView *profileView;
+
+@property BOOL isEditing;
+@property NSDictionary *userInfo;
 
 @property IBOutlet UIScrollView *scrollView;
 
