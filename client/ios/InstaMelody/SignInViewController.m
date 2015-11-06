@@ -49,6 +49,19 @@
     
     [loginManager logOut];
     
+    // setup twitter login button and callback
+    self.twitterButton = [TWTRLogInButton buttonWithLogInCompletion:^(TWTRSession* session, NSError* error) {
+        if (session) {
+            NSLog(@"signed in as %@", [session userName]);
+            [self signUp:nil];
+        } else {
+            NSLog(@"error: %@", [error localizedDescription]);
+        }
+    }];
+    //self.twitterButton.titleLabel.text = @"Log in";
+    self.twitterButton.layer.cornerRadius = 4.0;
+    self.twitterButton.layer.masksToBounds = true;
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -72,7 +85,7 @@
 
 -(void)loginButton:(FBSDKLoginButton *)loginButton didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result error:(NSError *)error {
     if (error == nil && result != nil) {
-        [self signIn:nil];
+        [self signUp:nil];
     } else {
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Error connecting to Facebook" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alertView show];
@@ -104,6 +117,12 @@
  }
  
  */
+
+-(IBAction)signUp:(id)sender {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
+    SignUpViewController *signupVC = [mainStoryboard instantiateViewControllerWithIdentifier:@"SignUpViewController"];
+    [self.navigationController pushViewController:signupVC animated:YES];
+}
 
 -(IBAction)signIn:(id)sender {
  

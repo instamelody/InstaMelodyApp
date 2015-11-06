@@ -271,21 +271,23 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aqh-9Q-vAB">
-                                        <rect key="frame" x="30" y="470" width="260" height="50"/>
+                                        <rect key="frame" x="0.0" y="470" width="320" height="50"/>
                                         <subviews>
                                             <button opaque="NO" alpha="0.79999999999999982" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XFB-dO-Yy8" customClass="FBSDKLoginButton">
-                                                <rect key="frame" x="0.0" y="0.0" width="120" height="50"/>
+                                                <rect key="frame" x="8" y="0.0" width="114" height="50"/>
                                                 <animations/>
                                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <state key="normal" title="Facebook">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                             </button>
-                                            <button opaque="NO" alpha="0.79999999999999982" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6sq-Md-cvw">
-                                                <rect key="frame" x="140" y="0.0" width="120" height="50"/>
+                                            <button opaque="NO" alpha="0.79999999999999982" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6sq-Md-cvw" customClass="TWTRLogInButton">
+                                                <rect key="frame" x="139" y="0.0" width="173" height="50"/>
                                                 <animations/>
                                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <state key="normal" title="Twitter">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -295,14 +297,14 @@
                                         <animations/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="Lot-Ii-O3b"/>
-                                            <constraint firstAttribute="width" constant="260" id="tws-ae-6Vt"/>
+                                            <constraint firstAttribute="width" constant="320" id="tws-ae-6Vt"/>
                                         </constraints>
                                     </view>
                                 </subviews>
                                 <animations/>
                                 <constraints>
                                     <constraint firstItem="a3G-eF-s6a" firstAttribute="top" secondItem="QLo-o1-Dp6" secondAttribute="bottom" constant="69" id="7cw-c0-ofO"/>
-                                    <constraint firstAttribute="bottom" secondItem="aqh-9Q-vAB" secondAttribute="bottom" constant="16" id="BGy-k8-8Ud"/>
+                                    <constraint firstAttribute="bottom" secondItem="aqh-9Q-vAB" secondAttribute="bottom" constant="6" id="BGy-k8-8Ud"/>
                                     <constraint firstAttribute="height" constant="526" id="CLN-00-NrN"/>
                                     <constraint firstAttribute="trailing" secondItem="pkQ-MK-b0m" secondAttribute="trailing" constant="30" id="ERs-0n-Mbl"/>
                                     <constraint firstItem="AuC-oa-rUV" firstAttribute="top" secondItem="7QN-KL-d4F" secondAttribute="top" constant="38" id="HGU-cE-FJk"/>
@@ -346,6 +348,7 @@
                         <outlet property="passField" destination="Gkr-3Y-ya9" id="tjE-pG-L6R"/>
                         <outlet property="passLabel" destination="v6U-Wm-ncJ" id="bBe-3e-8LV"/>
                         <outlet property="scrollView" destination="7QN-KL-d4F" id="Blj-Ou-rlx"/>
+                        <outlet property="twitterButton" destination="6sq-Md-cvw" id="0SY-hg-7PY"/>
                         <outlet property="userField" destination="B5z-YV-mmj" id="OeD-yG-08r"/>
                         <outlet property="userLabel" destination="HVB-FF-mtE" id="LpH-XJ-Y9S"/>
                     </connections>

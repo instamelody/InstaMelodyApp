@@ -14,6 +14,9 @@ PODS:
   - EZAudio/Full (1.1.2):
     - EZAudio/Core
     - TPCircularBuffer (~> 0.0)
+  - Fabric (1.6.0):
+    - Fabric/Base (= 1.6.0)
+  - Fabric/Base (1.6.0)
   - FBSDKCoreKit (4.7.1):
     - Bolts (~> 1.1)
     - FBSDKCoreKit/arc (= 4.7.1)
@@ -35,6 +38,10 @@ PODS:
   - MagicalRecord (2.3.0)
   - MGSwipeTableCell (1.5.1)
   - TPCircularBuffer (0.0.1)
+  - TwitterCore (1.12.1):
+    - Fabric
+  - TwitterKit (1.12.1):
+    - TwitterCore (= 1.12.1)
   - UIImageView-Letters (1.1.4)
 
 DEPENDENCIES:
@@ -42,6 +49,7 @@ DEPENDENCIES:
   - DAAlertController
   - DACircularProgress
   - EZAudio
+  - Fabric
   - FBSDKCoreKit
   - FBSDKLoginKit
   - FBSDKShareKit
@@ -50,6 +58,7 @@ DEPENDENCIES:
   - M13ProgressSuite
   - MagicalRecord
   - MGSwipeTableCell
+  - TwitterKit
   - UIImageView-Letters
 
 SPEC CHECKSUMS:
@@ -58,6 +67,7 @@ SPEC CHECKSUMS:
   DAAlertController: 4735313ec65d3d69f81fdd34d01308809680350f
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   EZAudio: 01373de2b1257b77be1bf13753fb1c4ea8a9777e
+  Fabric: d737eda3a26ac940a5430230eedb35f16b226131
   FBSDKCoreKit: 9141b70960a37930850370495fe565f4a27ac141
   FBSDKLoginKit: c11ed3c2833472db3bb4a4aecf27af4a6f69b173
   FBSDKShareKit: 213adf63e073f41a346b0e7a689805880dc5150e
@@ -68,6 +78,8 @@ SPEC CHECKSUMS:
   MagicalRecord: 89eb7d7ead39fb37f01c3d010665ee94d17f8dba
   MGSwipeTableCell: a51fa670c01f0aa048f12af040acebf315223137
   TPCircularBuffer: 949e9632b9fb99b7274d7b2296ee22bff5841e35
+  TwitterCore: 2b1bdd58dfba3f21b416d2a0d1ca74173e3b0eea
+  TwitterKit: 7f55ebb8d2a1476f7ef2d6fedd40090d4b349b40
   UIImageView-Letters: f62db28076797adf3560ab7410647dc6899b9eef
 
 COCOAPODS: 0.39.0

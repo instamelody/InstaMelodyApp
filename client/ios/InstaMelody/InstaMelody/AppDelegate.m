@@ -10,6 +10,8 @@
 #import <MagicalRecord/MagicalRecord.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
+#import <TwitterKit/TwitterKit.h>
+#import <Fabric/Fabric.h>
 
 @interface AppDelegate ()
 
@@ -32,8 +34,12 @@
     
     [MagicalRecord setupCoreDataStackWithStoreNamed:@"InstaMelody"];
     
+    [[Twitter sharedInstance] startWithConsumerKey:@"Xq6cieg5b6FFEqSsJHzTnbrW8" consumerSecret:@"GtR8gm0JZySbZfVLlW4YwzCMc8D7ERXIz0C8kdN3TjZ5MBVkxc"];
+    [Fabric with:@[[Twitter sharedInstance]]];
+    
+    
     [FBSDKLoginButton classForCoder];
-    //TWTRLogInButton.classForCoder()
+    [TWTRLogInButton classForCoder];
     
     return YES;
 }
