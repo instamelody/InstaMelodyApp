@@ -72,6 +72,8 @@
         [self.submitButton setTitle:@"Update" forState:UIControlStateNormal];
     }
     
+    [self loadProfileImage];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -88,6 +90,25 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+-(void)loadProfileImage {
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+
+    if ([defaults objectForKey:@"ProfileFilePath"] != nil && ![[defaults objectForKey:@"ProfileFilePath"] isEqualToString:@""]) {
+        
+        NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+        
+        NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
+        NSString *imageName = [[defaults objectForKey:@"ProfileFilePath"] lastPathComponent];
+        
+        NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
+        [self.profileButton setBackgroundImage:[UIImage imageWithContentsOfFile:imagePath] forState:UIControlStateNormal];
+    } else {
+        [self.profileButton setBackgroundImage:[UIImage imageNamed:@"Profile"] forState:UIControlStateNormal];
+    }
+    
+}
 
 -(void)loadData {
     if ([self.userInfo objectForKey:@"FirstName"] != nil) {

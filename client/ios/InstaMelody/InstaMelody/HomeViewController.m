@@ -28,14 +28,13 @@
     self.profileView.layer.masksToBounds = YES;
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *authToken = [defaults objectForKey:@"authToken"];
-    //NSString *deviceToken = [defaults objectForKey:@"deviceToken"];
     
     self.dateFormatter = [[NSDateFormatter alloc] init];
     
     if (![self isValidToken]) {
         
         [self signIn:nil];
+        [self getUserDetails:[defaults objectForKey:@"DisplayName"]];
 
     } else {
         //validate token
@@ -101,6 +100,8 @@
             
             self.displayNameLabel.text = [NSString stringWithFormat:@"@%@", [defaults objectForKey:@"DisplayName"]];
             
+            [self loadProfileImage];
+            
         }
     }];
 }
@@ -121,6 +122,8 @@
         [[DataManager sharedManager] fetchFriends];
         [[DataManager sharedManager] fetchMelodies];
         [[DataManager sharedManager] fetchUserMelodies];
+        
+        [self getUserDetails:[defaults objectForKey:@"DisplayName"]];
     }
     
     [self loadProfileImage];
@@ -397,6 +400,56 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     UIGraphicsEndImageContext();
     
     [[NetworkManager sharedManager] updateProfilePicture:resizedImage];
+}
+
+-(void)getUserDetails:(NSString*)displayName {
+    
+    //https://api.instamelody.com/v1.0/User?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&displayName=testeraccount
+    
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/User", API_BASE_URL];
+    
+    NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    
+    NSDictionary *parameters = @{@"token": token, @"displayName": displayName};
+    
+    [manager GET:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        
+        
+        NSDictionary *responseDict =
+        (NSDictionary *)responseObject;
+        [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"Id"] forKey:@"Id"];
+        [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"DisplayName"] forKey:@"DisplayName"];
+        [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"FirstName"] forKey:@"FirstName"];
+        [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"LastName"] forKey:@"LastName"];
+        
+        if ([responseDict objectForKey:@"Image"] != nil && [[responseDict objectForKey:@"Image"] isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *imageDict = [responseDict objectForKey:@"Image"];
+            [[NSUserDefaults standardUserDefaults] setObject:[imageDict objectForKey:@"FilePath"] forKey:@"ProfileFilePath"];
+        }
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"infoUpdated" object:nil];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        //NSDictionary *responseDict = (NSDictionary *)responseObject;
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
+            
+            NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
+            
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            
+            NSLog(@"%@",ErrorResponse);
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
+        }
+    }];
 }
 
 
