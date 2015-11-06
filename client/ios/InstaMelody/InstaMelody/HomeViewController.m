@@ -260,6 +260,9 @@
         UIAlertAction *action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [self signIn:nil];
         }];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDestructive handler:nil];
+        
+        [alert addAction:cancelAction];
         [alert addAction:action];
         [self presentViewController:alert animated:YES completion:nil];
     }
