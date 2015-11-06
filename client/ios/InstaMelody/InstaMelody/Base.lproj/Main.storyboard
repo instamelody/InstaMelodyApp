@@ -856,48 +856,48 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="28P-is-qx9">
-                                        <rect key="frame" x="8" y="85" width="116" height="31"/>
+                                        <rect key="frame" x="8" y="96" width="116" height="20"/>
                                         <subviews>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Czz-UA-Q3f" customClass="BEMCheckBox">
+                                                <rect key="frame" x="0.0" y="0.0" width="42" height="20"/>
+                                                <animations/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Public" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4re-hZ-Aq8">
-                                                <rect key="frame" x="50" y="5" width="58" height="21"/>
+                                                <rect key="frame" x="29" y="2" width="58" height="15"/>
                                                 <animations/>
                                                 <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="15"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Czz-UA-Q3f" customClass="BEMCheckBox">
-                                                <rect key="frame" x="0.0" y="0.0" width="42" height="31"/>
-                                                <animations/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                            </view>
                                         </subviews>
                                         <animations/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="31" id="JwY-hM-n0r"/>
+                                            <constraint firstAttribute="height" constant="20" id="JwY-hM-n0r"/>
                                             <constraint firstAttribute="width" constant="116" id="SNe-4p-058"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OPc-28-5Cq">
-                                        <rect key="frame" x="8" y="46" width="116" height="31"/>
+                                        <rect key="frame" x="8" y="68" width="116" height="20"/>
                                         <subviews>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UEg-on-v4N" customClass="BEMCheckBox">
+                                                <rect key="frame" x="0.0" y="0.0" width="42" height="20"/>
+                                                <animations/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Explicit" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yjY-tZ-k0e">
-                                                <rect key="frame" x="50" y="5" width="58" height="21"/>
+                                                <rect key="frame" x="29" y="2" width="58" height="15"/>
                                                 <animations/>
                                                 <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="15"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UEg-on-v4N" customClass="BEMCheckBox">
-                                                <rect key="frame" x="0.0" y="0.0" width="42" height="31"/>
-                                                <animations/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                            </view>
                                         </subviews>
                                         <animations/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="31" id="2Bs-je-hRG"/>
+                                            <constraint firstAttribute="height" constant="20" id="2Bs-je-hRG"/>
                                             <constraint firstAttribute="width" constant="116" id="L3X-Da-S9J"/>
                                         </constraints>
                                     </view>
