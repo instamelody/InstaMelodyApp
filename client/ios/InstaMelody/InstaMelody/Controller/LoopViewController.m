@@ -215,12 +215,18 @@
         self.saveBar.hidden = NO;
         self.recordButton.hidden = NO;
         
+        self.publicView.hidden = NO;
+        self.explicitView.hidden = NO;
+        
         self.saveBarStationLabel.text = [NSString stringWithFormat:@"@%@", [[NSUserDefaults standardUserDefaults] objectForKey:@"DisplayName"]];
         
         UITextField *topicField = (UITextField *)[self.tableView viewWithTag:98];
     } else {
         self.saveBar.hidden = YES;
         self.recordButton.hidden = YES;
+        
+        self.publicView.hidden = YES;
+        self.explicitView.hidden = YES;
         
     }
 }

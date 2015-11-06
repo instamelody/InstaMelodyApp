@@ -84,6 +84,8 @@
             <string>CenturyGothic</string>
             <string>CenturyGothic</string>
             <string>CenturyGothic</string>
+            <string>CenturyGothic</string>
+            <string>CenturyGothic</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -776,14 +778,64 @@
                                             <constraint firstItem="4fB-lT-6K0" firstAttribute="leading" secondItem="Qks-ms-28B" secondAttribute="leading" id="uH7-ry-6Lq"/>
                                         </constraints>
                                     </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="28P-is-qx9">
+                                        <rect key="frame" x="8" y="85" width="116" height="31"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Public" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4re-hZ-Aq8">
+                                                <rect key="frame" x="50" y="5" width="58" height="21"/>
+                                                <animations/>
+                                                <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="15"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Czz-UA-Q3f" customClass="BEMCheckBox">
+                                                <rect key="frame" x="0.0" y="0.0" width="42" height="31"/>
+                                                <animations/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            </view>
+                                        </subviews>
+                                        <animations/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="31" id="JwY-hM-n0r"/>
+                                            <constraint firstAttribute="width" constant="116" id="SNe-4p-058"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OPc-28-5Cq">
+                                        <rect key="frame" x="8" y="46" width="116" height="31"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Explicit" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yjY-tZ-k0e">
+                                                <rect key="frame" x="50" y="5" width="58" height="21"/>
+                                                <animations/>
+                                                <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="15"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UEg-on-v4N" customClass="BEMCheckBox">
+                                                <rect key="frame" x="0.0" y="0.0" width="42" height="31"/>
+                                                <animations/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            </view>
+                                        </subviews>
+                                        <animations/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="31" id="2Bs-je-hRG"/>
+                                            <constraint firstAttribute="width" constant="116" id="L3X-Da-S9J"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <animations/>
                                 <color key="backgroundColor" red="0.88235294117647056" green="0.88235294117647056" blue="0.88235294117647056" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="170" id="5Mz-4f-uPC"/>
+                                    <constraint firstItem="28P-is-qx9" firstAttribute="leading" secondItem="Mhi-0z-3EO" secondAttribute="leading" constant="8" id="8Ob-sS-JxJ"/>
+                                    <constraint firstItem="28P-is-qx9" firstAttribute="top" secondItem="OPc-28-5Cq" secondAttribute="bottom" constant="8" id="FZp-xs-iHD"/>
                                     <constraint firstAttribute="trailing" secondItem="Qks-ms-28B" secondAttribute="trailing" id="Xhi-bu-RWS"/>
                                     <constraint firstAttribute="bottom" secondItem="Qks-ms-28B" secondAttribute="bottom" id="aoh-yv-O05"/>
                                     <constraint firstItem="Qks-ms-28B" firstAttribute="leading" secondItem="Mhi-0z-3EO" secondAttribute="leading" id="bK1-Ul-rB9"/>
+                                    <constraint firstItem="OPc-28-5Cq" firstAttribute="leading" secondItem="Mhi-0z-3EO" secondAttribute="leading" constant="8" id="mhf-Ek-D7L"/>
+                                    <constraint firstItem="Qks-ms-28B" firstAttribute="top" secondItem="28P-is-qx9" secondAttribute="bottom" constant="8" id="qCb-Qt-WKY"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yIN-IG-5BF">
@@ -1219,11 +1271,15 @@
                         <outlet property="backwardButton" destination="1mI-Mj-5Wh" id="SLd-an-zDX"/>
                         <outlet property="centerConsoleView" destination="WV3-gz-0cc" id="LW0-GR-C4U"/>
                         <outlet property="consoleView" destination="yIN-IG-5BF" id="ZbM-pl-jbh"/>
+                        <outlet property="explicitCheckbox" destination="UEg-on-v4N" id="sPV-ld-0Rs"/>
+                        <outlet property="explicitView" destination="OPc-28-5Cq" id="9kR-fG-1h9"/>
                         <outlet property="forwardButton" destination="1oK-Yl-Pmf" id="Ot2-wk-ZP0"/>
                         <outlet property="playButton" destination="ObB-It-L2l" id="gRN-0e-5bJ"/>
                         <outlet property="profileImageView" destination="Not-UM-Ow1" id="ZxR-tc-QV5"/>
                         <outlet property="progressLabel" destination="4QL-Pf-TSi" id="mI1-Qa-H3I"/>
                         <outlet property="progressView" destination="XdP-JA-fd2" id="tie-lA-UZv"/>
+                        <outlet property="publicCheckbox" destination="Czz-UA-Q3f" id="Jn1-EQ-2iG"/>
+                        <outlet property="publicView" destination="28P-is-qx9" id="mcP-pO-OGw"/>
                         <outlet property="recordButton" destination="8lD-vy-m4N" id="eCo-hG-Mkx"/>
                         <outlet property="saveBar" destination="Qks-ms-28B" id="onK-kS-MQG"/>
                         <outlet property="saveBarDelete" destination="pMV-aY-fAb" id="qkf-te-qJI"/>
@@ -3701,7 +3757,7 @@
         <image name="vol" width="47" height="47"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="p0p-hV-u3V"/>
         <segue reference="4ps-ka-4X8"/>
+        <segue reference="42P-9A-i60"/>
     </inferredMetricsTieBreakers>
 </document>

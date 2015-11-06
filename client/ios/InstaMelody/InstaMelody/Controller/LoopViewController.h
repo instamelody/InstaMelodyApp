@@ -21,6 +21,7 @@
 #import "EZAudio.h"
 #import "UIImageView+Letters.h"
 #import "CLTokenInputView.h"
+#import "BEMCheckBox.h"
 
 @protocol LoopDelegate <NSObject, UITableViewDataSource, UITableViewDelegate, CLTokenInputViewDelegate>
 
@@ -58,6 +59,12 @@
 @property (nonatomic, strong) IBOutlet UILabel *saveBarStationLabel;
 @property IBOutlet UIButton *saveBarDelete;
 @property IBOutlet UIButton *saveBarSave;
+
+
+@property (nonatomic, strong) IBOutlet UIView *publicView;
+@property (nonatomic, strong) IBOutlet UIView *explicitView;
+@property IBOutlet BEMCheckBox *publicCheckbox;
+@property IBOutlet BEMCheckBox *explicitCheckbox;
 
 
 @property (nonatomic, strong) IBOutlet UIView *saveBar;

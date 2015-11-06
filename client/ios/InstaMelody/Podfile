@@ -17,4 +17,5 @@ target 'InstaMelody' do
   pod 'FBSDKShareKit'
   pod 'Fabric'
   pod 'TwitterKit'
+  pod 'BEMCheckBox'
 end

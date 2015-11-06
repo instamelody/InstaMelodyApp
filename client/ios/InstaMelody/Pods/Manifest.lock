@@ -1,4 +1,5 @@
 PODS:
+  - BEMCheckBox (1.1.0)
   - Bolts (1.4.0):
     - Bolts/AppLinks (= 1.4.0)
     - Bolts/Tasks (= 1.4.0)
@@ -45,6 +46,7 @@ PODS:
   - UIImageView-Letters (1.1.4)
 
 DEPENDENCIES:
+  - BEMCheckBox
   - CLTokenInputView
   - DAAlertController
   - DACircularProgress
@@ -62,6 +64,7 @@ DEPENDENCIES:
   - UIImageView-Letters
 
 SPEC CHECKSUMS:
+  BEMCheckBox: abb7b1ffcc24c25c31ffa7b7167a3e869f4f15ba
   Bolts: 0e9bce58b9b9f5e8a7a4d47b16d2fabec289072b
   CLTokenInputView: dc40041faf76102cf96dede1635d93bd0f115a0d
   DAAlertController: 4735313ec65d3d69f81fdd34d01308809680350f

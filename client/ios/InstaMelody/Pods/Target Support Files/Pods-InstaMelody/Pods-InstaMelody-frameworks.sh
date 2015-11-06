@@ -84,6 +84,7 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
+  install_framework "Pods-InstaMelody/BEMCheckBox.framework"
   install_framework "Pods-InstaMelody/Bolts.framework"
   install_framework "Pods-InstaMelody/CLTokenInputView.framework"
   install_framework "Pods-InstaMelody/DAAlertController.framework"
@@ -102,6 +103,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-InstaMelody/UIImageView_Letters.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_framework "Pods-InstaMelody/BEMCheckBox.framework"
   install_framework "Pods-InstaMelody/Bolts.framework"
   install_framework "Pods-InstaMelody/CLTokenInputView.framework"
   install_framework "Pods-InstaMelody/DAAlertController.framework"
