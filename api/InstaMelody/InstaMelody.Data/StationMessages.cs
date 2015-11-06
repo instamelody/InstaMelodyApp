@@ -107,6 +107,37 @@ namespace InstaMelody.Data
         }
 
         /// <summary>
+        /// Gets the station messages by user melody identifier.
+        /// </summary>
+        /// <param name="userMelodyId">The user melody identifier.</param>
+        /// <returns></returns>
+        public IList<StationMessage> GetStationMessagesByUserMelodyId(Guid userMelodyId)
+        {
+            var query = @"SELECT sm.* FROM dbo.MessageMelodies AS mm
+                        INNER JOIN dbo.Messages AS m
+                        ON m.Id = mm.MessageId
+                        AND m.IsDeleted = 0
+                        LEFT JOIN dbo.StationMessages AS sm
+                        ON sm.MessageId = m.Id
+                        AND sm.IsDeleted = 0
+                        WHERE mm.UserMelodyId = @UserMelodyId
+                        AND mm.IsDeleted = 0";
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "UserMelodyId",
+                    Value = userMelodyId,
+                    SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                }
+            };
+
+            return GetRecordSet<StationMessage>(query, parameters.ToArray());
+        }
+
+        /// <summary>
         /// Gets the messages by station identifier.
         /// </summary>
         /// <param name="stationId">The station identifier.</param>

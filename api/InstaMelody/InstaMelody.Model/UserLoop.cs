@@ -6,6 +6,8 @@ namespace InstaMelody.Model
 {
     public class UserLoop
     {
+        private Guid _chatId;
+
         public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Name is required.")]
@@ -23,6 +25,18 @@ namespace InstaMelody.Model
         public bool IsDeleted { get; set; }
 
         #region Relationship Properties
+
+        public bool IsChatLoop { get; set; }
+
+        public Guid ChatId
+        {
+            get { return _chatId; }
+            set
+            {
+                _chatId = value;
+                IsChatLoop = (_chatId != null && !_chatId.Equals(default(Guid)));
+            }
+        }
 
         public IList<UserLoopPart> Parts { get; set; }
 

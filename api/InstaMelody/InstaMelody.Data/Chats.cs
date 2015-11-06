@@ -89,12 +89,12 @@ namespace InstaMelody.Data
                         WHERE IsDeleted = 0 AND Id = @ChatId";
 
                 parameters.Add(new SqlParameter
-                    {
-                        ParameterName = "ChatLoopId",
-                        Value = chat.ChatLoopId,
-                        SqlDbType = SqlDbType.UniqueIdentifier,
-                        Direction = ParameterDirection.Input
-                    });
+                {
+                    ParameterName = "ChatLoopId",
+                    Value = chat.ChatLoopId,
+                    SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                });
             }
 
             ExecuteNonQuery(query, parameters.ToArray());
@@ -254,6 +254,30 @@ namespace InstaMelody.Data
                 {
                     ParameterName = "ChatId",
                     Value = chatId,
+                    SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                }
+            };
+
+            return GetRecord<Chat>(query, parameters.ToArray());
+        }
+
+        /// <summary>
+        /// Gets the chat by chat loop identifier.
+        /// </summary>
+        /// <param name="chatLoopId">The chat loop identifier.</param>
+        /// <returns></returns>
+        public Chat GetChatByChatLoopId(Guid chatLoopId)
+        {
+            var query = @"SELECT TOP 1 * FROM dbo.Chats
+                        Where ChatLoopId = @ChatLoopId AND IsDeleted = 0";
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "ChatLoopId",
+                    Value = chatLoopId,
                     SqlDbType = SqlDbType.UniqueIdentifier,
                     Direction = ParameterDirection.Input
                 }

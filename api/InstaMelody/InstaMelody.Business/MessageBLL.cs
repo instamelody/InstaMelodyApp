@@ -753,6 +753,7 @@ namespace InstaMelody.Business
             // return message image
             return addedMessageVideo;
         }
+
         /// <summary>
         /// Creates the or update chat loop.
         /// </summary>
@@ -809,6 +810,22 @@ namespace InstaMelody.Business
         #endregion Private Methods
         
         #region Internal Methods
+
+        /// <summary>
+        /// Gets the chat identifier by chat loop identifier.
+        /// </summary>
+        /// <param name="chatLoopId">The chat loop identifier.</param>
+        /// <returns></returns>
+        internal Guid GetChatIdByChatLoopId(Guid chatLoopId)
+        {
+            var dal = new Chats();
+            var foundChat = dal.GetChatByChatLoopId(chatLoopId);
+            if (foundChat != null && !foundChat.Id.Equals(default(Guid)))
+            {
+                return foundChat.Id;
+            }
+            return new Guid();
+        }
 
         /// <summary>
         /// Creates the message.

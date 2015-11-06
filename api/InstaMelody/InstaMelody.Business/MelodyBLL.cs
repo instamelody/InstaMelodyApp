@@ -196,7 +196,7 @@ namespace InstaMelody.Business
                 userMelody.Parts = GetUserMelodyParts(userMelody.Id);
             }
 
-            return userMelodies;
+            return userMelodies.Select(GetMelodyRelationshipIds).ToList();
         }
 
         /// <summary>
@@ -297,7 +297,7 @@ namespace InstaMelody.Business
                 userLoop.Parts = GetUserLoopParts(userLoop.Id);
             }
 
-            return loops;
+            return loops.Select(GetLoopRelationshipIds).ToList();
         }
 
         /// <summary>
@@ -611,7 +611,7 @@ namespace InstaMelody.Business
             // get user loop parts
             result.Parts = GetUserLoopParts(result.Id);
 
-            return result;
+            return GetLoopRelationshipIds(result);
         }
 
         /// <summary>
@@ -757,6 +757,56 @@ namespace InstaMelody.Business
             return createdPart;
         }
 
+        /// <summary>
+        /// Gets the loop relationship ids.
+        /// </summary>
+        /// <param name="loop">The loop.</param>
+        /// <returns></returns>
+        private UserLoop GetLoopRelationshipIds(UserLoop loop)
+        {
+            if (loop == null || loop.Id == null || loop.Id.Equals(default(Guid)))
+            {
+                return loop;
+            }
+
+            var chatBll = new MessageBll();
+            var chatId = chatBll.GetChatIdByChatLoopId(loop.Id);
+            if (chatId != null && !chatId.Equals(default(Guid)))
+            {
+                loop.ChatId = chatId;
+            }
+
+            return loop;
+        }
+
+        /// <summary>
+        /// Gets the melody relationship ids.
+        /// </summary>
+        /// <param name="melody">The melody.</param>
+        /// <returns></returns>
+        private UserMelody GetMelodyRelationshipIds(UserMelody melody)
+        {
+            if (melody == null || melody.Id == null || melody.Id.Equals(default(Guid)))
+            {
+                return melody;
+            }
+
+            var stationBll = new StationBll();
+            var stationPosts = stationBll.GetStationMessagesByUserMelody(melody.Id);
+            if (stationPosts == null) { return melody; }
+
+            var postIds = new List<Guid>();
+            foreach (var post in stationPosts)
+            {
+                if (post.MessageId.Equals(default(Guid))) continue;
+                postIds.Add(post.MessageId);
+            }
+
+            melody.StationPostIds = postIds;
+
+            return melody;
+        }
+
         #endregion Private Methods
 
         #region Internal Methods
@@ -790,7 +840,7 @@ namespace InstaMelody.Business
             // get parts of user melody
             result.Parts = GetUserMelodyParts(result.Id);
 
-            return result;
+            return GetMelodyRelationshipIds(result);
         }
 
         /// <summary>
@@ -873,7 +923,7 @@ namespace InstaMelody.Business
             return new ApiUserMelodyFileUpload
             {
                 FileUploadToken = createdToken,
-                UserMelody = createdUserMelody
+                UserMelody = GetMelodyRelationshipIds(createdUserMelody)
             };
         }
 
