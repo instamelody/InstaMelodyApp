@@ -80,6 +80,7 @@
             <string>CenturyGothic</string>
             <string>CenturyGothic</string>
             <string>CenturyGothic</string>
+            <string>CenturyGothic</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -2629,6 +2630,9 @@
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
+                                                <connections>
+                                                    <segue destination="PBB-Ww-IPE" kind="show" id="cm1-wA-mZ1"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <animations/>
@@ -2745,6 +2749,53 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tll-37-NcB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="5450" y="-302"/>
+        </scene>
+        <!--Terms of Service-->
+        <scene sceneID="doT-ni-RLV">
+            <objects>
+                <viewController id="PBB-Ww-IPE" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="pnQ-98-RaN"/>
+                        <viewControllerLayoutGuide type="bottom" id="sYi-Kn-FAn"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="38k-Ed-e4d">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blurBlue" translatesAutoresizingMaskIntoConstraints="NO" id="sdV-se-yU0">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <animations/>
+                            </imageView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="SrH-z7-fIS">
+                                <rect key="frame" x="160" y="104" width="280" height="456"/>
+                                <animations/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="280" id="mqE-hu-NGn"/>
+                                </constraints>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="SrH-z7-fIS" firstAttribute="top" secondItem="pnQ-98-RaN" secondAttribute="bottom" constant="40" id="0Ox-Ff-bZB"/>
+                            <constraint firstAttribute="trailing" secondItem="sdV-se-yU0" secondAttribute="trailing" id="6BQ-jF-hbo"/>
+                            <constraint firstItem="sYi-Kn-FAn" firstAttribute="top" secondItem="sdV-se-yU0" secondAttribute="bottom" id="Dol-oG-PfE"/>
+                            <constraint firstItem="sYi-Kn-FAn" firstAttribute="top" secondItem="SrH-z7-fIS" secondAttribute="bottom" constant="40" id="Tek-qU-VRu"/>
+                            <constraint firstItem="SrH-z7-fIS" firstAttribute="centerX" secondItem="38k-Ed-e4d" secondAttribute="centerX" id="lQG-qy-Pws"/>
+                            <constraint firstItem="sdV-se-yU0" firstAttribute="leading" secondItem="38k-Ed-e4d" secondAttribute="leading" id="na8-fl-QLk"/>
+                            <constraint firstItem="sdV-se-yU0" firstAttribute="top" secondItem="pnQ-98-RaN" secondAttribute="bottom" constant="-64" id="ymp-es-7np"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Terms of Service" id="lKN-K6-ppf"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="oOs-0W-a0G" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6196" y="-302"/>
         </scene>
         <!--Volume View Controller-->
         <scene sceneID="OJO-po-KaI">
