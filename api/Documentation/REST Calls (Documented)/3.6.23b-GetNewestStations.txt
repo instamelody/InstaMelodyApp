@@ -1,0 +1,47 @@
+// EXAMPLE B - Get Newest Stations With Defined Limit
+
+// REQUEST - GET https://api.instamelody.com/v1.0/Station/Newest?token=665E0AB4-442B-4FF3-8A74-3C861294E26B&limit=2
+
+// RESPONSE - HTTP/1.1 200 OK
+[
+  {
+    "Id": 7,
+    "UserId": "00e9a9dc-39d1-4019-8ad8-4f56100bef18",
+    "StationImageId": null,
+    "Name": "jeff4test's Station",
+    "IsPublished": true,
+    "DateCreated": "2015-10-06T17:42:11.223",
+    "DateModified": "2015-10-06T17:42:11.223",
+    "IsDeleted": false,
+    "Image": null,
+    "Categories": [
+      {
+        "Id": 1,
+        "ParentId": null,
+        "Name": "Test Category",
+        "DateCreated": "2015-07-06T00:00:00",
+        "DateModified": "2015-07-06T00:00:00",
+        "IsDeleted": false,
+        "Children": null
+      }
+    ],
+    "Followers": null,
+    "Messages": null,
+    "Likes": 0
+  },
+  {
+    "Id": 6,
+    "UserId": "9e93b868-905a-4ede-9c31-389a9d42f41c",
+    "StationImageId": null,
+    "Name": "jeff2test's Station",
+    "IsPublished": true,
+    "DateCreated": "2015-10-06T17:39:40.71",
+    "DateModified": "2015-10-06T17:39:40.71",
+    "IsDeleted": false,
+    "Image": null,
+    "Categories": null,
+    "Followers": null,
+    "Messages": null,
+    "Likes": 0
+  }
+]

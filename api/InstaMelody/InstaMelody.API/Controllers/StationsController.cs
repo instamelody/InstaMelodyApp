@@ -502,6 +502,78 @@ namespace InstaMelody.API.Controllers
         }
 
         /// <summary>
+        /// Gets the newest stations.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route(Routes.RouteNewest)]
+        public HttpResponseMessage GetNewestStations()
+        {
+            HttpResponseMessage response;
+
+            var nvc = HttpUtility.ParseQueryString(Request.RequestUri.Query);
+
+            Guid _token;
+            var token = nvc["token"];
+            Guid.TryParse(token, out _token);
+
+            int _limit;
+            var limit = nvc["limit"];
+            int.TryParse(limit, out _limit);
+
+            int _catId;
+            var catId = nvc["categoryId"];
+            int.TryParse(catId, out _catId);
+
+            if (_token.Equals(default(Guid)))
+            {
+                InstaMelodyLogger.Log("Received NULL GetNewestStations request", LogLevel.Trace);
+                response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized,
+                    Exceptions.FailedAuthentication);
+            }
+            else
+            {
+                try
+                {
+                    // Log call
+                    InstaMelodyLogger.Log(
+                        string.Format("Get Newest Stations - Token: {0}", _token),
+                        LogLevel.Trace);
+
+                    var bll = new StationBll();
+                    var result = bll.GetNewestStations(_token, _limit, _catId);
+
+                    if (result == null)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.FailedGetStations);
+                    }
+                    else
+                    {
+                        response = this.Request.CreateResponse(HttpStatusCode.OK, result);
+                    }
+                }
+                catch (Exception exc)
+                {
+                    if (exc is UnauthorizedAccessException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, exc.Message);
+                    }
+                    else if (exc is DataException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, exc.Message);
+                    }
+                    else
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
+                    }
+
+                }
+            }
+
+            return response;
+        }
+
+        /// <summary>
         /// Gets the top stations.
         /// </summary>
         /// <returns></returns>

@@ -406,6 +406,31 @@ namespace InstaMelody.Business
         }
 
         /// <summary>
+        /// Gets the newest stations.
+        /// </summary>
+        /// <param name="sessionToken">The session token.</param>
+        /// <param name="limit">The limit.</param>
+        /// <param name="categoryId">The category identifier.</param>
+        /// <returns></returns>
+        public IList<Station> GetNewestStations(Guid sessionToken, int limit = 0, int categoryId = 0)
+        {
+            Utilities.GetUserBySession(sessionToken);
+
+            var dal = new Stations();
+
+            var stationLimit = (limit > 0) ? limit : Settings.Default.DefaultStationGetLimit;
+            var stationCat = (categoryId > 0) ? categoryId : int.MinValue;
+
+            var stations = dal.GetNewestStations(stationLimit, stationCat);
+            if (stations == null || stations.Count.Equals(0))
+            {
+                stations = new List<Station>();
+            }
+
+            return stations.Select(GetStationWithRelationshipProperties).ToList();
+        }
+
+        /// <summary>
         /// Deletes the station.
         /// </summary>
         /// <param name="station">The station.</param>
@@ -1363,6 +1388,17 @@ namespace InstaMelody.Business
             var createdStation = dal.CreateStation(clonedStation);
 
             return createdStation;
+        }
+
+        /// <summary>
+        /// Gets the station messages by user melody.
+        /// </summary>
+        /// <param name="userMelodyId">The user melody identifier.</param>
+        /// <returns></returns>
+        internal IList<StationMessage> GetStationMessagesByUserMelody(Guid userMelodyId)
+        {
+            var dal = new StationMessages();
+            return dal.GetStationMessagesByUserMelodyId(userMelodyId);
         }
 
         #endregion Internal Methods

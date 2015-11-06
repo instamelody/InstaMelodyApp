@@ -262,6 +262,11 @@
         public const string RouteTop = "Top";
 
         /// <summary>
+        /// The route newest
+        /// </summary>
+        public const string RouteNewest = "Newest";
+
+        /// <summary>
         /// The route followers
         /// </summary>
         public const string RouteFollowers = "Followers";

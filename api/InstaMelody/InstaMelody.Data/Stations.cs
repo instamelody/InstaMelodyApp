@@ -348,6 +348,48 @@ namespace InstaMelody.Data
             DeleteAllFollowersByStationId(stationId);
         }
 
+        /// <summary>
+        /// Gets the newest stations.
+        /// </summary>
+        /// <param name="limit">The limit.</param>
+        /// <param name="categoryId">The category identifier.</param>
+        /// <returns></returns>
+        public IList<Station> GetNewestStations(int limit = int.MaxValue, int categoryId = int.MinValue)
+        {
+            var query = string.Format(
+                        @"SELECT TOP(@Limit) s.* FROM dbo.Stations AS s {0}
+                        WHERE s.IsDeleted = 0 AND s.IsPublished = 1
+                        ORDER BY s.DateCreated DESC",
+                        (categoryId > int.MinValue)
+                            ? @"INNER JOIN dbo.StationCategories AS c
+                                ON c.StationId = s.Id AND c.IsDeleted = 0 
+                                AND c.Id = @CategoryId"
+                            : string.Empty);
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "Limit",
+                    Value = limit,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                }
+            };
+            if (categoryId > int.MinValue)
+            {
+                parameters.Add(new SqlParameter
+                {
+                    ParameterName = "CategoryId",
+                    Value = categoryId,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                });
+            }
+
+            return GetRecordSet<Station>(query, parameters.ToArray());
+        }
+
         #region Station Categories
 
         /// <summary>
