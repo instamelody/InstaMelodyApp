@@ -2218,7 +2218,7 @@
                                                 <action selector="denyFriend:" destination="vYc-MT-dDl" eventType="touchUpInside" id="Gnz-bn-xbt"/>
                                             </connections>
                                         </button>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="VIP" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2dx-Tt-WbI">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="VIP" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="2dx-Tt-WbI">
                                             <rect key="frame" x="108" y="53" width="384" height="18"/>
                                             <animations/>
                                             <constraints>

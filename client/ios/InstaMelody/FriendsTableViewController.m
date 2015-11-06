@@ -61,13 +61,21 @@
     // Return the number of rows in the section.
     
     if (section == 0) {
-        return self.friendsList.count;
-    } /*else if (section == 1) {
-        return self.pendingFriendsList.count;
+        if (self.friendsList.count > 0) {
+            return self.friendsList.count;
+        } else {
+            return 1;
+        }
     }
-    return self.otherFriendsList.count;
-       */
-    return self.pendingFriendsList.count;
+    
+    if (section == 1) {
+        if (self.pendingFriendsList.count > 0) {
+            return self.pendingFriendsList.count;
+        } else {
+            return 1;
+        }
+    }
+    return  0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -89,39 +97,62 @@
     
     if (indexPath.section == 0)  {
         
-        Friend *friend = (Friend *)[self.friendsList objectAtIndex:indexPath.row];
-        
-        //NSDictionary *friendDict = [self.friendsList objectAtIndex:indexPath.row];
-        
         cell.approveButton.hidden = YES;
         cell.denyButton.hidden = YES;
         
-        cell.nameLabel.text = friend.displayName;
-        
-        cell.detailLabel.text = [NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName];
-        
-        cell.profileImageView.image = [UIImage imageNamed:@"Profile"];
-        
-        if (friend.profileFilePath != nil && ![friend.profileFilePath isEqualToString:@""]) {
+        if (self.friendsList.count > 0) {
             
-            NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+            Friend *friend = (Friend *)[self.friendsList objectAtIndex:indexPath.row];
             
-            NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
-            NSString *imageName = [friend.profileFilePath lastPathComponent];
+            //NSDictionary *friendDict = [self.friendsList objectAtIndex:indexPath.row];
             
-            NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
-            cell.profileImageView.image = [UIImage imageWithContentsOfFile:imagePath];
+            cell.nameLabel.text = friend.displayName;
             
+            cell.detailLabel.text = [NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName];
+            
+            cell.profileImageView.image = [UIImage imageNamed:@"Profile"];
+            
+            if (friend.profileFilePath != nil && ![friend.profileFilePath isEqualToString:@""]) {
+                
+                NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+                
+                NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
+                NSString *imageName = [friend.profileFilePath lastPathComponent];
+                
+                NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
+                cell.profileImageView.image = [UIImage imageWithContentsOfFile:imagePath];
+                
+            }
+        } else {
+            cell.nameLabel.text = @"No VIPs yet";
+            
+            cell.detailLabel.text = @"Please request a friend";
+            
+            cell.profileImageView.image = [UIImage imageNamed:@"Profile"];
         }
         
         
     } else if (indexPath.section == 1) {
-        NSDictionary *friendDict = [self.pendingFriendsList objectAtIndex:indexPath.row];
+        if (self.pendingFriendsList.count > 0)  {
+            NSDictionary *friendDict = [self.pendingFriendsList objectAtIndex:indexPath.row];
+            
+            cell.nameLabel.text = [friendDict objectForKey:@"DisplayName"];
+            cell.approveButton.tag = indexPath.row;
+            
+            cell.profileImageView.image = [UIImage imageNamed:@"Profile"];
+
+        } else {
+            
+            cell.approveButton.hidden = YES;
+            cell.denyButton.hidden = YES;
+            
+            cell.nameLabel.text = @"No Fans";
+            
+            cell.detailLabel.text = @"Go viral!";
+            
+            cell.profileImageView.image = [UIImage imageNamed:@"Profile"];
+        }
         
-        cell.nameLabel.text = [friendDict objectForKey:@"DisplayName"];
-        cell.approveButton.tag = indexPath.row;
-        
-        cell.profileImageView.image = [UIImage imageNamed:@"Profile"];
     } else {
         NSDictionary *friendDict = [self.otherFriendsList objectAtIndex:indexPath.row];
 
@@ -138,13 +169,13 @@
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (section == 0) {
-        return @"Friends";
+        return @"VIPs";
     } /*else if (section == 1)  {
         return @"People who have added me";
     }
     return @"People I've added";
        */
-    return @"Pending Friend Requests";
+    return @"Fans";
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
