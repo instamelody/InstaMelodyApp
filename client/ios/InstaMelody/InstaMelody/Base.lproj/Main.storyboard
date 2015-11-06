@@ -81,6 +81,7 @@
             <string>CenturyGothic</string>
             <string>CenturyGothic</string>
             <string>CenturyGothic</string>
+            <string>CenturyGothic</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -2361,25 +2362,51 @@
                                                     <constraint firstAttribute="bottom" secondItem="1lv-4K-tIE" secondAttribute="bottom" constant="1" id="rjc-PU-a9L"/>
                                                 </constraints>
                                             </view>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DVp-sz-fhN">
-                                                <rect key="frame" x="142" y="15" width="100" height="100"/>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Y7-lp-ylM">
+                                                <rect key="frame" x="145" y="18" width="100" height="100"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C98-00-QkQ">
+                                                        <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                                        <animations/>
+                                                        <state key="normal" backgroundImage="Profile"/>
+                                                        <connections>
+                                                            <action selector="changeProfile:" destination="nbi-tE-dvK" eventType="touchUpInside" id="MWf-WO-D3y"/>
+                                                        </connections>
+                                                    </button>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Change" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CAG-sO-ayb">
+                                                        <rect key="frame" x="0.0" y="79" width="100" height="21"/>
+                                                        <animations/>
+                                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="21" id="l14-1J-fVQ"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="12"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
                                                 <animations/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="100" id="8Qd-0n-5Bh"/>
-                                                    <constraint firstAttribute="height" constant="100" id="cPl-jT-VvS"/>
+                                                    <constraint firstAttribute="bottom" secondItem="C98-00-QkQ" secondAttribute="bottom" id="5MY-fX-2Rc"/>
+                                                    <constraint firstItem="C98-00-QkQ" firstAttribute="leading" secondItem="7Y7-lp-ylM" secondAttribute="leading" id="Bx4-pL-fqL"/>
+                                                    <constraint firstItem="C98-00-QkQ" firstAttribute="top" secondItem="7Y7-lp-ylM" secondAttribute="top" id="Lgq-tO-RfX"/>
+                                                    <constraint firstAttribute="trailing" secondItem="C98-00-QkQ" secondAttribute="trailing" id="Pt9-Xe-dYZ"/>
+                                                    <constraint firstAttribute="width" constant="100" id="VDc-FI-mWP"/>
+                                                    <constraint firstAttribute="bottom" secondItem="CAG-sO-ayb" secondAttribute="bottom" id="XrS-RQ-pOi"/>
+                                                    <constraint firstAttribute="height" constant="100" id="Znt-D3-XNG"/>
+                                                    <constraint firstItem="CAG-sO-ayb" firstAttribute="leading" secondItem="7Y7-lp-ylM" secondAttribute="leading" id="a3v-ry-tPg"/>
+                                                    <constraint firstAttribute="trailing" secondItem="CAG-sO-ayb" secondAttribute="trailing" id="qTR-FD-jWj"/>
                                                 </constraints>
-                                                <state key="normal" image="Profile">
-                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                            </button>
+                                            </view>
                                         </subviews>
                                         <animations/>
                                         <constraints>
                                             <constraint firstItem="P0e-1P-5nm" firstAttribute="leading" secondItem="J2p-zQ-zmO" secondAttribute="leading" id="2vQ-dK-guu"/>
-                                            <constraint firstItem="DVp-sz-fhN" firstAttribute="top" secondItem="J2p-zQ-zmO" secondAttribute="top" constant="15" id="3ni-Yu-byy"/>
                                             <constraint firstItem="iis-99-XvR" firstAttribute="leading" secondItem="J2p-zQ-zmO" secondAttribute="leading" id="AHa-NM-Ear"/>
+                                            <constraint firstAttribute="trailing" secondItem="7Y7-lp-ylM" secondAttribute="trailing" constant="15" id="HUa-4u-6C6"/>
                                             <constraint firstAttribute="bottom" secondItem="iis-99-XvR" secondAttribute="bottom" constant="8" id="Mma-yX-WPW"/>
-                                            <constraint firstAttribute="trailing" secondItem="DVp-sz-fhN" secondAttribute="trailing" constant="18" id="hGv-Oa-ImN"/>
+                                            <constraint firstItem="7Y7-lp-ylM" firstAttribute="top" secondItem="J2p-zQ-zmO" secondAttribute="top" constant="18" id="beY-Dx-EJ3"/>
                                             <constraint firstAttribute="width" constant="260" id="tCH-hc-dkm"/>
                                             <constraint firstAttribute="height" constant="130" id="uJZ-KH-1s0"/>
                                             <constraint firstItem="P0e-1P-5nm" firstAttribute="top" secondItem="J2p-zQ-zmO" secondAttribute="top" id="yFg-Df-ucB"/>
@@ -2742,6 +2769,8 @@
                         <outlet property="lastNameField" destination="TN3-4N-IEb" id="s9F-Af-7dd"/>
                         <outlet property="passwordField" destination="sAT-8c-0Ip" id="3vb-v8-FaL"/>
                         <outlet property="phoneNumberField" destination="tbt-O4-RPJ" id="LBV-6u-6dr"/>
+                        <outlet property="profileButton" destination="C98-00-QkQ" id="Tju-WA-Knz"/>
+                        <outlet property="profileView" destination="7Y7-lp-ylM" id="6SX-jz-LeK"/>
                         <outlet property="scrollView" destination="mej-wi-Crq" id="7RT-0N-fOM"/>
                         <outlet property="usernameField" destination="ZsL-Ec-fGT" id="P5q-Pe-zvk"/>
                     </connections>

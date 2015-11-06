@@ -19,7 +19,7 @@
 
 @end
 
-@interface SignUpViewController : UIViewController <UITextFieldDelegate, LTHMonthYearPickerViewDelegate>
+@interface SignUpViewController : UIViewController <UITextFieldDelegate, LTHMonthYearPickerViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property id<SignUpDelegate> delegate;
 
@@ -31,9 +31,13 @@
 @property IBOutlet UITextField * emailAddressField;
 @property IBOutlet UISegmentedControl * genderField;
 @property IBOutlet UITextField *dobField;
+@property IBOutlet UIButton *profileButton;
+@property IBOutlet UIView *profileView;
 
 @property IBOutlet UIScrollView *scrollView;
 
 -(IBAction)submit:(id)sender;
+
+-(IBAction)changeProfile:(id)sender;
 
 @end

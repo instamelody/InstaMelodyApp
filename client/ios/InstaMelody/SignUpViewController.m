@@ -62,6 +62,9 @@
     self.dobField.delegate = self;
     self.dobField.inputView = self.monthYearPicker;
     
+    self.profileView.layer.cornerRadius = self.profileView.frame.size.height / 2;
+    self.profileView.layer.masksToBounds = YES;
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -107,7 +110,7 @@
             
             [self.HUD hide:YES];
             
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"You are now a user" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            //UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"You are now a user" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             //[alertView show];
             
             [self dismissViewControllerAnimated:YES completion:^{
@@ -192,6 +195,15 @@
     }];
 }
 
+-(IBAction)changeProfile:(id)sender {
+    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+    imagePicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+    imagePicker.delegate = self;
+    
+    [self presentViewController:imagePicker animated:YES completion:^{
+        NSLog(@"Image picker presented!");
+    }];
+}
 
 #pragma mark - LTHMonthYearPickerView Delegate
 - (void)pickerDidPressCancelWithInitialValues:(NSDictionary *)initialValues {
@@ -231,6 +243,61 @@
 
 - (void)pickerDidSelectMonth:(NSString *)month andYear:(NSString *)year {
     self.dobField.text = [NSString stringWithFormat: @"%@ / %@", month, year];
+}
+
+#pragma mark - image picker delegate
+
+
+-(void)imagePickerController:(UIImagePickerController *)picker
+didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *selectedImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+    [self.profileButton setBackgroundImage:selectedImage forState:UIControlStateNormal];
+    [picker dismissViewControllerAnimated:YES completion:^{
+        NSLog(@"Image selected!");
+    }];
+    
+    [self prepareImage:selectedImage];
+}
+
+-(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:^{
+        NSLog(@"Picker cancelled without doing anything");
+    }];
+}
+
+
+-(void)prepareImage:(UIImage *)image {
+    
+    UIImage *resizedImage = nil;
+    CGSize originalImageSize = image.size;
+    CGSize targetImageSize = CGSizeMake(150.0f, 150.0f);
+    float scaleFactor, tempImageHeight, tempImageWidth;
+    CGRect croppingRect;
+    BOOL favorsX = NO;
+    if (originalImageSize.width > originalImageSize.height) {
+        scaleFactor = targetImageSize.height / originalImageSize.height;
+        favorsX = YES;
+    } else {
+        scaleFactor = targetImageSize.width / originalImageSize.width;
+        favorsX = NO;
+    }
+    
+    tempImageHeight = originalImageSize.height * scaleFactor;
+    tempImageWidth = originalImageSize.width * scaleFactor;
+    if (favorsX) {
+        float delta = (tempImageWidth - targetImageSize.width) / 2;
+        croppingRect = CGRectMake(-1.0f * delta, 0, tempImageWidth, tempImageHeight);
+    } else {
+        float delta = (tempImageHeight - targetImageSize.height) / 2;
+        croppingRect = CGRectMake(0, -1.0f * delta, tempImageWidth, tempImageHeight);
+    }
+    UIGraphicsBeginImageContext(targetImageSize);
+    [image drawInRect:croppingRect];
+    resizedImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
 }
 
 @end
