@@ -13,6 +13,7 @@
 #import "DAAlertController.h"
 #import "SignUpViewController.h"
 #import "StationViewController.h"
+#import "NotificationsViewController.h"
 
 @interface HomeViewController ()
 
@@ -266,6 +267,26 @@
         [alert addAction:action];
         [self presentViewController:alert animated:YES completion:nil];
     }
+}
+
+-(IBAction)showFeed:(id)sender {
+    //NotificationsViewController
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    NotificationsViewController *vc = (NotificationsViewController *)[sb instantiateViewControllerWithIdentifier:@"NotificationsViewController"];
+    vc.title = @"Feed";
+    vc.isFeed = YES;
+    
+    [self.navigationController pushViewController:vc animated:YES];
+    
+}
+
+-(IBAction)showNotifications:(id)sender {
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    NotificationsViewController *vc = (NotificationsViewController *)[sb instantiateViewControllerWithIdentifier:@"NotificationsViewController"];
+    vc.title = @"Notifications";
+    vc.isFeed = NO;
+    
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 -(IBAction)showSettings:(id)sender {

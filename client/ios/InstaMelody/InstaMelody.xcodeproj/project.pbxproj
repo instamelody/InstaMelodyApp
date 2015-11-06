@@ -65,6 +65,7 @@
 		87E6F4751BB6936D009E3EA8 /* IMMessagesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87E6F4731BB6936D009E3EA8 /* IMMessagesViewController.xib */; };
 		87EBFB431BB6154900AA5F70 /* StationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87EBFB421BB6154900AA5F70 /* StationViewController.m */; };
 		87EBFB461BB64C7900AA5F70 /* StationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87EBFB451BB64C7900AA5F70 /* StationCell.m */; };
+		87EDA7631BED4DB80075F38E /* NotificationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87EDA7621BED4DB80075F38E /* NotificationCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -191,6 +192,8 @@
 		87EBFB421BB6154900AA5F70 /* StationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StationViewController.m; sourceTree = "<group>"; };
 		87EBFB441BB64C7900AA5F70 /* StationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StationCell.h; path = View/StationCell.h; sourceTree = "<group>"; };
 		87EBFB451BB64C7900AA5F70 /* StationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StationCell.m; path = View/StationCell.m; sourceTree = "<group>"; };
+		87EDA7611BED4DB80075F38E /* NotificationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NotificationCell.h; path = View/NotificationCell.h; sourceTree = "<group>"; };
+		87EDA7621BED4DB80075F38E /* NotificationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NotificationCell.m; path = View/NotificationCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -455,6 +458,8 @@
 				873FCFEF1BB750BE00CE2B44 /* StatusCell.m */,
 				87A972C61BD168B20016C6EA /* TopicCell.h */,
 				87A972C71BD168B20016C6EA /* TopicCell.m */,
+				87EDA7611BED4DB80075F38E /* NotificationCell.h */,
+				87EDA7621BED4DB80075F38E /* NotificationCell.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -658,6 +663,7 @@
 				87CFE8BF1B829427009A4B6D /* Melody.m in Sources */,
 				8707F9F31B4476BD004B4C20 /* AFHTTPRequestOperationManager.m in Sources */,
 				879CCC541B81D2870031FDCC /* Model.xcdatamodeld in Sources */,
+				87EDA7631BED4DB80075F38E /* NotificationCell.m in Sources */,
 				878FAD601BAC6E1D00260D5B /* UserMelodyListViewController.m in Sources */,
 				879CCC5D1B81D6460031FDCC /* DataManager.m in Sources */,
 				87E6F4741BB6936D009E3EA8 /* IMMessagesViewController.m in Sources */,

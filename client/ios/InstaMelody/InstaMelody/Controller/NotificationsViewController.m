@@ -7,8 +7,14 @@
 //
 
 #import "NotificationsViewController.h"
+#import "AFHTTPRequestOperationManager.h"
+#import "constants.h"
+#import "NotificationCell.h"
 
 @interface NotificationsViewController ()
+
+@property NSArray *dataArray;
+@property NSDateFormatter *dateFormatter;
 
 @end
 
@@ -26,12 +32,47 @@
     UIImageView *tempImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"blurBlue"]];
     [tempImageView setFrame:self.tableView.frame];
     
+    self.dateFormatter = [[NSDateFormatter alloc] init];
+    self.dateFormatter.dateStyle = NSDateFormatterShortStyle;
+    
     self.tableView.backgroundView = tempImageView;
+    
+    if (self.isFeed) {
+        [self getData];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)getData {
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/Station/Newest", API_BASE_URL];
+    
+    NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    NSDictionary *parameters = @{@"token": token, @"limit": @10, @"categoryId": @1};
+    
+    [manager GET:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        // NSLog(@"JSON: %@", responseObject);
+        NSLog(@"top stations updated");
+        
+        NSArray *stationList = (NSArray *)responseObject;
+        self.dataArray = stationList;
+        
+        [self.tableView reloadData];
+        
+        
+        //NSDictionary *responseDict = (NSDictionary *)responseObject;
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error fetching top stations: %@", error);
+        
+    }];
 }
 
 #pragma mark - Table view data source
@@ -41,13 +82,24 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 2;
+    
+    if (self.dataArray.count > 0) {
+        return self.dataArray.count;
+    }
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"NotificationCell" forIndexPath:indexPath];
+    NotificationCell *cell = (NotificationCell *)[tableView dequeueReusableCellWithIdentifier:@"NotificationCell" forIndexPath:indexPath];
+    
+    NSString *dateString = [self.dateFormatter stringFromDate:[NSDate date]];
     
     // Configure the cell...
+    if (self.dataArray.count == 0) {
+        cell.messageLabel.text = @"No friend activity yet";
+        cell.dateLabel.text = dateString;
+    }
+    
     
     return cell;
 }

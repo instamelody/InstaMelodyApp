@@ -430,7 +430,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ChatCell" rowHeight="110" id="H27-Z3-kTS" customClass="ChatCell">
-                                <rect key="frame" x="0.0" y="86" width="600" height="110"/>
+                                <rect key="frame" x="0.0" y="22" width="600" height="110"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="H27-Z3-kTS" id="ZlZ-jV-Pyt">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="109"/>
@@ -1373,7 +1373,7 @@
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <connections>
-                                                    <segue destination="Pq6-4v-OYC" kind="show" identifier="showNotifSegue" id="MNP-ud-pEC"/>
+                                                    <action selector="showNotifications:" destination="xSn-CF-ntb" eventType="touchUpInside" id="ANJ-a1-D5R"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A6k-Z0-ZsI">
@@ -1466,7 +1466,7 @@
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <connections>
-                                                    <segue destination="Pq6-4v-OYC" kind="show" identifier="showFeedSegue" id="BRo-Dx-5pM"/>
+                                                    <action selector="showFeed:" destination="xSn-CF-ntb" eventType="touchUpInside" id="tT2-l8-Ysb"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3ZS-kI-L21">
@@ -3016,8 +3016,8 @@
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="NotificationCell" rowHeight="101" id="MhQ-vH-nNz">
-                                <rect key="frame" x="0.0" y="92" width="600" height="101"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="NotificationCell" rowHeight="101" id="MhQ-vH-nNz" customClass="NotificationCell">
+                                <rect key="frame" x="0.0" y="28" width="600" height="101"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="MhQ-vH-nNz" id="RXL-ME-0ua">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="100"/>
@@ -3032,14 +3032,6 @@
                                                 <constraint firstAttribute="height" constant="70" id="bkC-VR-cY5"/>
                                             </constraints>
                                         </imageView>
-                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lao-fh-8hx">
-                                            <rect key="frame" x="98" y="16" width="439" height="68"/>
-                                            <animations/>
-                                            <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna</string>
-                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="14"/>
-                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                        </textView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10/21" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tAt-tj-tHt">
                                             <rect key="frame" x="537" y="38" width="45" height="24"/>
                                             <animations/>
@@ -3051,23 +3043,33 @@
                                             <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="efP-br-U4l">
+                                            <rect key="frame" x="96" y="16" width="433" height="68"/>
+                                            <animations/>
+                                            <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="14"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <animations/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <constraints>
-                                        <constraint firstItem="lao-fh-8hx" firstAttribute="top" secondItem="RXL-ME-0ua" secondAttribute="topMargin" constant="8" id="6V2-Ba-JJS"/>
-                                        <constraint firstItem="lao-fh-8hx" firstAttribute="leading" secondItem="nbL-IL-ic0" secondAttribute="trailing" constant="10" id="ATS-nK-Opi"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="efP-br-U4l" secondAttribute="bottom" constant="8" id="521-ru-qZq"/>
                                         <constraint firstItem="nbL-IL-ic0" firstAttribute="centerY" secondItem="RXL-ME-0ua" secondAttribute="centerY" id="EAx-xC-uLU"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="tAt-tj-tHt" secondAttribute="trailing" constant="10" id="Fnx-ZE-zmN"/>
+                                        <constraint firstItem="tAt-tj-tHt" firstAttribute="leading" secondItem="efP-br-U4l" secondAttribute="trailing" constant="8" id="Gda-Xy-Cta"/>
+                                        <constraint firstItem="efP-br-U4l" firstAttribute="leading" secondItem="nbL-IL-ic0" secondAttribute="trailing" constant="8" id="TW7-6d-qOz"/>
+                                        <constraint firstItem="efP-br-U4l" firstAttribute="top" secondItem="RXL-ME-0ua" secondAttribute="topMargin" constant="8" id="jcQ-iN-mOG"/>
                                         <constraint firstItem="nbL-IL-ic0" firstAttribute="leading" secondItem="RXL-ME-0ua" secondAttribute="leadingMargin" constant="10" id="k9f-Q8-8kX"/>
-                                        <constraint firstItem="tAt-tj-tHt" firstAttribute="leading" secondItem="lao-fh-8hx" secondAttribute="trailing" id="kig-fS-nxH"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="lao-fh-8hx" secondAttribute="bottom" constant="8" id="pLf-NJ-gnt"/>
                                         <constraint firstItem="tAt-tj-tHt" firstAttribute="centerY" secondItem="RXL-ME-0ua" secondAttribute="centerY" id="zYu-dU-Mn0"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <animations/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <connections>
+                                    <outlet property="dateLabel" destination="tAt-tj-tHt" id="5wF-B7-1lh"/>
+                                    <outlet property="messageLabel" destination="efP-br-U4l" id="Jd4-8c-S7Y"/>
+                                    <outlet property="profileImageView" destination="nbL-IL-ic0" id="m8r-wN-fXp"/>
                                     <segue destination="eln-IA-CPa" kind="show" id="pm1-RC-hGu"/>
                                 </connections>
                             </tableViewCell>
@@ -3587,7 +3589,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="4ps-ka-4X8"/>
-        <segue reference="BRo-Dx-5pM"/>
         <segue reference="pIZ-0E-tZg"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -10,4 +10,6 @@
 
 @interface NotificationsViewController : UITableViewController
 
+@property BOOL isFeed;
+
 @end
