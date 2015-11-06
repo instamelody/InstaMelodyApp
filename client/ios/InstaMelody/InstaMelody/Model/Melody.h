@@ -15,6 +15,7 @@
 
 @property (nonatomic, retain) NSNumber * melodyId;
 @property (nonatomic, retain) NSNumber * isUserCreated;
+@property (nonatomic, retain) NSNumber * isPremiumContent;
 @property (nonatomic, retain) NSString * fileName;
 @property (nonatomic, retain) NSString * filePathUrlString;
 @property (nonatomic, retain) NSDate * dateModified;

@@ -66,6 +66,7 @@
 		87EBFB431BB6154900AA5F70 /* StationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87EBFB421BB6154900AA5F70 /* StationViewController.m */; };
 		87EBFB461BB64C7900AA5F70 /* StationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87EBFB451BB64C7900AA5F70 /* StationCell.m */; };
 		87EDA7631BED4DB80075F38E /* NotificationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87EDA7621BED4DB80075F38E /* NotificationCell.m */; };
+		87EDA7691BED5AEF0075F38E /* ServerMelodyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87EDA7681BED5AEF0075F38E /* ServerMelodyCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -194,6 +195,8 @@
 		87EBFB451BB64C7900AA5F70 /* StationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StationCell.m; path = View/StationCell.m; sourceTree = "<group>"; };
 		87EDA7611BED4DB80075F38E /* NotificationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NotificationCell.h; path = View/NotificationCell.h; sourceTree = "<group>"; };
 		87EDA7621BED4DB80075F38E /* NotificationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NotificationCell.m; path = View/NotificationCell.m; sourceTree = "<group>"; };
+		87EDA7671BED5AEF0075F38E /* ServerMelodyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ServerMelodyCell.h; path = View/ServerMelodyCell.h; sourceTree = "<group>"; };
+		87EDA7681BED5AEF0075F38E /* ServerMelodyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ServerMelodyCell.m; path = View/ServerMelodyCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -460,6 +463,8 @@
 				87A972C71BD168B20016C6EA /* TopicCell.m */,
 				87EDA7611BED4DB80075F38E /* NotificationCell.h */,
 				87EDA7621BED4DB80075F38E /* NotificationCell.m */,
+				87EDA7671BED5AEF0075F38E /* ServerMelodyCell.h */,
+				87EDA7681BED5AEF0075F38E /* ServerMelodyCell.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -638,6 +643,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				879CCC5A1B81D4860031FDCC /* Friend.m in Sources */,
+				87EDA7691BED5AEF0075F38E /* ServerMelodyCell.m in Sources */,
 				87C84E9D1BAC848400A99239 /* UserMelodyPart.m in Sources */,
 				872BB5A11B74CAD1004CDBE7 /* AwesomeMenuItem.m in Sources */,
 				8707F9F71B4476BD004B4C20 /* AFURLConnectionOperation.m in Sources */,

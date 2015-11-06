@@ -7,6 +7,9 @@
 //
 
 #import "MelodyPickerController.h"
+#import "ServerMelodyCell.h"
+#import "UIFont+FontAwesome.h"
+#import "NSString+FontAwesome.h"
 
 @interface MelodyPickerController ()
 
@@ -49,11 +52,19 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MelodyCell" forIndexPath:indexPath];
+    ServerMelodyCell *cell = (ServerMelodyCell *)[tableView dequeueReusableCellWithIdentifier:@"MelodyCell" forIndexPath:indexPath];
     
     Melody *melody = (Melody *)[self.melodyList objectAtIndex:indexPath.row];
     
-    cell.textLabel.text = melody.melodyName;
+    cell.nameLabel.text = melody.melodyName;
+    cell.lockLabel.font = [UIFont fontAwesomeFontOfSize:20.0f];
+    
+    if ([melody.isPremiumContent boolValue]) {
+        cell.lockLabel.text = [NSString fontAwesomeIconStringForEnum:FALock];
+    } else {
+        cell.lockLabel.text = [NSString fontAwesomeIconStringForEnum:FAUnlock];
+    }
+    
     cell.backgroundColor = [UIColor clearColor];
         
     return cell;

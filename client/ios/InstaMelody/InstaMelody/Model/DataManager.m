@@ -230,6 +230,8 @@
             newMelody.fileName = [melodyDict objectForKey:@"FileName"];
             newMelody.filePathUrlString = [melodyDict objectForKey:@"FilePath"];
             newMelody.isUserCreated = [melodyDict objectForKey:@"IsUserCreated"];
+            newMelody.isPremiumContent = [melodyDict objectForKey:@"IsPremiumContent"];
+            
             
             NSString *dateString = [melodyDict objectForKey:@"DateModified"];
             dateString = [dateString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
