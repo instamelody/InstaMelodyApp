@@ -39,6 +39,16 @@
     self.HUD.animationPoint = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height / 2);
     UIWindow *window = [[[UIApplication sharedApplication] windows] objectAtIndex:0];
     [window addSubview:self.HUD];
+    
+    self.fbButton.readPermissions = @[@"public_profile", @"email", @"user_friends"];
+    self.fbButton.delegate = self;
+    self.fbButton.layer.cornerRadius = 4.0f;
+    self.fbButton.layer.masksToBounds = YES;
+    
+    FBSDKLoginManager *loginManager = [[FBSDKLoginManager alloc] init];
+    
+    [loginManager logOut];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -58,10 +68,47 @@
     }
 }
 
+#pragma mark - fb sdk delegate
+
+-(void)loginButton:(FBSDKLoginButton *)loginButton didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result error:(NSError *)error {
+    if (error == nil && result != nil) {
+        [self signIn:nil];
+    } else {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Error connecting to Facebook" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+    }
+}
+
+-(void)loginButtonDidLogOut:(FBSDKLoginButton *)loginButton {
+    
+}
+
+/*
+ 
+ //facebook delegate methods
+ 
+ func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
+ 
+ Flurry.logEvent("Login Facebook");
+ 
+ if result != nil {
+ if (!result!.isCancelled) {
+ let fbToken = result!.token
+ self.facebookSuccess(fbToken.tokenString)
+ } else {
+ let alert = UIAlertController(title: defaultAlertTitle, message: "Error linking Facebook", preferredStyle: UIAlertControllerStyle.Alert)
+ alert.addAction(UIAlertAction(title: okButtonText, style: UIAlertActionStyle.Default, handler: nil))
+ self.presentViewController(alert, animated: true, completion: nil)
+ }
+ }
+ }
+ 
+ */
+
 -(IBAction)signIn:(id)sender {
-    
+ 
     NSString *deviceToken =  [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"];
-    
+ 
     if (![self.userField.text isEqualToString:@""] && ![self.passField.text isEqualToString:@""] ) {
         
         self.HUD.indeterminate = YES;

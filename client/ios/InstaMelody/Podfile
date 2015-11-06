@@ -12,4 +12,7 @@ target 'InstaMelody' do
   pod 'M13ProgressSuite'
   pod 'EZAudio'
   pod 'DAAlertController'
+  pod 'FBSDKCoreKit'
+  pod 'FBSDKLoginKit'
+  pod 'FBSDKShareKit'
 end

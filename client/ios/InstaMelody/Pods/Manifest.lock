@@ -1,4 +1,10 @@
 PODS:
+  - Bolts (1.4.0):
+    - Bolts/AppLinks (= 1.4.0)
+    - Bolts/Tasks (= 1.4.0)
+  - Bolts/AppLinks (1.4.0):
+    - Bolts/Tasks
+  - Bolts/Tasks (1.4.0)
   - CLTokenInputView (2.1.0)
   - DAAlertController (0.1.4)
   - DACircularProgress (2.3.1)
@@ -8,6 +14,19 @@ PODS:
   - EZAudio/Full (1.1.2):
     - EZAudio/Core
     - TPCircularBuffer (~> 0.0)
+  - FBSDKCoreKit (4.7.1):
+    - Bolts (~> 1.1)
+    - FBSDKCoreKit/arc (= 4.7.1)
+    - FBSDKCoreKit/no-arc (= 4.7.1)
+  - FBSDKCoreKit/arc (4.7.1):
+    - Bolts (~> 1.1)
+  - FBSDKCoreKit/no-arc (4.7.1):
+    - Bolts (~> 1.1)
+    - FBSDKCoreKit/arc
+  - FBSDKLoginKit (4.7.1):
+    - FBSDKCoreKit
+  - FBSDKShareKit (4.7.1):
+    - FBSDKCoreKit
   - FontAwesome (4.3.0)
   - JSQMessagesViewController (7.2.0):
     - JSQSystemSoundPlayer (~> 2.0.1)
@@ -23,6 +42,9 @@ DEPENDENCIES:
   - DAAlertController
   - DACircularProgress
   - EZAudio
+  - FBSDKCoreKit
+  - FBSDKLoginKit
+  - FBSDKShareKit
   - FontAwesome
   - JSQMessagesViewController
   - M13ProgressSuite
@@ -31,10 +53,14 @@ DEPENDENCIES:
   - UIImageView-Letters
 
 SPEC CHECKSUMS:
+  Bolts: 0e9bce58b9b9f5e8a7a4d47b16d2fabec289072b
   CLTokenInputView: dc40041faf76102cf96dede1635d93bd0f115a0d
   DAAlertController: 4735313ec65d3d69f81fdd34d01308809680350f
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   EZAudio: 01373de2b1257b77be1bf13753fb1c4ea8a9777e
+  FBSDKCoreKit: 9141b70960a37930850370495fe565f4a27ac141
+  FBSDKLoginKit: c11ed3c2833472db3bb4a4aecf27af4a6f69b173
+  FBSDKShareKit: 213adf63e073f41a346b0e7a689805880dc5150e
   FontAwesome: 341b52261cad8254017da3ddfc01d67c87c0ca88
   JSQMessagesViewController: 73cab48aa92fc2d512f3b6724f3425cc47a19eb5
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d

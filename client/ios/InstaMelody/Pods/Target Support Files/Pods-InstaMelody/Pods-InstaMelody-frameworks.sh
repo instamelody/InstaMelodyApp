@@ -84,10 +84,14 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
+  install_framework "Pods-InstaMelody/Bolts.framework"
   install_framework "Pods-InstaMelody/CLTokenInputView.framework"
   install_framework "Pods-InstaMelody/DAAlertController.framework"
   install_framework "Pods-InstaMelody/DACircularProgress.framework"
   install_framework "Pods-InstaMelody/EZAudio.framework"
+  install_framework "Pods-InstaMelody/FBSDKCoreKit.framework"
+  install_framework "Pods-InstaMelody/FBSDKLoginKit.framework"
+  install_framework "Pods-InstaMelody/FBSDKShareKit.framework"
   install_framework "Pods-InstaMelody/FontAwesome.framework"
   install_framework "Pods-InstaMelody/JSQMessagesViewController.framework"
   install_framework "Pods-InstaMelody/JSQSystemSoundPlayer.framework"
@@ -98,10 +102,14 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-InstaMelody/UIImageView_Letters.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_framework "Pods-InstaMelody/Bolts.framework"
   install_framework "Pods-InstaMelody/CLTokenInputView.framework"
   install_framework "Pods-InstaMelody/DAAlertController.framework"
   install_framework "Pods-InstaMelody/DACircularProgress.framework"
   install_framework "Pods-InstaMelody/EZAudio.framework"
+  install_framework "Pods-InstaMelody/FBSDKCoreKit.framework"
+  install_framework "Pods-InstaMelody/FBSDKLoginKit.framework"
+  install_framework "Pods-InstaMelody/FBSDKShareKit.framework"
   install_framework "Pods-InstaMelody/FontAwesome.framework"
   install_framework "Pods-InstaMelody/JSQMessagesViewController.framework"
   install_framework "Pods-InstaMelody/JSQSystemSoundPlayer.framework"
