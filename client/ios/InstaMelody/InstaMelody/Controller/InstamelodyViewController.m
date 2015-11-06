@@ -92,7 +92,7 @@
     
     switch (idx) {
         case 0:
-            [self showChats:nil];
+            [self showCreateChat:nil];
             break;
         case 1:
             [self showLoops:nil];
@@ -110,6 +110,13 @@
 }
 
 -(IBAction)showChats:(id)sender {
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UIViewController *vc = [sb instantiateViewControllerWithIdentifier:@"ChatsTableViewController"];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+
+-(IBAction)showCreateChat:(id)sender {
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     UIViewController *vc = [sb instantiateViewControllerWithIdentifier:@"CreateChatNVC"];
     [self presentViewController:vc animated:YES completion:nil];
