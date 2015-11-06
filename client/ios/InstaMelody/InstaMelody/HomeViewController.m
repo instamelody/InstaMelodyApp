@@ -12,6 +12,7 @@
 #import "DataManager.h"
 #import "DAAlertController.h"
 #import "SignUpViewController.h"
+#import "StationViewController.h"
 
 @interface HomeViewController ()
 
@@ -31,7 +32,7 @@
     
     self.dateFormatter = [[NSDateFormatter alloc] init];
     
-    if ( authToken ==  nil || [authToken isEqualToString:@""]) {
+    if (![self isValidToken]) {
         
         [self signIn:nil];
 
@@ -129,7 +130,7 @@
 -(void)loadProfileImage {
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if ([defaults objectForKey:@"authToken"] !=  nil &&  ![[defaults objectForKey:@"authToken"] isEqualToString:@""]) {
+    if ([self isValidToken]) {
         self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", [defaults objectForKey:@"FirstName"], [defaults objectForKey:@"LastName"]];
         
         //self.displayNameLabel.text = [NSString stringWithFormat:@"@%@", [defaults objectForKey:@"DisplayName"]];
@@ -213,6 +214,10 @@
                                               - (titleSize.height + spacing), 0.0, 0.0, - titleSize.width);
 }
 
+-(BOOL)isValidToken {
+    return [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"] != nil && ![[[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"] isEqualToString:@""];
+}
+
 -(IBAction)showOptions:(id)sender
 {
     
@@ -227,7 +232,7 @@
     
     NSString *signoutTitle = @"Sign in";
     
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"] != nil && ![[[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"] isEqualToString:@""]) {
+    if ([self isValidToken]) {
         signoutTitle = @"Sign out";
     }
     
@@ -239,6 +244,25 @@
     
     [DAAlertController showActionSheetInViewController:self fromBarButtonItem:sender withTitle:@"More options" message:@"" actions:actions permittedArrowDirections:UIPopoverArrowDirectionDown];
     
+}
+
+-(IBAction)showStation:(id)sender {
+    
+    if ([self isValidToken]) {
+     
+        UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        StationViewController *vc = (StationViewController *)[sb instantiateViewControllerWithIdentifier:@"StationViewController"];
+        
+        [self.navigationController pushViewController:vc animated:YES];
+        
+    } else {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:@"Please login to enjoy this feature" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self signIn:nil];
+        }];
+        [alert addAction:action];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
 }
 
 -(IBAction)showSettings:(id)sender {
@@ -256,7 +280,7 @@
 -(IBAction)signOut:(id)sender {
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if ([defaults objectForKey:@"authToken"]== nil || [[defaults objectForKey:@"authToken"] isEqualToString:@""]) {
+    if (![self isValidToken]) {
         [self signIn:nil];
     } else {
         

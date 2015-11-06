@@ -1388,7 +1388,7 @@
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <connections>
-                                                    <segue destination="x3v-Jb-UfZ" kind="show" id="uus-fc-Z9E"/>
+                                                    <action selector="showStation:" destination="xSn-CF-ntb" eventType="touchUpInside" id="LEv-SN-ytq"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wz6-Qe-z0E">
@@ -3588,7 +3588,6 @@
     <inferredMetricsTieBreakers>
         <segue reference="4ps-ka-4X8"/>
         <segue reference="BRo-Dx-5pM"/>
-        <segue reference="uus-fc-Z9E"/>
         <segue reference="pIZ-0E-tZg"/>
     </inferredMetricsTieBreakers>
 </document>
