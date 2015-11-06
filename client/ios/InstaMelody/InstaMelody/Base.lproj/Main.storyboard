@@ -82,6 +82,8 @@
             <string>CenturyGothic</string>
             <string>CenturyGothic</string>
             <string>CenturyGothic</string>
+            <string>CenturyGothic</string>
+            <string>CenturyGothic</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -694,10 +696,94 @@
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mhi-0z-3EO">
                                 <rect key="frame" x="0.0" y="430" width="600" height="170"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qks-ms-28B">
+                                        <rect key="frame" x="0.0" y="124" width="600" height="46"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@station" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="p8H-Gq-uLf">
+                                                <rect key="frame" x="238" y="4" width="124" height="21"/>
+                                                <animations/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="21" id="J3G-Sg-MKj"/>
+                                                    <constraint firstAttribute="width" constant="124" id="gzd-PT-vjr"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="15"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="My Loop" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="08A-CG-R0N">
+                                                <rect key="frame" x="238" y="29" width="124" height="13"/>
+                                                <animations/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="124" id="EF6-LM-wbu"/>
+                                                    <constraint firstAttribute="height" constant="13" id="kEL-dv-Qlc"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="12"/>
+                                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4fB-lT-6K0">
+                                                <rect key="frame" x="0.0" y="0.0" width="600" height="1"/>
+                                                <animations/>
+                                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="1" id="zrg-bh-YLN"/>
+                                                </constraints>
+                                            </view>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pMV-aY-fAb">
+                                                <rect key="frame" x="14" y="8" width="30" height="30"/>
+                                                <animations/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="30" id="Kcg-nV-qj7"/>
+                                                    <constraint firstAttribute="height" constant="30" id="zEP-Se-f9X"/>
+                                                </constraints>
+                                                <state key="normal" title="D">
+                                                    <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="toggleRecording:" destination="zFq-Vd-UtH" eventType="touchUpInside" id="xnc-kI-nM3"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jtG-Ps-Ozf">
+                                                <rect key="frame" x="56" y="8" width="30" height="30"/>
+                                                <animations/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="30" id="fuu-yF-tKl"/>
+                                                    <constraint firstAttribute="width" constant="30" id="tdq-nX-GAK"/>
+                                                </constraints>
+                                                <state key="normal" title="S">
+                                                    <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="save:" destination="zFq-Vd-UtH" eventType="touchUpInside" id="bD1-Gh-TxX"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <animations/>
+                                        <color key="backgroundColor" red="0.85490196078431369" green="0.85490196078431369" blue="0.85490196078431369" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstItem="p8H-Gq-uLf" firstAttribute="top" secondItem="Qks-ms-28B" secondAttribute="top" constant="4" id="5R3-74-qti"/>
+                                            <constraint firstItem="pMV-aY-fAb" firstAttribute="leading" secondItem="Qks-ms-28B" secondAttribute="leading" constant="14" id="Brr-cj-q0L"/>
+                                            <constraint firstItem="4fB-lT-6K0" firstAttribute="top" secondItem="Qks-ms-28B" secondAttribute="top" id="K9M-Yl-1vN"/>
+                                            <constraint firstAttribute="trailing" secondItem="4fB-lT-6K0" secondAttribute="trailing" id="L8L-sB-gJb"/>
+                                            <constraint firstItem="pMV-aY-fAb" firstAttribute="centerY" secondItem="Qks-ms-28B" secondAttribute="centerY" id="QvV-3o-uDJ"/>
+                                            <constraint firstItem="jtG-Ps-Ozf" firstAttribute="centerY" secondItem="Qks-ms-28B" secondAttribute="centerY" id="ReU-Xj-ql8"/>
+                                            <constraint firstItem="08A-CG-R0N" firstAttribute="centerX" secondItem="Qks-ms-28B" secondAttribute="centerX" id="hbc-8T-cMH"/>
+                                            <constraint firstItem="jtG-Ps-Ozf" firstAttribute="leading" secondItem="pMV-aY-fAb" secondAttribute="trailing" constant="12" id="pgH-GZ-KTs"/>
+                                            <constraint firstItem="08A-CG-R0N" firstAttribute="top" secondItem="p8H-Gq-uLf" secondAttribute="bottom" constant="4" id="qPR-hl-n0n"/>
+                                            <constraint firstAttribute="height" constant="46" id="sU8-uS-oaV"/>
+                                            <constraint firstItem="p8H-Gq-uLf" firstAttribute="centerX" secondItem="Qks-ms-28B" secondAttribute="centerX" id="tve-Es-lQR"/>
+                                            <constraint firstItem="4fB-lT-6K0" firstAttribute="leading" secondItem="Qks-ms-28B" secondAttribute="leading" id="uH7-ry-6Lq"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
                                 <animations/>
                                 <color key="backgroundColor" red="0.88235294117647056" green="0.88235294117647056" blue="0.88235294117647056" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="170" id="5Mz-4f-uPC"/>
+                                    <constraint firstAttribute="trailing" secondItem="Qks-ms-28B" secondAttribute="trailing" id="Xhi-bu-RWS"/>
+                                    <constraint firstAttribute="bottom" secondItem="Qks-ms-28B" secondAttribute="bottom" id="aoh-yv-O05"/>
+                                    <constraint firstItem="Qks-ms-28B" firstAttribute="leading" secondItem="Mhi-0z-3EO" secondAttribute="leading" id="bK1-Ul-rB9"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yIN-IG-5BF">
@@ -1139,6 +1225,11 @@
                         <outlet property="progressLabel" destination="4QL-Pf-TSi" id="mI1-Qa-H3I"/>
                         <outlet property="progressView" destination="XdP-JA-fd2" id="tie-lA-UZv"/>
                         <outlet property="recordButton" destination="8lD-vy-m4N" id="eCo-hG-Mkx"/>
+                        <outlet property="saveBar" destination="Qks-ms-28B" id="onK-kS-MQG"/>
+                        <outlet property="saveBarDelete" destination="pMV-aY-fAb" id="qkf-te-qJI"/>
+                        <outlet property="saveBarSave" destination="jtG-Ps-Ozf" id="3B0-nX-wE7"/>
+                        <outlet property="saveBarStationLabel" destination="p8H-Gq-uLf" id="CMa-sZ-vrK"/>
+                        <outlet property="saveBarTopicLabel" destination="08A-CG-R0N" id="0RT-qU-kwn"/>
                         <outlet property="shareButton" destination="511-II-2sA" id="cWl-xp-Q6T"/>
                         <outlet property="tableView" destination="bUH-Oi-60g" id="aYB-xs-8TO"/>
                         <outlet property="volumeButton" destination="uDF-4P-4Ou" id="jJK-TH-f9u"/>

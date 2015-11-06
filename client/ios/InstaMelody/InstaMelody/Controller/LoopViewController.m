@@ -62,6 +62,8 @@
     self.progressView.progressTintColor = INSTA_BLUE;
     self.progressView.thicknessRatio = 0.1f;
     
+    NSString *myUserId = [self.defaults objectForKey:@"Id"];
+    
      if (self.selectedLoop !=nil) {
          [self getLoop:[self.selectedLoop objectForKey:@"Id"]];
          
@@ -71,6 +73,11 @@
         
         int count = 0;
         NSLog(@"loaded with a melody");
+         
+         if ([self.selectedUserMelody.userId isEqualToString:myUserId]) {
+             self.isMyStudio = YES;
+         }
+         
         for (UserMelodyPart *part in [self.selectedUserMelody parts]) {
             if ([part.isUserCreated boolValue] == true) {
                 //get and set recording
@@ -146,6 +153,7 @@
          self.backwardButton.hidden = YES;
          self.forwardButton.hidden = YES;
          self.isNewPart = YES;
+         self.isMyStudio = YES;
      }
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"pickedMelody" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
@@ -191,12 +199,29 @@
     
     [self initializeAudio];
     
+    [self updateBarStatus];
+    
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     if ([self.fgPlayer isPlaying]) {
         [self togglePlayback:nil];
+    }
+}
+
+-(void)updateBarStatus {
+    if (self.isMyStudio) {
+        self.saveBar.hidden = NO;
+        self.recordButton.hidden = NO;
+        
+        self.saveBarStationLabel.text = [NSString stringWithFormat:@"@%@", [[NSUserDefaults standardUserDefaults] objectForKey:@"DisplayName"]];
+        
+        UITextField *topicField = (UITextField *)[self.tableView viewWithTag:98];
+    } else {
+        self.saveBar.hidden = YES;
+        self.recordButton.hidden = YES;
+        
     }
 }
 
@@ -444,6 +469,14 @@
     
     self.forwardButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:40.0f];
     self.backwardButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:40.0f];
+    
+    self.saveBarDelete.titleLabel.font = [UIFont fontAwesomeFontOfSize:25.0f];
+    self.saveBarSave.titleLabel.font = [UIFont fontAwesomeFontOfSize:25.0f];
+    
+    [self.saveBarDelete setTitle:[NSString fontAwesomeIconStringForEnum:FAtrash] forState:UIControlStateNormal];
+    [self.saveBarSave setTitle:[NSString fontAwesomeIconStringForEnum:FAFloppyO] forState:UIControlStateNormal];
+
+    
     
     [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
     [self.playLoopButton setTitle:[NSString fontAwesomeIconStringForEnum:FARefresh] forState:UIControlStateNormal];
@@ -1632,12 +1665,21 @@
             
             if (self.selectedLoop !=nil) {
                 cell.topicField.text = [self.selectedLoop objectForKey:@"Name"];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.saveBarTopicLabel.text = [self.selectedLoop objectForKey:@"Name"];
+                });
+
                 [cell.topicField setEnabled:NO];
                 [cell.topicField setBackgroundColor:[UIColor lightGrayColor]];
             }
             
             if (self.selectedUserMelody != nil) {
                 cell.topicField.text = self.selectedUserMelody.userMelodyName;
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.saveBarTopicLabel.text = self.selectedUserMelody.userMelodyName;
+                });
                 [cell.topicField setEnabled:NO];
                 [cell.topicField setBackgroundColor:[UIColor lightGrayColor]];
             }
@@ -1675,6 +1717,9 @@
                 cell.topicField.text = self.selectedUserMelody.userMelodyName;
                 [cell.topicField setEnabled:NO];
                 [cell.topicField setBackgroundColor:[UIColor lightGrayColor]];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.saveBarTopicLabel.text = self.selectedUserMelody.userMelodyName;
+                });
             }
             
             return cell;

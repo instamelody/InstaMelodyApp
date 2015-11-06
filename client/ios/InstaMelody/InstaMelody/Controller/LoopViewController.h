@@ -31,6 +31,8 @@
 
 @interface LoopViewController : UIViewController <AVAudioPlayerDelegate, EZMicrophoneDelegate>
 
+@property BOOL isMyStudio;
+
 @property (nonatomic, strong) NSDictionary *selectedLoop;
 @property (nonatomic, strong) UserMelody *selectedUserMelody;
 
@@ -52,6 +54,13 @@
 @property (nonatomic, strong) IBOutlet UILabel *loopStatusLabel;
 @property (nonatomic, strong) IBOutlet UILabel *progressLabel;
 
+@property (nonatomic, strong) IBOutlet UILabel *saveBarTopicLabel;
+@property (nonatomic, strong) IBOutlet UILabel *saveBarStationLabel;
+@property IBOutlet UIButton *saveBarDelete;
+@property IBOutlet UIButton *saveBarSave;
+
+
+@property (nonatomic, strong) IBOutlet UIView *saveBar;
 @property (nonatomic, strong) IBOutlet UIView *consoleView;
 @property (nonatomic, strong) IBOutlet UIView *centerConsoleView;
 @property (nonatomic, strong) IBOutlet DACircularProgressView *progressView;
