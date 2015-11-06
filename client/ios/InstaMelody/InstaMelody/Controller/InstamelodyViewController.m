@@ -54,10 +54,12 @@
     
     // Default Menu
     
+    /*
     AwesomeMenuItem *starMenuItem1 = [[AwesomeMenuItem alloc] initWithImage:soloImage
                                                            highlightedImage:soloImage
                                                                ContentImage:nil
                                                     highlightedContentImage:nil];
+     */
     AwesomeMenuItem *starMenuItem2 = [[AwesomeMenuItem alloc] initWithImage:chatImage
                                                            highlightedImage:chatImage
                                                                ContentImage:nil
@@ -67,7 +69,8 @@
                                                                ContentImage:nil
                                                     highlightedContentImage:nil];
     
-    NSArray *menuItems = [NSArray arrayWithObjects:starMenuItem1, starMenuItem2, starMenuItem3, nil];
+    //NSArray *menuItems = [NSArray arrayWithObjects:starMenuItem1, starMenuItem2, starMenuItem3, nil];
+    NSArray *menuItems = [NSArray arrayWithObjects:starMenuItem2, starMenuItem3, nil];
     
     AwesomeMenuItem *startItem = [[AwesomeMenuItem alloc] initWithImage:micImage
                                                        highlightedImage:micImage
@@ -88,10 +91,10 @@
     NSLog(@"Select the index : %ld",(long)idx);
     
     switch (idx) {
-        case 1:
+        case 0:
             [self showChats:nil];
             break;
-        case 2:
+        case 1:
             [self showLoops:nil];
             break;
         default:
@@ -108,8 +111,8 @@
 
 -(IBAction)showChats:(id)sender {
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    UIViewController *vc = [sb instantiateViewControllerWithIdentifier:@"ChatsTableViewController"];
-    [self.navigationController pushViewController:vc animated:YES];
+    UIViewController *vc = [sb instantiateViewControllerWithIdentifier:@"CreateChatNVC"];
+    [self presentViewController:vc animated:YES completion:nil];
 }
 
 -(IBAction)showLoops:(id)sender {

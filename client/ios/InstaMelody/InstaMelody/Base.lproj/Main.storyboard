@@ -2056,7 +2056,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="FFn-q1-R2U">
-                                                    <rect key="frame" x="100" y="34" width="30" height="19"/>
+                                                    <rect key="frame" x="100" y="33" width="30" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="16"/>
@@ -2064,7 +2064,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="pX5-z4-DQZ">
-                                                    <rect key="frame" x="100" y="53" width="38" height="13"/>
+                                                    <rect key="frame" x="100" y="53" width="39" height="14"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="11"/>
@@ -3124,7 +3124,7 @@
         <!--Navigation Controller-->
         <scene sceneID="t4W-bj-0GB">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="k60-g6-Bw8" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="CreateChatNVC" automaticallyAdjustsScrollViewInsets="NO" id="k60-g6-Bw8" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="wr4-xc-ZnN">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -3523,7 +3523,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Z6J-Eh-Yew">
-                                            <rect key="frame" x="100" y="34" width="30" height="19"/>
+                                            <rect key="frame" x="100" y="33" width="30" height="20"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <animations/>
                                             <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="16"/>
@@ -3531,7 +3531,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="iTC-09-alj">
-                                            <rect key="frame" x="100" y="53" width="38" height="13"/>
+                                            <rect key="frame" x="100" y="53" width="39" height="14"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <animations/>
                                             <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="11"/>
