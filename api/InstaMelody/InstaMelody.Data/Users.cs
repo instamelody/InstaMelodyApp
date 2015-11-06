@@ -271,6 +271,54 @@ namespace InstaMelody.Data
         }
 
         /// <summary>
+        /// Finds the by facebook token.
+        /// </summary>
+        /// <param name="token">The token.</param>
+        /// <returns></returns>
+        public User FindByFacebookToken(string token)
+        {
+            var query = @"SELECT TOP 1 * FROM dbo.Users
+                        WHERE FacebookToken = @FacebookToken AND IsDeleted = 0";
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "FacebookToken",
+                    Value = token,
+                    SqlDbType = SqlDbType.VarChar,
+                    Direction = ParameterDirection.Input
+                },
+            };
+
+            return GetRecord<User>(query, parameters.ToArray());
+        }
+
+        /// <summary>
+        /// Finds the by twitter token.
+        /// </summary>
+        /// <param name="token">The token.</param>
+        /// <returns></returns>
+        public User FindByTwitterToken(string token)
+        {
+            var query = @"SELECT TOP 1 * FROM dbo.Users
+                        WHERE TwitterToken = @TwitterToken AND IsDeleted = 0";
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "TwitterToken",
+                    Value = token,
+                    SqlDbType = SqlDbType.VarChar,
+                    Direction = ParameterDirection.Input
+                },
+            };
+
+            return GetRecord<User>(query, parameters.ToArray());
+        }
+
+        /// <summary>
         /// Updates the user.
         /// </summary>
         /// <param name="userId">The user identifier.</param>

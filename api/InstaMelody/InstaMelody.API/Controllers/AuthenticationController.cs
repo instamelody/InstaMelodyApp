@@ -59,17 +59,24 @@ namespace InstaMelody.API.Controllers
                 {
                     InstaMelodyLogger.Log(
                         string.Format(
-                            "Authentication request - Display Name: {0}, Email Address: {1}, Password: {2}, Device Token: {3}",
+                            "Authentication request - Display Name: {0}, Email Address: {1}, Password: {2}, Device Token: {3}, Facebook Token: {4}, Twitter Token: {5}",
                             request.DisplayName ?? "NULL",
                             request.EmailAddress ?? "NULL",
                             request.Password ?? "NULL",
-                            request.DeviceToken),
+                            request.DeviceToken,
+                            request.FacebookToken ?? "NULL",
+                            request.TwitterToken ?? "NULL"),
                         LogLevel.Trace);
 
                     var bll = new AuthenticationBll();
-                    var result = bll.Authenticate(request.DisplayName, request.EmailAddress, request.Password, request.DeviceToken);
+                    var result = new ApiToken();
 
-                    if (result.Token.Equals(default(Guid)))
+                    if (!string.IsNullOrEmpty(request.DisplayName) || !string.IsNullOrEmpty(request.EmailAddress))
+                        result = bll.Authenticate(request.DisplayName, request.EmailAddress, request.Password, request.DeviceToken);
+                    else if (!string.IsNullOrEmpty(request.FacebookToken) || !string.IsNullOrEmpty(request.TwitterToken))
+                        result = bll.Authenticate(request.Id, request.FacebookToken, request.TwitterToken, request.DeviceToken);
+
+                    if (result == null || result.Token.Equals(default(Guid)))
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, Exceptions.FailedAuthentication);
                     }

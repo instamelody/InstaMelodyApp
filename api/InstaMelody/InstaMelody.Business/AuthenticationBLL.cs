@@ -98,6 +98,67 @@ namespace InstaMelody.Business
         }
 
         /// <summary>
+        /// Authenticates the specified user identifier.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="facebookToken">The facebook token.</param>
+        /// <param name="twitterToken">The twitter token.</param>
+        /// <param name="deviceToken">The device token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.UnauthorizedAccessException">No User found with the provided information.</exception>
+        /// <exception cref="System.Data.DataException">
+        /// </exception>
+        public ApiToken Authenticate(Guid userId, string facebookToken, string twitterToken, string deviceToken)
+        {
+            User existingUser = null;
+            var userDal = new Users();
+
+            // find user by facebook token
+            if (!string.IsNullOrWhiteSpace(facebookToken))
+            {
+                existingUser = userDal.FindByFacebookToken(facebookToken);
+            }
+
+            // if no user was found with the facebook token, try the twitter token
+            if (existingUser == null && !string.IsNullOrWhiteSpace(twitterToken))
+            {
+                existingUser = userDal.FindByTwitterToken(twitterToken);
+            }
+
+            // if no user was found, then eject!
+            if (existingUser == null || existingUser.IsDeleted || !existingUser.Id.Equals(userId))
+            {
+                InstaMelodyLogger.Log(
+                    string.Format("No User / Token Match Was Found. Id: {0}, Facebook Token: {1}, Twitter Token: {2}",
+                        userId, facebookToken, twitterToken), LogLevel.Error);
+                throw new UnauthorizedAccessException("No User found with the provided information.");
+            }
+
+            // everything looks OK, so update the user and create a session token
+            var credentialedUser = userDal.SuccessfulUserLogin(existingUser);
+            if (credentialedUser == null)
+            {
+                InstaMelodyLogger.Log(
+                       string.Format("Error validating credentials. Id: {0}, Facebook Token: {1}, Twitter Token: {2}",
+                           userId, facebookToken, twitterToken), LogLevel.Error);
+                throw new DataException(string.Format("Error validating credentials for user: {0}", userId));
+            }
+
+            var sessionDal = new UserSessions();
+            //sessionDal.EndAllSessionsByUserId(credentialedUser.Id);
+            var sessionToken = sessionDal.AddSession(credentialedUser.Id, deviceToken);
+            if (!sessionToken.Equals(default(Guid)))
+            {
+                return new ApiToken { Token = sessionToken };
+            }
+
+            InstaMelodyLogger.Log(
+                string.Format("Error creating session. Id: {0}, Facebook Token: {1}, Twitter Token: {2}",
+                           userId, facebookToken, twitterToken), LogLevel.Error);
+            throw new DataException(string.Format("Error creating session for user: {0}", userId));
+        }
+
+        /// <summary>
         /// Validates the session.
         /// </summary>
         /// <param name="sessionToken">The session token.</param>
