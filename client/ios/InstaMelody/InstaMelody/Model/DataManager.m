@@ -42,7 +42,7 @@
 
 
 -(BOOL)isPremium {
-    return false;
+    return true;
 }
 
 - (void)fetchFriends {

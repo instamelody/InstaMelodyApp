@@ -1428,7 +1428,7 @@
                                                     <rect key="frame" x="0.0" y="93" width="90" height="90"/>
                                                 </variation>
                                                 <connections>
-                                                    <segue destination="zFq-Vd-UtH" kind="show" id="pIZ-0E-tZg"/>
+                                                    <action selector="showLoops:" destination="xSn-CF-ntb" eventType="touchUpInside" id="Xky-vy-6Pf"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qlx-qf-C6X">
@@ -3610,7 +3610,7 @@
         <image name="vol" width="47" height="47"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="p0p-hV-u3V"/>
         <segue reference="4ps-ka-4X8"/>
-        <segue reference="pIZ-0E-tZg"/>
     </inferredMetricsTieBreakers>
 </document>
