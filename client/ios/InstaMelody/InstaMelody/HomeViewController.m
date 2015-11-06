@@ -109,8 +109,6 @@
         self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", [defaults objectForKey:@"FirstName"], [defaults objectForKey:@"LastName"]];
         
         self.displayNameLabel.text = [NSString stringWithFormat:@"@%@", [defaults objectForKey:@"DisplayName"]];
-
-        [self loadProfileImage];
     }
     
     NSString *authToken = [defaults objectForKey:@"authToken"];
@@ -123,16 +121,7 @@
         [[DataManager sharedManager] fetchUserMelodies];
     }
     
-    if ([defaults objectForKey:@"ProfileFilePath"] != nil) {
-        
-        NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-        
-        NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
-        NSString *imageName = [[defaults objectForKey:@"ProfileFilePath"] lastPathComponent];
-        
-        NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
-        self.profileImageView.image = [UIImage imageWithContentsOfFile:imagePath];
-    }
+    [self loadProfileImage];
     
     self.liveImageView.hidden = ![[DataManager sharedManager] isPremium];
 }
@@ -140,14 +129,17 @@
 -(void)loadProfileImage {
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if ([defaults objectForKey:@"authToken"] !=  nil) {
+    if ([defaults objectForKey:@"authToken"] !=  nil &&  ![[defaults objectForKey:@"authToken"] isEqualToString:@""]) {
         self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", [defaults objectForKey:@"FirstName"], [defaults objectForKey:@"LastName"]];
         
         //self.displayNameLabel.text = [NSString stringWithFormat:@"@%@", [defaults objectForKey:@"DisplayName"]];
         
+    } else {
+        self.nameLabel.text = @"User name";
+        self.displayNameLabel.text = @"@station";
     }
     
-    if ([defaults objectForKey:@"ProfileFilePath"] != nil) {
+    if ([defaults objectForKey:@"ProfileFilePath"] != nil && ![[defaults objectForKey:@"ProfileFilePath"] isEqualToString:@""]) {
         
         NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
         
@@ -156,6 +148,8 @@
         
         NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
         self.profileImageView.image = [UIImage imageWithContentsOfFile:imagePath];
+    } else {
+        self.profileImageView.image = [UIImage imageNamed:@"Profile"];
     }
     
 }
@@ -227,17 +221,18 @@
     }];
     
     DAAlertAction *profileAction = [DAAlertAction actionWithTitle:@"Edit Profile" style:DAAlertActionStyleDefault handler:^{
-        [self changeProfilePic:nil];
+        //[self changeProfilePic:nil];
+        [self performSegueWithIdentifier:@"editProfileSegue" sender:nil];
     }];
     
     NSString *signoutTitle = @"Sign in";
     
-    if (![[[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"] isEqualToString:@""]) {
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"] != nil && ![[[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"] isEqualToString:@""]) {
         signoutTitle = @"Sign out";
     }
     
     DAAlertAction *logoutAction = [DAAlertAction actionWithTitle:signoutTitle style:DAAlertActionStyleDefault handler:^{
-                [self signOut:nil];
+        [self signOut:nil];
     }];
     
     NSArray *actions = @[profileAction, logoutAction, cancelAction];
@@ -271,13 +266,14 @@
         [defaults setObject:@"" forKey:@"DisplayName"];
         [defaults setObject:@"" forKey:@"ProfileFilePath"];
         [defaults synchronize];
+        [self signIn:nil];
     }
 }
 
 -(IBAction)signIn:(id)sender {
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     UINavigationController *nc = [sb instantiateViewControllerWithIdentifier:@"SignInNavController"];
-    [self presentViewController:nc animated:NO completion:nil];
+    [self presentViewController:nc animated:YES completion:nil];
 }
 
 -(IBAction)changeProfilePic:(id)sender {
