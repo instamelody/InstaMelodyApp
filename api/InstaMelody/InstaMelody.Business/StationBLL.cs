@@ -805,12 +805,16 @@ namespace InstaMelody.Business
             // validate user follows station
             var stationDal = new Stations();
             var userIsFollower = stationDal.DoesUserFollowStation(sessionUser.Id, foundStation.Id);
-            if (foundMessage.IsPrivate || !userIsFollower)
+
+            if (sessionUser.Id != foundStation.UserId)
             {
-                InstaMelodyLogger.Log(
-                    string.Format("This User does not have acces to Reply to this Post. Station Message Id: {0}, User Id: {1}, Token: {2}",
-                        stationMessage.Id, sessionUser.Id, sessionToken), LogLevel.Error);
-                throw new UnauthorizedAccessException("This User does not have acces to Reply to this Post.");
+                if (foundMessage.IsPrivate || !userIsFollower)
+                {
+                    InstaMelodyLogger.Log(
+                        string.Format("This User does not have acces to Reply to this Post. Station Message Id: {0}, User Id: {1}, Token: {2}",
+                            stationMessage.Id, sessionUser.Id, sessionToken), LogLevel.Error);
+                    throw new UnauthorizedAccessException("This User does not have acces to Reply to this Post.");
+                }
             }
 
             return CreateStationMessage(foundStation, newMessage, sessionUser, foundMessage.IsPrivate, foundMessage.Id);
@@ -1155,6 +1159,11 @@ namespace InstaMelody.Business
             var dal = new StationMessages();
             var messageBll = new MessageBll();
             var messages = dal.GetTopLevelMessagesByStationId(foundStation.Id, getPrivateMessages);
+            if (messages == null)
+            {
+                return new List<StationMessage>();
+            }
+
             foreach (var stationMessage in messages)
             {
                 stationMessage.Replies = FindStationMessageReplies(stationMessage);
