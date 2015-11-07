@@ -198,6 +198,87 @@ namespace InstaMelody.Business
         }
 
         /// <summary>
+        /// Gets the user activity.
+        /// </summary>
+        /// <param name="sessionToken">The session token.</param>
+        /// <param name="afterDateTime">The after date time.</param>
+        /// <param name="fetchActivityForFriends">if set to <c>true</c> [fetch activity for friends].</param>
+        /// <returns></returns>
+        public static IList<Model.UserActivity> GetUserActivity(Guid sessionToken, bool fetchActivityForFriends, DateTime? afterDateTime = null)
+        {
+            // TODO: wire this method to API layer
+            var sessionUser = GetUserBySession(sessionToken);
+
+            var dal = new Data.UserActivity();
+            IList<Model.UserActivity> activity;
+
+            if (fetchActivityForFriends)
+            {
+                var friendsDal = new UserFriends();
+                var friends = friendsDal.GetUserFriends(sessionUser.Id);
+                var friendIds = friends.Select(f => f.Id).ToList();
+
+                activity = (afterDateTime != null && afterDateTime > DateTime.MinValue)
+                    ? dal.GetActivity(friendIds, (DateTime)afterDateTime)
+                    : dal.GetActivity(friendIds);
+            }
+            else
+            {
+                // fetch activity for self;
+                activity = (afterDateTime != null && afterDateTime > DateTime.MinValue)
+                    ? dal.GetActivity(sessionUser.Id, (DateTime)afterDateTime) 
+                    : dal.GetActivity(sessionUser.Id);
+            }
+
+            if (activity == null) return activity;
+
+            foreach (var userActivity in activity)
+            {
+                userActivity.Activity = FormatUserActivity(userActivity);
+            }
+
+            return activity;
+        }
+
+        /// <summary>
+        /// Formats the user activity.
+        /// </summary>
+        /// <param name="activity">The activity.</param>
+        /// <returns></returns>
+        private static string FormatUserActivity(Model.UserActivity activity)
+        {
+            if (activity == null) return string.Empty;
+
+            var activityMessage = string.Empty;
+            switch(activity.ActivityType)
+            {
+                case ActivityTypeEnum.Friend:
+                    activityMessage = Constants.ActivityFriend;
+                    break;
+
+                case ActivityTypeEnum.StationLike:
+                    activityMessage = Constants.ActivityStationLike;
+                    break;
+
+                case ActivityTypeEnum.StationMessageUserLike:
+                    activityMessage = Constants.ActivityStationMessageUserLike;
+                    break;
+
+                case ActivityTypeEnum.StationPost:
+                    activityMessage = Constants.ActivityStationPost;
+                    break;
+
+                case ActivityTypeEnum.StationPostReply:
+                    activityMessage = Constants.ActivityStationPostReply;
+                    break;
+            }
+
+            return string.Format(activityMessage,
+                activity.UserDisplayName ?? activity.UserId.ToString(),
+                activity.EntityName);
+        }
+
+        /// <summary>
         /// Sends the email.
         /// </summary>
         /// <param name="toAddress">To address.</param>

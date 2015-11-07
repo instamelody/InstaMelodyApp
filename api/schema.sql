@@ -390,6 +390,14 @@ GO
 
 -- -- END STATIONS
 
+CREATE TABLE dbo.UserActivity
+	(Id int IDENTITY(1,1) PRIMARY KEY,
+	UserId UNIQUEIDENTIFIER NOT NULL,
+	UserDisplayName varchar(128) NOT NULL,
+	EntityName varchar(128) NOT NULL,
+	ActivityType varchar(255) NOT NULL,
+	DateOfActivity datetime NOT NULL)
+
 -- END Tables
 
 -- START SProcs
@@ -428,3 +436,159 @@ AS
 GO
 
 -- END SProcs
+
+-- START TRIGGERS
+
+-- New Friend Trigger
+CREATE TRIGGER trgUserFriendApprove
+ON dbo.UserFriends 
+FOR UPDATE
+AS 
+	DECLARE @UserId UNIQUEIDENTIFIER
+	DECLARE @UserName varchar(32)
+	DECLARE @FriendId UNIQUEIDENTIFIER
+	DECLARE @FriendName varchar(32)
+	DECLARE @Pending bit
+	DECLARE @Denied bit
+	DECLARE @Deleted bit
+
+	SELECT @Pending = i.IsPending FROM INSERTED AS i
+	SELECT @Denied = i.IsDenied FROM INSERTED AS i
+	SELECT @Deleted = i.IsDeleted FROM INSERTED AS i
+
+	IF (@Pending = 0 AND @Denied = 0 AND @Deleted = 0)
+	BEGIN
+
+		SELECT @UserId = i.UserId FROM INSERTED AS i
+		SELECT @FriendId = i.RequestorId FROM INSERTED AS i
+
+		SELECT TOP(1) @UserName = DisplayName FROM dbo.Users WHERE Id = @UserId
+		SELECT TOP(1) @FriendName = DisplayName FROM dbo.Users WHERE Id = @FriendId
+
+		INSERT INTO dbo.UserActivity (UserId, ActivityType, UserDisplayName, EntityName, DateOfActivity)
+		VALUES (@UserId, 'Friend', @UserName, @FriendName, GETUTCDATE())
+
+		INSERT INTO dbo.UserActivity (UserId, ActivityType, UserDisplayName, EntityName, DateOfActivity)
+		VALUES (@FriendId, 'Friend', @FriendName, @UserName, GETUTCDATE())
+
+	END
+GO
+
+-- Like Station Trigger
+CREATE TRIGGER trgLikeStation
+ON dbo.StationLikes
+FOR INSERT
+AS 
+	DECLARE @UserId UNIQUEIDENTIFIER
+	DECLARE @UserName varchar(32)
+	DECLARE @StationId int
+	DECLARE @StationName varchar(128)
+	DECLARE @Deleted bit
+
+	SELECT @Deleted = i.IsDeleted FROM INSERTED AS i
+
+	IF (@Deleted = 0)
+	BEGIN
+
+		SELECT @UserId = i.UserId FROM INSERTED AS i
+		SELECT @StationId = i.StationId FROM INSERTED AS i
+
+		SELECT TOP(1) @UserName = DisplayName FROM dbo.Users WHERE Id = @UserId
+		SELECT TOP(1) @StationName = Name FROM dbo.Stations WHERE Id = @StationId
+
+		INSERT INTO dbo.UserActivity (UserId, ActivityType, UserDisplayName, EntityName, DateOfActivity)
+		VALUES (@UserId, 'StationLike', @UserName, @StationName, GETUTCDATE())
+
+	END
+GO
+
+-- Like Station Post Triger 
+CREATE TRIGGER trgLikeStationPost
+ON dbo.StationMessageUserLikes
+FOR INSERT
+AS 
+	DECLARE @UserId UNIQUEIDENTIFIER
+	DECLARE @UserName varchar(32)
+	DECLARE @StationMessageId int
+	DECLARE @StationName varchar(128)
+	DECLARE @Deleted bit
+
+	SELECT @Deleted = i.IsDeleted FROM INSERTED AS i
+
+	IF (@Deleted = 0)
+	BEGIN
+
+		SELECT @UserId = i.UserId FROM INSERTED AS i
+		SELECT @StationMessageId = i.StationMessageId FROM INSERTED AS i
+
+		SELECT TOP(1) @UserName = DisplayName FROM dbo.Users WHERE Id = @UserId
+		SELECT TOP(1) @StationName = s.Name FROM dbo.StationMessages AS sm
+		INNER JOIN dbo.Stations AS s
+		ON s.Id = sm.StationId
+		WHERE sm.Id = @StationMessageId
+
+		INSERT INTO dbo.UserActivity (UserId, ActivityType, UserDisplayName, EntityName, DateOfActivity)
+		VALUES (@UserId, 'StationMessageUserLike', @UserName, @StationName, GETUTCDATE())
+
+	END
+GO
+
+-- New Station Post Trigger
+CREATE TRIGGER trgStationPost
+ON dbo.StationMessages
+FOR INSERT
+AS 
+	DECLARE @UserId UNIQUEIDENTIFIER
+	DECLARE @UserName varchar(32)
+	DECLARE @StationId int
+	DECLARE @StationName varchar(128)
+	DECLARE @Private bit
+	DECLARE @Deleted bit
+	DECLARE @IsReply bit
+	DECLARE @InsertType varchar(16) = 'StationPost'
+	
+	SELECT @Private = i.IsPrivate FROM INSERTED AS i
+	SELECT @Deleted = i.IsDeleted FROM INSERTED AS i
+
+	IF (@Private = 0 AND @Deleted = 0)
+	BEGIN
+
+		SELECT @UserId = i.SenderId FROM INSERTED AS i
+		SELECT @StationId = i.StationId FROM INSERTED AS i
+		SELECT @IsReply = (CASE WHEN i.ParentId IS NULL THEN 0 ELSE 1 END) FROM INSERTED AS i
+
+		SELECT TOP(1) @UserName = DisplayName FROM dbo.Users WHERE Id = @UserId
+		SELECT TOP(1) @StationName = Name FROM dbo.Stations WHERE Id = @StationId
+
+		IF (@IsReply = 1)
+		BEGIN
+			SET @InsertType = 'StationPostReply'
+		END
+
+		INSERT INTO dbo.UserActivity (UserId, ActivityType, UserDisplayName, EntityName, DateOfActivity)
+		VALUES (@UserId, @InsertType, @UserName, @StationName, GETUTCDATE())
+
+	END
+GO
+
+-- Delete Old UserActivity Trigger
+CREATE TRIGGER trgDeleteOldUserActivity
+ON dbo.UserActivity 
+FOR INSERT, UPDATE
+AS 
+	DECLARE @Prev30Days DATETIME = DATEADD(day,-30,GETUTCDATE())
+	DELETE FROM dbo.UserActivity
+	WHERE DateOfActivity < @Prev30Days
+GO
+
+-- Delete Old FileUploadTokens
+CREATE TRIGGER trgDeleteOldFileUploadTokens
+ON dbo.FileUploadTokens 
+FOR INSERT, UPDATE
+AS 
+	UPDATE dbo.FileUploadTokens
+	SET IsDeleted = 1
+	WHERE DateExpires < GETUTCDATE()
+GO
+
+-- END TRIGGERS

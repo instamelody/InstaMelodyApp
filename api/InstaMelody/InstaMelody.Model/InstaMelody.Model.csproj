@@ -58,6 +58,7 @@
     <Compile Include="Chat.cs" />
     <Compile Include="ChatMessage.cs" />
     <Compile Include="ChatUser.cs" />
+    <Compile Include="Enums\ActivityTypeEnum.cs" />
     <Compile Include="Enums\FileUploadTypeEnum.cs" />
     <Compile Include="Enums\LoopEffectsEnum.cs" />
     <Compile Include="Enums\MediaTypeEnum.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="MessageImage.cs" />
     <Compile Include="MessageMelody.cs" />
     <Compile Include="MessageVideo.cs" />
+    <Compile Include="Parser\DataParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Station.cs" />
     <Compile Include="StationCategory.cs" />
@@ -80,6 +82,7 @@
     <Compile Include="StationMessage.cs" />
     <Compile Include="StationMessageUserLike.cs" />
     <Compile Include="User.cs" />
+    <Compile Include="UserActivity.cs" />
     <Compile Include="UserAppPurchaseReceipt.cs" />
     <Compile Include="UserFriend.cs" />
     <Compile Include="UserLoop.cs" />
