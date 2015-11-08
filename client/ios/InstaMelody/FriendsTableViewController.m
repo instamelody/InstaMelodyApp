@@ -136,7 +136,13 @@
         if (self.pendingFriendsList.count > 0)  {
             NSDictionary *friendDict = [self.pendingFriendsList objectAtIndex:indexPath.row];
             
+            cell.approveButton.hidden = NO;
+            cell.denyButton.hidden = NO;
+            
             cell.nameLabel.text = [friendDict objectForKey:@"DisplayName"];
+            
+            cell.detailLabel.text = [NSString stringWithFormat:@"%@ %@", [friendDict objectForKey:@"FirstName"], [friendDict objectForKey:@"LastName"]];
+            
             cell.approveButton.tag = indexPath.row;
             
             cell.profileImageView.image = [UIImage imageNamed:@"Profile"];
