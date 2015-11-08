@@ -34,12 +34,12 @@
     if (![self isValidToken]) {
         
         [self signIn:nil];
-        [self getUserDetails:[defaults objectForKey:@"DisplayName"]];
 
     } else {
         //validate token
-        
-        //sd
+        if ([defaults objectForKey:@"DisplayName"] != nil) {
+                [self getUserDetails:[defaults objectForKey:@"DisplayName"]];
+        }
         
     }
     
@@ -123,7 +123,10 @@
         [[DataManager sharedManager] fetchMelodies];
         [[DataManager sharedManager] fetchUserMelodies];
         
-        [self getUserDetails:[defaults objectForKey:@"DisplayName"]];
+        if ([defaults objectForKey:@"DisplayName"] != nil) {
+            [self getUserDetails:[defaults objectForKey:@"DisplayName"]];
+        }
+
     }
     
     [self loadProfileImage];
