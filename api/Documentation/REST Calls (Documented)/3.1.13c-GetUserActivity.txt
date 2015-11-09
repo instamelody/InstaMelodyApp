@@ -1,0 +1,22 @@
+// EXAMPLE C - Get Latest Activity for Friends after a specified date
+
+// REQUEST - GET https://api.instamelody.com/v1.0/User/Activity?token=104F5708-C12D-4642-912F-EEA90942464D&activityForFriends=true&after=2015-11-07
+
+// Note: The 'after' URL parameter can be formatted in 1 of 2 ways:
+//	 1. date only = [YYYY]-[MM]-[DD]
+//			ex: &after=2015-11-07
+//	 2. date and time = [YYYY]-[MM]-[DD]T[HH]:[MM]:[SS]
+//			ex: &after=2015-11-07T01:55:15
+
+// RESPONSE - HTTP/1.1 200 OK
+[
+  {
+    "Id": 4,
+    "UserId": "19e58bf2-ed1e-49af-bb4e-4acadeeed51e",
+    "UserDisplayName": "testuser",
+    "EntityName": "jeff4test's Station",
+    "ActivityType": 2,
+    "DateOfActivity": "2015-11-07T01:55:15.877",
+    "Activity": "testuser liked jeff4test's Station."
+  }
+]

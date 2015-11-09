@@ -128,6 +128,8 @@
         /// </summary>
         public const string FailedDeleteReceipt = "Failed to delete the requested App Purchase Receipt";
 
+        public const string FailedGetActivity = "Failed to get the requested User activity.";
+
         #endregion Users Exceptions
 
         #region Stations Exceptions

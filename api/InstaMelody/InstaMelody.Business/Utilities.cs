@@ -230,7 +230,7 @@ namespace InstaMelody.Business
                     : dal.GetActivity(sessionUser.Id);
             }
 
-            if (activity == null) return activity;
+            if (activity == null) return new List<Model.UserActivity>();
 
             foreach (var userActivity in activity)
             {

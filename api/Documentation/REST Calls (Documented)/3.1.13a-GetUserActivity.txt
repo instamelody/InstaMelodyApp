@@ -1,0 +1,44 @@
+// EXAMPLE A - Get Latest Activity for Self
+
+// REQUEST - GET https://api.instamelody.com/v1.0/User/Activity?token=104F5708-C12D-4642-912F-EEA90942464D
+
+
+// RESPONSE - HTTP/1.1 200 OK
+[
+  {
+    "Id": 6,
+    "UserId": "1da69a56-4a2b-4cd1-b88c-647db929d0c1",
+    "UserDisplayName": "jdennis86",
+    "EntityName": "jdennis86's Station",
+    "ActivityType": 4,
+    "DateOfActivity": "2015-11-07T02:03:49.31",
+    "Activity": "jdennis86 posted to jdennis86's Station."
+  },
+  {
+    "Id": 5,
+    "UserId": "1da69a56-4a2b-4cd1-b88c-647db929d0c1",
+    "UserDisplayName": "jdennis86",
+    "EntityName": "jdennis86's Station",
+    "ActivityType": 4,
+    "DateOfActivity": "2015-11-07T02:03:44.387",
+    "Activity": "jdennis86 posted to jdennis86's Station."
+  },
+  {
+    "Id": 3,
+    "UserId": "1da69a56-4a2b-4cd1-b88c-647db929d0c1",
+    "UserDisplayName": "jdennis86",
+    "EntityName": "jdennis86's Station",
+    "ActivityType": 3,
+    "DateOfActivity": "2015-11-07T01:54:05.223",
+    "Activity": "jdennis86 liked a message from jdennis86's Station."
+  },
+  {
+    "Id": 2,
+    "UserId": "1da69a56-4a2b-4cd1-b88c-647db929d0c1",
+    "UserDisplayName": "jdennis86",
+    "EntityName": "JeffDennis",
+    "ActivityType": 1,
+    "DateOfActivity": "2015-11-07T01:50:29.59",
+    "Activity": "jdennis86 is now friends with JeffDennis."
+  }
+]

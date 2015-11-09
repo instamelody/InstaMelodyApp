@@ -15,6 +15,7 @@ using InstaMelody.Model.ApiModels;
 using NLog;
 
 using Utilities = InstaMelody.Infrastructure.Utilities;
+using System.Collections.Generic;
 
 namespace InstaMelody.API.Controllers
 {
@@ -1093,6 +1094,63 @@ namespace InstaMelody.API.Controllers
             {
                 InstaMelodyLogger.Log("Received NULL Receipt request", LogLevel.Trace);
                 response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.NullReceipt);
+            }
+
+            return response;
+        }
+
+        [HttpGet]
+        [Route(Routes.RouteActivity)]
+        public HttpResponseMessage GetUserActivity()
+        {
+            HttpResponseMessage response;
+
+            var nvc = HttpUtility.ParseQueryString(Request.RequestUri.Query);
+            var token = nvc["token"];
+            var getActivityForFriends = nvc["activityForFriends"];
+            var afterDate = nvc["after"];
+
+            InstaMelodyLogger.Log(
+                string.Format("Get User Activity - Token: {0}, Get Activity For Friends: {1}, After Date: {2}", 
+                    token, getActivityForFriends, afterDate),
+                LogLevel.Trace);
+
+            if (string.IsNullOrEmpty(token))
+            {
+                response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, Exceptions.FailedValidation);
+            }
+            else
+            {
+                try
+                {
+                    Guid _token;
+                    Guid.TryParse(token, out _token);
+
+                    bool _activityForFriends = false;
+                    bool.TryParse(getActivityForFriends, out _activityForFriends);
+
+                    DateTime _afterDate;
+                    DateTime.TryParse(afterDate, out _afterDate);
+
+                    var data = Business.Utilities.GetUserActivity(_token, _activityForFriends, (_afterDate >= DateTime.MinValue) ? (DateTime?)_afterDate : null);
+
+                    response = this.Request.CreateResponse(HttpStatusCode.OK, data);
+                }
+                catch (Exception exc)
+                {
+                    if (exc is UnauthorizedAccessException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, exc.Message);
+                    }
+                    else if (exc is DataException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, exc.Message);
+                    }
+                    else
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
+                    }
+                }
             }
 
             return response;

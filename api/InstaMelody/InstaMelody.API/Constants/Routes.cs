@@ -165,6 +165,11 @@
         /// </summary>
         public const string RouteDeleteAppReceipt = "PurchaseReceipt/Delete";
 
+        /// <summary>
+        /// The route activity
+        /// </summary>
+        public const string RouteActivity = "Activity";
+
         #endregion User Routes
 
         #region Melody Routes

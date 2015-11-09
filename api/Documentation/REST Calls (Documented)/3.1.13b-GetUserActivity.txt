@@ -1,0 +1,26 @@
+// EXAMPLE B - Get Latest Activity for Friends
+
+// REQUEST - GET https://api.instamelody.com/v1.0/User/Activity?token=104F5708-C12D-4642-912F-EEA90942464D&activityForFriends=true
+
+
+// RESPONSE - HTTP/1.1 200 OK
+[
+  {
+    "Id": 4,
+    "UserId": "19e58bf2-ed1e-49af-bb4e-4acadeeed51e",
+    "UserDisplayName": "testuser",
+    "EntityName": "jeff4test's Station",
+    "ActivityType": 2,
+    "DateOfActivity": "2015-11-07T01:55:15.877",
+    "Activity": "testuser liked jeff4test's Station."
+  },
+  {
+    "Id": 1,
+    "UserId": "6b49d708-c1f4-4322-9085-e37769245770",
+    "UserDisplayName": "JeffDennis",
+    "EntityName": "jdennis86",
+    "ActivityType": 1,
+    "DateOfActivity": "2015-11-07T01:50:29.57",
+    "Activity": "JeffDennis is now friends with jdennis86."
+  }
+]
