@@ -15,6 +15,14 @@ namespace InstaMelody.Model
 
         public ActivityTypeEnum ActivityType { get; set; }
 
+        public string ActivityTypeString
+        {
+            get
+            {
+                return this.ActivityType.ToString();
+            }
+        }
+
         public DateTime DateOfActivity { get; set; }
 
         #region Relationship Properties

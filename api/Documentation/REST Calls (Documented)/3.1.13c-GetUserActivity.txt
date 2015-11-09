@@ -16,6 +16,7 @@
     "UserDisplayName": "testuser",
     "EntityName": "jeff4test's Station",
     "ActivityType": 2,
+    "ActivityTypeString": "StationLike",
     "DateOfActivity": "2015-11-07T01:55:15.877",
     "Activity": "testuser liked jeff4test's Station."
   }
