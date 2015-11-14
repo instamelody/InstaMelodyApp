@@ -7,6 +7,7 @@
 //
 
 #import "FeaturedViewController.h"
+#import "AdViewCell.h"
 
 @interface FeaturedViewController ()
 
@@ -56,6 +57,19 @@
     
     if (cv == self.currentCollectionView) {
         UICollectionViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"CurrentCell" forIndexPath:indexPath];
+        return cell;
+    }
+    
+    if (cv == self.adCollectionView) {
+        AdViewCell *cell = (AdViewCell *)[cv dequeueReusableCellWithReuseIdentifier:@"AdViewCell" forIndexPath:indexPath];
+        cell.imageView.image = [UIImage imageNamed:@"showcase1.png"];
+        
+        if (indexPath.row == 1) {
+                cell.imageView.image = [UIImage imageNamed:@"showcase2.png"];
+        } else if (indexPath.row == 2) {
+                cell.imageView.image = [UIImage imageNamed:@"showcase3.png"];
+        }
+        
         return cell;
     }
     

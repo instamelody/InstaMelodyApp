@@ -12,5 +12,6 @@
 
 @property IBOutlet UICollectionView *currentCollectionView;
 @property IBOutlet UICollectionView *featuredCollectionView;
+@property IBOutlet UICollectionView *adCollectionView;
 
 @end

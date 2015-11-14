@@ -45,6 +45,10 @@
 		87538B801BB72C6400F7F9D8 /* UserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87538B7F1BB72C6400F7F9D8 /* UserCell.m */; };
 		8754A8BC1BD13D340060B078 /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8754A8BB1BD13D340060B078 /* NotificationsViewController.m */; };
 		875C19FE1BB5F3B3007B14DE /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 875C19FD1BB5F3B3007B14DE /* FontAwesome.ttf */; };
+		877040B71BF7B3D1003D1F27 /* AdViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 877040B61BF7B3D1003D1F27 /* AdViewCell.m */; };
+		877040BB1BF7BA6E003D1F27 /* showcase1.png in Resources */ = {isa = PBXBuildFile; fileRef = 877040B81BF7BA6E003D1F27 /* showcase1.png */; };
+		877040BC1BF7BA6E003D1F27 /* showcase2.png in Resources */ = {isa = PBXBuildFile; fileRef = 877040B91BF7BA6E003D1F27 /* showcase2.png */; };
+		877040BD1BF7BA6E003D1F27 /* showcase3.png in Resources */ = {isa = PBXBuildFile; fileRef = 877040BA1BF7BA6E003D1F27 /* showcase3.png */; };
 		878FAD601BAC6E1D00260D5B /* UserMelodyListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 878FAD5F1BAC6E1D00260D5B /* UserMelodyListViewController.m */; };
 		87915E8B1B9F4AC300628937 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 87915E8A1B9F4AC300628937 /* placeholder.png */; };
 		879CCC541B81D2870031FDCC /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 879CCC521B81D2870031FDCC /* Model.xcdatamodeld */; };
@@ -156,6 +160,11 @@
 		8754A8BA1BD13D340060B078 /* NotificationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationsViewController.h; sourceTree = "<group>"; };
 		8754A8BB1BD13D340060B078 /* NotificationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsViewController.m; sourceTree = "<group>"; };
 		875C19FD1BB5F3B3007B14DE /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.ttf; path = Pods/FontAwesome/Resources/FontAwesome.ttf; sourceTree = "<group>"; };
+		877040B51BF7B3D1003D1F27 /* AdViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AdViewCell.h; path = View/AdViewCell.h; sourceTree = "<group>"; };
+		877040B61BF7B3D1003D1F27 /* AdViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AdViewCell.m; path = View/AdViewCell.m; sourceTree = "<group>"; };
+		877040B81BF7BA6E003D1F27 /* showcase1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = showcase1.png; sourceTree = "<group>"; };
+		877040B91BF7BA6E003D1F27 /* showcase2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = showcase2.png; sourceTree = "<group>"; };
+		877040BA1BF7BA6E003D1F27 /* showcase3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = showcase3.png; sourceTree = "<group>"; };
 		878FAD5E1BAC6E1D00260D5B /* UserMelodyListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserMelodyListViewController.h; sourceTree = "<group>"; };
 		878FAD5F1BAC6E1D00260D5B /* UserMelodyListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserMelodyListViewController.m; sourceTree = "<group>"; };
 		87915E8A1B9F4AC300628937 /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = SOURCE_ROOT; };
@@ -243,6 +252,7 @@
 		8707F9B11B446F57004B4C20 /* InstaMelody */ = {
 			isa = PBXGroup;
 			children = (
+				877040AE1BF7B138003D1F27 /* showcase */,
 				87915E8A1B9F4AC300628937 /* placeholder.png */,
 				879CCC571B81D4860031FDCC /* Model */,
 				87CFE8C81B82AAE5009A4B6D /* View */,
@@ -352,6 +362,16 @@
 				8751BAD31BEC22500025EB8D /* LTHMonthYearPickerView.m */,
 			);
 			path = LTHMonthYearPickerView;
+			sourceTree = "<group>";
+		};
+		877040AE1BF7B138003D1F27 /* showcase */ = {
+			isa = PBXGroup;
+			children = (
+				877040B81BF7BA6E003D1F27 /* showcase1.png */,
+				877040B91BF7BA6E003D1F27 /* showcase2.png */,
+				877040BA1BF7BA6E003D1F27 /* showcase3.png */,
+			);
+			name = showcase;
 			sourceTree = "<group>";
 		};
 		879881F51B9A137800AF5B8B /* Chat */ = {
@@ -465,6 +485,8 @@
 				87EDA7621BED4DB80075F38E /* NotificationCell.m */,
 				87EDA7671BED5AEF0075F38E /* ServerMelodyCell.h */,
 				87EDA7681BED5AEF0075F38E /* ServerMelodyCell.m */,
+				877040B51BF7B3D1003D1F27 /* AdViewCell.h */,
+				877040B61BF7B3D1003D1F27 /* AdViewCell.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -572,10 +594,13 @@
 			files = (
 				87E6F4751BB6936D009E3EA8 /* IMMessagesViewController.xib in Resources */,
 				87915E8B1B9F4AC300628937 /* placeholder.png in Resources */,
+				877040BD1BF7BA6E003D1F27 /* showcase3.png in Resources */,
 				8707F9C11B446F57004B4C20 /* Main.storyboard in Resources */,
+				877040BC1BF7BA6E003D1F27 /* showcase2.png in Resources */,
 				8707F9C61B446F57004B4C20 /* LaunchScreen.xib in Resources */,
 				8707F9C31B446F57004B4C20 /* Images.xcassets in Resources */,
 				87A8A63E1BC83A19009AF895 /* century-gothic.ttf in Resources */,
+				877040BB1BF7BA6E003D1F27 /* showcase1.png in Resources */,
 				875C19FE1BB5F3B3007B14DE /* FontAwesome.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -693,6 +718,7 @@
 				87098F601B74E88000C3E7C9 /* CreateChatViewController.m in Sources */,
 				87A972C81BD168B20016C6EA /* TopicCell.m in Sources */,
 				87CFE8BC1B829426009A4B6D /* MelodyGroup.m in Sources */,
+				877040B71BF7B3D1003D1F27 /* AdViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

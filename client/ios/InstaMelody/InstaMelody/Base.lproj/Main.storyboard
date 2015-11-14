@@ -87,8 +87,6 @@
             <string>CenturyGothic</string>
             <string>CenturyGothic</string>
             <string>CenturyGothic</string>
-            <string>CenturyGothic</string>
-            <string>CenturyGothic</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -3485,7 +3483,7 @@
                                 <animations/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jnl-ub-yKh">
-                                <rect key="frame" x="0.0" y="400" width="600" height="200"/>
+                                <rect key="frame" x="0.0" y="410" width="600" height="190"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Featured Stations" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IfI-hM-Jkv">
                                         <rect key="frame" x="20" y="20" width="560" height="21"/>
@@ -3498,7 +3496,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="AMH-we-5tT">
-                                        <rect key="frame" x="40" y="60" width="520" height="80"/>
+                                        <rect key="frame" x="40" y="55" width="520" height="80"/>
                                         <animations/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
@@ -3545,17 +3543,17 @@
                                     <constraint firstItem="IfI-hM-Jkv" firstAttribute="top" secondItem="Jnl-ub-yKh" secondAttribute="top" constant="20" id="099-Sv-7ir"/>
                                     <constraint firstItem="AMH-we-5tT" firstAttribute="leading" secondItem="Jnl-ub-yKh" secondAttribute="leading" constant="40" id="2c6-gT-460"/>
                                     <constraint firstAttribute="trailing" secondItem="AMH-we-5tT" secondAttribute="trailing" constant="40" id="F5W-nV-133"/>
-                                    <constraint firstAttribute="height" constant="200" id="PKr-F9-c4l"/>
+                                    <constraint firstAttribute="height" constant="190" id="PKr-F9-c4l"/>
                                     <constraint firstAttribute="trailing" secondItem="IfI-hM-Jkv" secondAttribute="trailing" constant="20" id="T79-B7-dkj"/>
                                     <constraint firstItem="AMH-we-5tT" firstAttribute="centerY" secondItem="Jnl-ub-yKh" secondAttribute="centerY" id="VUC-hr-f2U"/>
                                     <constraint firstItem="IfI-hM-Jkv" firstAttribute="leading" secondItem="Jnl-ub-yKh" secondAttribute="leading" constant="20" id="eQW-l1-Q6L"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7j2-mz-ZY8">
-                                <rect key="frame" x="0.0" y="200" width="600" height="200"/>
+                                <rect key="frame" x="0.0" y="220" width="600" height="190"/>
                                 <subviews>
                                     <view alpha="0.25" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ETt-PC-eYf">
-                                        <rect key="frame" x="0.0" y="0.0" width="600" height="200"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="190"/>
                                         <animations/>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
@@ -3571,7 +3569,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="aVp-Yh-mdQ">
-                                        <rect key="frame" x="40" y="44" width="520" height="140"/>
+                                        <rect key="frame" x="40" y="34" width="520" height="140"/>
                                         <animations/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
@@ -3639,49 +3637,63 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KWL-bh-Kyx">
-                                <rect key="frame" x="0.0" y="64" width="600" height="136"/>
+                                <rect key="frame" x="0.0" y="64" width="600" height="156"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bqx-Em-obu">
-                                        <rect key="frame" x="182" y="23" width="236" height="89"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Connect with Melody" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dOq-RT-7cm">
-                                                <rect key="frame" x="20" y="57" width="196" height="21"/>
-                                                <animations/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="21" id="5pZ-HY-Ebc"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="12"/>
-                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="GO LIVE AND SOCIAL" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ps5-wF-i12">
-                                                <rect key="frame" x="20" y="8" width="196" height="41"/>
-                                                <animations/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="41" id="9lh-JK-I6b"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="17"/>
-                                                <color key="textColor" red="1" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                        </subviews>
+                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="rkL-Gd-n7P">
+                                        <rect key="frame" x="180.5" y="9" width="240" height="138"/>
                                         <animations/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="dOq-RT-7cm" secondAttribute="trailing" constant="20" id="3mr-cb-kQr"/>
-                                            <constraint firstItem="Ps5-wF-i12" firstAttribute="top" secondItem="bqx-Em-obu" secondAttribute="top" constant="8" id="DLS-m6-q8g"/>
-                                            <constraint firstAttribute="width" constant="236" id="G6J-Md-gAm"/>
-                                            <constraint firstAttribute="height" constant="89" id="Jei-ge-K6A"/>
-                                            <constraint firstItem="Ps5-wF-i12" firstAttribute="leading" secondItem="bqx-Em-obu" secondAttribute="leading" constant="20" id="UYK-5V-K7m"/>
-                                            <constraint firstItem="dOq-RT-7cm" firstAttribute="leading" secondItem="bqx-Em-obu" secondAttribute="leading" constant="20" id="e25-vo-Hz6"/>
-                                            <constraint firstAttribute="trailing" secondItem="Ps5-wF-i12" secondAttribute="trailing" constant="20" id="gkl-dK-hlG"/>
-                                            <constraint firstAttribute="bottom" secondItem="dOq-RT-7cm" secondAttribute="bottom" constant="11" id="o9N-Pi-qYF"/>
+                                            <constraint firstAttribute="width" constant="240" id="Qcw-uy-Gj1"/>
+                                            <constraint firstAttribute="height" constant="138" id="x3c-cy-5E0"/>
                                         </constraints>
-                                    </view>
+                                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="tpz-ua-MKw">
+                                            <size key="itemSize" width="233" height="124.5"/>
+                                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        </collectionViewFlowLayout>
+                                        <cells>
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="AdViewCell" id="j9r-Mq-1Uc" customClass="AdViewCell">
+                                                <rect key="frame" x="0.0" y="7" width="233" height="124.5"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                                    <rect key="frame" x="0.0" y="0.0" width="233" height="124.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1X4-Yn-EgA">
+                                                            <rect key="frame" x="0.0" y="0.0" width="233" height="124.5"/>
+                                                            <animations/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                        </imageView>
+                                                    </subviews>
+                                                    <animations/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                </view>
+                                                <animations/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstItem="1X4-Yn-EgA" firstAttribute="top" secondItem="j9r-Mq-1Uc" secondAttribute="top" id="9It-xf-jXF"/>
+                                                    <constraint firstAttribute="trailing" secondItem="1X4-Yn-EgA" secondAttribute="trailing" id="gb2-fg-wGr"/>
+                                                    <constraint firstItem="1X4-Yn-EgA" firstAttribute="leading" secondItem="j9r-Mq-1Uc" secondAttribute="leading" id="lOh-51-Jgj"/>
+                                                    <constraint firstAttribute="bottom" secondItem="1X4-Yn-EgA" secondAttribute="bottom" id="m8y-nh-hiy"/>
+                                                </constraints>
+                                                <connections>
+                                                    <outlet property="imageView" destination="1X4-Yn-EgA" id="g4K-nB-Nkq"/>
+                                                </connections>
+                                            </collectionViewCell>
+                                        </cells>
+                                        <connections>
+                                            <outlet property="dataSource" destination="BFB-zy-Vw4" id="ZmL-aD-Hb5"/>
+                                            <outlet property="delegate" destination="BFB-zy-Vw4" id="XB5-ee-NgD"/>
+                                        </connections>
+                                    </collectionView>
                                 </subviews>
                                 <animations/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="bqx-Em-obu" firstAttribute="centerX" secondItem="KWL-bh-Kyx" secondAttribute="centerX" id="7xP-Cb-2oP"/>
-                                    <constraint firstItem="bqx-Em-obu" firstAttribute="centerY" secondItem="KWL-bh-Kyx" secondAttribute="centerY" id="oZH-UZ-8OR"/>
+                                    <constraint firstItem="rkL-Gd-n7P" firstAttribute="centerY" secondItem="KWL-bh-Kyx" secondAttribute="centerY" id="UUN-pQ-1N1"/>
+                                    <constraint firstItem="rkL-Gd-n7P" firstAttribute="centerX" secondItem="KWL-bh-Kyx" secondAttribute="centerX" id="ycn-RL-pKh"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -3707,6 +3719,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Featured" id="cnZ-1T-app"/>
                     <connections>
+                        <outlet property="adCollectionView" destination="rkL-Gd-n7P" id="cQ4-Pv-QZN"/>
                         <outlet property="currentCollectionView" destination="aVp-Yh-mdQ" id="pr8-Jz-Hv0"/>
                         <outlet property="featuredCollectionView" destination="AMH-we-5tT" id="5UR-f3-him"/>
                     </connections>
@@ -3843,7 +3856,7 @@
         <image name="live" width="96" height="40"/>
         <image name="messenger" width="70" height="70"/>
         <image name="mic" width="107" height="108"/>
-        <image name="notifications" width="48" height="55"/>
+        <image name="notifications" width="70" height="70"/>
         <image name="placeholder" width="164" height="156"/>
         <image name="play" width="89" height="89"/>
         <image name="profileBack" width="237" height="98"/>
