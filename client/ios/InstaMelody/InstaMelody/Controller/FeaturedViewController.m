@@ -11,6 +11,9 @@
 
 @interface FeaturedViewController ()
 
+@property NSTimer *timer;
+@property int currentIndex;
+
 @end
 
 @implementation FeaturedViewController
@@ -25,6 +28,24 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    if (self.timer != nil) {
+        [self.timer invalidate];
+    }
+    
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(advanceCarousel) userInfo:nil repeats:YES];
+    self.currentIndex = 0;
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    if (self.timer != nil) {
+        [self.timer invalidate];
+    }
+}
 /*
 #pragma mark - Navigation
 
@@ -137,6 +158,15 @@
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     
+    if (collectionView == self.adCollectionView) {
+        switch (indexPath.row) {
+            case 0:
+                break;
+            default:
+                break;
+        }
+    }
+    
     /*
     
     UserMelody *melody = (UserMelody *)[self.loopArray objectAtIndex:indexPath.row];
@@ -153,6 +183,17 @@
         
     }
      */
+}
+
+-(void)advanceCarousel {
+    if (self.currentIndex == 2) {
+        self.currentIndex = 0;
+    } else {
+        self.currentIndex++;
+    }
+    NSIndexPath *index = [NSIndexPath indexPathForRow:self.currentIndex inSection:0];
+    
+    [self.adCollectionView scrollToItemAtIndexPath:index atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
 }
 
 @end
