@@ -1641,7 +1641,7 @@
                 height = 87.0f;
                 break;
             case 2:
-                height = 91.0f;
+                height = 151.0f;
                 break;
             case 3:
                 height = 59.0f;
@@ -1656,7 +1656,7 @@
                 height = 87.0f;
                 break;
             case 1:
-                height = 91.0f;
+                height = 151.0f;
                 break;
             case 2:
                 height = 59.0f;
