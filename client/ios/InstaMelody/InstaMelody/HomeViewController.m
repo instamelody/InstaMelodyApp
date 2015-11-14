@@ -320,6 +320,10 @@
         [defaults setObject:@"" forKey:@"DisplayName"];
         [defaults setObject:@"" forKey:@"ProfileFilePath"];
         [defaults synchronize];
+        
+        [[DataManager sharedManager] clearChats];
+        [[DataManager sharedManager] clearFriends];
+        [[DataManager sharedManager] clearUserMelodies];
         [self signIn:nil];
     }
 }

@@ -429,4 +429,16 @@
     return [MelodyGroup MR_findAllSortedBy:@"groupId" ascending:YES];
 }
 
+-(void)clearChats {
+    
+}
+
+-(void)clearFriends {
+    [Friend MR_truncateAll];
+}
+
+-(void)clearUserMelodies {
+    [UserMelody MR_truncateAll];
+}
+
 @end

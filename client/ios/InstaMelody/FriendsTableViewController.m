@@ -264,8 +264,56 @@
     
     //add observer for fetching friend list asynchronously
     
-    //get friends from core data
-    self.friendsList = [[DataManager sharedManager] friendList];
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/User/Friends", API_BASE_URL];
+    
+    NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    NSDictionary *parameters = @{@"token": token};
+    
+    [manager GET:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        
+        NSArray *friendsList = (NSArray *)responseObject;
+        
+        [Friend MR_truncateAll];
+        
+        for (NSDictionary *friendDict in friendsList) {
+            Friend *newFriend = [Friend MR_createEntity];
+            newFriend.firstName = [friendDict objectForKey:@"FirstName"];
+            newFriend.lastName = [friendDict objectForKey:@"LastName"];
+            newFriend.userId = [friendDict objectForKey:@"Id"];
+            newFriend.displayName = [friendDict objectForKey:@"DisplayName"];
+            
+            if ([friendDict objectForKey:@"Image"] != nil && [[friendDict objectForKey:@"Image"] isKindOfClass:[NSDictionary class]]) {
+                NSDictionary *imageDict = [friendDict objectForKey:@"Image"];
+                newFriend.profileFilePath = [imageDict objectForKey:@"FilePath"];
+            }
+        }
+        
+        [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreWithCompletion:^(BOOL contextDidSave, NSError *error) {
+            if (error == nil) {
+                NSLog(@"CORE DATA save - successful");
+                
+                //get friends from core data
+                self.friendsList = [[DataManager sharedManager] friendList];
+                [self.tableView reloadData];
+                
+            } else {
+                NSLog(@"CORE DATA error - %@", error.description);
+            }
+            //
+        }];
+        
+        
+        //NSDictionary *responseDict = (NSDictionary *)responseObject;
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error fetching friends: %@", error);
+        
+    }];
     
 }
 

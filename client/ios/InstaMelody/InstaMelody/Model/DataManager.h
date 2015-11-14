@@ -29,6 +29,10 @@
 - (NSArray *)userMelodyList;
 -(void)fetchUserMelody:(NSString*)melodyId;
 
+-(void)clearChats;
+-(void)clearUserMelodies;
+-(void)clearFriends;
+
 -(BOOL)isPremium;
 
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
