@@ -8,11 +8,14 @@
 
 #import "FeaturedViewController.h"
 #import "AdViewCell.h"
+#import "CurrentCell.h"
 
 @interface FeaturedViewController ()
 
 @property NSTimer *timer;
 @property int currentIndex;
+@property NSArray *newestArray;
+@property NSArray *topArray;
 
 @end
 
@@ -21,6 +24,19 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    [[DataManager sharedManager] fetchNewestStations];
+    [[DataManager sharedManager] fetchTopStations];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:kNewestName object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        self.newestArray = [note.userInfo objectForKey:@"Data"];
+        [self.currentCollectionView reloadData];
+    }];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:kTopName object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+        self.topArray = [note.userInfo objectForKey:@"Data"];
+        [self.featuredCollectionView reloadData];
+    }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -61,6 +77,14 @@
 #pragma mark - UICollectionView Datasource
 // 1
 - (NSInteger)collectionView:(UICollectionView *)view numberOfItemsInSection:(NSInteger)section {
+    if (view == self.featuredCollectionView) {
+        return self.topArray.count;
+    }
+    
+    if (view == self.currentCollectionView) {
+        return self.newestArray.count;
+    }
+    
     return 3;
 }
 
@@ -72,12 +96,17 @@
     
     
     if (cv == self.featuredCollectionView) {
-        UICollectionViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"FeaturedCell" forIndexPath:indexPath];
+        
+        NSDictionary *itemDict = [self.topArray objectAtIndex:indexPath.row];
+        CurrentCell *cell = (CurrentCell *)[cv dequeueReusableCellWithReuseIdentifier:@"FeaturedCell" forIndexPath:indexPath];
+        cell.titleLabel.text = [itemDict objectForKey:@"Name"];
         return cell;
     }
     
     if (cv == self.currentCollectionView) {
-        UICollectionViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"CurrentCell" forIndexPath:indexPath];
+        NSDictionary *itemDict = [self.newestArray objectAtIndex:indexPath.row];
+        CurrentCell *cell = (CurrentCell *)[cv dequeueReusableCellWithReuseIdentifier:@"CurrentCell" forIndexPath:indexPath];
+        cell.titleLabel.text = [itemDict objectForKey:@"Name"];
         return cell;
     }
     

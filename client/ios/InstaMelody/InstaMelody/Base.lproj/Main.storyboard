@@ -3509,13 +3509,18 @@
                                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         </collectionViewFlowLayout>
                                         <cells>
-                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="FeaturedCell" id="8BK-6O-1Gu">
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="FeaturedCell" id="8BK-6O-1Gu" customClass="CurrentCell">
                                                 <rect key="frame" x="0.0" y="0.0" width="150" height="80"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                                     <rect key="frame" x="0.0" y="0.0" width="150" height="80"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0jX-Ob-fk8">
+                                                            <rect key="frame" x="0.0" y="0.0" width="150" height="80"/>
+                                                            <animations/>
+                                                            <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                        </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Station Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0NA-Gi-6hS">
                                                             <rect key="frame" x="15" y="29" width="116" height="21"/>
                                                             <animations/>
@@ -3529,6 +3534,16 @@
                                                 </view>
                                                 <animations/>
                                                 <color key="backgroundColor" red="0.4793088549522373" green="0.48405448717948718" blue="0.48405448717948718" alpha="1" colorSpace="calibratedRGB"/>
+                                                <constraints>
+                                                    <constraint firstItem="0jX-Ob-fk8" firstAttribute="leading" secondItem="8BK-6O-1Gu" secondAttribute="leading" id="5L9-JZ-x6W"/>
+                                                    <constraint firstItem="0jX-Ob-fk8" firstAttribute="top" secondItem="8BK-6O-1Gu" secondAttribute="top" id="AcJ-bl-ckh"/>
+                                                    <constraint firstAttribute="trailing" secondItem="0jX-Ob-fk8" secondAttribute="trailing" id="cz1-uV-Bn0"/>
+                                                    <constraint firstAttribute="bottom" secondItem="0jX-Ob-fk8" secondAttribute="bottom" id="iPT-sB-ybY"/>
+                                                </constraints>
+                                                <connections>
+                                                    <outlet property="imageView" destination="0jX-Ob-fk8" id="fB5-Zf-yqP"/>
+                                                    <outlet property="titleLabel" destination="0NA-Gi-6hS" id="3HQ-yD-Qgu"/>
+                                                </connections>
                                             </collectionViewCell>
                                         </cells>
                                         <connections>
@@ -3582,25 +3597,23 @@
                                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         </collectionViewFlowLayout>
                                         <cells>
-                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CurrentCell" id="B9L-hy-BUU">
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CurrentCell" id="B9L-hy-BUU" customClass="CurrentCell">
                                                 <rect key="frame" x="0.0" y="0.0" width="97" height="140"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                                     <rect key="frame" x="0.0" y="0.0" width="97" height="140"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8tH-kj-cyc">
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tsR-Sg-oPL">
                                                             <rect key="frame" x="8" y="0.0" width="81" height="105"/>
-                                                            <subviews>
-                                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zsa-ux-jSU">
-                                                                    <rect key="frame" x="16" y="29" width="48" height="48"/>
-                                                                    <animations/>
-                                                                    <state key="normal" backgroundImage="play"/>
-                                                                </button>
-                                                            </subviews>
                                                             <animations/>
                                                             <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                                        </view>
+                                                        </imageView>
+                                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zsa-ux-jSU">
+                                                            <rect key="frame" x="24" y="46" width="48" height="48"/>
+                                                            <animations/>
+                                                            <state key="normal" backgroundImage="play"/>
+                                                        </button>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Melody Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qmx-pf-BqV">
                                                             <rect key="frame" x="8" y="111" width="81" height="21"/>
                                                             <animations/>
@@ -3614,6 +3627,10 @@
                                                 </view>
                                                 <animations/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <connections>
+                                                    <outlet property="imageView" destination="tsR-Sg-oPL" id="0S1-7x-Rb7"/>
+                                                    <outlet property="titleLabel" destination="qmx-pf-BqV" id="wNn-wF-f1b"/>
+                                                </connections>
                                             </collectionViewCell>
                                         </cells>
                                         <connections>

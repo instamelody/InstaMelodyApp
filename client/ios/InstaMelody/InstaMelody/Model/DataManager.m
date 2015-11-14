@@ -103,6 +103,70 @@
     
 }
 
+-(void)downloadProfilePicture:(NSString *)userId {
+    //try to create folder
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    
+    NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
+    
+    if (![fileManager fileExistsAtPath:profilePath]){
+        
+        NSError* error;
+        if(  [[NSFileManager defaultManager] createDirectoryAtPath:profilePath withIntermediateDirectories:NO attributes:nil error:&error]) {
+            
+            NSLog(@"success creating folder");
+            
+        } else {
+            NSLog(@"[%@] ERROR: attempting to write create MyFolder directory", [self class]);
+            NSAssert( FALSE, @"Failed to create directory maybe out of disk space?");
+        }
+        
+    }
+    
+    /*
+    NSArray *friendList = [Friend MR_findAll];
+    
+    NSString *fileName = [friend.profileFilePath lastPathComponent];
+    NSString *pathString = [profilePath stringByAppendingPathComponent:fileName];
+    
+    if (![fileManager fileExistsAtPath:pathString]) {
+        
+        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+        AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
+        
+        NSString *fullUrlString = [NSString stringWithFormat:@"%@/%@", DOWNLOAD_BASE_URL, friend.profileFilePath];
+        fullUrlString = [fullUrlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+        
+        NSURL *URL = [NSURL URLWithString:fullUrlString];
+        NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+        
+        NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+            
+            //NSString *fileString = [NSString stringWithFormat:@"file://%@", destinationFilePath];
+            NSURL *fileURL = [NSURL fileURLWithPath:pathString];
+            
+            return fileURL;
+            
+            //NSURL *documentsDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
+            //return [documentsDirectoryURL URLByAppendingPathComponent:[response suggestedFilename]];
+        } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+            
+            if (error == nil) {
+                NSLog(@"File downloaded to: %@", filePath);
+                
+            } else {
+                NSLog(@"Download error: %@", error.description);
+            }
+        }];
+        [downloadTask resume];
+        
+    }*/
+
+}
+
 -(void)downloadProfilePictures {
     
     //try to create folder
@@ -175,6 +239,63 @@
 
 
 #pragma mark - melodies
+
+-(void)fetchTopStations {
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/Station/Top", API_BASE_URL];
+    
+    NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    NSDictionary *parameters = @{@"token": token};
+    
+    [manager GET:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        // NSLog(@"JSON: %@", responseObject);
+        NSLog(@"melodies updated");
+        
+        NSArray *melodyList = (NSArray *)responseObject;
+        NSDictionary *userDict = @{@"Data": melodyList};
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:kTopName object:nil userInfo:userDict];
+        
+        
+        //NSDictionary *responseDict = (NSDictionary *)responseObject;
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error fetching meodies: %@", error);
+        
+    }];
+}
+
+-(void)fetchNewestStations {
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/Station/Newest", API_BASE_URL];
+    
+    NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    NSDictionary *parameters = @{@"token": token};
+    
+    [manager GET:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        // NSLog(@"JSON: %@", responseObject);
+        NSLog(@"melodies updated");
+        
+        NSArray *melodyList = (NSArray *)responseObject;
+        
+        NSDictionary *userDict = @{@"Data": melodyList};
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNewestName object:nil userInfo:userDict];
+        
+        
+        //NSDictionary *responseDict = (NSDictionary *)responseObject;
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error fetching meodies: %@", error);
+        
+    }];
+}
 
 -(void)fetchMelodies {
     NSString *requestUrl = [NSString stringWithFormat:@"%@/Melody", API_BASE_URL];

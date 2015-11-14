@@ -33,6 +33,9 @@
 -(void)clearUserMelodies;
 -(void)clearFriends;
 
+-(void)fetchNewestStations;
+-(void)fetchTopStations;
+
 -(BOOL)isPremium;
 
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
