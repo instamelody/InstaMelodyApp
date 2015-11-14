@@ -456,7 +456,7 @@
 -(void)updateRecordProgress {
     NSDate *now = [NSDate date];
     
-    
+    float RECORDING_LIMIT = [[DataManager sharedManager] isPremium] ? PREM_RECORDING_LIMIT :  FREE_RECORDING_LIMIT;
     NSTimeInterval interval = [now timeIntervalSinceDate:self.startTime];
     
     if (interval > RECORDING_LIMIT) {
@@ -959,6 +959,8 @@
                 self.timer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(updateRecordProgress) userInfo:nil repeats:YES];
                 
                 [self.recordButton setImage:[UIImage imageNamed:@"stop"] forState:UIControlStateNormal];
+                
+                float RECORDING_LIMIT = [[DataManager sharedManager] isPremium] ? PREM_RECORDING_LIMIT :  FREE_RECORDING_LIMIT;
                 
                 [self performSelector:@selector(stopRecording) withObject:self afterDelay:RECORDING_LIMIT];
                 
