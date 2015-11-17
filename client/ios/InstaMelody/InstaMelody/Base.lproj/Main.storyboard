@@ -852,6 +852,12 @@
                                             <constraint firstItem="p8H-Gq-uLf" firstAttribute="centerX" secondItem="Qks-ms-28B" secondAttribute="centerX" id="tve-Es-lQR"/>
                                             <constraint firstItem="4fB-lT-6K0" firstAttribute="leading" secondItem="Qks-ms-28B" secondAttribute="leading" id="uH7-ry-6Lq"/>
                                         </constraints>
+                                        <variation key="default">
+                                            <mask key="subviews">
+                                                <exclude reference="pMV-aY-fAb"/>
+                                                <exclude reference="jtG-Ps-Ozf"/>
+                                            </mask>
+                                        </variation>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="28P-is-qx9">
                                         <rect key="frame" x="8" y="96" width="116" height="20"/>

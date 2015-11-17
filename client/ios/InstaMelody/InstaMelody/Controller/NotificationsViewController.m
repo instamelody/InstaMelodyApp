@@ -60,8 +60,8 @@
 }
 
 -(void)getData {
-    NSString *requestUrl = [NSString stringWithFormat:@"%@/Station/Newest", API_BASE_URL];
-    //NSString *requestUrl = [NSString stringWithFormat:@"%@/User/Activity", API_BASE_URL];
+    //NSString *requestUrl = [NSString stringWithFormat:@"%@/Station/Newest", API_BASE_URL];
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/User/Activity", API_BASE_URL];
     
     NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
     
@@ -74,8 +74,10 @@
         
         
         //parameters should be params for that API clal
+        
+        parameters = @{@"token": token, @"activityForFriends": @"true"};
         //parameters = @{@"token": token, @"limit": @10, @"categoryId": @1};
-        //parameters = @{@"token": token, @"activityForFriends": @"true"};
+        
     }
     
     //add 64 char string
@@ -125,8 +127,8 @@
         cell.dateLabel.text = dateString;
     } else {
         NSDictionary *infoDict = [self.dataArray objectAtIndex:indexPath.row];
-        cell.messageLabel.text = [infoDict objectForKey:@"Name"];
-        NSDate *date = [self.inputDateFormatter dateFromString:[infoDict objectForKey:@"DateModified"]];
+        cell.messageLabel.text = [infoDict objectForKey:@"Activity"];
+        NSDate *date = [self.inputDateFormatter dateFromString:[infoDict objectForKey:@"DateOfActivity"]];
         cell.dateLabel.text = [self.dateFormatter stringFromDate:date];
         
     }
