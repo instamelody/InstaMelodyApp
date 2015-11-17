@@ -45,7 +45,12 @@
     [self.inputDateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
     
     self.tableView.backgroundView = tempImageView;
+
+}
+
+-(void)viewWillAppear:(BOOL)animated {
     
+    [super viewWillAppear:animated];
     [self getData];
 }
 
