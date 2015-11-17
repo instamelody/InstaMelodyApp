@@ -85,7 +85,7 @@
         if ( tokenCount == 1) {
             CLToken *cltoken = (CLToken *)[self.tokenInputView.allTokens objectAtIndex:0];
             
-            parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"User": @{@"DisplayName" : cltoken.displayText}, @"Message": @{@"Description" : self.messageField.text}}];
+            parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"User": @{@"DisplayName" : cltoken.displayText}, @"Message": @{@"Description" : self.messageField.text}, @"Chat": @{@"Name" : self.topicField.text}}];
         } else if  (tokenCount > 1){
             
             NSMutableArray *tempUserArray = [NSMutableArray new];
@@ -96,7 +96,7 @@
             }
             
             
-            parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Users": tempUserArray, @"Message": @{@"Description" : self.messageField.text}}];
+            parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Users": tempUserArray, @"Message": @{@"Description" : self.messageField.text}, @"Chat": @{@"Name" : self.topicField.text}}];
         }
         
         

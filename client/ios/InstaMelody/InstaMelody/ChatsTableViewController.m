@@ -113,6 +113,12 @@
     if (userArray.count == 2) {
         cell.nameLabel.text = friend.displayName;
         cell.descriptionLabel.text = @"1:1 chat";
+        if ([chatDict objectForKey:@"Name"] != nil) {
+            NSString *nameString = (NSString *)[chatDict objectForKey:@"Name"];
+            if ([nameString isKindOfClass:[NSString class]] && ![nameString containsString:@"ChatLoop_"]) {
+                    cell.descriptionLabel.text = [chatDict objectForKey:@"Name"];
+            }
+        }
     } else if (userArray.count > 2) {
         
         NSString *myName = [[NSUserDefaults standardUserDefaults] objectForKey:@"DisplayName"];
@@ -128,9 +134,23 @@
         //cell.nameLabel.text = [NSString stringWithFormat:@"Chat with %@ +%ld others", friend.displayName, userArray.count - 2];
         cell.nameLabel.text = names;
         cell.descriptionLabel.text = [NSString stringWithFormat:@"%ld users", userArray.count];
+        
+        if ([chatDict objectForKey:@"Name"] != nil) {
+            NSString *nameString = [chatDict objectForKey:@"Name"];
+            if ([nameString isKindOfClass:[NSString class]] && ![nameString containsString:@"ChatLoop_"]) {
+                cell.descriptionLabel.text = [chatDict objectForKey:@"Name"];
+            }
+        }
     } else {
         cell.nameLabel.text = @"Group chat";
         cell.descriptionLabel.text = @"Click to join";
+        
+        if ([chatDict objectForKey:@"Name"] != nil) {
+            NSString *nameString = [chatDict objectForKey:@"Name"];
+            if ([nameString isKindOfClass:[NSString class]] && ![nameString containsString:@"ChatLoop_"]) {
+                cell.descriptionLabel.text = [chatDict objectForKey:@"Name"];
+            }
+        }
     }
     
     
