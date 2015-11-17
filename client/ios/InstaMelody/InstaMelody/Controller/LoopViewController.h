@@ -91,6 +91,8 @@
 
 @property (nonatomic, strong) NSDictionary *loopDict;
 
+@property (nonatomic, strong) NSString *topicString;
+
 /**
  The CoreGraphics based audio plot
  */

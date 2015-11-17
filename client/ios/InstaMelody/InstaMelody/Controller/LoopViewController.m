@@ -1692,6 +1692,8 @@
 
                 [cell.topicField setEnabled:NO];
                 [cell.topicField setBackgroundColor:[UIColor lightGrayColor]];
+            } else if (self.topicString != nil) {
+                cell.topicField.text = self.topicString;
             }
             
             if (self.selectedUserMelody != nil) {
@@ -1702,6 +1704,8 @@
                 });
                 [cell.topicField setEnabled:NO];
                 [cell.topicField setBackgroundColor:[UIColor lightGrayColor]];
+            } else if (self.topicString != nil) {
+                cell.topicField.text = self.topicString;
             }
             return cell;
         } else if (indexPath.row == 2) {
@@ -1740,6 +1744,8 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     self.saveBarTopicLabel.text = self.selectedUserMelody.userMelodyName;
                 });
+            } else if (self.topicString != nil) {
+                cell.topicField.text = self.topicString;
             }
             
             return cell;

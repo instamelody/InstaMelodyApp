@@ -106,6 +106,12 @@
     
     [self loadMessages];
     
+    NSString *nameString = [self.chatDict objectForKey:@"Name"];
+    if (nameString != nil && [nameString isKindOfClass:[NSString class]] && ![nameString containsString:@"ChatLoop_"]) {
+        [self.loopTitleButton setTitle:nameString forState:UIControlStateNormal];
+        
+    }
+    
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -945,6 +951,16 @@
     LoopViewController *vc = (LoopViewController *)[sb instantiateViewControllerWithIdentifier:@"LoopViewController"];
     vc.delegate = self;
     vc.selectedLoop = self.loopDict;
+    
+    NSString *nameString = [self.chatDict objectForKey:@"Name"];
+    if (nameString != nil && [nameString isKindOfClass:[NSString class]] && ![nameString containsString:@"ChatLoop_"]) {
+        if (self.loopDict == nil) {
+            vc.topicString = nameString;
+        }
+        
+    }
+    
+    
     [self.navigationController pushViewController:vc animated:YES];
 }
 
