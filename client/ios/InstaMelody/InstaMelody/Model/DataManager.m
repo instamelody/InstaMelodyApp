@@ -126,6 +126,38 @@
         
     }
     
+    //get user info
+    
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/User", API_BASE_URL];
+    
+    NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    NSDictionary *parameters = @{@"token": token, @"id": userId };
+    
+    [manager GET:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        // NSLog(@"JSON: %@", responseObject);
+        NSLog(@"melodies updated");
+        
+        NSArray *infoList = (NSArray *)responseObject;
+        
+        //get profile pic
+        
+        
+        
+        
+        //[[NSNotificationCenter defaultCenter] postNotificationName:kTopName object:nil userInfo:userDict];
+        
+        
+        //NSDictionary *responseDict = (NSDictionary *)responseObject;
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error fetching meodies: %@", error);
+        
+    }];
+    
     /*
     NSArray *friendList = [Friend MR_findAll];
     

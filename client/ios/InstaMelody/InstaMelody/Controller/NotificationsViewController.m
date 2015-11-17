@@ -15,6 +15,7 @@
 
 @property NSArray *dataArray;
 @property NSDateFormatter *dateFormatter;
+@property NSDateFormatter *inputDateFormatter;
 
 @end
 
@@ -35,11 +36,17 @@
     self.dateFormatter = [[NSDateFormatter alloc] init];
     self.dateFormatter.dateStyle = NSDateFormatterShortStyle;
     
+    NSLocale *enUSPOSIXLocale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
+    
+    self.inputDateFormatter = [[NSDateFormatter alloc] init];
+    [self.inputDateFormatter setLocale:enUSPOSIXLocale];
+    
+    [self.inputDateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
+    [self.inputDateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    
     self.tableView.backgroundView = tempImageView;
     
-    if (self.isFeed) {
-        [self getData];
-    }
+    [self getData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -49,14 +56,27 @@
 
 -(void)getData {
     NSString *requestUrl = [NSString stringWithFormat:@"%@/Station/Newest", API_BASE_URL];
+    //NSString *requestUrl = [NSString stringWithFormat:@"%@/User/Activity", API_BASE_URL];
     
     NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
+    
+    NSDictionary *parameters = @{@"token": token};
+    
+    if (self.isFeed) {
+        //requestUrl should point to friends' activity
+        
+        //requestUrl = [NSString stringWithFormat:@"%@/User/Activity", API_BASE_URL];
+        
+        
+        //parameters should be params for that API clal
+        //parameters = @{@"token": token, @"limit": @10, @"categoryId": @1};
+        //parameters = @{@"token": token, @"activityForFriends": @"true"};
+    }
     
     //add 64 char string
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    
-    NSDictionary *parameters = @{@"token": token, @"limit": @10, @"categoryId": @1};
+
     
     [manager GET:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         // NSLog(@"JSON: %@", responseObject);
@@ -98,6 +118,12 @@
     if (self.dataArray.count == 0) {
         cell.messageLabel.text = @"No friend activity yet";
         cell.dateLabel.text = dateString;
+    } else {
+        NSDictionary *infoDict = [self.dataArray objectAtIndex:indexPath.row];
+        cell.messageLabel.text = [infoDict objectForKey:@"Name"];
+        NSDate *date = [self.inputDateFormatter dateFromString:[infoDict objectForKey:@"DateModified"]];
+        cell.dateLabel.text = [self.dateFormatter stringFromDate:date];
+        
     }
     
     
