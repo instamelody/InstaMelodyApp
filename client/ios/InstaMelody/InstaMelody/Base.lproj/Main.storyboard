@@ -2261,6 +2261,9 @@
                                     <segment title="" image="soloBtn"/>
                                 </segments>
                                 <color key="tintColor" red="1" green="0.20000000000000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="change:" destination="x3v-Jb-UfZ" eventType="valueChanged" id="hHp-TU-6d5"/>
+                                </connections>
                             </segmentedControl>
                         </subviews>
                         <animations/>

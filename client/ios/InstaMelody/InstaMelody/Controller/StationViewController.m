@@ -193,11 +193,15 @@
 -(void)fetchMyMelodies {
     
     
-    self.loopArray = [[DataManager sharedManager] userMelodyList];
+    NSArray *tempArray = [[DataManager sharedManager] userMelodyList];
     
     if (self.loopArray.count > 20) {
         self.loopArray = [self.loopArray subarrayWithRange:NSMakeRange(0, 20)];
     }
+    
+    NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateCreated" ascending:YES];
+    NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
+    self.loopArray = [tempArray sortedArrayUsingDescriptors:descriptors];
     
     [self.collectionView reloadData];
 }
@@ -336,6 +340,76 @@
     loopVc.delegate = self;
     
     [self.navigationController pushViewController:loopVc animated:YES];
+}
+
+-(IBAction)change:(id)sender {
+    UISegmentedControl *control = (UISegmentedControl *)sender;
+    
+    self.loopArray = [[DataManager sharedManager] userMelodyList];
+    
+    switch (control.selectedSegmentIndex) {
+        case 0: {
+            
+            NSArray *tempArray = self.loopArray;
+            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateCreated" ascending:YES];
+            NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
+            self.loopArray = [tempArray sortedArrayUsingDescriptors:descriptors];
+            
+            
+            break;
+        }
+        case 1: {
+            
+            NSMutableArray *tempArray = [NSMutableArray new];
+            for (UserMelody *melody in self.loopArray) {
+                if (melody.parts.count > 1) {
+                    [tempArray addObject:melody];
+                }
+            }
+            
+            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateCreated" ascending:YES];
+            NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
+            self.loopArray = [tempArray sortedArrayUsingDescriptors:descriptors];
+            
+            
+            break;
+        }
+        case 2: {
+            NSMutableArray *tempArray = [NSMutableArray new];
+            for (UserMelody *melody in self.loopArray) {
+                if ([melody.isChatLoopPart boolValue] == TRUE) {
+                    [tempArray addObject:melody];
+                }
+            }
+            
+            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateCreated" ascending:YES];
+            NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
+            self.loopArray = [tempArray sortedArrayUsingDescriptors:descriptors];
+            
+            break;
+        }
+        case 3: {
+            
+            NSMutableArray *tempArray = [NSMutableArray new];
+            for (UserMelody *melody in self.loopArray) {
+                if (melody.parts.count == 1) {
+                    [tempArray addObject:melody];
+                }
+            }
+            
+            
+            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateCreated" ascending:YES];
+            NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
+            self.loopArray = [tempArray sortedArrayUsingDescriptors:descriptors];
+            
+            break;
+        }
+            
+        default:
+            break;
+    }
+    
+    [self.collectionView reloadData];
 }
 
 
