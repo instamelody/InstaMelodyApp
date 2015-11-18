@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="1" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9057" systemVersion="15B42" minimumToolsVersion="Xcode 4.3">
+<model userDefinedModelVersionIdentifier="1" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9057" systemVersion="15C40a" minimumToolsVersion="Xcode 4.3">
     <entity name="Friend" representedClassName="Friend" syncable="YES">
         <attribute name="displayName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
@@ -28,6 +28,7 @@
     </entity>
     <entity name="UserMelody" representedClassName="UserMelody" syncable="YES">
         <attribute name="dateCreated" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="isChatLoopPart" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="userId" attributeType="String" syncable="YES"/>
         <attribute name="userMelodyId" attributeType="String" syncable="YES"/>
         <attribute name="userMelodyName" optional="YES" attributeType="String" syncable="YES"/>
@@ -47,7 +48,7 @@
         <element name="Friend" positionX="-90" positionY="-7" width="128" height="148"/>
         <element name="Melody" positionX="243" positionY="-15" width="128" height="180"/>
         <element name="MelodyGroup" positionX="36" positionY="-162" width="128" height="103"/>
-        <element name="UserMelody" positionX="-18" positionY="164" width="128" height="118"/>
+        <element name="UserMelody" positionX="-18" positionY="164" width="128" height="133"/>
         <element name="UserMelodyPart" positionX="160" positionY="164" width="128" height="163"/>
     </elements>
 </model>

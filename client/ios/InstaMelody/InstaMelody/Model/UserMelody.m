@@ -11,6 +11,7 @@
 @implementation UserMelody
 
 @dynamic userMelodyId;
+@dynamic isChatLoopPart;
 @dynamic userId;
 @dynamic userMelodyName;
 @dynamic dateCreated;

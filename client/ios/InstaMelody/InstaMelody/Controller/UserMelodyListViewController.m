@@ -66,7 +66,14 @@
     UserMelody *userMelody = (UserMelody *)[self.filteredList objectAtIndex:indexPath.row];
     
     cell.textLabel.text = userMelody.userMelodyName;
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%ld Parts", userMelody.parts.count];
+    if (userMelody.parts.count > 1) {
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"Social loop"];
+    } else {
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"Solo loop"];
+    }
+    if ([userMelody.isChatLoopPart boolValue] == TRUE && self.filterControl.selectedSegmentIndex == 3) {
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"Chat loop"];
+    }
     cell.backgroundColor = [UIColor clearColor];
 
     return cell;
@@ -104,7 +111,10 @@
     //get friends from core data
     self.melodyList = [[DataManager sharedManager] userMelodyList];
     
-    self.filteredList = self.melodyList;
+    NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateCreated" ascending:YES];
+    NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
+    self.filteredList = [self.melodyList sortedArrayUsingDescriptors:descriptors];
+
     
 }
 
@@ -113,7 +123,10 @@
     switch (control.selectedSegmentIndex) {
         case 0: {
             
-            self.filteredList = self.melodyList;
+            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateCreated" ascending:YES];
+            NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
+            self.filteredList = [self.melodyList sortedArrayUsingDescriptors:descriptors];
+
             
             break;
         }
@@ -125,7 +138,12 @@
                     [tempArray addObject:melody];
                 }
             }
-            self.filteredList = tempArray;
+            
+            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateCreated" ascending:YES];
+            NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
+            self.filteredList = [tempArray sortedArrayUsingDescriptors:descriptors];
+
+            
             break;
         }
         case 2: {
@@ -136,8 +154,25 @@
                     [tempArray addObject:melody];
                 }
             }
-            self.filteredList = tempArray;
+
+            
+            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateCreated" ascending:YES];
+            NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
+            self.filteredList = [tempArray sortedArrayUsingDescriptors:descriptors];
+            
             break;
+        }
+        case 3: {
+            NSMutableArray *tempArray = [NSMutableArray new];
+            for (UserMelody *melody in self.melodyList) {
+                if ([melody.isChatLoopPart boolValue] == TRUE) {
+                    [tempArray addObject:melody];
+                }
+            }
+            
+            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateCreated" ascending:YES];
+            NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
+            self.filteredList = [tempArray sortedArrayUsingDescriptors:descriptors];
             
             break;
         }

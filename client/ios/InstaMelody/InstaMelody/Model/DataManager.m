@@ -474,6 +474,7 @@
         newUserMelody.userMelodyName = [melodyDict objectForKey:@"Name"];
         newUserMelody.userMelodyId = [melodyDict objectForKey:@"Id"];
         newUserMelody.userId = [melodyDict objectForKey:@"UserId"];
+        newUserMelody.isChatLoopPart = [melodyDict objectForKey:@"IsChatLoopPart"];
         
         NSString *dateString = [melodyDict objectForKey:@"DateCreated"];
         dateString = [dateString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
@@ -522,6 +523,7 @@
         newUserMelody.userMelodyName = [melodyDict objectForKey:@"Name"];
         newUserMelody.userMelodyId = [melodyDict objectForKey:@"Id"];
         newUserMelody.userId = [melodyDict objectForKey:@"UserId"];
+        newUserMelody.isChatLoopPart = [melodyDict objectForKey:@"IsChatLoopPart"];
         
         NSString *dateString = [melodyDict objectForKey:@"DateCreated"];
         dateString = [dateString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
