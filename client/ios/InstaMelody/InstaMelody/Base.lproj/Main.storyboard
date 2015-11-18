@@ -1964,15 +1964,15 @@
                                 <animations/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fjh-IR-zfP">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="293"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="296"/>
                                 <subviews>
                                     <view alpha="0.25" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b8p-3e-28k">
-                                        <rect key="frame" x="0.0" y="0.0" width="600" height="293"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="296"/>
                                         <animations/>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6j3-Ia-mEM">
-                                        <rect key="frame" x="135" y="72" width="330" height="228"/>
+                                        <rect key="frame" x="135" y="73.5" width="330" height="228"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="live" translatesAutoresizingMaskIntoConstraints="NO" id="GuR-R3-ieV">
                                                 <rect key="frame" x="125" y="0.0" width="79" height="28"/>
@@ -2088,7 +2088,7 @@
                                 </constraints>
                             </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="hXL-zV-iwj">
-                                <rect key="frame" x="0.0" y="339" width="600" height="261"/>
+                                <rect key="frame" x="0.0" y="336" width="600" height="264"/>
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="20" id="2Ic-r1-TGW">
@@ -2099,7 +2099,7 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="StationCell" id="JJD-cg-pGJ" customClass="StationCell">
-                                        <rect key="frame" x="0.0" y="0.5" width="170" height="260"/>
+                                        <rect key="frame" x="0.0" y="2" width="170" height="260"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="170" height="260"/>
@@ -2248,17 +2248,19 @@
                                 </connections>
                             </collectionView>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="bIQ-Bv-1WQ">
-                                <rect key="frame" x="45" y="301" width="510" height="31"/>
+                                <rect key="frame" x="0.0" y="296" width="600" height="41"/>
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="sLM-xF-G6c"/>
+                                    <constraint firstAttribute="height" constant="40" id="sLM-xF-G6c"/>
                                 </constraints>
                                 <segments>
-                                    <segment title="Loops"/>
-                                    <segment title="Melodies"/>
+                                    <segment title="" image="stationBtn"/>
+                                    <segment title="" image="loopBtn"/>
+                                    <segment title="" image="chatBtn"/>
+                                    <segment title="" image="soloBtn"/>
                                 </segments>
-                                <color key="tintColor" red="1" green="0.32469154580878101" blue="0.5577025691728531" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="tintColor" red="1" green="0.20000000000000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             </segmentedControl>
                         </subviews>
                         <animations/>
@@ -2266,16 +2268,16 @@
                         <constraints>
                             <constraint firstItem="ZHu-D2-1jk" firstAttribute="top" secondItem="LsR-Z2-7VB" secondAttribute="top" id="0xL-gZ-Tsr"/>
                             <constraint firstItem="fjh-IR-zfP" firstAttribute="top" secondItem="LsR-Z2-7VB" secondAttribute="top" id="8PJ-wt-gRm"/>
-                            <constraint firstItem="hXL-zV-iwj" firstAttribute="top" secondItem="bIQ-Bv-1WQ" secondAttribute="bottom" constant="8" id="Fi2-lz-gw0"/>
+                            <constraint firstItem="hXL-zV-iwj" firstAttribute="top" secondItem="bIQ-Bv-1WQ" secondAttribute="bottom" id="Fi2-lz-gw0"/>
                             <constraint firstItem="K5O-fq-BMO" firstAttribute="top" secondItem="ZHu-D2-1jk" secondAttribute="bottom" id="Lp8-pj-1Yl"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="bIQ-Bv-1WQ" secondAttribute="trailing" constant="25" id="PTf-mc-Wil"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="bIQ-Bv-1WQ" secondAttribute="trailing" constant="-20" id="PTf-mc-Wil"/>
                             <constraint firstItem="K5O-fq-BMO" firstAttribute="top" secondItem="hXL-zV-iwj" secondAttribute="bottom" id="ZMM-aT-f5F"/>
                             <constraint firstAttribute="trailing" secondItem="ZHu-D2-1jk" secondAttribute="trailing" id="cy2-m2-B8I"/>
-                            <constraint firstItem="bIQ-Bv-1WQ" firstAttribute="top" secondItem="fjh-IR-zfP" secondAttribute="bottom" constant="8" id="dFi-iy-jqg"/>
+                            <constraint firstItem="bIQ-Bv-1WQ" firstAttribute="top" secondItem="fjh-IR-zfP" secondAttribute="bottom" id="dFi-iy-jqg"/>
                             <constraint firstItem="ZHu-D2-1jk" firstAttribute="leading" secondItem="LsR-Z2-7VB" secondAttribute="leading" id="dQd-m5-CdQ"/>
                             <constraint firstItem="fjh-IR-zfP" firstAttribute="leading" secondItem="LsR-Z2-7VB" secondAttribute="leading" id="kHJ-TW-bLf"/>
                             <constraint firstAttribute="trailing" secondItem="fjh-IR-zfP" secondAttribute="trailing" id="mZO-D4-yPa"/>
-                            <constraint firstItem="bIQ-Bv-1WQ" firstAttribute="leading" secondItem="LsR-Z2-7VB" secondAttribute="leadingMargin" constant="25" id="v5z-rm-jaQ"/>
+                            <constraint firstItem="bIQ-Bv-1WQ" firstAttribute="leading" secondItem="LsR-Z2-7VB" secondAttribute="leadingMargin" constant="-20" id="v5z-rm-jaQ"/>
                             <constraint firstItem="hXL-zV-iwj" firstAttribute="height" secondItem="fjh-IR-zfP" secondAttribute="height" constant="-32" id="vMV-An-qt3"/>
                             <constraint firstItem="hXL-zV-iwj" firstAttribute="leading" secondItem="LsR-Z2-7VB" secondAttribute="leading" id="wO2-d3-xcB"/>
                             <constraint firstAttribute="trailing" secondItem="hXL-zV-iwj" secondAttribute="trailing" id="wYb-36-vwN"/>
@@ -3873,11 +3875,13 @@
         <image name="blurBlue" width="557" height="991"/>
         <image name="blurGreen" width="557" height="991"/>
         <image name="blurRed" width="373" height="664"/>
+        <image name="chatBtn" width="135" height="63"/>
         <image name="edit" width="43" height="43"/>
         <image name="feed" width="70" height="70"/>
         <image name="friends" width="70" height="70"/>
         <image name="library" width="70" height="70"/>
         <image name="live" width="96" height="40"/>
+        <image name="loopBtn" width="135" height="63"/>
         <image name="messenger" width="70" height="70"/>
         <image name="mic" width="107" height="108"/>
         <image name="notifications" width="70" height="70"/>
@@ -3886,7 +3890,9 @@
         <image name="profileBack" width="237" height="98"/>
         <image name="share" width="47" height="47"/>
         <image name="showcase" width="70" height="70"/>
+        <image name="soloBtn" width="135" height="63"/>
         <image name="station" width="70" height="70"/>
+        <image name="stationBtn" width="135" height="63"/>
         <image name="store" width="70" height="70"/>
         <image name="studio" width="70" height="70"/>
         <image name="vol" width="47" height="47"/>
