@@ -24,6 +24,10 @@ namespace InstaMelody.Model
 
         #region Relationship Properties
 
+        public bool IsChatLoopPart { get; set; }
+
+        public Guid ChatLoopId { get; set; }
+
         public bool IsStationPostMelody { get; set; }
 
         public List<Guid> StationPostIds

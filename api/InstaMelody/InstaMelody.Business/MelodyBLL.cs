@@ -774,6 +774,14 @@ namespace InstaMelody.Business
             if (chatId != null && !chatId.Equals(default(Guid)))
             {
                 loop.ChatId = chatId;
+                foreach(var part in loop.Parts)
+                {
+                    if (part.UserMelody != null)
+                    {
+                        part.UserMelody.IsChatLoopPart = true;
+                        part.UserMelody.ChatLoopId = loop.Id;
+                    }
+                }
             }
 
             return loop;
@@ -793,16 +801,25 @@ namespace InstaMelody.Business
 
             var stationBll = new StationBll();
             var stationPosts = stationBll.GetStationMessagesByUserMelody(melody.Id);
-            if (stationPosts == null) { return melody; }
-
-            var postIds = new List<Guid>();
-            foreach (var post in stationPosts)
+            if (stationPosts != null)
             {
-                if (post.MessageId.Equals(default(Guid))) continue;
-                postIds.Add(post.MessageId);
+                var postIds = new List<Guid>();
+                foreach (var post in stationPosts)
+                {
+                    if (post.MessageId.Equals(default(Guid))) continue;
+                    postIds.Add(post.MessageId);
+                }
+
+                melody.StationPostIds = postIds;
             }
 
-            melody.StationPostIds = postIds;
+            var userMelodyDal = new UserMelodies();
+            var chatLoopId = userMelodyDal.GetChatLoopIdByUserMelodyId(melody.Id);
+            if (!chatLoopId.Equals(default(Guid)))
+            {
+                melody.IsChatLoopPart = true;
+                melody.ChatLoopId = chatLoopId;
+            }
 
             return melody;
         }

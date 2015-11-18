@@ -188,6 +188,39 @@ namespace InstaMelody.Data
         }
 
         /// <summary>
+        /// Gets the chat loop identifier by user melody identifier.
+        /// </summary>
+        /// <param name="userMelodyId">The user melody identifier.</param>
+        /// <returns></returns>
+        public Guid GetChatLoopIdByUserMelodyId(Guid userMelodyId)
+        {
+            var query = @"SELECT c.ChatLoopId FROM dbo.UserMelodies AS um
+                        LEFT JOIN dbo.UserLoopParts AS ulp
+                        ON ulp.UserMelodyId = um.Id
+                        LEFT JOIN dbo.Chats AS c
+                        ON c.ChatLoopId = ulp.UserLoopId
+                        WHERE um.Id = @UserMelodyId";
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "UserMelodyId",
+                    Value = userMelodyId,
+                    SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                }
+            };
+
+            var chatLoopId = ExecuteScalar(query, parameters.ToArray());
+            if (chatLoopId.Equals(DBNull.Value))
+            {
+                return new Guid();
+            }
+            return Guid.Parse(chatLoopId.ToString());
+        }
+
+        /// <summary>
         /// Deletes the user melody.
         /// </summary>
         /// <param name="userMelodyId">The user melody identifier.</param>

@@ -115,11 +115,11 @@ INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(
 INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(34, '009_Cinematic_Soundtrack', '009_Cinematic_Soundtrack.wav', '2015-11-04', '2015-11-04')
 INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(35, '010_Cinematic_Soundtrack', '010_Cinematic_Soundtrack.wav', '2015-11-04', '2015-11-04')
 GO
-INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(36, '001_Happy_Birthday', '001_Happy_Birthday.wav', '2015-11-04', '2015-11-04')
-INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(37, '002_Happy_Birthday', '002_Happy_Birthday.wav', '2015-11-04', '2015-11-04')
-INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(38, '003_Happy_Birthday', '003_Happy_Birthday.wav', '2015-11-04', '2015-11-04')
-INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(39, '004_Happy_Birthday', '004_Happy_Birthday.mp3', '2015-11-04', '2015-11-04')
-GO
+-- INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(36, '001_Happy_Birthday', '001_Happy_Birthday.wav', '2015-11-04', '2015-11-04')
+-- INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(37, '002_Happy_Birthday', '002_Happy_Birthday.wav', '2015-11-04', '2015-11-04')
+-- INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(38, '003_Happy_Birthday', '003_Happy_Birthday.wav', '2015-11-04', '2015-11-04')
+-- INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(39, '004_Happy_Birthday', '004_Happy_Birthday.mp3', '2015-11-04', '2015-11-04')
+-- GO
 INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(40, '001_WeWishYouAMerryChristmas', '001_WeWishYouAMerryChristmas.mp3', '2015-11-04', '2015-11-04')
 INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(41, '002_AdesteFidelis', '002_AdesteFidelis.mp3', '2015-11-04', '2015-11-04')
 INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(42, '003_JingleBells', '003_JingleBells.mp3', '2015-11-04', '2015-11-04')
@@ -336,6 +336,16 @@ INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(
 INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(252, 'Drums - iMantra', 'Drums - iMantra.wav', '2015-11-04', '2015-11-04')
 INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(253, 'Melody - iMantra', 'Melody - iMantra.wav', '2015-11-04', '2015-11-04')
 GO
+INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(254, '001_happy_birthday', '001_happy_birthday.mp3', '2015-11-04', '2015-11-04')
+INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(255, '002_happy_birthday', '002_happy_birthday.mp3', '2015-11-04', '2015-11-04')
+INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(256, '003_happy_birthday', '003_happy_birthday.mp3', '2015-11-04', '2015-11-04')
+INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(257, '004_happy_birthday', '004_happy_birthday.mp3', '2015-11-04', '2015-11-04')
+INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(258, '005_happy_birthday', '005_happy_birthday.mp3', '2015-11-04', '2015-11-04')
+INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(259, '006_happy_birthday', '006_happy_birthday.wav', '2015-11-04', '2015-11-04')
+INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(260, '007_happy_birthday', '007_happy_birthday.wav', '2015-11-04', '2015-11-04')
+INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(261, '008_happy_birthday', '008_happy_birthday.wav', '2015-11-04', '2015-11-04')
+INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(262, '009_happy_birthday', '009_happy_birthday.wav', '2015-11-04', '2015-11-04')
+INSERT INTO dbo.Melodies (Id, Name, FileName, DateCreated, DateModified) VALUES(263, '010_happy_birthday', '010_happy_birthday.wav', '2015-11-04', '2015-11-04')
 SET IDENTITY_INSERT dbo.Melodies OFF
 GO
 
@@ -375,10 +385,10 @@ INSERT INTO dbo.MelodyFileGroups (MelodyId, FileGroupId, DateCreated) VALUES(32,
 INSERT INTO dbo.MelodyFileGroups (MelodyId, FileGroupId, DateCreated) VALUES(33, 3, '2015-11-04')
 INSERT INTO dbo.MelodyFileGroups (MelodyId, FileGroupId, DateCreated) VALUES(34, 3, '2015-11-04')
 INSERT INTO dbo.MelodyFileGroups (MelodyId, FileGroupId, DateCreated) VALUES(35, 3, '2015-11-04')
-INSERT INTO dbo.MelodyFileGroups (MelodyId, FileGroupId, DateCreated) VALUES(36, 2, '2015-11-04')
-INSERT INTO dbo.MelodyFileGroups (MelodyId, FileGroupId, DateCreated) VALUES(37, 2, '2015-11-04')
-INSERT INTO dbo.MelodyFileGroups (MelodyId, FileGroupId, DateCreated) VALUES(38, 2, '2015-11-04')
-INSERT INTO dbo.MelodyFileGroups (MelodyId, FileGroupId, DateCreated) VALUES(39, 2, '2015-11-04')
+-- INSERT INTO dbo.MelodyFileGroups (MelodyId, FileGroupId, DateCreated) VALUES(36, 2, '2015-11-04')
+-- INSERT INTO dbo.MelodyFileGroups (MelodyId, FileGroupId, DateCreated) VALUES(37, 2, '2015-11-04')
+-- INSERT INTO dbo.MelodyFileGroups (MelodyId, FileGroupId, DateCreated) VALUES(38, 2, '2015-11-04')
+-- INSERT INTO dbo.MelodyFileGroups (MelodyId, FileGroupId, DateCreated) VALUES(39, 2, '2015-11-04')
 INSERT INTO dbo.MelodyFileGroups (MelodyId, FileGroupId, DateCreated) VALUES(40, 4, '2015-11-04')
 INSERT INTO dbo.MelodyFileGroups (MelodyId, FileGroupId, DateCreated) VALUES(41, 4, '2015-11-04')
 INSERT INTO dbo.MelodyFileGroups (MelodyId, FileGroupId, DateCreated) VALUES(42, 4, '2015-11-04')
@@ -594,5 +604,16 @@ INSERT INTO dbo.MelodyFileGroups (MelodyId, FileGroupId, DateCreated) VALUES(250
 INSERT INTO dbo.MelodyFileGroups (MelodyId, FileGroupId, DateCreated) VALUES(251, 71, '2015-11-04')
 INSERT INTO dbo.MelodyFileGroups (MelodyId, FileGroupId, DateCreated) VALUES(252, 71, '2015-11-04')
 INSERT INTO dbo.MelodyFileGroups (MelodyId, FileGroupId, DateCreated) VALUES(253, 71, '2015-11-04')
+GO
+INSERT INTO dbo.MelodyFileGroups (MelodyId, FileGroupId, DateCreated) VALUES(254, 2,  '2015-11-04')
+INSERT INTO dbo.MelodyFileGroups (MelodyId, FileGroupId, DateCreated) VALUES(255, 2,  '2015-11-04')
+INSERT INTO dbo.MelodyFileGroups (MelodyId, FileGroupId, DateCreated) VALUES(256, 2,  '2015-11-04')
+INSERT INTO dbo.MelodyFileGroups (MelodyId, FileGroupId, DateCreated) VALUES(257, 2,  '2015-11-04')
+INSERT INTO dbo.MelodyFileGroups (MelodyId, FileGroupId, DateCreated) VALUES(258, 2,  '2015-11-04')
+INSERT INTO dbo.MelodyFileGroups (MelodyId, FileGroupId, DateCreated) VALUES(259, 2,  '2015-11-04')
+INSERT INTO dbo.MelodyFileGroups (MelodyId, FileGroupId, DateCreated) VALUES(260, 2,  '2015-11-04')
+INSERT INTO dbo.MelodyFileGroups (MelodyId, FileGroupId, DateCreated) VALUES(261, 2,  '2015-11-04')
+INSERT INTO dbo.MelodyFileGroups (MelodyId, FileGroupId, DateCreated) VALUES(262, 2,  '2015-11-04')
+INSERT INTO dbo.MelodyFileGroups (MelodyId, FileGroupId, DateCreated) VALUES(263, 2,  '2015-11-04')
 GO
 

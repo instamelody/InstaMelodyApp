@@ -786,7 +786,7 @@ namespace InstaMelody.Business
                 var createdLoop = melodyBll.CreateLoop(
                     new UserLoop
                     {
-                        Name = string.Format("ChatLoop_{0}", chat.Id),
+                        Name = (!string.IsNullOrEmpty(chat.Name)) ? chat.Name : string.Format("ChatLoop_{0}", chat.Id),
                         Parts = new List<UserLoopPart>
                         {
                             new UserLoopPart
