@@ -15,6 +15,7 @@
     @property M13ProgressHUD *HUD;
     @property LTHMonthYearPickerView *monthYearPicker;
     @property UIImage *savedImage;
+    @property BOOL hasChanged;
 
 @end
 
@@ -67,13 +68,17 @@
     self.profileView.layer.cornerRadius = self.profileView.frame.size.height / 2;
     self.profileView.layer.masksToBounds = YES;
     
+    [self loadProfileImage];
+    
+}
+
+- (void)viewDidAppear:(BOOL)animated  {
+    [super viewDidAppear:animated];
     if (self.userInfo != nil) {
         [self loadData];
         [self.submitButton setTitle:@"Update" forState:UIControlStateNormal];
     }
-    
-    [self loadProfileImage];
-    
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -111,6 +116,9 @@
 }
 
 -(void)loadData {
+    
+    //signupVC.userInfo = @{@"FirstName": [defaults objectForKey:@"FirstName"], @"LastName": [defaults objectForKey:@"LastName"], @"PhoneNumber":  [defaults objectForKey:@"PhoneNumber"], @"EmailAddress": [defaults objectForKey:@"EmailAddress"], @"DateOfBirth": [defaults objectForKey:@"DateOfBirth"], @"IsFemale":[defaults objectForKey:@"IsFemale"]};
+    
     if ([self.userInfo objectForKey:@"FirstName"] != nil) {
         self.firstNameField.text = [self.userInfo objectForKey:@"FirstName"];
     }
@@ -118,6 +126,47 @@
     if ([self.userInfo objectForKey:@"LastName"] != nil) {
         self.lastNameField.text = [self.userInfo objectForKey:@"LastName"];
     }
+    
+    if ([self.userInfo objectForKey:@"EmailAddress"] != nil) {
+        self.emailAddressField.text = [self.userInfo objectForKey:@"EmailAddress"];
+        self.emailAddressField.textColor = [UIColor lightGrayColor];
+        self.emailAddressField.enabled = NO;
+    }
+    
+    if ([self.userInfo objectForKey:@"PhoneNumber"] != nil) {
+        self.phoneNumberField.text = [self.userInfo objectForKey:@"PhoneNumber"];
+    }
+    
+    if ([self.userInfo objectForKey:@"DisplayName"] != nil) {
+        self.usernameField.text = [self.userInfo objectForKey:@"DisplayName"];
+        self.usernameField.textColor = [UIColor lightGrayColor];
+        self.usernameField.enabled = NO;
+    }
+    
+    if ([self.userInfo objectForKey:@"DateOfBirth"] != nil) {
+        
+        NSDateFormatter *toFormatter = [NSDateFormatter new];
+        [toFormatter setDateFormat:@"MM / yyyy"];
+        
+        NSDateFormatter *fromFormatter = [NSDateFormatter new];
+        [fromFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+        NSDate *date = [fromFormatter dateFromString:[self.userInfo objectForKey:@"DateOfBirth"]];
+        
+        NSString *dateString = [toFormatter stringFromDate:date];
+        self.dobField.text = dateString;
+    }
+    
+    if ([self.userInfo objectForKey:@"IsFemale"] != nil) {
+        
+        
+        if ([[self.userInfo objectForKey:@"IsFemale"] boolValue] == YES) {
+            self.genderField.enabled = NO;
+        } else {
+            self.genderField.enabled = YES;
+        }
+    }
+    
+    self.hasChanged = NO;
 }
 
 - (IBAction)submit:(id)sender {
@@ -131,11 +180,112 @@
 }
 
 -(void)updateProfile {
-    if (self.savedImage != nil) {
-        [self prepareImage:self.savedImage];
-    }
     
-    [self.navigationController popViewControllerAnimated:YES];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *userToken = [defaults objectForKey:@"authToken"];
+    
+    NSNumber *isFemale = self.genderField.enabled ? [NSNumber numberWithBool:NO] : [NSNumber numberWithBool:YES];
+    
+    NSString *monthYear = self.dobField.text;
+    
+    NSString *encodedEmail = [self.emailAddressField.text stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
+    NSDictionary *parameters = @{@"Token" : userToken ,  @"User": @{@"DisplayName": self.usernameField.text, @"FirstName": self.firstNameField.text, @"LastName": self.lastNameField.text, @"PhoneNumber" : self.phoneNumberField.text, @"EmailAddress" : encodedEmail, @"IsFemale": isFemale, @"DateOfBirth": monthYear}};
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    self.HUD.indeterminate = YES;
+    self.HUD.status = @"Signing up";
+    [self.HUD show:YES];
+    
+    
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/User/Update", API_BASE_URL];
+    
+    [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        
+        
+        if (self.savedImage != nil) {
+            [self prepareImage:self.savedImage];
+        }
+        
+        [self.HUD hide:YES];
+        
+        [self.navigationController popViewControllerAnimated:YES];
+        
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+        [self.HUD hide:YES];
+        
+        if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
+            
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            
+            NSLog(@"%@",ErrorResponse);
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
+        }
+    }];
+    
+    if (![self.passwordField.text isEqualToString:@""]) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Confirm" message:@"Enter old password" preferredStyle:UIAlertControllerStyleAlert];
+        [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+            textField.placeholder = @"Password";
+            textField.secureTextEntry = YES;
+        }];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+            [self updatePassword:alert.textFields[0].text];
+            
+            
+        }];
+        
+        [alert addAction:cancelAction];
+        [alert addAction:okAction];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+
+}
+
+-(void)updatePassword:(NSString *)password {
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *userToken = [defaults objectForKey:@"authToken"];
+        
+    NSDictionary *parameters = @{@"Token": userToken , @"UserPassword": @{@"OldPassword": password, @"DateOfBirth": self.passwordField.text}};
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+
+    self.HUD.indeterminate = YES;
+    self.HUD.status = @"Updating";
+    [self.HUD show:YES];
+    
+    
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/Auth/Password/Update", API_BASE_URL];
+    
+    [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+    }  failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+        [self.HUD hide:YES];
+        
+        if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
+            
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            
+            NSLog(@"%@",ErrorResponse);
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
+        }
+    }];
 }
 
 -(void)createNewUser {
@@ -150,11 +300,6 @@
         NSDictionary *parameters = @{@"DisplayName": self.usernameField.text, @"Password": self.passwordField.text, @"FirstName": self.firstNameField.text, @"LastName": self.lastNameField.text, @"PhoneNumber" : self.phoneNumberField.text, @"EmailAddress" : encodedEmail, @"IsFemale": isFemale, @"DateOfBirth": monthYear};
         
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-        //[manager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-        //manager.requestSerializer = [AFHTTPRequestSerializer serializer];
-        /*
-         [[AFHTTPRequestSerializer serializer] requestWithMethod:@"POST" URLString:URLString parameters:parameters];
-         */
         
         self.HUD.indeterminate = YES;
         self.HUD.status = @"Signing up";

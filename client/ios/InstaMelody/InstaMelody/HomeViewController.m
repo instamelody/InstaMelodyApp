@@ -184,7 +184,7 @@
         
         SignUpViewController *signupVC = (SignUpViewController *)segue.destinationViewController;
         
-        signupVC.userInfo = @{@"FirstName": [defaults objectForKey:@"FirstName"], @"LastName": [defaults objectForKey:@"LastName"]};
+        signupVC.userInfo = @{@"FirstName": [defaults objectForKey:@"FirstName"], @"LastName": [defaults objectForKey:@"LastName"], @"PhoneNumber":  [defaults objectForKey:@"PhoneNumber"], @"EmailAddress": [defaults objectForKey:@"EmailAddress"], @"DateOfBirth": [defaults objectForKey:@"DateOfBirth"], @"IsFemale":[defaults objectForKey:@"IsFemale"], @"DisplayName" : [defaults objectForKey:@"DisplayName"]};
         signupVC.title = @"Edit Profile";
         
     }
@@ -434,6 +434,14 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"DisplayName"] forKey:@"DisplayName"];
         [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"FirstName"] forKey:@"FirstName"];
         [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"LastName"] forKey:@"LastName"];
+        
+        [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"DateOfBirth"] forKey:@"DateOfBirth"];
+        
+        [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"IsFemale"] forKey:@"IsFemale"];
+        
+        [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"PhoneNumber"] forKey:@"PhoneNumber"];
+        
+        [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"EmailAddress"] forKey:@"EmailAddress"];
         
         if ([responseDict objectForKey:@"Image"] != nil && [[responseDict objectForKey:@"Image"] isKindOfClass:[NSDictionary class]]) {
             NSDictionary *imageDict = [responseDict objectForKey:@"Image"];
