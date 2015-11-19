@@ -240,7 +240,6 @@
     [cell.shareButton setTitle:[NSString fontAwesomeIconStringForEnum:FAEllipsisH] forState:UIControlStateNormal];
     [cell.likeButton setTitle:[NSString fontAwesomeIconStringForEnum:FAHeartO] forState:UIControlStateNormal];
     
-    
     //load profile pic
     
     /*
@@ -262,6 +261,13 @@
     
     if ([userId isEqualToString:myUserId]) {
 
+        //if my station + public
+        
+        if ([melody.isStationPostMelody boolValue] == YES) {
+            [cell.joinButton setTitle:@"Public" forState:UIControlStateNormal];
+        } else {
+            [cell.joinButton setTitle:@"Private" forState:UIControlStateNormal];
+        }
         
         NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
         

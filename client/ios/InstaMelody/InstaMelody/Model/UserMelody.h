@@ -16,6 +16,7 @@
 @property (nonatomic, retain) NSString * userMelodyId;
 @property (nonatomic, retain) NSString * userId;
 @property (nonatomic, retain) NSNumber * isChatLoopPart;
+@property (nonatomic, retain) NSNumber * isStationPostMelody;
 @property (nonatomic, retain) NSString * userMelodyName;
 @property (nonatomic, retain) NSDate * dateCreated;
 @property (nonatomic, retain) NSSet *parts;

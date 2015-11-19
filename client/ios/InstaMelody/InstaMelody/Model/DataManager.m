@@ -474,6 +474,9 @@
         newUserMelody.userMelodyName = [melodyDict objectForKey:@"Name"];
         newUserMelody.userMelodyId = [melodyDict objectForKey:@"Id"];
         newUserMelody.userId = [melodyDict objectForKey:@"UserId"];
+        
+        newUserMelody.isStationPostMelody = [melodyDict objectForKey:@"IsStationPostMelody"];
+        
         newUserMelody.isChatLoopPart = [melodyDict objectForKey:@"IsChatLoopPart"];
         
         NSString *dateString = [melodyDict objectForKey:@"DateCreated"];
