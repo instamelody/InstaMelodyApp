@@ -131,7 +131,7 @@
     
     [self loadProfileImage];
     
-    self.liveImageView.hidden = ![[DataManager sharedManager] isPremium];
+    //self.liveImageView.hidden = ![[DataManager sharedManager] isPremium];
 }
 
 -(void)loadProfileImage {

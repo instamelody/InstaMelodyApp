@@ -87,6 +87,8 @@
             <string>CenturyGothic</string>
             <string>CenturyGothic</string>
             <string>CenturyGothic</string>
+            <string>CenturyGothic</string>
+            <string>CenturyGothic</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -1847,7 +1849,7 @@
                                             <segue destination="nbi-tE-dvK" kind="show" identifier="editProfileSegue" id="4ps-ka-4X8"/>
                                         </connections>
                                     </button>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="live" translatesAutoresizingMaskIntoConstraints="NO" id="LP0-Td-iiH">
+                                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="live" translatesAutoresizingMaskIntoConstraints="NO" id="LP0-Td-iiH">
                                         <rect key="frame" x="122" y="0.0" width="56" height="24"/>
                                         <animations/>
                                         <constraints>
@@ -1971,10 +1973,10 @@
                                         <animations/>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6j3-Ia-mEM">
-                                        <rect key="frame" x="135" y="73.5" width="330" height="228"/>
+                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6j3-Ia-mEM">
+                                        <rect key="frame" x="135" y="73" width="330" height="228"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="live" translatesAutoresizingMaskIntoConstraints="NO" id="GuR-R3-ieV">
+                                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="live" translatesAutoresizingMaskIntoConstraints="NO" id="GuR-R3-ieV">
                                                 <rect key="frame" x="125" y="0.0" width="79" height="28"/>
                                                 <animations/>
                                                 <constraints>
@@ -2047,17 +2049,27 @@
                                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5jY-Ci-jUW">
-                                                <rect key="frame" x="275" y="88" width="35" height="35"/>
+                                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5jY-Ci-jUW">
+                                                <rect key="frame" x="280" y="89" width="50" height="50"/>
                                                 <animations/>
-                                                <state key="normal" title="S">
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="5r6-fL-k6D"/>
+                                                    <constraint firstAttribute="width" constant="50" id="GhZ-aL-lGJ"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="14"/>
+                                                <state key="normal" image="friends">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xsd-of-aDb">
-                                                <rect key="frame" x="20" y="88" width="35" height="35"/>
+                                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xsd-of-aDb">
+                                                <rect key="frame" x="0.0" y="89" width="50" height="50"/>
                                                 <animations/>
-                                                <state key="normal" title="L">
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="08B-VJ-Vpe"/>
+                                                    <constraint firstAttribute="width" constant="50" id="0fF-qL-wju"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="14"/>
+                                                <state key="normal" image="following">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                             </button>
@@ -2066,14 +2078,18 @@
                                         <constraints>
                                             <constraint firstItem="Rh0-39-wV8" firstAttribute="top" secondItem="nd7-if-bhd" secondAttribute="bottom" id="3Xj-1C-S4U"/>
                                             <constraint firstItem="Rh0-39-wV8" firstAttribute="centerX" secondItem="6j3-Ia-mEM" secondAttribute="centerX" id="BGs-m9-ncM"/>
+                                            <constraint firstAttribute="trailing" secondItem="5jY-Ci-jUW" secondAttribute="trailing" id="FgS-yY-Il6"/>
                                             <constraint firstItem="Gdq-O5-PQ3" firstAttribute="centerX" secondItem="6j3-Ia-mEM" secondAttribute="centerX" id="McB-qx-BMY"/>
                                             <constraint firstAttribute="height" constant="228" id="OCx-0y-eIC"/>
                                             <constraint firstAttribute="width" constant="330" id="PfX-D2-hWY"/>
                                             <constraint firstItem="nd7-if-bhd" firstAttribute="centerX" secondItem="6j3-Ia-mEM" secondAttribute="centerX" id="U8f-1B-7j4"/>
                                             <constraint firstAttribute="bottom" secondItem="Rh0-39-wV8" secondAttribute="bottom" constant="20" id="f2U-Yj-a0q"/>
+                                            <constraint firstItem="Xsd-of-aDb" firstAttribute="centerY" secondItem="6j3-Ia-mEM" secondAttribute="centerY" id="h0s-PJ-fW5"/>
                                             <constraint firstItem="GuR-R3-ieV" firstAttribute="centerX" secondItem="6j3-Ia-mEM" secondAttribute="centerX" id="kFh-UZ-M1S"/>
                                             <constraint firstItem="GuR-R3-ieV" firstAttribute="top" secondItem="6j3-Ia-mEM" secondAttribute="top" id="lZq-E7-noK"/>
                                             <constraint firstItem="Gdq-O5-PQ3" firstAttribute="top" secondItem="6j3-Ia-mEM" secondAttribute="top" constant="25" id="tBx-ZR-S7j"/>
+                                            <constraint firstItem="Xsd-of-aDb" firstAttribute="leading" secondItem="6j3-Ia-mEM" secondAttribute="leading" id="ubj-zM-lnx"/>
+                                            <constraint firstItem="5jY-Ci-jUW" firstAttribute="centerY" secondItem="6j3-Ia-mEM" secondAttribute="centerY" id="v5a-jb-yJA"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -3881,6 +3897,7 @@
         <image name="chatBtn" width="135" height="63"/>
         <image name="edit" width="43" height="43"/>
         <image name="feed" width="70" height="70"/>
+        <image name="following" width="70" height="70"/>
         <image name="friends" width="70" height="70"/>
         <image name="library" width="70" height="70"/>
         <image name="live" width="96" height="40"/>

@@ -28,15 +28,44 @@
     self.filterControl.layer.cornerRadius = 4;
     self.filterControl.layer.masksToBounds = YES;
     
-    self.fanButton.titleLabel.font  = [UIFont fontAwesomeFontOfSize:20.0f];
-    self.vipButton.titleLabel.font  = [UIFont fontAwesomeFontOfSize:20.0f];
+    //self.fanButton.titleLabel.font  = [UIFont fontAwesomeFontOfSize:20.0f];
+    //self.vipButton.titleLabel.font  = [UIFont fontAwesomeFontOfSize:20.0f];
     
-    [self.fanButton setTitle:[NSString fontAwesomeIconStringForEnum:FAThumbsUp] forState:UIControlStateNormal];
-    [self.vipButton setTitle:[NSString fontAwesomeIconStringForEnum:FAStar] forState:UIControlStateNormal];
+
+    //[self.fanButton setTitle:[NSString fontAwesomeIconStringForEnum:FAThumbsUp] forState:UIControlStateNormal];
+    //[self.vipButton setTitle:[NSString fontAwesomeIconStringForEnum:FAStar] forState:UIControlStateNormal];
     
-    self.liveImageView.hidden = ![[DataManager sharedManager] isPremium];
+    //self.liveImageView.hidden = ![[DataManager sharedManager] isPremium];
     
     [self getFirstStation];
+    
+    self.stationLabel.text = @"My Station";
+    [self.fanButton setTitle:@"0 Fans" forState:UIControlStateNormal];
+    [self.fanButton setTitle:@"0 VIPs" forState:UIControlStateNormal];
+    [self fixButtons];
+}
+
+-(void)fixButtons {
+    
+    [self centerButton:self.fanButton];
+    [self centerButton:self.vipButton];
+}
+
+-(void)centerButton:(UIButton *)button {
+    // the space between the image and text
+    CGFloat spacing = 6.0;
+    
+    // lower the text and push it left so it appears centered
+    //  below the image
+    CGSize imageSize = button.imageView.image.size;
+    button.titleEdgeInsets = UIEdgeInsetsMake(
+                                              0.0, - imageSize.width, - (imageSize.height + spacing), 0.0);
+    
+    // raise the image and push it right so it appears centered
+    //  above the text
+    CGSize titleSize = [button.titleLabel.text sizeWithAttributes:@{NSFontAttributeName: button.titleLabel.font}];
+    button.imageEdgeInsets = UIEdgeInsetsMake(
+                                              - (titleSize.height + spacing), 0.0, 0.0, - titleSize.width);
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -48,8 +77,6 @@
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         if ([defaults objectForKey:@"authToken"] !=  nil) {
             self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", [defaults objectForKey:@"FirstName"], [defaults objectForKey:@"LastName"]];
-            
-            self.stationLabel.text = @"My Station";
             
         }
         
@@ -119,10 +146,23 @@
             
             NSDictionary *selectedStation = stationList[0];
             
+            NSInteger numFans = [[selectedStation objectForKey:@"Likes"] integerValue];
+            NSInteger numVips = 0;
+            id followers = [selectedStation objectForKey:@"Followers"];
+            if ([followers isKindOfClass:[NSArray class]]) {
+                //sd
+                NSArray *followerArray = (NSArray *)followers;
+                numVips = followerArray.count;
+            }
+            
             //self.loopArray = stationList;
             dispatch_async(dispatch_get_main_queue(), ^(void){
                 //Run UI Updates
                 self.stationLabel.text = [selectedStation objectForKey:@"Name"];
+                
+                [self.fanButton setTitle:[NSString stringWithFormat:@"%ld Fans", numFans] forState:UIControlStateNormal];
+                [self.vipButton setTitle:[NSString stringWithFormat:@"%ld VIPs", numVips] forState:UIControlStateNormal];
+                [self fixButtons];
                 
             });
             
