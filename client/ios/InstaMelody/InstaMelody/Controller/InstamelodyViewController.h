@@ -13,6 +13,7 @@
 #import "UIFont+FontAwesome.h"
 #import "NSString+FontAwesome.h"
 #import "constants.h"
+#import "CreateChatViewController.h"
 
 @interface InstamelodyViewController : UIViewController <AwesomeMenuDelegate>
 

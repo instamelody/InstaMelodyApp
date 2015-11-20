@@ -7,6 +7,7 @@
 //
 
 #import "InstamelodyViewController.h"
+#import "ChatViewController.h"
 
 @interface InstamelodyViewController ()
 
@@ -115,15 +116,64 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 
+-(void)didCreateChatWithId:(NSString *)chatId {
+    
+    [self getChat:chatId];
+    
+}
+
 
 -(IBAction)showCreateChat:(id)sender {
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    UIViewController *vc = [sb instantiateViewControllerWithIdentifier:@"CreateChatNVC"];
+    UINavigationController *vc = (UINavigationController *)[sb instantiateViewControllerWithIdentifier:@"CreateChatNVC"];
+    CreateChatViewController *chatVC = (CreateChatViewController *)vc.topViewController;
+    chatVC.delegate = self;
     [self presentViewController:vc animated:YES completion:nil];
 }
 
 -(IBAction)showLoops:(id)sender {
     
+}
+
+
+- (void)getChat:(NSString *)chatId {
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/Message/Chat", API_BASE_URL];
+    
+    NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    NSDictionary *parameters = @{@"token": token, @"id": chatId};
+    
+    [manager GET:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        
+        NSDictionary *chatDict = (NSDictionary *)responseObject;
+        
+        ChatViewController *vc = [ChatViewController messagesViewController];
+        
+        //get chat
+        
+        vc.title = @"New Chat";
+        vc.chatDict = chatDict;
+        
+        [self.navigationController pushViewController:vc animated:YES];
+        
+        //NSDictionary *responseDict = (NSDictionary *)responseObject;
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
+            
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            
+            NSLog(@"%@",ErrorResponse);
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
+        }
+    }];
 }
 
 -(UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
