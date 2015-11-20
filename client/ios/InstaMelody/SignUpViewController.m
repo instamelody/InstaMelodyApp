@@ -81,6 +81,94 @@
 
 }
 
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    
+    //to make nav bar clear
+    
+    //self.navigationController.navigationBar.translucent = YES;
+    [(UIView*)[self.navigationController.navigationBar.subviews objectAtIndex:0] setAlpha:0.2f];
+    
+    NSDictionary *navbarTitleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                               [UIColor whiteColor],
+                                               NSForegroundColorAttributeName,
+                                               [UIFont fontWithName:@"Century Gothic" size:18.0],
+                                               NSFontAttributeName,
+                                               nil];
+    
+    
+    /*
+     NSDictionary *buttonTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+     [UIColor colorWithRed:191/255.0f green:139/255.0f blue:226/255.0f alpha:1.0f],
+     NSForegroundColorAttributeName,
+     [UIFont fontWithName:@"FontAwesome" size:20.0],
+     NSFontAttributeName,
+     nil];
+     */
+    
+    
+    [self.navigationController.navigationBar setTitleTextAttributes:navbarTitleTextAttributes];
+    //[self.navigationController.navigationBar setTintColor:[UIColor colorWithRed:191/255.0f green:139/255.0f blue:226/255.0f alpha:1.0f]];
+    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+    
+    
+    NSDictionary *buttonTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                          INSTA_BLUE,
+                                          NSForegroundColorAttributeName,
+                                          [UIFont fontWithName:@"FontAwesome" size:20.0],
+                                          NSFontAttributeName,
+                                          nil];
+    
+    
+    [[UIBarButtonItem appearance] setTitleTextAttributes:buttonTextAttributes forState:UIControlStateNormal];
+    
+}
+
+-(void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    
+    
+    //to make nav bar clear
+    
+    //self.navigationController.navigationBar.translucent = YES;
+    [(UIView*)[self.navigationController.navigationBar.subviews objectAtIndex:0] setAlpha:0.2f];
+    
+    NSDictionary *navbarTitleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                               [UIColor whiteColor],
+                                               NSForegroundColorAttributeName,
+                                               [UIFont fontWithName:@"Century Gothic" size:18.0],
+                                               NSFontAttributeName,
+                                               nil];
+    
+    
+    /*
+     NSDictionary *buttonTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+     [UIColor colorWithRed:191/255.0f green:139/255.0f blue:226/255.0f alpha:1.0f],
+     NSForegroundColorAttributeName,
+     [UIFont fontWithName:@"FontAwesome" size:20.0],
+     NSFontAttributeName,
+     nil];
+     */
+    
+    
+    [self.navigationController.navigationBar setTitleTextAttributes:navbarTitleTextAttributes];
+    //[self.navigationController.navigationBar setTintColor:[UIColor colorWithRed:191/255.0f green:139/255.0f blue:226/255.0f alpha:1.0f]];
+    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+    
+    
+    NSDictionary *buttonTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                          [UIColor whiteColor],
+                                          NSForegroundColorAttributeName,
+                                          [UIFont fontWithName:@"FontAwesome" size:20.0],
+                                          NSFontAttributeName,
+                                          nil];
+    
+    
+    [[UIBarButtonItem appearance] setTitleTextAttributes:buttonTextAttributes forState:UIControlStateNormal];
+    
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -152,8 +240,12 @@
         [fromFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
         NSDate *date = [fromFormatter dateFromString:[self.userInfo objectForKey:@"DateOfBirth"]];
         
-        NSString *dateString = [toFormatter stringFromDate:date];
-        self.dobField.text = dateString;
+        if (date != nil) {
+            NSString *dateString = [toFormatter stringFromDate:date];
+            self.dobField.text = dateString;
+            self.dobField.textColor = [UIColor lightGrayColor];
+            self.dobField.enabled = NO;
+        }
     }
     
     if ([self.userInfo objectForKey:@"IsFemale"] != nil) {
@@ -190,7 +282,7 @@
     NSString *monthYear = self.dobField.text;
     
     NSString *encodedEmail = [self.emailAddressField.text stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
-    NSDictionary *parameters = @{@"Token" : userToken ,  @"User": @{@"DisplayName": self.usernameField.text, @"FirstName": self.firstNameField.text, @"LastName": self.lastNameField.text, @"PhoneNumber" : self.phoneNumberField.text, @"EmailAddress" : encodedEmail, @"IsFemale": isFemale, @"DateOfBirth": monthYear}};
+    NSDictionary *parameters = @{@"Token" : userToken ,  @"User": @{@"DisplayName": self.usernameField.text, @"FirstName": self.firstNameField.text, @"LastName": self.lastNameField.text, @"PhoneNumber" : self.phoneNumberField.text, @"EmailAddress" : encodedEmail, @"IsFemale": isFemale}};
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     

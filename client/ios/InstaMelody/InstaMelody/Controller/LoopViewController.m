@@ -203,6 +203,50 @@
     
 }
 
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    
+    //to make nav bar clear
+    
+    //self.navigationController.navigationBar.translucent = YES;
+    [(UIView*)[self.navigationController.navigationBar.subviews objectAtIndex:0] setAlpha:0.2f];
+    
+    NSDictionary *navbarTitleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                               [UIColor whiteColor],
+                                               NSForegroundColorAttributeName,
+                                               [UIFont fontWithName:@"Century Gothic" size:18.0],
+                                               NSFontAttributeName,
+                                               nil];
+    
+    
+    /*
+     NSDictionary *buttonTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+     [UIColor colorWithRed:191/255.0f green:139/255.0f blue:226/255.0f alpha:1.0f],
+     NSForegroundColorAttributeName,
+     [UIFont fontWithName:@"FontAwesome" size:20.0],
+     NSFontAttributeName,
+     nil];
+     */
+    
+    
+    [self.navigationController.navigationBar setTitleTextAttributes:navbarTitleTextAttributes];
+    //[self.navigationController.navigationBar setTintColor:[UIColor colorWithRed:191/255.0f green:139/255.0f blue:226/255.0f alpha:1.0f]];
+    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+    
+    
+    NSDictionary *buttonTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                          [UIColor whiteColor],
+                                          NSForegroundColorAttributeName,
+                                          [UIFont fontWithName:@"FontAwesome" size:20.0],
+                                          NSFontAttributeName,
+                                          nil];
+    
+    
+    [[UIBarButtonItem appearance] setTitleTextAttributes:buttonTextAttributes forState:UIControlStateNormal];
+    
+}
+
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     if ([self.fgPlayer isPlaying]) {

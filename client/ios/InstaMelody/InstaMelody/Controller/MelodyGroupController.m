@@ -20,6 +20,34 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self refreshGroupList];
+    
+    
+    //self.navigationController.navigationBar.translucent = YES;
+    [(UIView*)[self.navigationController.navigationBar.subviews objectAtIndex:0] setAlpha:0.2f];
+    
+    NSDictionary *navbarTitleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                               [UIColor darkGrayColor],
+                                               NSForegroundColorAttributeName,
+                                               [UIFont fontWithName:@"Century Gothic" size:18.0],
+                                               NSFontAttributeName,
+                                               nil];
+    
+    
+    [self.navigationController.navigationBar setTitleTextAttributes:navbarTitleTextAttributes];
+    //[self.navigationController.navigationBar setTintColor:[UIColor colorWithRed:191/255.0f green:139/255.0f blue:226/255.0f alpha:1.0f]];
+    [self.navigationController.navigationBar setTintColor:[UIColor darkGrayColor]];
+    
+    
+    NSDictionary *buttonTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                          [UIColor darkGrayColor],
+                                          NSForegroundColorAttributeName,
+                                          [UIFont fontWithName:@"FontAwesome" size:20.0],
+                                          NSFontAttributeName,
+                                          nil];
+    
+    
+    [[UIBarButtonItem appearance] setTitleTextAttributes:buttonTextAttributes forState:UIControlStateNormal];
+    
 }
 
 - (void)didReceiveMemoryWarning {
