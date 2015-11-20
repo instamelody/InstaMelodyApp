@@ -199,6 +199,23 @@
     // header.contentView.backgroundColor = [UIColor blackColor];
 }
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (indexPath.section == 0) {
+        Friend *selectedFriend = [self.friendsList objectAtIndex:indexPath.row];
+        UIStoryboard *mainSB = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        
+        StationViewController *vc = (StationViewController *)[mainSB instantiateViewControllerWithIdentifier:@"StationViewController"];
+        vc.selectedFriend = selectedFriend;
+        
+        [self.navigationController pushViewController:vc animated:YES];
+        
+    } else {
+        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    }
+    
+}
+
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {

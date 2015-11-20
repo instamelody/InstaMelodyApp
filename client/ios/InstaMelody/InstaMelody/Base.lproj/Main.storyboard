@@ -2526,7 +2526,6 @@
                                     <outlet property="detailLabel" destination="2dx-Tt-WbI" id="CZZ-6q-TKA"/>
                                     <outlet property="nameLabel" destination="Y0i-r9-LvI" id="3M8-zU-Ilm"/>
                                     <outlet property="profileImageView" destination="nks-ZE-lUZ" id="qar-Zs-aar"/>
-                                    <segue destination="x3v-Jb-UfZ" kind="show" identifier="showFriendStation" id="iJg-m6-OlB"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
