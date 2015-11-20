@@ -90,23 +90,36 @@
     
     if (self.selectedFriend == nil) {
         
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        if ([defaults objectForKey:@"authToken"] !=  nil) {
-            self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", [defaults objectForKey:@"FirstName"], [defaults objectForKey:@"LastName"]];
+        if (self.stationDict != nil) {
+            
+            
+            //self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", self.selectedFriend.firstName, self.selectedFriend.lastName];
+            
+            self.title = [self.stationDict objectForKey:@"Name"];
+            self.stationLabel.text = [self.stationDict objectForKey:@"Name"];
+            
+            //get station
+            [self getFirstStation];
+            
+        } else {
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            if ([defaults objectForKey:@"authToken"] !=  nil) {
+                self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", [defaults objectForKey:@"FirstName"], [defaults objectForKey:@"LastName"]];
+                
+            }
+            
+            if ([defaults objectForKey:@"ProfileFilePath"] != nil) {
+                
+                NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+                
+                NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
+                NSString *imageName = [[defaults objectForKey:@"ProfileFilePath"] lastPathComponent];
+                
+                NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
+                self.profileImageView.image = [UIImage imageWithContentsOfFile:imagePath];
+            }
             
         }
-        
-        if ([defaults objectForKey:@"ProfileFilePath"] != nil) {
-            
-            NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-            
-            NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
-            NSString *imageName = [[defaults objectForKey:@"ProfileFilePath"] lastPathComponent];
-            
-            NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
-            self.profileImageView.image = [UIImage imageWithContentsOfFile:imagePath];
-        }
-        
         
     } else {
 
@@ -145,6 +158,12 @@
     if (self.selectedFriend != nil) {
         userId = self.selectedFriend.userId;
     }
+    
+    if (self.stationDict != nil) {
+        userId = [self.stationDict objectForKey:@"UserId"];
+    }
+    
+    [self getUserDetails:userId];
     
     //add 64 char string
     
@@ -566,5 +585,48 @@
     [self.collectionView reloadData];
 }
 
+
+-(void)getUserDetails:(NSString*)userId {
+    
+    //https://api.instamelody.com/v1.0/User?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&displayName=testeraccount
+    
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/User", API_BASE_URL];
+    
+    NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    
+    NSDictionary *parameters = @{@"token": token, @"id": userId};
+    
+    [manager GET:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        
+        
+        NSDictionary *responseDict = (NSDictionary *)responseObject;
+        
+        
+        dispatch_async(dispatch_get_main_queue(), ^(void){
+            self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", [responseDict objectForKey:@"FirstName"], [responseDict objectForKey:@"LastName"]];
+            
+        });
+
+        //NSDictionary *responseDict = (NSDictionary *)responseObject;
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
+            
+            NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
+            
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            
+            NSLog(@"%@",ErrorResponse);
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            //[alertView show];
+        }
+    }];
+}
 
 @end

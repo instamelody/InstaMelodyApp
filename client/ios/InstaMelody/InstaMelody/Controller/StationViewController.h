@@ -26,5 +26,6 @@
 @property IBOutlet UIButton *fanButton;
 
 @property Friend *selectedFriend;
+@property NSDictionary *stationDict;
 
 @end

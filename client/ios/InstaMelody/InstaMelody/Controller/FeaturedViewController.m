@@ -7,6 +7,7 @@
 //
 
 #import "FeaturedViewController.h"
+#import "StationViewController.h"
 #import "AdViewCell.h"
 #import "CurrentCell.h"
 
@@ -194,6 +195,28 @@
             default:
                 break;
         }
+    }
+    
+    if (collectionView == self.featuredCollectionView) {
+        NSDictionary *itemDict = [self.topArray objectAtIndex:indexPath.row];
+        
+        UIStoryboard *mainSB = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        
+        StationViewController *vc = (StationViewController *)[mainSB instantiateViewControllerWithIdentifier:@"StationViewController"];
+        vc.stationDict = itemDict;
+        
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    
+    if (collectionView == self.currentCollectionView) {
+        NSDictionary *itemDict = [self.newestArray objectAtIndex:indexPath.row];
+        
+        UIStoryboard *mainSB = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        
+        StationViewController *vc = (StationViewController *)[mainSB instantiateViewControllerWithIdentifier:@"StationViewController"];
+        vc.stationDict = itemDict;
+        
+        [self.navigationController pushViewController:vc animated:YES];
     }
     
     /*
