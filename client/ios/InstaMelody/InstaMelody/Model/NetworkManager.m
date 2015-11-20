@@ -37,6 +37,7 @@
     
     time_t unixTime = time(NULL);
     
+    NSNumber *isExplicit = [userDict objectForKey:@"IsExplicit"];
     
     NSString *recordingPath = [userDict objectForKey:@"LoopURL"];
     NSString *recordingName = [recordingPath lastPathComponent];
@@ -60,6 +61,7 @@
     
     NSNumber *firstId = [userDict objectForKey:@"MelodyId1"];
     NSNumber *secondId = [userDict objectForKey:@"MelodyId2"];
+    NSNumber *thirdId = [userDict objectForKey:@"MelodyId3"];
     
     if (firstId) {
         NSDictionary *entry = [NSDictionary dictionaryWithObject:firstId forKey:@"Id"];
@@ -69,6 +71,12 @@
     if (secondId) {
         NSDictionary *entry = [NSDictionary dictionaryWithObject:secondId forKey:@"Id"];
         [partArray addObject:entry];
+    }
+    
+    if (thirdId) {
+        NSDictionary *entry = [NSDictionary dictionaryWithObject:thirdId forKey:@"Id"];
+        [partArray addObject:entry];
+        
     }
     
     NSMutableDictionary *recordingDict = [NSMutableDictionary dictionary];
@@ -81,7 +89,7 @@
     //NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"UserMelody": @{@"Parts" : partArray}}];
     
     
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Chat": @{@"Id" : [userDict objectForKey:@"Id"]}, @"Message": @{@"Description" : @"User Melody Message", @"UserMelody": @{@"Parts" : partArray} }}];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Chat": @{@"Id" : [userDict objectForKey:@"Id"]}, @"Message": @{@"Description" : @"User Melody Message", @"UserMelody": @{@"Parts" : partArray,  @"IsExplicit" : isExplicit} }}];
     
     
     NSString *requestUrl = [NSString stringWithFormat:@"%@/Message/Chat/Message", API_BASE_URL];
@@ -147,6 +155,8 @@
     NSNumber *secondId = [userDict objectForKey:@"MelodyId2"];
     NSNumber *thirdId = [userDict objectForKey:@"MelodyId3"];
     
+    NSNumber *isExplicit = [userDict objectForKey:@"IsExplicit"];
+    
     if (firstId) {
         NSDictionary *entry = [NSDictionary dictionaryWithObject:firstId forKey:@"Id"];
         [partArray addObject:entry];
@@ -180,7 +190,7 @@
     [recordingDict setObject:recordingName forKey:@"FileName"];
     [partArray addObject:recordingDict];
     
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"UserMelody": @{@"Parts" : partArray}}];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"UserMelody": @{@"Parts" : partArray, @"IsExplicit" : isExplicit}}];
     
     
     NSString *requestUrl = [NSString stringWithFormat:@"%@/Melody/New", API_BASE_URL];

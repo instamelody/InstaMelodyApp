@@ -12,6 +12,7 @@
 
 @dynamic userMelodyId;
 @dynamic isChatLoopPart;
+@dynamic isExplicit;
 @dynamic isStationPostMelody;
 @dynamic userId;
 @dynamic userMelodyName;

@@ -29,6 +29,7 @@
     <entity name="UserMelody" representedClassName="UserMelody" syncable="YES">
         <attribute name="dateCreated" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="isChatLoopPart" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="isExplicit" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="isStationPostMelody" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="userId" attributeType="String" syncable="YES"/>
         <attribute name="userMelodyId" attributeType="String" syncable="YES"/>
@@ -49,7 +50,7 @@
         <element name="Friend" positionX="-90" positionY="-7" width="128" height="148"/>
         <element name="Melody" positionX="243" positionY="-15" width="128" height="180"/>
         <element name="MelodyGroup" positionX="36" positionY="-162" width="128" height="103"/>
-        <element name="UserMelody" positionX="-18" positionY="164" width="128" height="150"/>
+        <element name="UserMelody" positionX="-18" positionY="164" width="128" height="165"/>
         <element name="UserMelodyPart" positionX="160" positionY="164" width="128" height="163"/>
     </elements>
 </model>

@@ -206,6 +206,7 @@
                 [self fetchMyLoops];
             } else {
                 //get my friend's public loops
+                self.loopArray = [selectedStation objectForKey:@"Messages"];
             }
 
         }

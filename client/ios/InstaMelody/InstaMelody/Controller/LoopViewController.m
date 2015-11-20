@@ -77,6 +77,10 @@
          if ([self.selectedUserMelody.userId isEqualToString:myUserId]) {
              self.isMyStudio = YES;
          }
+                           
+        if ([self.selectedUserMelody.isExplicit boolValue]) {
+                self.explicitCheckbox.on = YES;
+        }
          
         for (UserMelodyPart *part in [self.selectedUserMelody parts]) {
             if ([part.isUserCreated boolValue] == true) {
@@ -372,6 +376,12 @@
         NSDictionary *userMelodyDict = [part objectForKey:@"UserMelody"];
         
         NSString *userId = [userMelodyDict objectForKey:@"UserId"];
+        
+        BOOL isExplicit =[[userMelodyDict objectForKey:@"IsExplicit"] boolValue];
+        
+        if (isExplicit) {
+            self.explicitCheckbox.on = YES;
+        }
         
         [partDict setObject:userId forKey:@"UserId"];
         
@@ -859,6 +869,9 @@
         if (self.selectedMelody3 != nil) {
             [userDict setObject:self.selectedMelody3.melodyId forKey:@"MelodyId3"];
         }
+        
+        [userDict setObject:[NSNumber numberWithBool:self.explicitCheckbox.on ] forKey:@"IsExplicit"];
+        
         
         
         if (!isPremium && self.selectedMelody2) {
