@@ -7,6 +7,8 @@
 //
 
 #import "NotificationsViewController.h"
+#import "ChatsTableViewController.h"
+#import "StationViewController.h"
 #import "AFHTTPRequestOperationManager.h"
 #import "constants.h"
 #import "NotificationCell.h"
@@ -136,6 +138,38 @@
     
     return cell;
 }
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    NSDictionary *infoDict = [self.dataArray objectAtIndex:indexPath.row];
+    NSString *friendId = [infoDict objectForKey:@"UserId"];
+    NSInteger activityType = [[infoDict objectForKey:@"ActivityType"] integerValue];
+    
+    if (self.isFeed && activityType == 1) {
+        /*
+         Friend *selectedFriend = [self.friendsList objectAtIndex:indexPath.row];
+         StationViewController *stationVC = (StationViewController *)segue.destinationViewController;
+         stationVC.selectedFriend = selectedFriend;
+         */
+        
+        
+        Friend *selectedFriend = [Friend MR_findFirstByAttribute:@"userId" withValue:friendId];
+        
+        UIStoryboard *mainSB = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        
+        StationViewController *vc = (StationViewController *)[mainSB instantiateViewControllerWithIdentifier:@"StationViewController"];
+        vc.selectedFriend = selectedFriend;
+        
+        [self.navigationController pushViewController:vc animated:YES];
+        
+    } else {
+        UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        UIViewController *vc = [sb instantiateViewControllerWithIdentifier:@"ChatsTableViewController"];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+}
+
+
 
 /*
 // Override to support conditional editing of the table view.

@@ -2211,7 +2211,7 @@
                                                         <constraint firstAttribute="width" constant="170" id="hs8-rY-k3f"/>
                                                     </constraints>
                                                 </imageView>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qQr-hy-pm7">
+                                                <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qQr-hy-pm7">
                                                     <rect key="frame" x="53" y="98" width="65" height="65"/>
                                                     <animations/>
                                                     <constraints>
@@ -3363,7 +3363,6 @@
                                     <outlet property="dateLabel" destination="tAt-tj-tHt" id="5wF-B7-1lh"/>
                                     <outlet property="messageLabel" destination="efP-br-U4l" id="Jd4-8c-S7Y"/>
                                     <outlet property="profileImageView" destination="nbL-IL-ic0" id="m8r-wN-fXp"/>
-                                    <segue destination="eln-IA-CPa" kind="show" id="pm1-RC-hGu"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -3919,6 +3918,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="4ps-ka-4X8"/>
-        <segue reference="42P-9A-i60"/>
+        <segue reference="p0p-hV-u3V"/>
     </inferredMetricsTieBreakers>
 </document>
