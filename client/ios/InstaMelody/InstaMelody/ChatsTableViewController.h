@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "MGSwipeTableCell.h"
 #import "MGSwipeButton.h"
+#import "CreateChatViewController.h"
 
-@interface ChatsTableViewController : UITableViewController <MGSwipeTableCellDelegate>
+@interface ChatsTableViewController : UITableViewController <MGSwipeTableCellDelegate, CreateChatDelegate>
 
 @end

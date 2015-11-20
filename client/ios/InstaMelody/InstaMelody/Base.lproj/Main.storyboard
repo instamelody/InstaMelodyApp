@@ -520,14 +520,14 @@
                     <navigationItem key="navigationItem" title="Chats" id="IiK-q9-JmP">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="fbR-6Q-Frs">
                             <connections>
-                                <segue destination="k60-g6-Bw8" kind="presentation" id="DH9-4E-IwG"/>
+                                <segue destination="k60-g6-Bw8" kind="presentation" identifier="presentCreateChat" id="DH9-4E-IwG"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Mkp-ei-FrD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1224" y="91"/>
+            <point key="canvasLocation" x="1206" y="91"/>
         </scene>
         <!--Delegate-->
         <scene sceneID="Fiz-Mw-9ys">

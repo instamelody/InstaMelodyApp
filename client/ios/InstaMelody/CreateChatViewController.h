@@ -9,7 +9,15 @@
 #import <UIKit/UIKit.h>
 #import "CLTokenInputView.h"
 
+@protocol CreateChatDelegate <NSObject>
+
+-(void)didCreateChatWithId:(NSString *)chatId;
+
+@end
+
 @interface CreateChatViewController : UIViewController <CLTokenInputViewDelegate, UITableViewDataSource, UITableViewDelegate>
+
+@property (nonatomic, strong) id <CreateChatDelegate> delegate;
 
 @property (nonatomic, strong) IBOutlet UITextField *nameField;
 @property (nonatomic, strong) IBOutlet UITextField *messageField;

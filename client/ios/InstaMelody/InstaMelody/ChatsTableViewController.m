@@ -181,6 +181,8 @@
      //[self.navigationController presentViewController:navCon animated:YES completion:nil];
 }
 
+
+
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -215,21 +217,74 @@
 }
 */
 
-/*
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:@"presentCreateChat"]) {
+        UINavigationController *navVC = segue.destinationViewController;
+        CreateChatViewController *chatVC = (CreateChatViewController *)navVC.topViewController;
+        chatVC.delegate = self;
+    }
+    
 }
-*/
+
+
+-(void)didCreateChatWithId:(NSString *)chatId {
+    
+    [self getChat:chatId];
+
+}
 
 #pragma mark - webservice actions
 
 - (void)refreshChats {
     [self getUserChats];
 }
+
+
+- (void)getChat:(NSString *)chatId {
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/Message/Chat", API_BASE_URL];
+    
+    NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    NSDictionary *parameters = @{@"token": token, @"id": chatId};
+    
+    [manager GET:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        
+        NSDictionary *chatDict = (NSDictionary *)responseObject;
+        
+        ChatViewController *vc = [ChatViewController messagesViewController];
+        
+        //get chat
+         
+         vc.title = @"New Chat";
+         vc.chatDict = chatDict;
+        
+        [self.navigationController pushViewController:vc animated:YES];
+        
+        //NSDictionary *responseDict = (NSDictionary *)responseObject;
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
+            
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            
+            NSLog(@"%@",ErrorResponse);
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
+        }
+    }];
+}
+
 
 - (void)getUserChats {
     NSString *requestUrl = [NSString stringWithFormat:@"%@/Message/Chat", API_BASE_URL];

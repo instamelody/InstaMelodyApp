@@ -23,14 +23,14 @@
 #import "CLTokenInputView.h"
 #import "BEMCheckBox.h"
 
-@protocol LoopDelegate <NSObject, UITableViewDataSource, UITableViewDelegate, CLTokenInputViewDelegate>
+@protocol LoopDelegate <NSObject>
 
 -(void)didFinishWithInfo:(NSDictionary *)userDict;
 -(void)cancel;
 
 @end
 
-@interface LoopViewController : UIViewController <AVAudioPlayerDelegate, EZMicrophoneDelegate>
+@interface LoopViewController : UIViewController <AVAudioPlayerDelegate, EZMicrophoneDelegate, UITableViewDataSource, UITableViewDelegate, CLTokenInputViewDelegate>
 
 @property BOOL isMyStudio;
 
