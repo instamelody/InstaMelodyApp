@@ -89,6 +89,7 @@
             <string>CenturyGothic</string>
             <string>CenturyGothic</string>
             <string>CenturyGothic</string>
+            <string>CenturyGothic</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -2345,39 +2346,73 @@
                                 <animations/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MelodyCell" textLabel="FFn-q1-R2U" detailTextLabel="pX5-z4-DQZ" imageView="EdE-qr-btJ" rowHeight="101" style="IBUITableViewCellStyleSubtitle" id="d7f-UQ-RpR">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MelodyCell" rowHeight="101" id="d7f-UQ-RpR" customClass="UserMelodyCell">
                                         <rect key="frame" x="0.0" y="22" width="600" height="101"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="d7f-UQ-RpR" id="FoZ-le-mcK">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="100.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="FFn-q1-R2U">
-                                                    <rect key="frame" x="100" y="34" width="29.5" height="20"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10/21" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OAc-TQ-dJH">
+                                                    <rect key="frame" x="525" y="39" width="65" height="24"/>
                                                     <animations/>
-                                                    <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="16"/>
-                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="pX5-z4-DQZ">
-                                                    <rect key="frame" x="100" y="54" width="39" height="13.5"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <animations/>
-                                                    <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="11"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="65" id="04a-Hx-Gbc"/>
+                                                        <constraint firstAttribute="height" constant="24" id="Du0-bK-6ZK"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="12"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="showcase" id="EdE-qr-btJ">
-                                                    <rect key="frame" x="15" y="15" width="70" height="70"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ekU-UK-Eg3">
+                                                    <rect key="frame" x="108" y="28" width="409" height="28"/>
                                                     <animations/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="28" id="LBa-10-KWT"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="18"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="VIP" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="ZDq-8M-jAr">
+                                                    <rect key="frame" x="108" y="59" width="384" height="18"/>
+                                                    <animations/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="18" id="Fxd-mo-amx"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="16"/>
+                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="showcase" translatesAutoresizingMaskIntoConstraints="NO" id="nK3-Sb-y5j">
+                                                    <rect key="frame" x="16" y="16" width="70" height="70"/>
+                                                    <animations/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="70" id="hpj-8P-ekM"/>
+                                                        <constraint firstAttribute="width" constant="70" id="lCq-kp-6Jc"/>
+                                                    </constraints>
                                                 </imageView>
                                             </subviews>
                                             <animations/>
+                                            <constraints>
+                                                <constraint firstItem="ZDq-8M-jAr" firstAttribute="leading" secondItem="nK3-Sb-y5j" secondAttribute="trailing" constant="22" id="GaE-nQ-t70"/>
+                                                <constraint firstItem="OAc-TQ-dJH" firstAttribute="leading" secondItem="ekU-UK-Eg3" secondAttribute="trailing" constant="8" id="Iql-Ez-AtU"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="ZDq-8M-jAr" secondAttribute="trailing" constant="100" id="Ru7-Rh-u0I"/>
+                                                <constraint firstItem="ekU-UK-Eg3" firstAttribute="top" secondItem="FoZ-le-mcK" secondAttribute="topMargin" constant="20" id="SGN-of-3FJ"/>
+                                                <constraint firstItem="OAc-TQ-dJH" firstAttribute="centerY" secondItem="FoZ-le-mcK" secondAttribute="centerY" id="SVx-hu-coc"/>
+                                                <constraint firstItem="nK3-Sb-y5j" firstAttribute="centerY" secondItem="FoZ-le-mcK" secondAttribute="centerY" id="aH8-EI-qhW"/>
+                                                <constraint firstItem="nK3-Sb-y5j" firstAttribute="leading" secondItem="FoZ-le-mcK" secondAttribute="leadingMargin" constant="8" id="hFB-zu-ODk"/>
+                                                <constraint firstItem="ekU-UK-Eg3" firstAttribute="leading" secondItem="nK3-Sb-y5j" secondAttribute="trailing" constant="22" id="hfu-bf-AFT"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="OAc-TQ-dJH" secondAttribute="trailing" constant="2" id="kVX-HE-xbk"/>
+                                                <constraint firstItem="ZDq-8M-jAr" firstAttribute="top" secondItem="ekU-UK-Eg3" secondAttribute="bottom" constant="3" id="ljq-3D-8Dd"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                         <animations/>
                                         <connections>
+                                            <outlet property="dateLabel" destination="OAc-TQ-dJH" id="EAg-Zn-cyI"/>
+                                            <outlet property="profileImageView" destination="nK3-Sb-y5j" id="TDf-qM-mLd"/>
+                                            <outlet property="subtitleLabel" destination="ZDq-8M-jAr" id="yec-rE-j6v"/>
+                                            <outlet property="titleLabel" destination="ekU-UK-Eg3" id="iIU-82-qX5"/>
                                             <segue destination="zFq-Vd-UtH" kind="show" identifier="showUserMelody" id="42P-9A-i60"/>
                                         </connections>
                                     </tableViewCell>
@@ -3381,10 +3416,10 @@ We are committed to conducting our business in accordance with these principles 
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10/21" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tAt-tj-tHt">
-                                            <rect key="frame" x="537" y="38" width="45" height="24"/>
+                                            <rect key="frame" x="517" y="38" width="65" height="24"/>
                                             <animations/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="45" id="VTz-W6-5J1"/>
+                                                <constraint firstAttribute="width" constant="65" id="VTz-W6-5J1"/>
                                                 <constraint firstAttribute="height" constant="24" id="fUY-Il-3Dt"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="12"/>
@@ -3392,7 +3427,7 @@ We are committed to conducting our business in accordance with these principles 
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="efP-br-U4l">
-                                            <rect key="frame" x="96" y="16" width="433" height="68"/>
+                                            <rect key="frame" x="96" y="16" width="413" height="68"/>
                                             <animations/>
                                             <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="14"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -3973,6 +4008,6 @@ We are committed to conducting our business in accordance with these principles 
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="SjU-KU-hD4"/>
-        <segue reference="p0p-hV-u3V"/>
+        <segue reference="42P-9A-i60"/>
     </inferredMetricsTieBreakers>
 </document>

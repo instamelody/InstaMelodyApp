@@ -36,6 +36,7 @@
 		872BB56E1B74BC36004CDBE7 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BB56D1B74BC36004CDBE7 /* ChatViewController.m */; };
 		872BB5A01B74CAD1004CDBE7 /* AwesomeMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BB59D1B74CAD1004CDBE7 /* AwesomeMenu.m */; };
 		872BB5A11B74CAD1004CDBE7 /* AwesomeMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 872BB59F1B74CAD1004CDBE7 /* AwesomeMenuItem.m */; };
+		873C5BEA1BFF070500E2A4E1 /* UserMelodyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 873C5BE91BFF070500E2A4E1 /* UserMelodyCell.m */; };
 		873FCFE51BB7355F00CE2B44 /* MelodyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 873FCFE41BB7355F00CE2B44 /* MelodyCell.m */; };
 		873FCFEA1BB73C9400CE2B44 /* MelodyGroupController.m in Sources */ = {isa = PBXBuildFile; fileRef = 873FCFE91BB73C9400CE2B44 /* MelodyGroupController.m */; };
 		873FCFED1BB7412C00CE2B44 /* MelodyPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 873FCFEC1BB7412C00CE2B44 /* MelodyPickerController.m */; };
@@ -144,6 +145,8 @@
 		872BB59D1B74CAD1004CDBE7 /* AwesomeMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AwesomeMenu.m; sourceTree = "<group>"; };
 		872BB59E1B74CAD1004CDBE7 /* AwesomeMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AwesomeMenuItem.h; sourceTree = "<group>"; };
 		872BB59F1B74CAD1004CDBE7 /* AwesomeMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AwesomeMenuItem.m; sourceTree = "<group>"; };
+		873C5BE81BFF070500E2A4E1 /* UserMelodyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserMelodyCell.h; path = View/UserMelodyCell.h; sourceTree = "<group>"; };
+		873C5BE91BFF070500E2A4E1 /* UserMelodyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserMelodyCell.m; path = View/UserMelodyCell.m; sourceTree = "<group>"; };
 		873FCFE31BB7355F00CE2B44 /* MelodyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MelodyCell.h; path = View/MelodyCell.h; sourceTree = "<group>"; };
 		873FCFE41BB7355F00CE2B44 /* MelodyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MelodyCell.m; path = View/MelodyCell.m; sourceTree = "<group>"; };
 		873FCFE81BB73C9400CE2B44 /* MelodyGroupController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MelodyGroupController.h; sourceTree = "<group>"; };
@@ -492,6 +495,8 @@
 				877040B61BF7B3D1003D1F27 /* AdViewCell.m */,
 				877040BE1BF7C4DF003D1F27 /* CurrentCell.h */,
 				877040BF1BF7C4DF003D1F27 /* CurrentCell.m */,
+				873C5BE81BFF070500E2A4E1 /* UserMelodyCell.h */,
+				873C5BE91BFF070500E2A4E1 /* UserMelodyCell.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -690,6 +695,7 @@
 				8706E62E1BDA14A80017E560 /* InstamelodyViewController.m in Sources */,
 				8707F9F81B4476BD004B4C20 /* AFURLRequestSerialization.m in Sources */,
 				8707F9F91B4476BD004B4C20 /* AFURLResponseSerialization.m in Sources */,
+				873C5BEA1BFF070500E2A4E1 /* UserMelodyCell.m in Sources */,
 				8707F9B81B446F57004B4C20 /* AppDelegate.m in Sources */,
 				8706E6341BDB50700017E560 /* FeaturedViewController.m in Sources */,
 				87DA195F1B72872A00941DCE /* SignInViewController.m in Sources */,

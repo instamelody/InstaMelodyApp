@@ -7,6 +7,7 @@
 //
 
 #import "UserMelodyListViewController.h"
+#import "UserMelodyCell.h"
 #import "constants.h"
 #import "AFHTTPRequestOperationManager.h"
 #import "UIFont+FontAwesome.h"
@@ -18,6 +19,7 @@
 
 @property (nonatomic, strong) NSArray *melodyList;
 @property NSArray *filteredList;
+@property NSDateFormatter *dateFormatter;
 
 @end
 
@@ -28,6 +30,8 @@
     // Do any additional setup after loading the view.
     
     [self refreshUserMelodyList];
+    self.dateFormatter = [[NSDateFormatter alloc] init];
+    [self.dateFormatter setDateStyle:NSDateFormatterShortStyle];
     
 }
 
@@ -61,19 +65,20 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MelodyCell" forIndexPath:indexPath];
+    UserMelodyCell *cell = (UserMelodyCell *)[tableView dequeueReusableCellWithIdentifier:@"MelodyCell" forIndexPath:indexPath];
     
     UserMelody *userMelody = (UserMelody *)[self.filteredList objectAtIndex:indexPath.row];
     
-    cell.textLabel.text = userMelody.userMelodyName;
+    cell.titleLabel.text = userMelody.userMelodyName;
     if (userMelody.parts.count > 1) {
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"Social loop"];
+        cell.subtitleLabel.text = [NSString stringWithFormat:@"Social loop"];
     } else {
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"Solo loop"];
+        cell.subtitleLabel.text = [NSString stringWithFormat:@"Solo loop"];
     }
     if ([userMelody.isChatLoopPart boolValue] == TRUE && self.filterControl.selectedSegmentIndex == 3) {
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"Chat loop"];
+        cell.subtitleLabel.text = [NSString stringWithFormat:@"Chat loop"];
     }
+    cell.dateLabel.text = [self.dateFormatter stringFromDate:userMelody.dateCreated];
     cell.backgroundColor = [UIColor clearColor];
 
     return cell;
@@ -111,7 +116,7 @@
     //get friends from core data
     self.melodyList = [[DataManager sharedManager] userMelodyList];
     
-    NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateCreated" ascending:YES];
+    NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateCreated" ascending:NO];
     NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
     self.filteredList = [self.melodyList sortedArrayUsingDescriptors:descriptors];
 
@@ -123,7 +128,7 @@
     switch (control.selectedSegmentIndex) {
         case 0: {
             
-            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateCreated" ascending:YES];
+            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateCreated" ascending:NO];
             NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
             self.filteredList = [self.melodyList sortedArrayUsingDescriptors:descriptors];
 
@@ -139,7 +144,7 @@
                 }
             }
             
-            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateCreated" ascending:YES];
+            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateCreated" ascending:NO];
             NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
             self.filteredList = [tempArray sortedArrayUsingDescriptors:descriptors];
 
@@ -156,7 +161,7 @@
             }
 
             
-            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateCreated" ascending:YES];
+            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateCreated" ascending:NO];
             NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
             self.filteredList = [tempArray sortedArrayUsingDescriptors:descriptors];
             
@@ -170,7 +175,7 @@
                 }
             }
             
-            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateCreated" ascending:YES];
+            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateCreated" ascending:NO];
             NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
             self.filteredList = [tempArray sortedArrayUsingDescriptors:descriptors];
             
