@@ -79,6 +79,11 @@
     
     [[UIBarButtonItem appearance] setTitleTextAttributes:buttonTextAttributes forState:UIControlStateNormal];
     
+    
+    UIView *colorView = [UIView new];
+    [colorView setBackgroundColor:[UIColor colorWithRed:153/255.0 green:153/255.0 blue:153/255.0 alpha:1.0]];
+    [[UITableViewCell appearance] setSelectedBackgroundView:colorView];
+    
     if ([defaults objectForKey:@"micVolume"] == nil) {
         [defaults setObject:[NSNumber numberWithFloat:0.5] forKey:@"micVolume"];
         [defaults setObject:[NSNumber numberWithFloat:0.5] forKey:@"melodyVolume"];

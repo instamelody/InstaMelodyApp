@@ -203,12 +203,17 @@
     
     if (indexPath.section == 0) {
         Friend *selectedFriend = [self.friendsList objectAtIndex:indexPath.row];
-        UIStoryboard *mainSB = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         
-        StationViewController *vc = (StationViewController *)[mainSB instantiateViewControllerWithIdentifier:@"StationViewController"];
-        vc.selectedFriend = selectedFriend;
-        
-        [self.navigationController pushViewController:vc animated:YES];
+        if (selectedFriend != nil) {
+            UIStoryboard *mainSB = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+            
+            StationViewController *vc = (StationViewController *)[mainSB instantiateViewControllerWithIdentifier:@"StationViewController"];
+            vc.selectedFriend = selectedFriend;
+            
+            [self.navigationController pushViewController:vc animated:YES];
+        } else {
+            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+        }
         
     } else {
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
