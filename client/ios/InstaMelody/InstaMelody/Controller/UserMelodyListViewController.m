@@ -18,8 +18,11 @@
 @interface UserMelodyListViewController ()
 
 @property (nonatomic, strong) NSArray *melodyList;
-@property NSArray *filteredList;
-@property NSDateFormatter *dateFormatter;
+//@property NSArray *filteredList;
+@property NSDateFormatter *fromDateFormatter;
+@property NSDateFormatter *toDateFormatter;
+@property NSArray *loopArray;
+@property NSArray *cleanLoopArray;
 
 @end
 
@@ -29,9 +32,22 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    [self refreshUserMelodyList];
-    self.dateFormatter = [[NSDateFormatter alloc] init];
-    [self.dateFormatter setDateStyle:NSDateFormatterShortStyle];
+    //[self refreshUserMelodyList];
+    [self fetchMyLoops];
+    
+    self.fromDateFormatter = [[NSDateFormatter alloc] init];
+    
+    NSLocale *enUSPOSIXLocale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
+    
+    [self.fromDateFormatter setLocale:enUSPOSIXLocale];
+    
+    [self.fromDateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
+    [self.fromDateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    
+    self.toDateFormatter = [[NSDateFormatter alloc] init];
+    [self.toDateFormatter setDateStyle:NSDateFormatterShortStyle];
+    [self.toDateFormatter setTimeStyle:NSDateFormatterShortStyle];
+    
     
 }
 
@@ -60,25 +76,47 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
     
-    return self.filteredList.count;
+    return self.loopArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     UserMelodyCell *cell = (UserMelodyCell *)[tableView dequeueReusableCellWithIdentifier:@"MelodyCell" forIndexPath:indexPath];
     
-    UserMelody *userMelody = (UserMelody *)[self.filteredList objectAtIndex:indexPath.row];
+    NSDictionary *loopDict = self.loopArray[indexPath.row];
     
-    cell.titleLabel.text = userMelody.userMelodyName;
-    if (userMelody.parts.count > 1) {
+    cell.titleLabel.text = [loopDict objectForKey:@"Name"];
+    
+    NSString *oldDateString = [loopDict objectForKey:@"DateCreated"];
+    NSDate *dateObject = [self.fromDateFormatter dateFromString:oldDateString];
+    
+    cell.dateLabel.text = [self.toDateFormatter stringFromDate:dateObject];
+    
+    NSArray *parts = [loopDict objectForKey:@"Parts"];
+    
+    if (parts.count > 1) {
         cell.subtitleLabel.text = [NSString stringWithFormat:@"Social loop"];
     } else {
         cell.subtitleLabel.text = [NSString stringWithFormat:@"Solo loop"];
     }
-    if ([userMelody.isChatLoopPart boolValue] == TRUE && self.filterControl.selectedSegmentIndex == 3) {
+    if ([[loopDict objectForKey:@"IsChatLoopPart"] boolValue] == TRUE && self.filterControl.selectedSegmentIndex == 3) {
         cell.subtitleLabel.text = [NSString stringWithFormat:@"Chat loop"];
     }
-    cell.dateLabel.text = [self.dateFormatter stringFromDate:userMelody.dateCreated];
+    
+    /*
+    UserMelody *userMelody = (UserMelody *)[self.loopArray objectAtIndex:indexPath.row];
+    
+    cell.titleLabel.text = userMelody.userMelodyName;
+    if (userMelody.parts.count > 1) {
+     
+    } else {
+     
+    }
+     if ([userMelody.isChatLoopPart boolValue] == TRUE && self.filterControl.selectedSegmentIndex == 3) {
+     cell.subtitleLabel.text = [NSString stringWithFormat:@"Chat loop"];
+     }
+    */
+    
     cell.backgroundColor = [UIColor clearColor];
 
     return cell;
@@ -102,6 +140,46 @@
 }
 
 
+-(void)fetchMyLoops {
+    
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/Melody/Loop", API_BASE_URL];
+    
+    NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    NSDictionary *parameters = @{@"token": token};
+    
+    [manager GET:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        // NSLog(@"JSON: %@", responseObject);
+        NSLog(@"loop updated");
+        
+        NSArray *tempArray = (NSArray *)responseObject;
+        
+        //NSArray *tempArray = [[DataManager sharedManager] userMelodyList];
+        
+        if (tempArray.count > 20) {
+            tempArray = [tempArray subarrayWithRange:NSMakeRange(0, 20)];
+        }
+        
+        NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateCreated" ascending:NO];
+        NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
+        self.loopArray = [tempArray sortedArrayUsingDescriptors:descriptors];
+        
+        self.cleanLoopArray = [tempArray sortedArrayUsingDescriptors:descriptors];
+        
+        [self.tableView reloadData];
+        
+        
+        //NSDictionary *responseDict = (NSDictionary *)responseObject;
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error fetching loops: %@", error);
+        
+    }];
+}
+
 #pragma mark - web actions
 
 -(void)refreshUserMelodyList {
@@ -118,25 +196,36 @@
     
     NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateCreated" ascending:NO];
     NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
-    self.filteredList = [self.melodyList sortedArrayUsingDescriptors:descriptors];
+    //self.filteredList = [self.melodyList sortedArrayUsingDescriptors:descriptors];
 
     
 }
 
 -(IBAction)change:(id)sender {
     UISegmentedControl *control = (UISegmentedControl *)sender;
+    
+    self.loopArray = self.cleanLoopArray;
+    
     switch (control.selectedSegmentIndex) {
         case 0: {
             
+            /*
             NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateCreated" ascending:NO];
             NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
             self.filteredList = [self.melodyList sortedArrayUsingDescriptors:descriptors];
+             */
+            NSArray *tempArray = self.loopArray;
+            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateCreated" ascending:NO];
+            NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
+            self.loopArray = [tempArray sortedArrayUsingDescriptors:descriptors];
+            
 
             
             break;
         }
         case 1: {
             
+            /*
             NSMutableArray *tempArray = [NSMutableArray new];
             for (UserMelody *melody in self.melodyList) {
                 if (melody.parts.count > 1) {
@@ -147,12 +236,25 @@
             NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateCreated" ascending:NO];
             NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
             self.filteredList = [tempArray sortedArrayUsingDescriptors:descriptors];
+             */
+            NSMutableArray *tempArray = [NSMutableArray new];
+            
+            for (NSDictionary *itemDict in self.loopArray) {
+                NSArray *parts = [itemDict objectForKey:@"Parts"];
+                if (parts.count > 1) {
+                    [tempArray addObject:itemDict];
+                }
+            }
+            
+            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateCreated" ascending:NO];
+            NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
+            self.loopArray = [tempArray sortedArrayUsingDescriptors:descriptors];
 
             
             break;
         }
         case 2: {
-            
+            /*
             NSMutableArray *tempArray = [NSMutableArray new];
             for (UserMelody *melody in self.melodyList) {
                 if (melody.parts.count == 1) {
@@ -164,10 +266,29 @@
             NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateCreated" ascending:NO];
             NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
             self.filteredList = [tempArray sortedArrayUsingDescriptors:descriptors];
+             */
+            
+            
+            NSMutableArray *tempArray = [NSMutableArray new];
+            for (NSDictionary *itemDict in self.loopArray) {
+                NSArray *parts = [itemDict objectForKey:@"Parts"];
+                if (parts.count == 1) {
+                    [tempArray addObject:itemDict];
+                }
+            }
+            
+            
+            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateCreated" ascending:NO];
+            NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
+            self.loopArray = [tempArray sortedArrayUsingDescriptors:descriptors];
+            
+
+
             
             break;
         }
         case 3: {
+            /*
             NSMutableArray *tempArray = [NSMutableArray new];
             for (UserMelody *melody in self.melodyList) {
                 if ([melody.isChatLoopPart boolValue] == TRUE) {
@@ -178,8 +299,20 @@
             NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateCreated" ascending:NO];
             NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
             self.filteredList = [tempArray sortedArrayUsingDescriptors:descriptors];
+             */
             
-            break;
+            NSMutableArray *tempArray = [NSMutableArray new];
+            
+            for (NSDictionary *itemDict in self.loopArray) {
+                if ([[itemDict objectForKey:@"IsChatLoop"] boolValue] == TRUE) {
+                    [tempArray addObject:itemDict];
+                }
+            }
+            
+            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateCreated" ascending:NO];
+            NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
+            self.loopArray = [tempArray sortedArrayUsingDescriptors:descriptors];
+                        break;
         }
             
         default:
