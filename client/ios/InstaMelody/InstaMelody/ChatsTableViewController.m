@@ -93,8 +93,15 @@
     
     cell.profileImageView.image = [UIImage imageNamed:@"Profile"];
     
+    NSString *myDisplayName = [[NSUserDefaults standardUserDefaults] objectForKey:@"DisplayName"];
     
     NSDictionary *firstUser = userArray[0];
+    
+    if (userArray.count > 1) {
+        
+        if ([[firstUser objectForKey:@"DisplayName"] isEqualToString:myDisplayName])
+            firstUser = userArray[1];
+    }
     Friend *friend = [Friend MR_findFirstByAttribute:@"userId" withValue:[firstUser objectForKey:@"Id"]];
     
     if (friend.profileFilePath != nil && ![friend.profileFilePath isEqualToString:@""]) {
@@ -111,7 +118,7 @@
     
     
     if (userArray.count == 2) {
-        cell.nameLabel.text = friend.displayName;
+        cell.nameLabel.text =  [firstUser objectForKey:@"DisplayName"];
         cell.descriptionLabel.text = @"1:1 chat";
         if ([chatDict objectForKey:@"Name"] != nil) {
             NSString *nameString = (NSString *)[chatDict objectForKey:@"Name"];

@@ -103,12 +103,12 @@
             
         } else {
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-            if ([defaults objectForKey:@"authToken"] !=  nil) {
+            if ([defaults objectForKey:@"authToken"] !=  nil && ![[defaults objectForKey:@"authToken"] isEqualToString:@""] ) {
                 self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", [defaults objectForKey:@"FirstName"], [defaults objectForKey:@"LastName"]];
                 
             }
             
-            if ([defaults objectForKey:@"ProfileFilePath"] != nil) {
+            if ([defaults objectForKey:@"ProfileFilePath"] != nil && ![[defaults objectForKey:@"ProfileFilePath"] isEqualToString:@""]) {
                 
                 NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
                 
