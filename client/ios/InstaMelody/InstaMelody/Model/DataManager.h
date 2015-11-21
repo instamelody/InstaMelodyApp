@@ -37,6 +37,7 @@
 -(void)fetchTopStations;
 
 -(BOOL)isPremium;
+-(BOOL)isMature;
 
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @property NSDateFormatter *melodyDateFormatter;

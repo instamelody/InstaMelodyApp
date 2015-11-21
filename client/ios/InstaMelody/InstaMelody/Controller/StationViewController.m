@@ -201,12 +201,18 @@
                 
             });
             
-            if (self.selectedFriend == nil) {
+            if (self.stationDict == nil && self.selectedFriend == nil) {
                 //get all my loops
                 [self fetchMyLoops];
             } else {
                 //get my friend's public loops
-                self.loopArray = [selectedStation objectForKey:@"Messages"];
+                
+                if ([[DataManager sharedManager] isMature]) {
+                        self.loopArray = [selectedStation objectForKey:@"Messages"];
+                } else {
+                    self.loopArray = [self filteredArray:[selectedStation objectForKey:@"Messages"]];
+                }
+                
             }
 
         }
@@ -220,6 +226,19 @@
         }
         
     }];
+}
+
+-(NSArray *)filteredArray:(NSArray *)inputArray {
+    NSMutableArray *tempArray = [NSMutableArray new];
+    if (inputArray != nil) {
+        for (NSDictionary *itemDict in inputArray) {
+            if ([[itemDict objectForKey:@"IsExplicit"] boolValue] == false) {
+                [tempArray addObject:itemDict];
+            }
+        }
+
+    }
+    return (NSArray *)tempArray;
 }
 
 -(void)createStation {

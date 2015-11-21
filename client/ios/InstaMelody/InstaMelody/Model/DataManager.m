@@ -45,6 +45,23 @@
     return true;
 }
 
+-(BOOL)isMature {
+    NSString *dateString = [[NSUserDefaults standardUserDefaults] objectForKey:@"DateOfBirth"];
+    NSDate *dateObject = [self.dateFormatter dateFromString:dateString];
+    
+    if (dateObject != nil) {
+        NSTimeInterval ageInterval = [dateObject timeIntervalSinceDate:[NSDate date]];
+        
+        NSInteger age = ABS(ageInterval / (60 * 60 * 24 * 365));
+        
+        if (age < 18) {
+            return false;
+        }
+    }
+    
+    return true;
+}
+
 - (void)fetchFriends {
     NSString *requestUrl = [NSString stringWithFormat:@"%@/User/Friends", API_BASE_URL];
     
