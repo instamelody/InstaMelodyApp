@@ -605,7 +605,7 @@
 }
 
 -(NSArray *)melodyGroupList {
-    return [MelodyGroup MR_findAllSortedBy:@"groupId" ascending:YES];
+    return [MelodyGroup MR_findAllSortedBy:@"groupName" ascending:YES];
 }
 
 -(void)clearChats {

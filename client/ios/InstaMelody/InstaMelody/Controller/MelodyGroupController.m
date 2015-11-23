@@ -107,7 +107,15 @@
     MelodyGroup *melodyGroup = (MelodyGroup *)[self.groupList objectAtIndex:indexPath.row];
     
     MelodyPickerController *vc = (MelodyPickerController *)segue.destinationViewController;
-    vc.melodyList = [melodyGroup.melodies allObjects];
+    
+    NSArray *melodyArray = [melodyGroup.melodies allObjects];
+    
+    NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"melodyName" ascending:YES];
+    NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
+    
+    NSArray *sortedArray = [melodyArray sortedArrayUsingDescriptors:descriptors];
+    
+    vc.melodyList = sortedArray;
     
     
 }
