@@ -1520,8 +1520,11 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7pd-XS-7Fh">
-                                                    <rect key="frame" x="16" y="16" width="518" height="38"/>
+                                                    <rect key="frame" x="16" y="16" width="492" height="38"/>
                                                     <animations/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="38" id="8OJ-GU-lTb"/>
+                                                    </constraints>
                                                     <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="14"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
@@ -1537,15 +1540,28 @@
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F6T-t0-veu">
+                                                    <rect key="frame" x="516" y="20" width="30" height="30"/>
+                                                    <animations/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="30" id="Jcl-Ut-qa8"/>
+                                                        <constraint firstAttribute="width" constant="30" id="Yid-xc-9DP"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <state key="normal" title="P">
+                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                </button>
                                             </subviews>
                                             <animations/>
                                             <constraints>
-                                                <constraint firstItem="7pd-XS-7Fh" firstAttribute="top" secondItem="JQE-ux-jxH" secondAttribute="topMargin" constant="8" id="61p-9O-3eO"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="7pd-XS-7Fh" secondAttribute="bottom" constant="8" id="Fjb-Kn-MGF"/>
-                                                <constraint firstItem="eQF-Kw-R5m" firstAttribute="leading" secondItem="7pd-XS-7Fh" secondAttribute="trailing" constant="20" id="J3C-Xu-VSK"/>
-                                                <constraint firstItem="7pd-XS-7Fh" firstAttribute="leading" secondItem="JQE-ux-jxH" secondAttribute="leadingMargin" constant="8" id="Rd2-Hx-mEg"/>
+                                                <constraint firstItem="7pd-XS-7Fh" firstAttribute="centerY" secondItem="JQE-ux-jxH" secondAttribute="centerY" id="7mI-1n-9VT"/>
+                                                <constraint firstItem="F6T-t0-veu" firstAttribute="leading" secondItem="7pd-XS-7Fh" secondAttribute="trailing" constant="8" id="Egk-TK-j3x"/>
                                                 <constraint firstItem="eQF-Kw-R5m" firstAttribute="centerY" secondItem="JQE-ux-jxH" secondAttribute="centerY" id="UxZ-RX-wek"/>
+                                                <constraint firstItem="eQF-Kw-R5m" firstAttribute="leading" secondItem="F6T-t0-veu" secondAttribute="trailing" constant="8" id="YOa-wF-lrh"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="eQF-Kw-R5m" secondAttribute="trailing" constant="8" id="f72-R3-vpZ"/>
+                                                <constraint firstItem="F6T-t0-veu" firstAttribute="centerY" secondItem="JQE-ux-jxH" secondAttribute="centerY" id="rmC-Tx-YKM"/>
+                                                <constraint firstItem="7pd-XS-7Fh" firstAttribute="leading" secondItem="JQE-ux-jxH" secondAttribute="leadingMargin" constant="8" id="y0C-VC-Pw2"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <animations/>
@@ -1553,6 +1569,7 @@
                                         <connections>
                                             <outlet property="lockLabel" destination="eQF-Kw-R5m" id="ZXI-BK-hZr"/>
                                             <outlet property="nameLabel" destination="7pd-XS-7Fh" id="wX0-cb-24y"/>
+                                            <outlet property="playButton" destination="F6T-t0-veu" id="cvN-HH-kWy"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

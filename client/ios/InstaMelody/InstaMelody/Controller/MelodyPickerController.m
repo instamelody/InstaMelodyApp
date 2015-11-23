@@ -58,6 +58,7 @@
     
     cell.nameLabel.text = melody.melodyName;
     cell.lockLabel.font = [UIFont fontAwesomeFontOfSize:20.0f];
+    cell.playButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:20.0f];
     
     if ([melody.isPremiumContent boolValue]) {
         cell.lockLabel.text = [NSString fontAwesomeIconStringForEnum:FALock];
@@ -65,9 +66,19 @@
         cell.lockLabel.text = [NSString fontAwesomeIconStringForEnum:FAUnlock];
     }
     
+    [cell.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAPlayCircle] forState:UIControlStateNormal];
+    cell.playButton.tag = [melody.melodyId integerValue];
+    
+    [cell.playButton addTarget:self action:@selector(preview:) forControlEvents:UIControlEventTouchUpInside];
+    
     cell.backgroundColor = [UIColor clearColor];
         
     return cell;
+}
+
+-(IBAction)preview:(id)sender {
+    [sender setTitle:[NSString fontAwesomeIconStringForEnum:FACloudDownload] forState:UIControlStateNormal];
+    
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

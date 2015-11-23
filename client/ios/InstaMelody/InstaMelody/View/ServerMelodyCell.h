@@ -12,5 +12,6 @@
 
 @property IBOutlet UILabel *nameLabel;
 @property IBOutlet UILabel *lockLabel;
+@property IBOutlet UIButton *playButton;
 
 @end
