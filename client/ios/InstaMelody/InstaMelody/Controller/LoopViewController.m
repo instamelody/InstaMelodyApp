@@ -82,6 +82,10 @@
                 self.explicitCheckbox.on = YES;
         }
          
+         if ([self.selectedUserMelody.isStationPostMelody boolValue]) {
+             self.publicCheckbox.on = YES;
+         }
+         
         for (UserMelodyPart *part in [self.selectedUserMelody parts]) {
             if ([part.isUserCreated boolValue] == true) {
                 //get and set recording
@@ -379,8 +383,14 @@
         
         BOOL isExplicit =[[userMelodyDict objectForKey:@"IsExplicit"] boolValue];
         
+        BOOL isPublic = [[userMelodyDict objectForKey:@"IsStationPostMelody"] boolValue];
+        
         if (isExplicit) {
             self.explicitCheckbox.on = YES;
+        }
+        
+        if (isPublic) {
+            self.publicCheckbox.on = YES;
         }
         
         [partDict setObject:userId forKey:@"UserId"];
@@ -851,7 +861,7 @@
     UITextField *topicField = (UITextField *)[self.tableView viewWithTag:98];
     BOOL isPremium = [[DataManager sharedManager] isPremium];
     
-    if (![topicField.text isEqualToString:@""]) {
+    if (![topicField.text isEqualToString:@""] && self.currentRecordingURL) {
         
         NSMutableDictionary *userDict = [NSMutableDictionary new];
         [userDict setObject:[self.currentRecordingURL path] forKey:@"LoopURL"];
@@ -871,6 +881,7 @@
         }
         
         [userDict setObject:[NSNumber numberWithBool:self.explicitCheckbox.on ] forKey:@"IsExplicit"];
+        [userDict setObject:[NSNumber numberWithBool:self.publicCheckbox.on ] forKey:@"IsStationPostMelody"];
         
         
         
@@ -888,7 +899,7 @@
             [self.navigationController popViewControllerAnimated:YES];
         }
     } else {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:@"Please enter a loop topic" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:@"Please make sure you have selected a loop topic and recording" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
         [alert addAction:action];
         [self presentViewController:alert animated:YES completion:nil];

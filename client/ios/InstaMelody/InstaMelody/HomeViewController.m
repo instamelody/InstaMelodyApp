@@ -434,6 +434,92 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     [[NetworkManager sharedManager] updateProfilePicture:resizedImage];
 }
 
+-(void)getFirstStation {
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/Station", API_BASE_URL];
+    
+    NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
+    NSString *userId = [[NSUserDefaults standardUserDefaults] objectForKey:@"Id"];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    NSDictionary *parameters = @{@"token": token, @"userId": userId};
+    
+    [manager GET:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        // NSLog(@"JSON: %@", responseObject);
+        NSLog(@"stations updated");
+        
+        NSArray *stationList = (NSArray *)responseObject;
+        
+        if (stationList.count > 0) {
+            
+            NSDictionary *selectedStation = stationList[0];
+            
+            [[NSUserDefaults standardUserDefaults] setObject:[selectedStation objectForKey:@"Id"] forKey:@"stationId"];
+            
+            [[NSUserDefaults standardUserDefaults] synchronize];
+
+            //self.loopArray = stationList;
+
+            
+        }
+        
+        //NSDictionary *responseDict = (NSDictionary *)responseObject;
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error fetching stations: %@", error);
+        
+        if (error.code == -1011) {
+            [self createStation];
+        }
+        
+    }];
+}
+
+-(void)createStation {
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    //step 1 - get file token
+    NSString *token =  [defaults objectForKey:@"authToken"];
+    
+    NSString *nameString = [NSString stringWithFormat:@"%@'s Station", [defaults objectForKey:@"FirstName"]];
+    
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Station": @{@"Name" : nameString}}];
+    
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/Station/New", API_BASE_URL];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        NSLog(@"JSON: %@", responseObject);
+        
+        //
+        //step 2 - reload
+        [self getFirstStation];
+        
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
+            
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            
+            NSLog(@"%@",ErrorResponse);
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            //TODOAHMED
+            //[alertView show];
+            
+            //[self fetchMyMelodies];
+        }
+    }];
+}
+
+
 -(void)getUserDetails:(NSString*)displayName {
     
     //https://api.instamelody.com/v1.0/User?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&displayName=testeraccount
@@ -475,6 +561,8 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"infoUpdated" object:nil];
         [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        [self getFirstStation];
         
         //NSDictionary *responseDict = (NSDictionary *)responseObject;
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

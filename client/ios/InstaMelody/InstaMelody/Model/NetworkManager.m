@@ -38,6 +38,7 @@
     time_t unixTime = time(NULL);
     
     NSNumber *isExplicit = [userDict objectForKey:@"IsExplicit"];
+    NSNumber *isPublic = [userDict objectForKey:@"IsStationPostMelody"];
     
     NSString *recordingPath = [userDict objectForKey:@"LoopURL"];
     NSString *recordingName = [recordingPath lastPathComponent];
@@ -114,6 +115,10 @@
         [self uploadFile:recordingPath withFileToken:fileTokenString];
         //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
         
+        if (isPublic) {
+            NSDictionary *melodyDict = [responseDict objectForKey:@"UserMelody"];
+            [self makeLoopPublic:[responseDict objectForKey:@"Id"]];
+        }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
@@ -156,6 +161,7 @@
     NSNumber *thirdId = [userDict objectForKey:@"MelodyId3"];
     
     NSNumber *isExplicit = [userDict objectForKey:@"IsExplicit"];
+    NSNumber *isPublic = [userDict objectForKey:@"IsStationPostMelody"];
     
     if (firstId) {
         NSDictionary *entry = [NSDictionary dictionaryWithObject:firstId forKey:@"Id"];
@@ -214,6 +220,10 @@
         
         [self uploadFile:recordingPath withFileToken:fileTokenString];
         //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
+        if (isPublic) {
+            NSDictionary *melodyDict = [responseDict objectForKey:@"UserMelody"];
+            [self makeLoopPublic:[melodyDict objectForKey:@"Id"]];
+        }
         
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -232,6 +242,39 @@
     
 }
 
+-(void)makeLoopPublic:(NSString *)loopId {
+    NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
+    
+    NSString *stationId = [[NSUserDefaults standardUserDefaults] objectForKey:@"stationId"];
+    
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Station": @{@"Id" : stationId}, @"Message": @{@"Description" : @"station post", @"UserMelody" : @{@"Id": loopId}}}];
+    
+    
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/Station/Message", API_BASE_URL];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        
+        NSLog(@"----- loop is now public");
+        
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
+            
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            
+            NSLog(@"%@",ErrorResponse);
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
+        }
+    }];
+}
 
 -(void)updateProfilePicture:(UIImage *)image{
     

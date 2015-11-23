@@ -181,6 +181,8 @@
             
             NSDictionary *selectedStation = stationList[0];
             
+            [[NSUserDefaults standardUserDefaults] setObject:[selectedStation objectForKey:@"Id"] forKey:@"stationId"];
+            
             NSInteger numFans = [[selectedStation objectForKey:@"Likes"] integerValue];
             NSInteger numVips = 0;
             id followers = [selectedStation objectForKey:@"Followers"];
@@ -228,19 +230,6 @@
     }];
 }
 
--(NSArray *)filteredArray:(NSArray *)inputArray {
-    NSMutableArray *tempArray = [NSMutableArray new];
-    if (inputArray != nil) {
-        for (NSDictionary *itemDict in inputArray) {
-            if ([[itemDict objectForKey:@"IsExplicit"] boolValue] == false) {
-                [tempArray addObject:itemDict];
-            }
-        }
-
-    }
-    return (NSArray *)tempArray;
-}
-
 -(void)createStation {
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -284,6 +273,21 @@
         }
     }];
 }
+
+
+-(NSArray *)filteredArray:(NSArray *)inputArray {
+    NSMutableArray *tempArray = [NSMutableArray new];
+    if (inputArray != nil) {
+        for (NSDictionary *itemDict in inputArray) {
+            if ([[itemDict objectForKey:@"IsExplicit"] boolValue] == false) {
+                [tempArray addObject:itemDict];
+            }
+        }
+
+    }
+    return (NSArray *)tempArray;
+}
+
 
 -(void)fetchMyLoops {
     
