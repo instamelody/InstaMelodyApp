@@ -2130,23 +2130,14 @@
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HUm-ew-wkz">
                                                     <rect key="frame" x="0.0" y="214" width="170" height="37"/>
                                                     <subviews>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t4y-Nu-leF">
-                                                            <rect key="frame" x="60" y="10" width="32" height="32"/>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t4y-Nu-leF">
+                                                            <rect key="frame" x="60" y="10" width="25" height="32"/>
                                                             <animations/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="32" id="7E9-EH-qAp"/>
-                                                                <constraint firstAttribute="width" constant="32" id="V5p-Kl-5E3"/>
+                                                                <constraint firstAttribute="width" constant="25" id="V5p-Kl-5E3"/>
                                                             </constraints>
-                                                            <state key="normal" title="S"/>
-                                                        </button>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jXv-33-ISc">
-                                                            <rect key="frame" x="8" y="10" width="32" height="32"/>
-                                                            <animations/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="width" constant="32" id="0hP-bZ-5xW"/>
-                                                                <constraint firstAttribute="height" constant="32" id="Au9-KI-DLc"/>
-                                                            </constraints>
-                                                            <state key="normal" title="H"/>
+                                                            <state key="normal" image="shareSquare"/>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4u3-cB-Otd">
                                                             <rect key="frame" x="102" y="10" width="60" height="32"/>
@@ -2161,11 +2152,23 @@
                                                                 <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                             </state>
                                                         </button>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jXv-33-ISc">
+                                                            <rect key="frame" x="8" y="7" width="32" height="32"/>
+                                                            <animations/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="32" id="0hP-bZ-5xW"/>
+                                                                <constraint firstAttribute="height" constant="32" id="Au9-KI-DLc"/>
+                                                            </constraints>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                                            <state key="normal" title="H">
+                                                                <color key="titleColor" red="0.64313725490196083" green="0.61176470588235299" blue="0.61176470588235299" alpha="1" colorSpace="calibratedRGB"/>
+                                                            </state>
+                                                        </button>
                                                     </subviews>
                                                     <animations/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
-                                                        <constraint firstItem="jXv-33-ISc" firstAttribute="top" secondItem="HUm-ew-wkz" secondAttribute="top" constant="10" id="4Ga-4G-55M"/>
+                                                        <constraint firstItem="jXv-33-ISc" firstAttribute="top" secondItem="HUm-ew-wkz" secondAttribute="top" constant="7" id="4Ga-4G-55M"/>
                                                         <constraint firstItem="t4y-Nu-leF" firstAttribute="leading" secondItem="jXv-33-ISc" secondAttribute="trailing" constant="20" id="7L3-eg-095"/>
                                                         <constraint firstAttribute="trailing" secondItem="4u3-cB-Otd" secondAttribute="trailing" constant="8" id="mXi-N8-mbY"/>
                                                         <constraint firstItem="4u3-cB-Otd" firstAttribute="top" secondItem="HUm-ew-wkz" secondAttribute="top" constant="10" id="unK-ak-xr2"/>
@@ -3998,6 +4001,7 @@ We are committed to conducting our business in accordance with these principles 
         <image name="play" width="89" height="89"/>
         <image name="profileBack" width="237" height="98"/>
         <image name="share" width="47" height="47"/>
+        <image name="shareSquare" width="36" height="42"/>
         <image name="showcase" width="70" height="70"/>
         <image name="soloBtn" width="135" height="63"/>
         <image name="station" width="70" height="70"/>

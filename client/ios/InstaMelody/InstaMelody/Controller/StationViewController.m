@@ -412,8 +412,8 @@
     
     NSDictionary *loopDict = self.loopArray[indexPath.row];
     
-    cell.shareButton.titleLabel.font  = [UIFont fontAwesomeFontOfSize:20.0f];
-    cell.likeButton.titleLabel.font  = [UIFont fontAwesomeFontOfSize:20.0f];
+    //cell.shareButton.titleLabel.font  = [UIFont fontAwesomeFontOfSize:20.0f];
+    cell.likeButton.titleLabel.font  = [UIFont fontAwesomeFontOfSize:30.0f];
     cell.nameLabel.text = [loopDict objectForKey:@"Name"];
     
     NSString *oldDateString = [loopDict objectForKey:@"DateCreated"];
@@ -422,8 +422,9 @@
     cell.dateLabel.text = [self.toDateFormatter stringFromDate:dateObject];
     
     
-    [cell.shareButton setTitle:[NSString fontAwesomeIconStringForEnum:FAEllipsisH] forState:UIControlStateNormal];
+    //[cell.shareButton setTitle:[NSString fontAwesomeIconStringForEnum:FAshareAltSquare] forState:UIControlStateNormal];
     [cell.likeButton setTitle:[NSString fontAwesomeIconStringForEnum:FAHeartO] forState:UIControlStateNormal];
+    [cell.shareButton addTarget:self action:@selector(share:) forControlEvents:UIControlEventTouchUpInside];
     
     //load profile pic
     

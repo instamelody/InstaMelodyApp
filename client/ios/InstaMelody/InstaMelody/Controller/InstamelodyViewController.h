@@ -19,4 +19,6 @@
 
 @property NSDateFormatter *dateFormatter;
 
+-(IBAction)share:(id)sender;
+
 @end
