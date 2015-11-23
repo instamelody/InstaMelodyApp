@@ -115,7 +115,7 @@
         [self uploadFile:recordingPath withFileToken:fileTokenString];
         //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
         
-        if (isPublic) {
+        if ([isPublic boolValue] == TRUE) {
             NSDictionary *melodyDict = [responseDict objectForKey:@"UserMelody"];
             [self makeLoopPublic:[responseDict objectForKey:@"Id"]];
         }
@@ -220,7 +220,7 @@
         
         [self uploadFile:recordingPath withFileToken:fileTokenString];
         //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
-        if (isPublic) {
+        if ([isPublic boolValue] == TRUE) {
             NSDictionary *melodyDict = [responseDict objectForKey:@"UserMelody"];
             [self makeLoopPublic:[melodyDict objectForKey:@"Id"]];
         }
@@ -250,7 +250,7 @@
     NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Station": @{@"Id" : stationId}, @"Message": @{@"Description" : @"station post", @"UserMelody" : @{@"Id": loopId}}}];
     
     
-    NSString *requestUrl = [NSString stringWithFormat:@"%@/Station/Message", API_BASE_URL];
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/Station/Post", API_BASE_URL];
     
     //add 64 char string
     

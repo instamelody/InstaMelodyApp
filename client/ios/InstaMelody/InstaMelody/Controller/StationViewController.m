@@ -206,15 +206,13 @@
             if (self.stationDict == nil && self.selectedFriend == nil) {
                 //get all my loops
                 [self fetchMyLoops];
+                
+                [self getStationPosts:[selectedStation objectForKey:@"Id"] ];
             } else {
                 //get my friend's public loops
                 
-                if ([[DataManager sharedManager] isMature]) {
-                        self.loopArray = [selectedStation objectForKey:@"Messages"];
-                } else {
-                    self.loopArray = [self filteredArray:[selectedStation objectForKey:@"Messages"]];
-                }
                 
+                [self getStationPosts:[selectedStation objectForKey:@"Id"] ];
             }
 
         }
@@ -228,6 +226,47 @@
         }
         
     }];
+}
+
+-(void)getStationPosts:(NSString *)stationId {
+ 
+    
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/Station/Posts", API_BASE_URL];
+    
+    NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
+    NSString *userId = [[NSUserDefaults standardUserDefaults] objectForKey:@"Id"];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    NSDictionary *parameters = @{@"token": token, @"id": stationId};
+    
+    [manager GET:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        // NSLog(@"JSON: %@", responseObject);
+        NSLog(@"stations updated");
+        
+        NSArray *loopArray = (NSArray *)responseObject;
+        
+         if ([[DataManager sharedManager] isMature]) {
+         
+             self.loopArray = loopArray;
+         } else {
+             self.loopArray = [self filteredArray:loopArray];
+         }
+        
+        [self.collectionView reloadData];
+        
+        //NSDictionary *responseDict = (NSDictionary *)responseObject;
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error fetching stations: %@", error);
+        
+        if (error.code == -1011 && self.selectedFriend == nil) {
+            [self createStation];
+        }
+        
+    }];
+    
 }
 
 -(void)createStation {
