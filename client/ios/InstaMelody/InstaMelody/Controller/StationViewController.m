@@ -251,8 +251,10 @@
          if ([[DataManager sharedManager] isMature]) {
          
              self.loopArray = loopArray;
+             self.cleanLoopArray = loopArray;
          } else {
              self.loopArray = [self filteredArray:loopArray];
+             self.cleanLoopArray = [self filteredArray:loopArray];
          }
         
         [self.collectionView reloadData];
@@ -462,6 +464,11 @@
         cell.coverImage.image = [UIImage imageWithContentsOfFile:imagePath];
         
     } else {
+        
+        if (self.selectedFriend != nil) {
+            userId = self.selectedFriend.userId;
+        }
+        
         Friend *friend = [Friend MR_findFirstByAttribute:@"userId" withValue:userId];
         
         /*
