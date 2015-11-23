@@ -7,6 +7,7 @@
 //
 
 #import "LoopViewController.h"
+#import "MelodyGroupController.h"
 #import "NSString+FontAwesome.h"
 #import "UIFont+FontAwesome.h"
 #import "AFURLSessionManager.h"
@@ -28,6 +29,7 @@
 
 @property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic, strong)  NSDate *startTime;
+@property NSNumber *savedGroupId;
 
 @property (nonatomic, strong) AVAudioRecorder *recorder;
 @property (nonatomic, strong) NSMutableArray *partArray;
@@ -199,6 +201,7 @@
             }
             
             //add melody
+            self.savedGroupId = [note.userInfo objectForKey:@"groupId"];
             
         }
     }];
@@ -2028,6 +2031,8 @@
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     UINavigationController *vc = (UINavigationController *)[sb instantiateViewControllerWithIdentifier:@"MelodyGroupNavController"];
     //vc.delegate = self;
+    MelodyGroupController *groupVC = vc.topViewController;
+    groupVC.groupId = self.savedGroupId;
     [self presentViewController:vc animated:YES completion:nil];
     
     /*

@@ -1493,7 +1493,7 @@
         <!--Select a Melody-->
         <scene sceneID="ie8-ih-ZBR">
             <objects>
-                <viewController id="oeQ-I9-3lW" customClass="MelodyPickerController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MelodyPickerController" id="oeQ-I9-3lW" customClass="MelodyPickerController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="BkA-uT-soY"/>
                         <viewControllerLayoutGuide type="bottom" id="b2H-cq-9bA"/>
@@ -3135,7 +3135,7 @@
                                 <constraints>
                                     <constraint firstAttribute="width" constant="280" id="mqE-hu-NGn"/>
                                 </constraints>
-                                <mutableString key="text">InstaMelody Terms and Conditions of Use
+                                <string key="text">InstaMelody Terms and Conditions of Use
 
 1. Terms
 
@@ -3186,7 +3186,7 @@ We will collect personal information by lawful and fair means and, where appropr
 Personal data should be relevant to the purposes for which it is to be used, and, to the extent necessary for those purposes, should be accurate, complete, and up-to-date.
 We will protect personal information by reasonable security safeguards against loss or theft, as well as unauthorized access, disclosure, copying, use or modification.
 We will make readily available to customers information about our policies and practices relating to the management of personal information.
-We are committed to conducting our business in accordance with these principles in order to ensure that the confidentiality of personal information is protected and maintained.</mutableString>
+We are committed to conducting our business in accordance with these principles in order to ensure that the confidentiality of personal information is protected and maintained.</string>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>

@@ -76,7 +76,9 @@
     
     Melody *melody = (Melody *)[self.melodyList objectAtIndex:indexPath.row];
     
-    NSDictionary *userDict = [NSDictionary dictionaryWithObject:melody.melodyId forKey:@"melodyId"];
+    NSDictionary *userDict = @{@"melodyId": melody.melodyId, @"groupId":  self.groupId};
+    
+    //NSDictionary *userDict = [NSDictionary dictionaryWithObject:melody.melodyId forKey:@"melodyId"];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"pickedMelody" object:nil userInfo:userDict];
     

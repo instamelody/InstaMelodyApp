@@ -48,6 +48,28 @@
     
     [[UIBarButtonItem appearance] setTitleTextAttributes:buttonTextAttributes forState:UIControlStateNormal];
     
+    if (self.groupId != nil) {
+        
+        MelodyGroup *melodyGroup = [MelodyGroup MR_findFirstByAttribute:@"groupId" withValue:self.groupId];
+        
+        
+        UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        MelodyPickerController *vc = (MelodyPickerController *)[sb instantiateViewControllerWithIdentifier:@"MelodyPickerController"];
+        
+        
+        NSArray *melodyArray = [melodyGroup.melodies allObjects];
+        
+        NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"melodyName" ascending:YES];
+        NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
+        
+        NSArray *sortedArray = [melodyArray sortedArrayUsingDescriptors:descriptors];
+        
+        vc.melodyList = sortedArray;
+        vc.groupId = melodyGroup.groupId;
+        [self.navigationController pushViewController:vc animated:YES];
+        
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -64,6 +86,11 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+
+}
 
 -(IBAction)cancel:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -116,7 +143,7 @@
     NSArray *sortedArray = [melodyArray sortedArrayUsingDescriptors:descriptors];
     
     vc.melodyList = sortedArray;
-    
+    vc.groupId = melodyGroup.groupId;
     
 }
 

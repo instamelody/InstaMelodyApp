@@ -15,6 +15,8 @@
 
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 
+@property (nonatomic, strong) NSNumber *groupId;
+
 -(IBAction)done:(id)sender;
 
 @end
