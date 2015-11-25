@@ -144,6 +144,54 @@
     
 }
 
+-(void)like:(id)sender {
+    NSLog(@"hello");
+    
+    UIButton *button = (UIButton *)sender;
+    NSString *messageId = [NSString stringWithFormat:@"%ld", button.tag];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    //step 1 - get file token
+    NSString *token =  [defaults objectForKey:@"authToken"];
+    
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"StationMessage": @{@"Id" : messageId}}];
+    
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/Station/Post/Like", API_BASE_URL];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        NSLog(@"JSON: %@", responseObject);
+        
+        //
+        //step 2 - reload
+        [button setTitleColor:INSTA_BLUE forState:UIControlStateNormal];
+        [button setEnabled:false];
+        
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
+            
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            
+            NSLog(@"%@",ErrorResponse);
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            //TODOAHMED
+            //[alertView show];
+            
+            [self fetchMyLoops];
+            //[self fetchMyMelodies];
+        }
+    }];
+
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -419,11 +467,14 @@
     NSString *oldDateString = [loopDict objectForKey:@"DateCreated"];
     NSDate *dateObject = [self.fromDateFormatter dateFromString:oldDateString];
     
+    cell.likeButton.tag = [loopDict objectForKey:@"Id"];
     cell.dateLabel.text = [self.toDateFormatter stringFromDate:dateObject];
     
     
     //[cell.shareButton setTitle:[NSString fontAwesomeIconStringForEnum:FAshareAltSquare] forState:UIControlStateNormal];
     [cell.likeButton setTitle:[NSString fontAwesomeIconStringForEnum:FAHeartO] forState:UIControlStateNormal];
+    [cell.likeButton addTarget:self action:@selector(like:) forControlEvents:UIControlEventTouchUpInside];
+    
     [cell.shareButton addTarget:self action:@selector(share:) forControlEvents:UIControlEventTouchUpInside];
     
     //load profile pic
