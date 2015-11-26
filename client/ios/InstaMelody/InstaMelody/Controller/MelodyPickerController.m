@@ -68,6 +68,7 @@
     
     [cell.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAPlayCircle] forState:UIControlStateNormal];
     cell.playButton.tag = [melody.melodyId integerValue];
+    cell.tag = indexPath.row + 900;
     
     [cell.playButton addTarget:self action:@selector(preview:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -78,6 +79,17 @@
 
 -(IBAction)preview:(id)sender {
     [sender setTitle:[NSString fontAwesomeIconStringForEnum:FACloudDownload] forState:UIControlStateNormal];
+    
+    UIButton *button = (UIButton *)sender;
+    UITableViewCell *cell = (UITableViewCell *)button.superview;
+    
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    
+    Melody *melody = (Melody *)[self.melodyList objectAtIndex:indexPath.row];
+    
+    NSDictionary *userDict = @{@"melodyId": melody.melodyId};
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"previewMelody" object:nil userInfo:userDict];
     
 }
 
