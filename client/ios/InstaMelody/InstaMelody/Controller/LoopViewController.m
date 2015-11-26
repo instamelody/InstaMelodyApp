@@ -261,7 +261,7 @@
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     if ([self.fgPlayer isPlaying]) {
-        [self togglePlayback:nil];
+        [self stopEverything:nil];
     }
 }
 
@@ -517,7 +517,11 @@
     
     float oldProgress = self.progressView.progress;
     float newProgress =self.fgPlayer.currentTime/self.fgPlayer.duration;
-    [self.progressView setProgress:MAX(oldProgress, newProgress)  animated:YES];
+    
+    if (newProgress - oldProgress > 0.02) {
+        [self.progressView setProgress:newProgress  animated:YES];
+    }
+    //NSLog(@"playback progress: %f", newProgress);
 }
 
 -(void)updateRecordProgress {
@@ -534,7 +538,9 @@
     float oldProgress = self.progressView.progress;
     float newProgress =interval/RECORDING_LIMIT;
     
-    [self.progressView setProgress:MAX(oldProgress, newProgress) animated:YES];
+    if (newProgress - oldProgress > 0.02) {
+            [self.progressView setProgress:newProgress animated:YES];
+    }
 }
 
 -(void)applyFontAwesome {
@@ -844,12 +850,20 @@
         
         [self.fgPlayer play];
         
-        NSTimeInterval interval = 0.1;
+        NSTimeInterval interval = 0.15;
         
         /*
         if (self.fgPlayer.duration < 5.0) {
             interval = 0.2;
         }*/
+        
+        if (self.timer !=nil) {
+            [self.timer invalidate];
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.progressView.progress = 0.0;
+        });
         
         self.timer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(updatePlaybackProgress) userInfo:nil repeats:YES];
     } else {
@@ -1095,22 +1109,33 @@
     
 }
 
+-(IBAction)stopEverything:(id)sender {
+    
+    if (self.timer != nil) {
+        [self.timer invalidate];
+        
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.progressView.progress = 0;
+    });
+    [self.fgPlayer stop];
+    [self.bgPlayer stop];
+    [self.bgPlayer2 stop];
+    [self.bgPlayer3 stop];
+    
+}
+
 -(IBAction)togglePlayback:(id)sender {
     //sdf
 
-    
-    [self.timer invalidate];
-    self.progressView.progress = 0;
+    [self stopEverything:nil];
     
     UIButton *toggleBtn = (UIButton *)[self.view viewWithTag:5];
     self.currentPartIndex = 0;
     
+    
     if ([self.fgPlayer isPlaying] || [self.bgPlayer isPlaying]) {
-        
-        [self.fgPlayer stop];
-        [self.bgPlayer stop];
-        [self.bgPlayer2 stop];
-        [self.bgPlayer3 stop];
+    
         [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
         
         [self.profileImageView setImage:[UIImage imageNamed:@"Profile"]];
@@ -1138,6 +1163,9 @@
          */
         
         if (error == nil) {
+            
+            /*
+            
             if ([self isHeadsetPluggedIn]) {
                 
                 [self playEverything];
@@ -1149,6 +1177,10 @@
                 [alert addAction:okAction];
                 [self presentViewController:alert animated:YES completion:nil];
             }
+             
+             */
+            
+            [self playEverything];
         } else {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:@"Error setting audio" preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
@@ -1283,6 +1315,11 @@
 }
 
 -(void)playEverything {
+    
+    [self.fgPlayer stop];
+    [self.bgPlayer stop];
+    [self.bgPlayer2 stop];
+    [self.bgPlayer3 stop];
     
     if (self.selectedLoop != nil) {
         
@@ -1648,14 +1685,14 @@
     [toggleBtn setTitle:@"Preview melodies" forState:UIControlStateNormal];
     
     
-    if (flag) {
+    if (flag && player == self.fgPlayer) {
         [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
 
-        if (player == self.fgPlayer) {
+        //if (player == self.fgPlayer) {
             [self.bgPlayer stop];
             [self.bgPlayer2 stop];
             [self.bgPlayer3 stop];
-        }
+        //}
         
         if (self.selectedLoop && !self.isNewPart) {
             
@@ -1671,7 +1708,8 @@
                     self.currentPartIndex++;
                 }
                 //[self preload];
-                [self playEverything];
+                [self performSelector:@selector(playEverything) withObject:nil afterDelay:0.1];
+                //[self playEverything];
             } else {
                 [self.profileImageView setImage:[UIImage imageNamed:@"Profile"]];
                 self.currentPartIndex = 0;
