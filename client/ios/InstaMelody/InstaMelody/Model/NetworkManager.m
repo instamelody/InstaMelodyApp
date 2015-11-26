@@ -245,7 +245,7 @@
 -(void)makeLoopPublic:(NSString *)loopId {
     NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
     
-    NSString *stationId = [[NSUserDefaults standardUserDefaults] objectForKey:@"stationId"];
+    NSString *stationId = [[[NSUserDefaults standardUserDefaults] objectForKey:@"stationId"] stringValue];
     
     NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Station": @{@"Id" : stationId}, @"Message": @{@"Description" : @"station post", @"UserMelody" : @{@"Id": loopId}}}];
     

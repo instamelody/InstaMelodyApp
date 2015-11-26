@@ -467,7 +467,11 @@
     NSString *oldDateString = [loopDict objectForKey:@"DateCreated"];
     NSDate *dateObject = [self.fromDateFormatter dateFromString:oldDateString];
     
-    cell.likeButton.tag = [loopDict objectForKey:@"Id"];
+    if ([[loopDict objectForKey:@"Id"] integerValue]) {
+        cell.likeButton.tag = [[loopDict objectForKey:@"Id"] integerValue];
+
+    }
+    
     cell.dateLabel.text = [self.toDateFormatter stringFromDate:dateObject];
     
     
