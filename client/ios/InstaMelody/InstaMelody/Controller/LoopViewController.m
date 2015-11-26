@@ -266,6 +266,7 @@
 }
 
 -(void)updateBarStatus {
+    /*
     if (self.isMyStudio) {
         self.saveBar.hidden = NO;
         self.recordButton.hidden = NO;
@@ -291,6 +292,19 @@
         
         
     }
+     */
+    self.saveBar.hidden = NO;
+    self.recordButton.hidden = NO;
+    
+    self.publicView.hidden = NO;
+    self.explicitView.hidden = NO;
+    
+    self.saveBarStationLabel.text = [NSString stringWithFormat:@"@%@", [[NSUserDefaults standardUserDefaults] objectForKey:@"DisplayName"]];
+    
+    UITextField *topicField = (UITextField *)[self.tableView viewWithTag:98];
+    
+    self.joinBar.hidden = YES;
+    self.joinBarModLabel.hidden = YES;
 }
 
 -(void)initializeAudio {
