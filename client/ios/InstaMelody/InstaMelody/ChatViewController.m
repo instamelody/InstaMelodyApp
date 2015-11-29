@@ -42,6 +42,7 @@
 @property NSUserDefaults *defaults;
 
 @property NSInteger currentPartIndex;
+@property float oldProgress;
 
 @end
 
@@ -55,6 +56,7 @@
     //self.title = [self.chatDict objectForKey:@"Id"];
 
     
+    self.oldProgress = 0.0f;
     //2015-08-10T20:23:13.283
     //yyyy-MM-dd
     
@@ -947,21 +949,25 @@
 #pragma mark - loop delegate
 
 -(void)showLoop {
-    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    LoopViewController *vc = (LoopViewController *)[sb instantiateViewControllerWithIdentifier:@"LoopViewController"];
-    vc.delegate = self;
-    vc.selectedLoop = self.loopDict;
     
-    NSString *nameString = [self.chatDict objectForKey:@"Name"];
-    if (nameString != nil && [nameString isKindOfClass:[NSString class]] && ![nameString containsString:@"ChatLoop_"]) {
-        if (self.loopDict == nil) {
-            vc.topicString = nameString;
+    
+    if (self.currentRecordingURL != nil) {
+        UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        LoopViewController *vc = (LoopViewController *)[sb instantiateViewControllerWithIdentifier:@"LoopViewController"];
+        vc.delegate = self;
+        vc.selectedLoop = self.loopDict;
+        
+        NSString *nameString = [self.chatDict objectForKey:@"Name"];
+        if (nameString != nil && [nameString isKindOfClass:[NSString class]] && ![nameString containsString:@"ChatLoop_"]) {
+            if (self.loopDict == nil) {
+                vc.topicString = nameString;
+            }
+            
         }
         
+        
+        [self.navigationController pushViewController:vc animated:YES];
     }
-    
-    
-    [self.navigationController pushViewController:vc animated:YES];
 }
 
 -(IBAction)createLoop:(id)sender {
@@ -991,7 +997,7 @@
 
 -(IBAction)togglePlayback:(id)sender {
     self.currentPartIndex = 0;
-    if ([self.fgPlayer isPlaying]) {
+    if ([self.bgPlayer isPlaying]) {
         [self.fgPlayer stop];
         [self.bgPlayer stop];
         [self.bgPlayer2 stop];
@@ -1116,21 +1122,23 @@
 
 -(void)playEverything {
     
-    [self playRecording:nil];
-    
-    if (self.selectedMelodyPath != nil) {
-        [self playLoop:nil];
+    if (self.currentRecordingURL != nil) {
+        [self playRecording:nil];
+        
+        if (self.selectedMelodyPath != nil) {
+            [self playLoop:nil];
+        }
+        
+        if (self.selectedMelodyPath2 != nil) {
+            [self playLoop2:nil];
+        }
+        
+        if (self.selectedMelodyPath3 != nil) {
+            [self playLoop3:nil];
+        }
+        
+        [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAStop] forState:UIControlStateNormal];
     }
-    
-    if (self.selectedMelodyPath2 != nil) {
-        [self playLoop2:nil];
-    }
-    
-    if (self.selectedMelodyPath3 != nil) {
-        [self playLoop3:nil];
-    }
-    
-    [self.playButton setTitle:[NSString fontAwesomeIconStringForEnum:FAStop] forState:UIControlStateNormal];
 }
 
 
@@ -1401,6 +1409,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     
     
     NSProgress *progress = nil;
+    self.oldProgress = 0.0f;
     
     NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:&progress destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
         
@@ -1501,14 +1510,19 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     if ([keyPath isEqualToString:@"fractionCompleted"]) {
         NSProgress *progress = (NSProgress *)object;
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            //Wants to update UI or perform any task on main thread.
-            double percent = progress.fractionCompleted * 100.0;
-            [self.statusButton setTitle:[NSString stringWithFormat:@"Downloading (%.0f%%)", percent] forState:UIControlStateNormal];
-
-        });
+        if (progress.fractionCompleted - self.oldProgress > 0.04) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                //Wants to update UI or perform any task on main thread.
+                double percent = progress.fractionCompleted * 100.0;
+                [self.statusButton setTitle:[NSString stringWithFormat:@"Downloading (%.0f%%)", percent] forState:UIControlStateNormal];
+                self.oldProgress = progress.fractionCompleted;
+                
+            });
+        }
         
-        NSLog(@"Progress… %f", progress.fractionCompleted);
+        if (progress.fractionCompleted - self.oldProgress > 0.06) {
+            NSLog(@"Progress… %f", progress.fractionCompleted);
+        }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
