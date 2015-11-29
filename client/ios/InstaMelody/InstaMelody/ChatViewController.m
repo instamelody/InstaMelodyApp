@@ -562,13 +562,48 @@
 
 - (void)didPressAccessoryButton:(UIButton *)sender
 {
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"Media messages"
-                                                       delegate:self
-                                              cancelButtonTitle:@"Cancel"
-                                         destructiveButtonTitle:nil
-                                              otherButtonTitles:@"Send photo", @"Send melody", nil];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDestructive handler:nil];
     
-    [sheet showFromToolbar:self.inputToolbar];
+    UIAlertAction *photoAction = [UIAlertAction actionWithTitle:@"Send Photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+        [self presentImagePicker:nil];
+        
+    }];
+    
+    UIAlertAction *melodyAction = [UIAlertAction actionWithTitle:@"Send melody" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+        [self createLoop:nil];
+        
+    }];
+    
+    if ([self.keyboardController keyboardIsVisible]) {
+        
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Media messages" message:nil preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alert addAction:photoAction];
+        [alert addAction:melodyAction];
+        [alert addAction:cancelAction];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+    } else {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Media messages" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+        
+        [alert addAction:photoAction];
+        [alert addAction:melodyAction];
+        [alert addAction:cancelAction];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+    
+    /*
+     
+     UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"Media messages"
+     delegate:self
+     cancelButtonTitle:@"Cancel"
+     destructiveButtonTitle:nil
+     otherButtonTitles:@"Send photo", @"Send melody", nil];
+     
+     [sheet showFromToolbar:self.inputToolbar];*/
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
