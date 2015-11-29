@@ -11,7 +11,7 @@
 #import "LoopViewController.h"
 #import "InstamelodyViewController.h"
 
-@interface StationViewController : InstamelodyViewController <UICollectionViewDataSource, UICollectionViewDelegate, AwesomeMenuDelegate>
+@interface StationViewController : InstamelodyViewController <UICollectionViewDataSource, UICollectionViewDelegate, AwesomeMenuDelegate, LoopDelegate>
 
 @property IBOutlet UIView *profileView;
 @property IBOutlet UIImageView *profileImageView;

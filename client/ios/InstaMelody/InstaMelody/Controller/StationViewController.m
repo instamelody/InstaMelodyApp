@@ -564,6 +564,7 @@
     LoopViewController *loopVC = (LoopViewController *)[mainSB instantiateViewControllerWithIdentifier:@"LoopViewController"];
     //loopVC.selectedUserMelody = melody;
     loopVC.selectedLoop = loopDict;
+    loopVC.delegate = self;
     
     [self.navigationController pushViewController:loopVC animated:YES];
 }
@@ -593,6 +594,7 @@
             LoopViewController *loopVC = (LoopViewController *)[mainSB instantiateViewControllerWithIdentifier:@"LoopViewController"];
             //loopVC.selectedUserMelody = melody;
             loopVC.loopDict = responseDict;
+            loopVC.delegate = self;
             
             [self.navigationController pushViewController:loopVC animated:YES];
             
@@ -754,5 +756,14 @@
         }
     }];
 }
+
+#pragma mark - loop delegate
+
+-(void)didFinishWithInfo:(NSDictionary *)userDict
+{
+    //sdfsdf
+    [[NetworkManager sharedManager] uploadUserMelody:userDict];
+}
+
 
 @end
