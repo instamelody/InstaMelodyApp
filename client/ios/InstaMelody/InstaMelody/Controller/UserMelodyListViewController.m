@@ -131,10 +131,19 @@
     
     NSIndexPath *indexPath = [self.tableView indexPathForCell:selectedCell];
     
+    NSDictionary *loopDict = [self.loopArray objectAtIndex:indexPath.row];
+    
+    LoopViewController *loopVC = (LoopViewController *)segue.destinationViewController;
+    //loopVC.selectedUserMelody = melody;
+    loopVC.selectedLoop = loopDict;
+    
+    
+    /*
     UserMelody *melody = [self.melodyList objectAtIndex:indexPath.row];
     
     LoopViewController *loopVC = (LoopViewController *)segue.destinationViewController;
     loopVC.selectedUserMelody = melody;
+     */
     
     
 }
