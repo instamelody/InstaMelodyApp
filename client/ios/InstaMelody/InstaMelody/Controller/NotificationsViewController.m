@@ -145,7 +145,10 @@
     NSString *friendId = [infoDict objectForKey:@"UserId"];
     NSInteger activityType = [[infoDict objectForKey:@"ActivityType"] integerValue];
     
-    if (self.isFeed && activityType == 1) {
+    UIStoryboard *mainSB = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    
+    
+    if (self.isFeed) {
         /*
          Friend *selectedFriend = [self.friendsList objectAtIndex:indexPath.row];
          StationViewController *stationVC = (StationViewController *)segue.destinationViewController;
@@ -155,17 +158,29 @@
         
         Friend *selectedFriend = [Friend MR_findFirstByAttribute:@"userId" withValue:friendId];
         
-        UIStoryboard *mainSB = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        
         StationViewController *vc = (StationViewController *)[mainSB instantiateViewControllerWithIdentifier:@"StationViewController"];
         vc.selectedFriend = selectedFriend;
         
         [self.navigationController pushViewController:vc animated:YES];
         
     } else {
-        UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        UIViewController *vc = [sb instantiateViewControllerWithIdentifier:@"ChatsTableViewController"];
-        [self.navigationController pushViewController:vc animated:YES];
+        
+        switch (activityType) {
+            case 1: {
+                UIViewController *vc = [mainSB instantiateViewControllerWithIdentifier:@"FriendsTableViewController"];
+                [self.navigationController pushViewController:vc animated:YES];
+                break;
+            }
+            case 4: {
+                StationViewController *vc = (StationViewController *)[mainSB instantiateViewControllerWithIdentifier:@"StationViewController"];
+                [self.navigationController pushViewController:vc animated:YES];
+                break;
+            }
+            default:
+                break;
+        }
+        
+
     }
 }
 
