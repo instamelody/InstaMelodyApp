@@ -92,6 +92,7 @@
             <string>CenturyGothic</string>
             <string>CenturyGothic</string>
             <string>CenturyGothic</string>
+            <string>CenturyGothic</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -1816,10 +1817,23 @@
                                             <rect key="frame" x="40" y="240" width="320" height="320"/>
                                         </variation>
                                     </view>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="For the best results, please plug in your headphones" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3CC-EF-z8l">
+                                        <rect key="frame" x="164" y="364" width="218" height="37"/>
+                                        <animations/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="218" id="19o-HT-9K2"/>
+                                            <constraint firstAttribute="height" constant="37" id="3sA-Y5-xgP"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="14"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <animations/>
                                 <constraints>
+                                    <constraint firstItem="3CC-EF-z8l" firstAttribute="centerX" secondItem="FQ2-cX-yXa" secondAttribute="centerX" constant="-27" id="1oU-o2-xIa"/>
                                     <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="r6v-GZ-td4" secondAttribute="bottom" constant="85" id="7OG-j3-R47"/>
+                                    <constraint firstAttribute="bottom" secondItem="3CC-EF-z8l" secondAttribute="bottom" constant="19" id="HCL-ZX-ZV8"/>
                                     <constraint firstItem="r6v-GZ-td4" firstAttribute="top" relation="greaterThanOrEqual" secondItem="FQ2-cX-yXa" secondAttribute="top" constant="58" id="HDf-Uz-1lA"/>
                                     <constraint firstItem="r6v-GZ-td4" firstAttribute="centerX" secondItem="FQ2-cX-yXa" secondAttribute="centerX" id="LJU-0A-yvY"/>
                                     <constraint firstAttribute="bottom" relation="lessThanOrEqual" secondItem="r6v-GZ-td4" secondAttribute="bottom" constant="130" id="eaH-za-Lp8"/>
@@ -4107,7 +4121,7 @@ We are committed to conducting our business in accordance with these principles 
         <image name="vol" width="47" height="47"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="SjU-KU-hD4"/>
+        <segue reference="4ps-ka-4X8"/>
         <segue reference="42P-9A-i60"/>
     </inferredMetricsTieBreakers>
 </document>
