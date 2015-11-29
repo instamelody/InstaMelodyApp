@@ -260,9 +260,7 @@
 
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    if ([self.fgPlayer isPlaying]) {
-        [self stopEverything:nil];
-    }
+    [self stopEverything:nil];
 }
 
 -(void)updateBarStatus {
@@ -302,6 +300,7 @@
     self.saveBarStationLabel.text = [NSString stringWithFormat:@"@%@", [[NSUserDefaults standardUserDefaults] objectForKey:@"DisplayName"]];
     
     UITextField *topicField = (UITextField *)[self.tableView viewWithTag:98];
+    topicField.delegate = self;
     
     self.joinBar.hidden = YES;
     self.joinBarModLabel.hidden = YES;
@@ -715,13 +714,13 @@
     
     if ([self.bgPlayer isPlaying]) {
         [self.bgPlayer stop];
-        [toggleBtn setTitle:@"Preview melodies" forState:UIControlStateNormal];
         
     } else {
         
         if (self.selectedMelody != nil) {
             [self playLoop:nil];
         }
+
     }
 }
 
@@ -748,6 +747,18 @@
     }
 }
 
+-(IBAction)previewMelodies:(id)sender {
+    
+    UIButton *toggleBtn = (UIButton *)[self.view viewWithTag:5];
+    
+    if ([self.bgPlayer isPlaying]) {
+        [toggleBtn setTitle:@"Preview melodies" forState:UIControlStateNormal];
+        [self stopEverything:nil];
+    } else {
+        [toggleBtn setTitle:@"Stop melodies" forState:UIControlStateNormal];
+        [self toggleMelodies:nil];
+    }
+}
 
 -(IBAction)playLoop:(id)sender {
     
@@ -772,11 +783,6 @@
         [self.bgPlayer setNumberOfLoops:-1];
         [self.bgPlayer setVolume:[volume floatValue]];
         [self.bgPlayer play];
-        
-        if (self.isNewPart) {
-            UIButton *toggleBtn = (UIButton *)[self.view viewWithTag:5];
-            [toggleBtn setTitle:@"Stop melodies" forState:UIControlStateNormal];
-        }
         
     } else {
         NSLog(@"Error loading file: %@", [error description]);
@@ -1113,9 +1119,6 @@
 
 -(IBAction)toggleMelodies:(id)sender {
     
-    UIButton *toggleBtn = (UIButton *)[self.view viewWithTag:5];
-    [toggleBtn setTitle:@"Preview melodies" forState:UIControlStateNormal];
-    
     [self toggleLoop:nil];
     [self toggleLoop2:nil];
     [self toggleLoop3:nil];
@@ -1142,14 +1145,15 @@
 -(IBAction)togglePlayback:(id)sender {
     //sdf
 
-    [self stopEverything:nil];
-    
     UIButton *toggleBtn = (UIButton *)[self.view viewWithTag:5];
     self.currentPartIndex = 0;
     
     
     if ([self.fgPlayer isPlaying] || [self.bgPlayer isPlaying]) {
     
+        [self stopEverything:nil];
+        
+        
         [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
         
         [self.profileImageView setImage:[UIImage imageNamed:@"Profile"]];
@@ -1849,7 +1853,7 @@
             StatusCell *cell = (StatusCell *)[tableView dequeueReusableCellWithIdentifier:@"StatusCell" forIndexPath:indexPath];
             self.loopStatusLabel = cell.statusLabel;
             [cell.playButton setTag:5];
-            [cell.playButton addTarget:self action:@selector(toggleMelodies:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.playButton addTarget:self action:@selector(previewMelodies:) forControlEvents:UIControlEventTouchUpInside];
             [cell.playButton setTitle:@"Preview melodies" forState:UIControlStateNormal];
             return cell;
             
@@ -1891,7 +1895,7 @@
             StatusCell *cell = (StatusCell *)[tableView dequeueReusableCellWithIdentifier:@"StatusCell" forIndexPath:indexPath];
             self.loopStatusLabel = cell.statusLabel;
             [cell.playButton setTag:5];
-            [cell.playButton addTarget:self action:@selector(toggleMelodies:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.playButton addTarget:self action:@selector(previewMelodies:) forControlEvents:UIControlEventTouchUpInside];
             return cell;
             
         }
@@ -2000,6 +2004,7 @@
 #pragma mark - token delegate
 
 #pragma mark - CLTokenInputViewDelegate
+
 /*
 - (void)tokenInputView:(CLTokenInputView *)view didChangeText:(NSString *)text
 {
@@ -2054,7 +2059,7 @@
 - (void)tokenInputViewDidEndEditing:(CLTokenInputView *)view
 {
     NSLog(@"token input view did end editing: %@", view);
-    view.accessoryView = nil;
+    //view.accessoryView = nil;
 }
 
 - (void)tokenInputViewDidBeginEditing:(CLTokenInputView *)view
@@ -2096,6 +2101,31 @@
     [alertView show];
      */
 }
+
+#pragma mark - text view delegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    
+    /*
+    if (textField == self.inputText) {
+        [textField resignFirstResponder];
+        return NO;
+    }*/
+    [textField resignFirstResponder];
+    return YES;
+}
+
+/*
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    NSRange resultRange = [text rangeOfCharacterFromSet:[NSCharacterSet newlineCharacterSet] options:NSBackwardsSearch];
+    if ([text length] == 1 && resultRange.location != NSNotFound) {
+        [textView resignFirstResponder];
+        return NO;
+    }
+    
+    return YES;
+}*/
+
 
 //------------------------------------------------------------------------------
 #pragma mark - Utility

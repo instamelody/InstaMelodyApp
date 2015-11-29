@@ -247,33 +247,39 @@
     
     NSString *stationId = [[[NSUserDefaults standardUserDefaults] objectForKey:@"stationId"] stringValue];
     
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Station": @{@"Id" : stationId}, @"Message": @{@"Description" : @"station post", @"UserMelody" : @{@"Id": loopId}}}];
-    
-    
-    NSString *requestUrl = [NSString stringWithFormat:@"%@/Station/Post", API_BASE_URL];
-    
-    //add 64 char string
-    
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    
-    [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"JSON: %@", responseObject);
-        
-        NSLog(@"----- loop is now public");
+    if (stationId!=nil && ![stationId isEqualToString:@""]) {
         
         
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
-            NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
+        NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Station": @{@"Id" : stationId}, @"Message": @{@"Description" : @"station post", @"UserMelody" : @{@"Id": loopId}}}];
+        
+        
+        NSString *requestUrl = [NSString stringWithFormat:@"%@/Station/Post", API_BASE_URL];
+        
+        //add 64 char string
+        
+        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        
+        [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSLog(@"JSON: %@", responseObject);
             
-            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            NSLog(@"----- loop is now public");
             
-            NSLog(@"%@",ErrorResponse);
             
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [alertView show];
-        }
-    }];
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
+                NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
+                
+                NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+                
+                NSLog(@"%@",ErrorResponse);
+                
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [alertView show];
+            }
+        }];
+        
+    }
+    
 }
 
 -(void)updateProfilePicture:(UIImage *)image{
