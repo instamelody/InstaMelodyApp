@@ -929,7 +929,18 @@
             [self presentViewController:alert animated:YES completion:nil];
         } else {
             if (self.isNewPart) {
-                [self.delegate didFinishWithInfo:userDict];
+                
+                NSMutableDictionary *mutableDict = [NSMutableDictionary dictionaryWithDictionary:userDict];
+                
+                BOOL isChatLoop = [[self.loopDict objectForKey:@"IsChatLoop"] boolValue];
+                
+                if (isChatLoop == true && [userDict objectForKey:@"Id"] == nil) {
+                    
+                    [mutableDict setObject:[self.loopDict objectForKey:@"ChatId"] forKey:@"Id"];
+                    
+                }
+                [self.delegate didFinishWithInfo:mutableDict];
+                
             }
             
             
