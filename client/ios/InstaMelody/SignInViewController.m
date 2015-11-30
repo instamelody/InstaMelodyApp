@@ -10,6 +10,7 @@
 #import "AFHTTPRequestOperationManager.h"
 #import "AFURLSessionManager.h"
 #import "constants.h"
+#import "FBSDKAccessToken.h"
 
 #import "UIFont+FontAwesome.h"
 #import "NSString+FontAwesome.h"
@@ -85,8 +86,13 @@
 
 -(void)loginButton:(FBSDKLoginButton *)loginButton didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result error:(NSError *)error {
     if (error == nil && result != nil) {
-        [self signUp:nil];
+        
+        NSString *fbToken = result.token.tokenString;
+        NSString *userId = result.token.userID;
+        
+        [self loginWithToken:fbToken andId:userId];
     } else {
+        NSLog(@"Facebook error: %@", error.description);
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Error connecting to Facebook" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alertView show];
     }
@@ -94,6 +100,56 @@
 
 -(void)loginButtonDidLogOut:(FBSDKLoginButton *)loginButton {
     
+}
+
+-(void)loginWithToken:(NSString *)token andId:(NSString *)userId {
+    
+    //[self signUp:nil];
+    
+    NSString *deviceToken =  [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"];
+    
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"FacebookToken": token}];
+    
+    if (deviceToken != nil) {
+        [parameters setObject:deviceToken forKey:@"DeviceToken"];
+    }
+    
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/Auth/User", API_BASE_URL];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"You are now logged in" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+        
+        NSDictionary *responseDict =
+        (NSDictionary *)responseObject;
+        [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"Token"] forKey:@"authToken"];
+        
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        
+        [self getUserDetails:self.userField.text];
+        
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
+            
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            
+            [self.HUD hide:YES];
+            NSLog(@"%@",ErrorResponse);
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
+            
+            [self signUpWithToken:token];
+        }
+    }];
 }
 
 /*
@@ -121,6 +177,14 @@
 -(IBAction)signUp:(id)sender {
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
     SignUpViewController *signupVC = [mainStoryboard instantiateViewControllerWithIdentifier:@"SignUpViewController"];
+    [self.navigationController pushViewController:signupVC animated:YES];
+}
+
+
+-(void)signUpWithToken:(NSString *)token {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
+    SignUpViewController *signupVC = [mainStoryboard instantiateViewControllerWithIdentifier:@"SignUpViewController"];
+    signupVC.fbToken = token;
     [self.navigationController pushViewController:signupVC animated:YES];
 }
 

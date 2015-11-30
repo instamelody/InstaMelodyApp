@@ -35,6 +35,8 @@
 @property IBOutlet UIButton *submitButton;
 @property IBOutlet UIView *profileView;
 
+@property NSString *fbToken;
+
 @property BOOL isEditing;
 @property NSDictionary *userInfo;
 

@@ -1,11 +1,11 @@
 PODS:
-  - BEMCheckBox (1.1.0)
-  - Bolts (1.4.0):
-    - Bolts/AppLinks (= 1.4.0)
-    - Bolts/Tasks (= 1.4.0)
-  - Bolts/AppLinks (1.4.0):
+  - BEMCheckBox (1.1.1)
+  - Bolts (1.5.0):
+    - Bolts/AppLinks (= 1.5.0)
+    - Bolts/Tasks (= 1.5.0)
+  - Bolts/AppLinks (1.5.0):
     - Bolts/Tasks
-  - Bolts/Tasks (1.4.0)
+  - Bolts/Tasks (1.5.0)
   - CLTokenInputView (2.1.0)
   - DAAlertController (0.1.4)
   - DACircularProgress (2.3.1)
@@ -15,21 +15,19 @@ PODS:
   - EZAudio/Full (1.1.2):
     - EZAudio/Core
     - TPCircularBuffer (~> 0.0)
-  - Fabric (1.6.0):
-    - Fabric/Base (= 1.6.0)
-  - Fabric/Base (1.6.0)
-  - FBSDKCoreKit (4.7.1):
+  - Fabric (1.6.1)
+  - FBSDKCoreKit (4.8.0):
     - Bolts (~> 1.1)
-    - FBSDKCoreKit/arc (= 4.7.1)
-    - FBSDKCoreKit/no-arc (= 4.7.1)
-  - FBSDKCoreKit/arc (4.7.1):
+    - FBSDKCoreKit/arc (= 4.8.0)
+    - FBSDKCoreKit/no-arc (= 4.8.0)
+  - FBSDKCoreKit/arc (4.8.0):
     - Bolts (~> 1.1)
-  - FBSDKCoreKit/no-arc (4.7.1):
+  - FBSDKCoreKit/no-arc (4.8.0):
     - Bolts (~> 1.1)
     - FBSDKCoreKit/arc
-  - FBSDKLoginKit (4.7.1):
+  - FBSDKLoginKit (4.8.0):
     - FBSDKCoreKit
-  - FBSDKShareKit (4.7.1):
+  - FBSDKShareKit (4.8.0):
     - FBSDKCoreKit
   - FontAwesome (4.3.0)
   - JSQMessagesViewController (7.2.0):
@@ -37,12 +35,12 @@ PODS:
   - JSQSystemSoundPlayer (2.0.1)
   - M13ProgressSuite (1.2.7)
   - MagicalRecord (2.3.0)
-  - MGSwipeTableCell (1.5.1)
+  - MGSwipeTableCell (1.5.3)
   - TPCircularBuffer (0.0.1)
-  - TwitterCore (1.12.1):
+  - TwitterCore (1.14.1):
     - Fabric
-  - TwitterKit (1.12.1):
-    - TwitterCore (= 1.12.1)
+  - TwitterKit (1.14.1):
+    - TwitterCore (= 1.14.1)
   - UIImageView-Letters (1.1.4)
 
 DEPENDENCIES:
@@ -64,25 +62,25 @@ DEPENDENCIES:
   - UIImageView-Letters
 
 SPEC CHECKSUMS:
-  BEMCheckBox: abb7b1ffcc24c25c31ffa7b7167a3e869f4f15ba
-  Bolts: 0e9bce58b9b9f5e8a7a4d47b16d2fabec289072b
+  BEMCheckBox: e1dd80417e0a9f1db4b55d8b8d2f3f477d120795
+  Bolts: 722ab9a4f8b50fc4ed1b9998a5a7a2b3f16d80b4
   CLTokenInputView: dc40041faf76102cf96dede1635d93bd0f115a0d
   DAAlertController: 4735313ec65d3d69f81fdd34d01308809680350f
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   EZAudio: 01373de2b1257b77be1bf13753fb1c4ea8a9777e
-  Fabric: d737eda3a26ac940a5430230eedb35f16b226131
-  FBSDKCoreKit: 9141b70960a37930850370495fe565f4a27ac141
-  FBSDKLoginKit: c11ed3c2833472db3bb4a4aecf27af4a6f69b173
-  FBSDKShareKit: 213adf63e073f41a346b0e7a689805880dc5150e
+  Fabric: bf0ceb04e7c924090efc5f8c55e4fbcca189e0a0
+  FBSDKCoreKit: 66a935d17b6e00b6b64e604f2eb9b72c9ab7deb8
+  FBSDKLoginKit: d893fcbb98d854496925e9ff73c67b896982d3c4
+  FBSDKShareKit: e7577ee3adf80fc04fb656dd133fbb522250672b
   FontAwesome: 341b52261cad8254017da3ddfc01d67c87c0ca88
   JSQMessagesViewController: 73cab48aa92fc2d512f3b6724f3425cc47a19eb5
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
   M13ProgressSuite: 03d194af6359da440641ba758aed5a18b0386a86
   MagicalRecord: 89eb7d7ead39fb37f01c3d010665ee94d17f8dba
-  MGSwipeTableCell: a51fa670c01f0aa048f12af040acebf315223137
+  MGSwipeTableCell: 5ae3b9a15efda26b201adc8676b24040febe6ff6
   TPCircularBuffer: 949e9632b9fb99b7274d7b2296ee22bff5841e35
-  TwitterCore: 2b1bdd58dfba3f21b416d2a0d1ca74173e3b0eea
-  TwitterKit: 7f55ebb8d2a1476f7ef2d6fedd40090d4b349b40
+  TwitterCore: 5c02651e664d715fda64a8870a4a2f6754705a2d
+  TwitterKit: 8db238c6b3ec23fbd5e4dd86355a5f805a6699f8
   UIImageView-Letters: f62db28076797adf3560ab7410647dc6899b9eef
 
 COCOAPODS: 0.39.0
