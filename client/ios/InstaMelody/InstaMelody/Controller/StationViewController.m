@@ -402,7 +402,7 @@
             tempArray = [tempArray subarrayWithRange:NSMakeRange(0, 20)];
         }
         
-        NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateCreated" ascending:NO];
+        NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateModified" ascending:NO];
         NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
         self.loopArray = [tempArray sortedArrayUsingDescriptors:descriptors];
         
@@ -428,7 +428,7 @@
         self.loopArray = [self.loopArray subarrayWithRange:NSMakeRange(0, 20)];
     }
     
-    NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateCreated" ascending:NO];
+    NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateModified" ascending:NO];
     NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
     self.loopArray = [tempArray sortedArrayUsingDescriptors:descriptors];
     
@@ -464,7 +464,7 @@
     cell.likeButton.titleLabel.font  = [UIFont fontAwesomeFontOfSize:30.0f];
     cell.nameLabel.text = [loopDict objectForKey:@"Name"];
     
-    NSString *oldDateString = [loopDict objectForKey:@"DateCreated"];
+    NSString *oldDateString = [loopDict objectForKey:@"DateModified"];
     NSDate *dateObject = [self.fromDateFormatter dateFromString:oldDateString];
     
     if ([[loopDict objectForKey:@"Id"] integerValue]) {
@@ -648,7 +648,7 @@
         case 0: {
             
             NSArray *tempArray = self.loopArray;
-            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateCreated" ascending:NO];
+            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateModified" ascending:NO];
             NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
             self.loopArray = [tempArray sortedArrayUsingDescriptors:descriptors];
             
@@ -666,7 +666,7 @@
                 }
             }
             
-            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateCreated" ascending:NO];
+            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateModified" ascending:NO];
             NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
             self.loopArray = [tempArray sortedArrayUsingDescriptors:descriptors];
             
@@ -682,7 +682,7 @@
                 }
             }
             
-            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateCreated" ascending:NO];
+            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateModified" ascending:NO];
             NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
             self.loopArray = [tempArray sortedArrayUsingDescriptors:descriptors];
             
@@ -699,7 +699,7 @@
             }
             
             
-            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateCreated" ascending:NO];
+            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateModified" ascending:NO];
             NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
             self.loopArray = [tempArray sortedArrayUsingDescriptors:descriptors];
             
