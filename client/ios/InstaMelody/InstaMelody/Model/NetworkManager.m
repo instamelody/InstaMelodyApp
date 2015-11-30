@@ -117,7 +117,25 @@
         
         if ([isPublic boolValue] == TRUE) {
             NSDictionary *melodyDict = [responseDict objectForKey:@"UserMelody"];
-            [self makeLoopPublic:[responseDict objectForKey:@"Id"]];
+            NSDictionary *chatMsgDict = [responseDict objectForKey:@"ChatMessage"];
+            
+            
+            if (melodyDict != nil) {
+                
+                //melody part
+                
+                [self makeLoopPublic:[responseDict objectForKey:@"Id"]];
+            } else if (chatMsgDict != nil) {
+                
+                //chat loop part
+                
+                NSDictionary *messageDict = [chatMsgDict objectForKey:@"Message"];
+                
+                if (messageDict != nil) {
+                    melodyDict = [messageDict objectForKey:@"UserMelody"];
+                    [self makeLoopPublic:[melodyDict objectForKey:@"Id"]];
+                }
+            }
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

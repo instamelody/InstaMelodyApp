@@ -986,23 +986,21 @@
 -(void)showLoop {
     
     
-    if (self.currentRecordingURL != nil) {
-        UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        LoopViewController *vc = (LoopViewController *)[sb instantiateViewControllerWithIdentifier:@"LoopViewController"];
-        vc.delegate = self;
-        vc.selectedLoop = self.loopDict;
-        
-        NSString *nameString = [self.chatDict objectForKey:@"Name"];
-        if (nameString != nil && [nameString isKindOfClass:[NSString class]] && ![nameString containsString:@"ChatLoop_"]) {
-            if (self.loopDict == nil) {
-                vc.topicString = nameString;
-            }
-            
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    LoopViewController *vc = (LoopViewController *)[sb instantiateViewControllerWithIdentifier:@"LoopViewController"];
+    vc.delegate = self;
+    vc.selectedLoop = self.loopDict;
+    
+    NSString *nameString = [self.chatDict objectForKey:@"Name"];
+    if (nameString != nil && [nameString isKindOfClass:[NSString class]] && ![nameString containsString:@"ChatLoop_"]) {
+        if (self.loopDict == nil) {
+            vc.topicString = nameString;
         }
         
-        
-        [self.navigationController pushViewController:vc animated:YES];
     }
+    
+    
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 -(IBAction)createLoop:(id)sender {
