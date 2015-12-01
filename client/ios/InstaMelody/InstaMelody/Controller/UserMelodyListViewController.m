@@ -98,7 +98,7 @@
     } else {
         cell.subtitleLabel.text = [NSString stringWithFormat:@"Solo loop"];
     }
-    if ([[loopDict objectForKey:@"IsChatLoopPart"] boolValue] == TRUE && self.filterControl.selectedSegmentIndex == 3) {
+    if ([[loopDict objectForKey:@"IsChatLoop"] boolValue] == TRUE  && self.filterControl.selectedSegmentIndex == 3) {
         cell.subtitleLabel.text = [NSString stringWithFormat:@"Chat loop"];
     }
     
