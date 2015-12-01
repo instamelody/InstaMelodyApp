@@ -256,7 +256,114 @@
             [alertView show];
         }
     }];
+
+}
+
+-(void)uploadLoop:(NSDictionary *)userDict{
     
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    //save to file
+    
+    time_t unixTime = time(NULL);
+    
+    
+    NSString *recordingPath = [userDict objectForKey:@"LoopURL"];
+    NSString *recordingName = [recordingPath lastPathComponent];
+    NSString *melodyName = [userDict objectForKey:@"Name"];
+    NSString *description = [userDict objectForKey:@"Description"];
+    
+    //step 1 - get file token
+    NSString *token =  [defaults objectForKey:@"authToken"];
+    NSString *userName =  [defaults objectForKey:@"DisplayName"];
+    
+    NSMutableArray *partArray = [NSMutableArray new];
+    
+    NSNumber *firstId = [userDict objectForKey:@"MelodyId1"];
+    NSNumber *secondId = [userDict objectForKey:@"MelodyId2"];
+    NSNumber *thirdId = [userDict objectForKey:@"MelodyId3"];
+    
+    NSNumber *isExplicit = [userDict objectForKey:@"IsExplicit"];
+    NSNumber *isPublic = [userDict objectForKey:@"IsStationPostMelody"];
+    
+    if (firstId) {
+        NSDictionary *entry = [NSDictionary dictionaryWithObject:firstId forKey:@"Id"];
+        [partArray addObject:entry];
+    }
+    
+    if (secondId) {
+        NSDictionary *entry = [NSDictionary dictionaryWithObject:secondId forKey:@"Id"];
+        [partArray addObject:entry];
+    }
+    
+    
+    if (thirdId) {
+        NSDictionary *entry = [NSDictionary dictionaryWithObject:thirdId forKey:@"Id"];
+        [partArray addObject:entry];
+        
+    }
+    
+    NSMutableDictionary *recordingDict = [NSMutableDictionary dictionary];
+    
+    if (melodyName == nil) {
+        melodyName = [NSString stringWithFormat:@"%@'s Loop", userName];
+    }
+    
+    if (description == nil) {
+        description = [NSString stringWithFormat:@"%@'s Loop", userName];
+    }
+    
+    
+    [recordingDict setObject:melodyName forKey:@"Name"];
+    [recordingDict setObject:description forKey:@"Description"];
+    [recordingDict setObject:recordingName forKey:@"FileName"];
+    [partArray addObject:recordingDict];
+    
+    NSDictionary *userMelodyDict = @{ @"UserMelody": @{@"Parts" : partArray, @"IsExplicit" : isExplicit}};
+    
+    NSDictionary *loopDict = @{@"Name": melodyName, @"Parts": @[userMelodyDict]};
+    
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Loop": loopDict}];
+    
+    
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/Melody/Loop", API_BASE_URL];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    
+    [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        NSLog(@"JSON: %@", responseObject);
+        
+        //
+        //step 2 - upload file
+        
+        NSDictionary *responseDict = (NSDictionary *)responseObject;
+        NSDictionary *tokenDict = [responseDict objectForKey:@"FileUploadToken"];
+        NSString *fileTokenString = [tokenDict objectForKey:@"Token"];
+        
+        [self uploadFile:recordingPath withFileToken:fileTokenString];
+        //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
+        if ([isPublic boolValue] == TRUE) {
+            NSDictionary *melodyDict = [responseDict objectForKey:@"UserMelody"];
+            [self makeLoopPublic:[melodyDict objectForKey:@"Id"]];
+        }
+        
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
+            
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            
+            NSLog(@"%@",ErrorResponse);
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
+        }
+    }];
     
 }
 

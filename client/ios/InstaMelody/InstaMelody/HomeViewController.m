@@ -375,7 +375,12 @@
 -(void)didFinishWithInfo:(NSDictionary *)userDict
 {
     //sdfsdf
-    [[NetworkManager sharedManager] uploadUserMelody:userDict];
+    
+    if ([userDict objectForKey:@"Id"] != nil) {
+        [[NetworkManager sharedManager] uploadChatUserMelody:userDict];
+    } else {
+        [[NetworkManager sharedManager] uploadLoop:userDict];
+    }
 }
 
 #pragma mark - image picker delegate

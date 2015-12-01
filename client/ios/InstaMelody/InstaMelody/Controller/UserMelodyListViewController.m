@@ -13,7 +13,6 @@
 #import "UIFont+FontAwesome.h"
 #import "NSString+FontAwesome.h"
 #import "DataManager.h"
-#import "LoopViewController.h"
 
 @interface UserMelodyListViewController ()
 
@@ -136,6 +135,7 @@
     LoopViewController *loopVC = (LoopViewController *)segue.destinationViewController;
     //loopVC.selectedUserMelody = melody;
     loopVC.selectedLoop = loopDict;
+    loopVC.delegate = self;
     
     
     /*
@@ -329,6 +329,17 @@
     }
     
     [self.tableView reloadData];
+}
+
+-(void)didFinishWithInfo:(NSDictionary *)userDict
+{
+    //sdfsdf
+    
+    if ([userDict objectForKey:@"Id"] != nil) {
+        [[NetworkManager sharedManager] uploadChatUserMelody:userDict];
+    } else {
+        [[NetworkManager sharedManager] uploadUserMelody:userDict];
+    }
 }
 
 @end

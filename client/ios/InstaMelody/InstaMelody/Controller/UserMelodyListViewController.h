@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LoopViewController.h"
+#import "NetworkManager.h"
 
 @interface UserMelodyListViewController : UIViewController
 
