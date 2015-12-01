@@ -259,7 +259,6 @@
             } else {
                 //get my friend's public loops
                 
-                
                 [self getStationPosts:[selectedStation objectForKey:@"Id"] ];
             }
 

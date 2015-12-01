@@ -464,7 +464,9 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
             [[NSUserDefaults standardUserDefaults] setObject:[selectedStation objectForKey:@"Id"] forKey:@"stationId"];
             
             [[NSUserDefaults standardUserDefaults] synchronize];
-
+            
+            
+            [self publishStation:[selectedStation objectForKey:@"Id"]];
             //self.loopArray = stationList;
 
             
@@ -505,6 +507,49 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         //
         //step 2 - reload
         [self getFirstStation];
+        
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
+            
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            
+            NSLog(@"%@",ErrorResponse);
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            //TODOAHMED
+            //[alertView show];
+            
+            //[self fetchMyMelodies];
+        }
+    }];
+}
+
+-(void)publishStation:(NSString *)stationId {
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    //step 1 - get file token
+    NSString *token =  [defaults objectForKey:@"authToken"];
+    
+    
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Station": @{@"Id" : stationId}}];
+    
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/Station/Publish", API_BASE_URL];
+    
+    //add 64 char string
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        NSLog(@"JSON: %@", responseObject);
+        
+        //
+        //step 2 - reload
+        //[self getFirstStation];
+        NSLog(@"---- Station published successfully");
         
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
