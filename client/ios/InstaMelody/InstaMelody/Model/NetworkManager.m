@@ -318,6 +318,7 @@
     [recordingDict setObject:recordingName forKey:@"FileName"];
     [partArray addObject:recordingDict];
     
+    //NSDictionary *userMelodyDict = @{ @"UserMelody": @{@"Parts" : partArray, @"IsExplicit" : isExplicit}};
     NSDictionary *userMelodyDict = @{ @"UserMelody": @{@"Parts" : partArray, @"IsExplicit" : isExplicit}};
     
     NSDictionary *loopDict = @{@"Name": melodyName, @"IsExplicit": isExplicit, @"Parts": @[userMelodyDict]};
