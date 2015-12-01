@@ -108,6 +108,52 @@
         NSDictionary *itemDict = [self.newestArray objectAtIndex:indexPath.row];
         CurrentCell *cell = (CurrentCell *)[cv dequeueReusableCellWithReuseIdentifier:@"CurrentCell" forIndexPath:indexPath];
         cell.titleLabel.text = [itemDict objectForKey:@"Name"];
+        
+        //load profile pic
+        
+        NSString *userId = [itemDict objectForKey:@"UserId"];
+        
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        
+        NSString *myUserId = [defaults objectForKey:@"Id"];
+        
+        if ([userId isEqualToString:myUserId]) {
+            
+            
+            NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+            
+            NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
+            NSString *imageName = [[defaults objectForKey:@"ProfileFilePath"] lastPathComponent];
+            
+            NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
+            cell.imageView.image = [UIImage imageWithContentsOfFile:imagePath];
+            
+        } else {
+            Friend *friend = [Friend MR_findFirstByAttribute:@"userId" withValue:userId];
+            
+            
+            if (friend.profileFilePath != nil && ![friend.profileFilePath isEqualToString:@""]) {
+                
+                NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+                
+                NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
+                NSString *imageName = [friend.profileFilePath lastPathComponent];
+                
+                NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
+                cell.imageView.image = [UIImage imageWithContentsOfFile:imagePath];
+                
+            } else {
+                cell.imageView.image = [UIImage imageNamed:@"Profile"];
+                /*
+                NSString *userName = [NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName];
+                [cell.imageView setImageWithString:userName color:nil circular:YES];
+                 */
+            }
+            
+            
+        }
+        
+        
         return cell;
     }
     
@@ -138,48 +184,6 @@
     
     [cell.shareButton setTitle:[NSString fontAwesomeIconStringForEnum:FAEllipsisH] forState:UIControlStateNormal];
     [cell.likeButton setTitle:[NSString fontAwesomeIconStringForEnum:FAHeartO] forState:UIControlStateNormal];
-    
-    
-    //load profile pic
-    
-    NSString *userId = melody.userId;
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    
-    NSString *myUserId = [defaults objectForKey:@"Id"];
-    
-    if ([userId isEqualToString:myUserId]) {
-        
-        
-        NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-        
-        NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
-        NSString *imageName = [[defaults objectForKey:@"ProfileFilePath"] lastPathComponent];
-        
-        NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
-        cell.coverImage.image = [UIImage imageWithContentsOfFile:imagePath];
-        
-    } else {
-        Friend *friend = [Friend MR_findFirstByAttribute:@"userId" withValue:userId];
-     
-        
-        if (friend.profileFilePath != nil && ![friend.profileFilePath isEqualToString:@""]) {
-            
-            NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-            
-            NSString *profilePath = [documentsPath stringByAppendingPathComponent:@"Profiles"];
-            NSString *imageName = [friend.profileFilePath lastPathComponent];
-            
-            NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
-            cell.coverImage.image = [UIImage imageWithContentsOfFile:imagePath];
-            
-        } else {
-            NSString *userName = [NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName];
-            //[cell.coverImage setImageWithString:userName color:nil circular:YES];
-        }
-        
-        
-    }
      
      */
     
