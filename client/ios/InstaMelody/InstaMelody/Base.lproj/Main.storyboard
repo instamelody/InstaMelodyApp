@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="15C47a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Upz-he-51Z">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="15C48a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Upz-he-51Z">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
@@ -3746,13 +3746,13 @@ We are committed to conducting our business in accordance with these principles 
                                                     <rect key="frame" x="0.0" y="0.0" width="150" height="80"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0jX-Ob-fk8">
-                                                            <rect key="frame" x="0.0" y="0.0" width="150" height="80"/>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="wave" translatesAutoresizingMaskIntoConstraints="NO" id="0jX-Ob-fk8">
+                                                            <rect key="frame" x="0.0" y="0.0" width="150" height="59"/>
                                                             <animations/>
                                                             <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Station Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0NA-Gi-6hS">
-                                                            <rect key="frame" x="15" y="29" width="116" height="21"/>
+                                                            <rect key="frame" x="0.0" y="59" width="142" height="21"/>
                                                             <animations/>
                                                             <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="13"/>
                                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -3763,13 +3763,7 @@ We are committed to conducting our business in accordance with these principles 
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 </view>
                                                 <animations/>
-                                                <color key="backgroundColor" red="0.4793088549522373" green="0.48405448717948718" blue="0.48405448717948718" alpha="1" colorSpace="calibratedRGB"/>
-                                                <constraints>
-                                                    <constraint firstItem="0jX-Ob-fk8" firstAttribute="leading" secondItem="8BK-6O-1Gu" secondAttribute="leading" id="5L9-JZ-x6W"/>
-                                                    <constraint firstItem="0jX-Ob-fk8" firstAttribute="top" secondItem="8BK-6O-1Gu" secondAttribute="top" id="AcJ-bl-ckh"/>
-                                                    <constraint firstAttribute="trailing" secondItem="0jX-Ob-fk8" secondAttribute="trailing" id="cz1-uV-Bn0"/>
-                                                    <constraint firstAttribute="bottom" secondItem="0jX-Ob-fk8" secondAttribute="bottom" id="iPT-sB-ybY"/>
-                                                </constraints>
+                                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                 <connections>
                                                     <outlet property="imageView" destination="0jX-Ob-fk8" id="fB5-Zf-yqP"/>
                                                     <outlet property="titleLabel" destination="0NA-Gi-6hS" id="3HQ-yD-Qgu"/>
@@ -3802,7 +3796,7 @@ We are committed to conducting our business in accordance with these principles 
                                         <animations/>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="New Melodies and Beat Loops" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mqR-dJ-bdF">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Top Performers" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mqR-dJ-bdF">
                                         <rect key="frame" x="184" y="8" width="232" height="21"/>
                                         <animations/>
                                         <constraints>
@@ -3835,22 +3829,22 @@ We are committed to conducting our business in accordance with these principles 
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tsR-Sg-oPL">
-                                                            <rect key="frame" x="8" y="0.0" width="81" height="105"/>
+                                                            <rect key="frame" x="10" y="0.0" width="77" height="101"/>
                                                             <animations/>
                                                             <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                         </imageView>
-                                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zsa-ux-jSU">
-                                                            <rect key="frame" x="24" y="46" width="48" height="48"/>
-                                                            <animations/>
-                                                            <state key="normal" backgroundImage="play"/>
-                                                        </button>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Melody Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qmx-pf-BqV">
-                                                            <rect key="frame" x="8" y="111" width="81" height="21"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Melody Name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qmx-pf-BqV">
+                                                            <rect key="frame" x="10" y="109" width="77" height="31"/>
                                                             <animations/>
                                                             <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="10"/>
                                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
+                                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zsa-ux-jSU">
+                                                            <rect key="frame" x="24" y="28" width="48" height="48"/>
+                                                            <animations/>
+                                                            <state key="normal" backgroundImage="play"/>
+                                                        </button>
                                                     </subviews>
                                                     <animations/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -4119,6 +4113,7 @@ We are committed to conducting our business in accordance with these principles 
         <image name="store" width="70" height="70"/>
         <image name="studio" width="70" height="70"/>
         <image name="vol" width="47" height="47"/>
+        <image name="wave" width="104" height="70"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="4ps-ka-4X8"/>
