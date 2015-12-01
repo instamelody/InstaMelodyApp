@@ -765,6 +765,8 @@
     
     if ([userDict objectForKey:@"Id"] != nil) {
         [[NetworkManager sharedManager] uploadChatUserMelody:userDict];
+    } else if ([userDict objectForKey:@"LoopId"] != nil) {
+        [[NetworkManager sharedManager] uploadLoopPart:userDict];
     } else {
          [[NetworkManager sharedManager] uploadUserMelody:userDict];
     }

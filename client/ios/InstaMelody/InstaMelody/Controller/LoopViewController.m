@@ -938,6 +938,8 @@
                     
                     [mutableDict setObject:[self.loopDict objectForKey:@"ChatId"] forKey:@"Id"];
                     
+                } else if ([self.loopDict objectForKey:@"Id"] != nil) {
+                    [mutableDict setObject:[self.loopDict objectForKey:@"Id"] forKey:@"LoopId"];
                 }
                 [self.delegate didFinishWithInfo:mutableDict];
                 
