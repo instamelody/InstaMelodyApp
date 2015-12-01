@@ -917,6 +917,7 @@ namespace InstaMelody.Business
             {
                 Name = userMelody.Name,
                 UserId = sender.Id,
+                IsExplicit = userMelody.IsExplicit,
                 DateCreated = DateTime.UtcNow
             });
 
@@ -1001,6 +1002,7 @@ namespace InstaMelody.Business
             {
                 UserId = creator.Id,
                 Name = loop.Name,
+                IsExplicit = loop.IsExplicit,
                 DateCreated = DateTime.UtcNow,
                 DateModified = DateTime.UtcNow
             });

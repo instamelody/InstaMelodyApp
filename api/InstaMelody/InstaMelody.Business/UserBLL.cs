@@ -92,11 +92,12 @@ namespace InstaMelody.Business
             if (!foundUser.Id.Equals(sessionUser.Id))
             {
                 var userDetail = string.IsNullOrWhiteSpace(user.DisplayName) ? user.EmailAddress : user.DisplayName;
-                InstaMelodyLogger.Log(
-                    string.Format("User: {0} cannot retrieve user info for another User: {1}", 
-                        sessionUser.Id, userDetail), LogLevel.Error);
-                throw new UnauthorizedAccessException(
-                    string.Format("User: {0} cannot retrieve user info for another User: {1}", sessionUser.Id, userDetail));
+                //InstaMelodyLogger.Log(
+                //    string.Format("User: {0} cannot retrieve user info for another User: {1}", 
+                //        sessionUser.Id, userDetail), LogLevel.Error);
+                //throw new UnauthorizedAccessException(
+                //    string.Format("User: {0} cannot retrieve user info for another User: {1}", sessionUser.Id, userDetail));
+                foundUser = foundUser.StripSensitiveInfoForNonFriends();
             }
 
             return GetUserWithImage(foundUser);
@@ -148,7 +149,7 @@ namespace InstaMelody.Business
                 throw new DataException(string.Format("Error getting user ID {0}.", userId));
             }
 
-            return GetUserWithImage(result) ?? new User();
+            return result ?? new User();
         }
 
         /// <summary>

@@ -931,6 +931,29 @@ namespace InstaMelody.Business
         {
             var dal = new Messages();
             var foundMessage = dal.GetMessageById(message.Id);
+            var fileBll = new FileBll();
+            if (foundMessage.MediaType == MediaTypeEnum.Image)
+            {
+                var image = dal.GetImageByMessageId(message.Id);
+                if (image != null)
+                    foundMessage.Image = fileBll.GetImage(new Image { Id = image.ImageId });
+            }
+            else if (foundMessage.MediaType == MediaTypeEnum.Video)
+            {
+                var video = dal.GetVideoByMessageId(message.Id);
+                if (video != null)
+                    foundMessage.Video = fileBll.GetVideo(new Video { Id = video.VideoId });
+            } 
+            else if (foundMessage.MediaType == MediaTypeEnum.Melody)
+            {
+                var melody = dal.GetMessageMelodyByMessageId(message.Id);
+                if (melody != null) 
+                {
+                    var melodyBll = new MelodyBll();
+                    foundMessage.UserMelody = melodyBll.GetUserMelody(new UserMelody { Id = melody.UserMelodyId });
+
+                }
+            }
 
             return foundMessage;
         }
