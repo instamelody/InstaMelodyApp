@@ -293,17 +293,45 @@
         // NSLog(@"JSON: %@", responseObject);
         NSLog(@"stations updated");
         
-        NSArray *loopArray = (NSArray *)responseObject;
         
-         if ([[DataManager sharedManager] isMature]) {
-         
-             self.loopArray = loopArray;
-             self.cleanLoopArray = loopArray;
-         } else {
-             self.loopArray = [self filteredArray:loopArray];
-             self.cleanLoopArray = [self filteredArray:loopArray];
-         }
+        NSArray *tempArray = (NSArray *)responseObject;
         
+        //NSArray *tempArray = [[DataManager sharedManager] userMelodyList];
+        
+        if (tempArray.count > 20) {
+            tempArray = [tempArray subarrayWithRange:NSMakeRange(0, 20)];
+        }
+        
+        NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateCreated" ascending:NO];
+        
+        if (tempArray.count > 0) {
+            NSString *userId = [tempArray[0] objectForKey:@"UserId"];
+            
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            
+            NSString *myUserId = [defaults objectForKey:@"Id"];
+            
+            if ([userId isEqualToString:myUserId]) {
+                
+                valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateModified" ascending:NO];
+            }
+            
+            NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
+            
+            if ([[DataManager sharedManager] isMature]) {
+                
+                self.loopArray = [tempArray sortedArrayUsingDescriptors:descriptors];
+                self.cleanLoopArray = [tempArray sortedArrayUsingDescriptors:descriptors];
+                
+            } else {
+                
+                self.loopArray = [self filteredArray:[tempArray sortedArrayUsingDescriptors:descriptors] ];
+                self.cleanLoopArray = [self filteredArray:[tempArray sortedArrayUsingDescriptors:descriptors]];
+                
+            }
+            
+
+        }
         [self.collectionView reloadData];
         
         //NSDictionary *responseDict = (NSDictionary *)responseObject;
@@ -401,7 +429,19 @@
             tempArray = [tempArray subarrayWithRange:NSMakeRange(0, 20)];
         }
         
-        NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateModified" ascending:NO];
+        NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateCreated" ascending:NO];
+        
+        NSString *userId = [self.loopArray[0] objectForKey:@"UserId"];
+        
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        
+        NSString *myUserId = [defaults objectForKey:@"Id"];
+        
+        if ([userId isEqualToString:myUserId]) {
+            
+            valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateModified" ascending:NO];
+        }
+        
         NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
         self.loopArray = [tempArray sortedArrayUsingDescriptors:descriptors];
         
@@ -457,21 +497,63 @@
     StationCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"StationCell" forIndexPath:indexPath];
     //cell.backgroundColor = [UIColor whiteColor];
     
-    NSDictionary *loopDict = self.loopArray[indexPath.row];
-    
+    /*
+     UIColor *darkestColor = [UIColor colorWithWhite:0.1f alpha:0.5f];
+     UIColor *lightestColor = [UIColor colorWithWhite:0.7f alpha:0.0f];
+     
+     CAGradientLayer *headerGradient = [CAGradientLayer layer];
+     headerGradient.colors = [NSArray arrayWithObjects:(id)darkestColor.CGColor, (id)lightestColor.CGColor, (id)darkestColor.CGColor,  nil];
+     
+     headerGradient.frame = cell.coverImage.bounds;
+     [cell.coverImage.layer insertSublayer:headerGradient atIndex:0];
+     */
     //cell.shareButton.titleLabel.font  = [UIFont fontAwesomeFontOfSize:20.0f];
     cell.likeButton.titleLabel.font  = [UIFont fontAwesomeFontOfSize:30.0f];
-    cell.nameLabel.text = [loopDict objectForKey:@"Name"];
     
-    NSString *oldDateString = [loopDict objectForKey:@"DateModified"];
-    NSDate *dateObject = [self.fromDateFormatter dateFromString:oldDateString];
+    NSDictionary *loopDict = self.loopArray[indexPath.row];
     
-    if ([[loopDict objectForKey:@"Id"] integerValue]) {
-        cell.likeButton.tag = [[loopDict objectForKey:@"Id"] integerValue];
+    NSDictionary *messageDict = [loopDict objectForKey:@"Message"];
+    
+    if (messageDict != nil) {
+        NSDictionary *userMelodyDict = [messageDict objectForKey:@"UserMelody"];
+        
+        if (userMelodyDict != nil) {
+            
+            cell.nameLabel.text = [userMelodyDict objectForKey:@"Name"];
+            
+            NSString *oldDateString = [userMelodyDict objectForKey:@"DateModified"];
+            
+            if (oldDateString == nil) {
+                oldDateString = [userMelodyDict objectForKey:@"DateCreated"];
+            }
+            
+            NSDate *dateObject = [self.fromDateFormatter dateFromString:oldDateString];
+            
+            if ([[loopDict objectForKey:@"Id"] integerValue]) {
+                cell.likeButton.tag = [[userMelodyDict objectForKey:@"Id"] integerValue];
+                
+            }
+            
+            cell.dateLabel.text = [self.toDateFormatter stringFromDate:dateObject];
+            
+        }
+        
+    } else {
+        
+        cell.nameLabel.text = [loopDict objectForKey:@"Name"];
+        
+        NSString *oldDateString = [loopDict objectForKey:@"DateModified"];
+        NSDate *dateObject = [self.fromDateFormatter dateFromString:oldDateString];
+        
+        if ([[loopDict objectForKey:@"Id"] integerValue]) {
+            cell.likeButton.tag = [[loopDict objectForKey:@"Id"] integerValue];
+            
+        }
+        
+        cell.dateLabel.text = [self.toDateFormatter stringFromDate:dateObject];
 
+        
     }
-    
-    cell.dateLabel.text = [self.toDateFormatter stringFromDate:dateObject];
     
     
     //[cell.shareButton setTitle:[NSString fontAwesomeIconStringForEnum:FAshareAltSquare] forState:UIControlStateNormal];
@@ -482,17 +564,7 @@
     
     //load profile pic
     
-    /*
-    UIColor *darkestColor = [UIColor colorWithWhite:0.1f alpha:0.5f];
-    UIColor *lightestColor = [UIColor colorWithWhite:0.7f alpha:0.0f];
-    
-    CAGradientLayer *headerGradient = [CAGradientLayer layer];
-    headerGradient.colors = [NSArray arrayWithObjects:(id)darkestColor.CGColor, (id)lightestColor.CGColor, (id)darkestColor.CGColor,  nil];
-    
-    headerGradient.frame = cell.coverImage.bounds;
-    [cell.coverImage.layer insertSublayer:headerGradient atIndex:0];
-     */
-    
+
     NSString *userId = [loopDict objectForKey:@"UserId"];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -570,8 +642,29 @@
     
     LoopViewController *loopVC = (LoopViewController *)[mainSB instantiateViewControllerWithIdentifier:@"LoopViewController"];
     //loopVC.selectedUserMelody = melody;
-    loopVC.selectedLoop = loopDict;
-    loopVC.delegate = self;
+    
+    NSString *userId = [loopDict objectForKey:@"UserId"];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    NSString *myUserId = [defaults objectForKey:@"Id"];
+    
+    
+    NSDictionary *messageDict = [loopDict objectForKey:@"Message"];
+    
+    if (messageDict != nil) {
+        NSDictionary *userMelodyDict = [messageDict objectForKey:@"UserMelody"];
+        
+        UserMelody *tempMelody = [[DataManager sharedManager] createUserMelodyWithDict:userMelodyDict];
+        
+        //loopVC.selectedLoop = userMelodyDict;
+        loopVC.selectedUserMelody = tempMelody;
+        loopVC.delegate = self;
+        
+    } else {
+        loopVC.selectedLoop = loopDict;
+        loopVC.delegate = self;
+    }
     
     [self.navigationController pushViewController:loopVC animated:YES];
 }
@@ -651,11 +744,24 @@
     
     self.loopArray = self.cleanLoopArray;
     
+    NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateCreated" ascending:NO];
+    
+    NSString *userId = [self.loopArray[0] objectForKey:@"UserId"];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    NSString *myUserId = [defaults objectForKey:@"Id"];
+    
+    if ([userId isEqualToString:myUserId]) {
+
+        valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateModified" ascending:NO];
+    }
+    
     switch (control.selectedSegmentIndex) {
         case 0: {
             
             NSArray *tempArray = self.loopArray;
-            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateModified" ascending:NO];
+           
             NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
             self.loopArray = [tempArray sortedArrayUsingDescriptors:descriptors];
             
@@ -673,7 +779,6 @@
                 }
             }
             
-            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateModified" ascending:NO];
             NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
             self.loopArray = [tempArray sortedArrayUsingDescriptors:descriptors];
             
@@ -689,7 +794,6 @@
                 }
             }
             
-            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateModified" ascending:NO];
             NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
             self.loopArray = [tempArray sortedArrayUsingDescriptors:descriptors];
             
@@ -705,8 +809,6 @@
                 }
             }
             
-            
-            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateModified" ascending:NO];
             NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
             self.loopArray = [tempArray sortedArrayUsingDescriptors:descriptors];
             

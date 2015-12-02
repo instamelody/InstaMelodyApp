@@ -28,6 +28,7 @@
 - (void)fetchUserMelodies;
 - (NSArray *)userMelodyList;
 -(void)fetchUserMelody:(NSString*)melodyId;
+- (UserMelody *)createUserMelodyWithDict:(NSDictionary *)melodyDict;
 
 -(void)clearChats;
 -(void)clearUserMelodies;

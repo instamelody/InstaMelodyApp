@@ -537,6 +537,45 @@
     }];
 }
 
+- (UserMelody *)createUserMelodyWithDict:(NSDictionary *)melodyDict {
+    
+    UserMelody *newUserMelody = [UserMelody MR_createEntity];
+    newUserMelody.userMelodyName = [melodyDict objectForKey:@"Name"];
+    newUserMelody.userMelodyId = [melodyDict objectForKey:@"Id"];
+    newUserMelody.userId = [melodyDict objectForKey:@"UserId"];
+    newUserMelody.isChatLoopPart = [melodyDict objectForKey:@"IsChatLoopPart"];
+    newUserMelody.isExplicit = [melodyDict objectForKey:@"IsExplicit"];
+    newUserMelody.isStationPostMelody = [melodyDict objectForKey:@"IsStationPostMelody"];
+    
+    NSString *dateString = [melodyDict objectForKey:@"DateCreated"];
+    dateString = [dateString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSDate *date = [self.dateFormatter dateFromString:dateString];
+    
+    newUserMelody.dateCreated = date;
+    
+    //create melodies
+    
+    NSArray *partArray = [melodyDict objectForKey:@"Parts"];
+    for (NSDictionary *partDict in partArray) {
+        UserMelodyPart *newPart = [UserMelodyPart MR_createEntity];
+        newPart.partName = [partDict objectForKey:@"Name"];
+        //newPart.partDesc = [partDict objectForKey:@"Description"];
+        newPart.partId = [partDict objectForKey:@"Id"];
+        newPart.fileName = [partDict objectForKey:@"FileName"];
+        newPart.filePath = [partDict objectForKey:@"FilePath"];
+        newPart.isUserCreated = [partDict objectForKey:@"IsUserCreated"];
+        
+        NSString *dateString = [partDict objectForKey:@"DateModified"];
+        dateString = [dateString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        NSDate *date = [self.dateFormatter dateFromString:dateString];
+        
+        newPart.dateModified = date;
+        
+        newPart.userMelody = newUserMelody;
+    }
+    return newUserMelody;
+}
+
 - (void)addUserMelody:(NSArray *)melodyList {
     
     for (NSDictionary *melodyDict in melodyList) {

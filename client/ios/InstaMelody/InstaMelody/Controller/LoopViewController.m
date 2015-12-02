@@ -1826,8 +1826,17 @@
             if (self.selectedLoop !=nil) {
                 cell.topicField.text = [self.selectedLoop objectForKey:@"Name"];
                 
+                //NSDictionary *melodyDict = [partDict objectForKey:@"UserMelody"];
+                
+                NSString *userId = [self.selectedLoop objectForKey:@"UserId"];
+                
+                Friend *friend = [Friend MR_findFirstByAttribute:@"userId" withValue:userId];
+                
+                NSString *userName = [NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName];
+                
                 dispatch_async(dispatch_get_main_queue(), ^{
                     self.saveBarTopicLabel.text = [self.selectedLoop objectForKey:@"Name"];
+                    //self.saveBarStationLabel.text = userName;
                 });
 
                 [cell.topicField setEnabled:NO];
