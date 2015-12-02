@@ -304,6 +304,17 @@ CREATE TABLE dbo.MessageMelodies
     IsDeleted bit NOT NULL DEFAULT 0)
 GO
 
+CREATE TABLE dbo.MessageLoops
+	(Id int IDENTITY(1,1) PRIMARY KEY,
+	MessageId UNIQUEIDENTIFIER NOT NULL,
+	CONSTRAINT FK_MessageLoops_MessageId FOREIGN KEY (MessageId)
+		REFERENCES Messages (Id),
+	UserLoopId UNIQUEIDENTIFIER NOT NULL,
+	CONSTRAINT FK_MessageLoops_UserLoopId FOREIGN KEY (UserLoopId)
+		REFERENCES UserLoops (Id),
+	DateCreated datetime NOT NULL,
+    IsDeleted bit NOT NULL DEFAULT 0)
+GO
 -- END CHATS & MESSAGES
 
 -- -- START STATIONS

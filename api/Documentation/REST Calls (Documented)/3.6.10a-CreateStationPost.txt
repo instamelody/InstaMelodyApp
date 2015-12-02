@@ -1,3 +1,5 @@
+// EXAMPLE A - Create A Station Post
+
 // REQUEST - POST https://api.instamelody.com/v1.0/Station/Post
 {
   "Token": "9D0AB021-FCF8-4EC3-B6E3-BB1D0D03B12E",

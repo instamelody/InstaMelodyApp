@@ -144,7 +144,7 @@ namespace InstaMelody.Data
         /// </summary>
         /// <param name="messageId">The message identifier.</param>
         /// <exception cref="System.Data.DataException"></exception>
-        public void MarkMessagAsRead(Guid messageId)
+        public void MarkMessageAsRead(Guid messageId)
         {
             var message = GetMessageById(messageId);
             if (message == null)
@@ -530,5 +530,99 @@ namespace InstaMelody.Data
         }
 
         #endregion MessageMelodies
+        
+        #region MessageLoops
+
+        /// <summary>
+        /// Adds the message loop.
+        /// </summary>
+        /// <param name="messageId">The message identifier.</param>
+        /// <param name="userLoopId">The user loop identifier.</param>
+        /// <returns></returns>
+        public MessageLoop AddMessageLoop(Guid messageId, Guid userLoopId)
+        {
+            var query = @"INSERT INTO dbo.MessageLoops
+                        (MessageId, UserLoopId, DateCreated, IsDeleted)
+                        VALUES (@MessageId, @UserLoopId, @DateCreated, 0)";
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "MessageId",
+                    Value = messageId,
+                    SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "UserLoopId",
+                    Value = userLoopId,
+                    SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "DateCreated",
+                    Value = DateTime.UtcNow,
+                    SqlDbType = SqlDbType.DateTime,
+                    Direction = ParameterDirection.Input
+                }
+            };
+
+            ExecuteNonQuery(query, parameters.ToArray());
+
+            return GetMessageLoopByMessageId(messageId);
+        }
+
+        /// <summary>
+        /// Gets the message loop by message identifier.
+        /// </summary>
+        /// <param name="messageId">The message identifier.</param>
+        /// <returns></returns>
+        public MessageLoop GetMessageLoopByMessageId(Guid messageId)
+        {
+            var query = @"SELECT TOP 1 * FROM dbo.MessageLoops
+                        WHERE MessageId = @MessageId AND IsDeleted = 0";
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "MessageId",
+                    Value = messageId,
+                    SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                }
+            };
+
+            return GetRecord<MessageLoop>(query, parameters.ToArray());
+        }
+
+        /// <summary>
+        /// Deletes the message loop by loop identifier.
+        /// </summary>
+        /// <param name="userLoopId">The user loop identifier.</param>
+        public void DeleteMessageLoopByLoopId(Guid userLoopId)
+        {
+            var query = @"UPDATE dbo.MessageLoops
+                        SET IsDeleted = 1
+                        WHERE UserLoopId = @UserLoopId";
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "UserLoopId",
+                    Value = userLoopId,
+                    SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                }
+            };
+
+            ExecuteNonQuery(query, parameters.ToArray());
+        }
+
+        #endregion MessageLoops
     }
 }

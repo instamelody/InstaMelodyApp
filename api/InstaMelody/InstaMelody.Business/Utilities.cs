@@ -189,6 +189,7 @@ namespace InstaMelody.Business
                     mediaPath = Settings.Default.VideoFileUploadFolder;
                     break;
                 case MediaTypeEnum.Melody:
+                case MediaTypeEnum.Loop:
                     mediaPath = Settings.Default.AudioFileUploadFolder;
                     break;
             }

@@ -1,0 +1,170 @@
+// EXAMPLE B - Create A Station Post With a UserLoop
+
+// REQUEST - POST https://api.instamelody.com/v1.0/Station/Post
+{
+  "Token": "DF5F67C6-B8C5-4878-9137-8DD0278EDB10",
+  "Station":
+  {
+    "Id": 10
+  },
+  "Message":
+  {
+    "Description": "Test post with loop from API.",
+    "UserLoop":
+    {
+    	"Name": "Test Loop",
+		"Parts": 
+		[
+			{
+				"UserMelody":
+				{
+					"Parts": 
+					[
+						{
+							"Id" : 1
+						},
+						{
+							"Id" : 2
+						},
+						{
+							"Id" : 3
+						},
+						{
+							"Name" : "Test API Message Melody 1",
+							"FileName" : "testmessagemelody.m4a"
+						}
+					]
+				}
+			}
+		]
+    }
+  }
+}
+
+// RESPONSE - HTTP/1.1 200 OK
+{
+  "StationMessage": {
+    "Id": 23,
+    "StationId": 10,
+    "MessageId": "aba6aa1c-da57-4cc8-a477-fc4ccf54a07d",
+    "SenderId": "1da69a56-4a2b-4cd1-b88c-647db929d0c1",
+    "ParentId": null,
+    "IsPrivate": false,
+    "DateCreated": "2015-12-02T20:43:04.113",
+    "IsDeleted": false,
+    "Replies": null,
+    "Message": {
+      "Id": "aba6aa1c-da57-4cc8-a477-fc4ccf54a07d",
+      "ParentId": null,
+      "Description": "Test post with loop from API.",
+      "MediaType": 5,
+      "IsRead": false,
+      "DateRead": null,
+      "DateCreated": "2015-12-02T20:42:56.313",
+      "IsDeleted": false,
+      "Image": null,
+      "UserMelody": null,
+      "Video": null,
+      "UserLoop": {
+        "Id": "6c6fe032-83fd-4654-be59-4fcdc5203354",
+        "Name": "Test Loop",
+        "UserId": "1da69a56-4a2b-4cd1-b88c-647db929d0c1",
+        "IsExplicit": false,
+        "DateCreated": "2015-12-02T20:42:59.013",
+        "DateModified": "2015-12-02T20:43:03.137",
+        "IsDeleted": false,
+        "IsChatLoop": false,
+        "ChatId": "00000000-0000-0000-0000-000000000000",
+        "Parts": [
+          {
+            "Id": 8,
+            "UserLoopId": "6c6fe032-83fd-4654-be59-4fcdc5203354",
+            "UserMelodyId": "73b64ec5-91cf-41a7-9dba-c4716561beed",
+            "OrderIndex": 1,
+            "StartTime": "00:00:00",
+            "StartEffect": 0,
+            "StartEffectDuration": "00:00:00",
+            "EndTime": null,
+            "EndEffect": 0,
+            "EndEffectDuration": "00:00:00",
+            "DateCreated": "2015-12-02T20:43:03.297",
+            "IsDeleted": false,
+            "UserMelody": {
+              "Id": "73b64ec5-91cf-41a7-9dba-c4716561beed",
+              "Name": "Test API Message Melody 1",
+              "UserId": "1da69a56-4a2b-4cd1-b88c-647db929d0c1",
+              "IsExplicit": false,
+              "DateCreated": "2015-12-02T20:43:02.47",
+              "IsDeleted": false,
+              "IsChatLoopPart": false,
+              "ChatLoopId": "00000000-0000-0000-0000-000000000000",
+              "IsStationPostMelody": false,
+              "StationPostIds": null,
+              "Parts": [
+                {
+                  "Id": 1,
+                  "IsUserCreated": false,
+                  "IsPremiumContent": false,
+                  "Name": "01 Bass",
+                  "Description": null,
+                  "FileName": "01 Bass.wav",
+                  "DateCreated": "2015-07-30T00:00:00",
+                  "DateModified": "2015-07-30T00:00:00",
+                  "IsDeleted": false,
+                  "FilePath": "Uploads/Melodies/01 Bass.wav"
+                },
+                {
+                  "Id": 2,
+                  "IsUserCreated": false,
+                  "IsPremiumContent": false,
+                  "Name": "01 Drums",
+                  "Description": null,
+                  "FileName": "01 Drums.wav",
+                  "DateCreated": "2015-07-30T00:00:00",
+                  "DateModified": "2015-07-30T00:00:00",
+                  "IsDeleted": false,
+                  "FilePath": "Uploads/Melodies/01 Drums.wav"
+                },
+                {
+                  "Id": 3,
+                  "IsUserCreated": false,
+                  "IsPremiumContent": false,
+                  "Name": "01 Melody",
+                  "Description": null,
+                  "FileName": "01 Melody.wav",
+                  "DateCreated": "2015-07-30T00:00:00",
+                  "DateModified": "2015-07-30T00:00:00",
+                  "IsDeleted": false,
+                  "FilePath": "Uploads/Melodies/01 Melody.wav"
+                },
+                {
+                  "Id": 211,
+                  "IsUserCreated": true,
+                  "IsPremiumContent": false,
+                  "Name": "Test API Message Melody 1",
+                  "Description": null,
+                  "FileName": "testmessagemelody.m4a",
+                  "DateCreated": "2015-12-02T20:43:02.393",
+                  "DateModified": "2015-12-02T20:43:02.393",
+                  "IsDeleted": false,
+                  "FilePath": "Uploads/Melodies/testmessagemelody.m4a"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "Likes": null
+  },
+  "FileUploadToken": {
+    "Token": "ef9e5638-aa0d-4568-a119-aadfbbc70ba4",
+    "UserId": "1da69a56-4a2b-4cd1-b88c-647db929d0c1",
+    "FileName": "testmessagemelody.m4a",
+    "MediaType": 2,
+    "DateExpires": "2015-12-02T20:53:03.003",
+    "DateCreated": "2015-12-02T20:43:03.007",
+    "IsDeleted": false,
+    "IsExpired": false
+  }
+}

@@ -6,6 +6,7 @@
         Text,
         Image,
         Video,
-        Melody
+        Melody,
+        Loop
     }
 }

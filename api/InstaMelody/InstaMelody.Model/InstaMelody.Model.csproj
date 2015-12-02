@@ -71,6 +71,7 @@
     <Compile Include="MelodyFileGroup.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="MessageImage.cs" />
+    <Compile Include="MessageLoop.cs" />
     <Compile Include="MessageMelody.cs" />
     <Compile Include="MessageVideo.cs" />
     <Compile Include="Parser\DataParser.cs" />

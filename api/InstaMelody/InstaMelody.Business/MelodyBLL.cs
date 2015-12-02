@@ -584,37 +584,6 @@ namespace InstaMelody.Business
         }
 
         /// <summary>
-        /// Gets the user loop.
-        /// </summary>
-        /// <param name="loop">The loop.</param>
-        /// <returns></returns>
-        /// <exception cref="System.ArgumentException">Could not find the requested Loop with the provided information.</exception>
-        private UserLoop GetUserLoop(UserLoop loop)
-        {
-            var dal = new UserLoops();
-
-            var result = dal.GetUserLoopById(loop.Id);
-            if (result == null
-                && (!loop.UserId.Equals(default(Guid)) && !string.IsNullOrWhiteSpace(loop.Name)))
-            {
-                result = dal.GetUserLoopByUserIdAndName(loop.UserId, loop.Name);
-            }
-
-            if (result == null)
-            {
-                InstaMelodyLogger.Log(
-                    string.Format("Could not find the requested Loop with the provided information. Loop Id: {0}, User Id: {1}, Loop Name: {2}",
-                        loop.Id, loop.UserId, loop.Name), LogLevel.Error);
-                throw new ArgumentException("Could not find the requested Loop with the provided information.");
-            }
-
-            // get user loop parts
-            result.Parts = GetUserLoopParts(result.Id);
-
-            return GetLoopRelationshipIds(result);
-        }
-
-        /// <summary>
         /// Gets the user loop parts.
         /// </summary>
         /// <param name="userLoopId">The user loop identifier.</param>
@@ -858,6 +827,37 @@ namespace InstaMelody.Business
             result.Parts = GetUserMelodyParts(result.Id);
 
             return GetMelodyRelationshipIds(result);
+        }
+
+        /// <summary>
+        /// Gets the user loop.
+        /// </summary>
+        /// <param name="loop">The loop.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException">Could not find the requested Loop with the provided information.</exception>
+        internal UserLoop GetUserLoop(UserLoop loop)
+        {
+            var dal = new UserLoops();
+
+            var result = dal.GetUserLoopById(loop.Id);
+            if (result == null
+                && (!loop.UserId.Equals(default(Guid)) && !string.IsNullOrWhiteSpace(loop.Name)))
+            {
+                result = dal.GetUserLoopByUserIdAndName(loop.UserId, loop.Name);
+            }
+
+            if (result == null)
+            {
+                InstaMelodyLogger.Log(
+                    string.Format("Could not find the requested Loop with the provided information. Loop Id: {0}, User Id: {1}, Loop Name: {2}",
+                        loop.Id, loop.UserId, loop.Name), LogLevel.Error);
+                throw new ArgumentException("Could not find the requested Loop with the provided information.");
+            }
+
+            // get user loop parts
+            result.Parts = GetUserLoopParts(result.Id);
+
+            return GetLoopRelationshipIds(result);
         }
 
         /// <summary>

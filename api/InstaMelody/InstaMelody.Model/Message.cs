@@ -29,6 +29,8 @@ namespace InstaMelody.Model
 
         public Video Video { get; set; }
 
+        public UserLoop UserLoop { get; set; }
+
         #endregion Relationship Properties
     }
 }

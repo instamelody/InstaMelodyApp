@@ -544,6 +544,9 @@ namespace InstaMelody.Business
                 case MediaTypeEnum.Melody:
                     foundMessage.UserMelody = GetMessageMelody(foundMessage);
                     break;
+                case MediaTypeEnum.Loop:
+                    foundMessage.UserLoop = GetMessageLoop(foundMessage);
+                    break;
             }
 
             // return message
@@ -640,6 +643,37 @@ namespace InstaMelody.Business
                 if (melody == null) return null;
                 
                 result = melody;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Gets the message loop.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException">Invalid Message.</exception>
+        private UserLoop GetMessageLoop(Message message)
+        {
+            if (message == null || message.Id.Equals(default(Guid)))
+            {
+                InstaMelodyLogger.Log("Invalid Message - NULL or Default Id.", LogLevel.Error);
+                throw new ArgumentException("Invalid Message.");
+            }
+
+            UserLoop result = null;
+            
+            // get message loop
+            var dal = new Messages();
+            var messageLoop = dal.GetMessageLoopByMessageId(message.Id);
+            if (messageLoop != null)
+            {
+                var melodyBll = new MelodyBll();
+                var loop = melodyBll.GetUserLoop(new UserLoop { Id = messageLoop.UserLoopId });
+                if (loop == null) return null;
+
+                result = loop;
             }
 
             return result;
@@ -865,6 +899,8 @@ namespace InstaMelody.Business
                 message.MediaType = MediaTypeEnum.Video;
             else if (message.UserMelody != null)
                 message.MediaType = MediaTypeEnum.Melody;
+            else if (message.UserLoop != null)
+                message.MediaType = MediaTypeEnum.Loop;
 
             var addedMessage = dal.AddMessage(message);
 
@@ -874,6 +910,8 @@ namespace InstaMelody.Business
                 UserId = sender.Id,
                 DateCreated = DateTime.UtcNow
             };
+
+            // TODO: refactor attachment code below
 
             // create attachment
             if (message.Image != null)
@@ -912,6 +950,38 @@ namespace InstaMelody.Business
                     return new Tuple<Message, FileUploadToken>(addedMessage, createdFileUpload.FileUploadToken);
                 }
             }
+            else if (message.UserLoop != null)
+            {
+                var melodyBll = new MelodyBll();
+                try
+                {
+                    var foundLoop = melodyBll.GetUserLoop(message.UserLoop);
+                    addedMessage.UserLoop = foundLoop;
+
+                    dal.AddMessageLoop(addedMessage.Id, foundLoop.Id);
+                }
+                catch (Exception)
+                {
+                    var createdFileUpload = melodyBll.CreateLoop(message.UserLoop, sender);
+
+                    if (createdFileUpload.GetType().Equals(typeof(ApiLoopFileUpload)))
+                    {
+                        var createdLoop = (ApiLoopFileUpload)createdFileUpload;
+                        dal.AddMessageLoop(addedMessage.Id, createdLoop.Loop.Id);
+
+                        addedMessage.UserLoop = createdLoop.Loop;
+                        return new Tuple<Message, FileUploadToken>(addedMessage, createdLoop.FileUploadTokens.First());
+                    }
+                    else if (createdFileUpload.GetType().Equals(typeof(UserLoop)))
+                    {
+                        var createdLoop = (UserLoop)createdFileUpload;
+                        dal.AddMessageLoop(addedMessage.Id, createdLoop.Id);
+
+                        addedMessage.UserLoop = createdLoop;
+                        return new Tuple<Message, FileUploadToken>(addedMessage, null);
+                    }
+                }
+            }
 
             if (!fileUploadToken.MediaType.Equals(FileUploadTypeEnum.Unknown))
             {
@@ -932,6 +1002,7 @@ namespace InstaMelody.Business
             var dal = new Messages();
             var foundMessage = dal.GetMessageById(message.Id);
             var fileBll = new FileBll();
+            var melodyBll = new MelodyBll();
             if (foundMessage.MediaType == MediaTypeEnum.Image)
             {
                 var image = dal.GetImageByMessageId(message.Id);
@@ -949,9 +1020,16 @@ namespace InstaMelody.Business
                 var melody = dal.GetMessageMelodyByMessageId(message.Id);
                 if (melody != null) 
                 {
-                    var melodyBll = new MelodyBll();
                     foundMessage.UserMelody = melodyBll.GetUserMelody(new UserMelody { Id = melody.UserMelodyId });
 
+                }
+            }
+            else if (foundMessage.MediaType == MediaTypeEnum.Loop)
+            {
+                var loop = dal.GetMessageLoopByMessageId(message.Id);
+                if (loop != null)
+                {
+                    foundMessage.UserLoop = melodyBll.GetUserLoop(new UserLoop { Id = loop.UserLoopId });
                 }
             }
 
@@ -996,6 +1074,16 @@ namespace InstaMelody.Business
         {
             var dal = new Messages();
             dal.DeleteMessageMelodyByMelodyId(userMelodyId);
+        }
+
+        /// <summary>
+        /// Deletes the message user loop.
+        /// </summary>
+        /// <param name="userLoopId">The user loop identifier.</param>
+        internal void DeleteMessageUserLoop(Guid userLoopId)
+        {
+            var dal = new Messages();
+            dal.DeleteMessageLoopByLoopId(userLoopId);
         }
 
         #endregion Internal Methods
