@@ -31,9 +31,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    //[self refreshUserMelodyList];
-    [self fetchMyLoops];
-    
     self.fromDateFormatter = [[NSDateFormatter alloc] init];
     
     NSLocale *enUSPOSIXLocale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
@@ -48,6 +45,13 @@
     [self.toDateFormatter setTimeStyle:NSDateFormatterShortStyle];
     
     
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    //[self refreshUserMelodyList];
+    [self fetchMyLoops];
 }
 
 - (void)didReceiveMemoryWarning {
