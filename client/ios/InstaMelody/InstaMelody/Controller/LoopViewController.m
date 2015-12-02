@@ -2105,14 +2105,6 @@
     groupVC.groupId = self.savedGroupId;
     [self presentViewController:vc animated:YES completion:nil];
     
-    /*
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Accessory View Button"
-                                                        message:@"This view is optional and can be a UIButton, etc."
-                                                       delegate:nil
-                                              cancelButtonTitle:@"Okay"
-                                              otherButtonTitles:nil];
-    [alertView show];
-     */
 }
 
 #pragma mark - text view delegate

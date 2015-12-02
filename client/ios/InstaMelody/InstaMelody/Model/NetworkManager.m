@@ -459,22 +459,26 @@
         //step 2 - upload file
         
         NSDictionary *responseDict = (NSDictionary *)responseObject;
-        NSDictionary *tokenDict = [responseDict objectForKey:@"FileUploadToken"];
-        NSString *fileTokenString = [tokenDict objectForKey:@"Token"];
+        NSArray *tokenArray = [responseDict objectForKey:@"FileUploadTokens"];
         
-        [self uploadFile:recordingPath withFileToken:fileTokenString];
-        //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
-        if ([isPublic boolValue] == TRUE) {
-            NSDictionary *melodyDict = [responseDict objectForKey:@"UserMelody"];
+        if (tokenArray != nil && tokenArray.count > 0) {
+            NSDictionary *tokenDict = tokenArray[0];
+            NSString *fileTokenString = [tokenDict objectForKey:@"Token"];
             
-            if (melodyDict == nil) {
-                NSDictionary *loopDict = [responseDict objectForKey:@"Loop"];
-                if (loopDict != nil) {
-                    NSArray * parts = [loopDict objectForKey:@"Parts"];
-                    melodyDict = [parts[0] objectForKey:@"UserMelody"];
+            [self uploadFile:recordingPath withFileToken:fileTokenString];
+            //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
+            if ([isPublic boolValue] == TRUE) {
+                NSDictionary *melodyDict = [responseDict objectForKey:@"UserMelody"];
+                
+                if (melodyDict == nil) {
+                    NSDictionary *loopDict = [responseDict objectForKey:@"Loop"];
+                    if (loopDict != nil) {
+                        NSArray * parts = [loopDict objectForKey:@"Parts"];
+                        melodyDict = [parts[0] objectForKey:@"UserMelody"];
+                    }
                 }
+                [self makeLoopPublic:[melodyDict objectForKey:@"Id"]];
             }
-            [self makeLoopPublic:[melodyDict objectForKey:@"Id"]];
         }
         
         
