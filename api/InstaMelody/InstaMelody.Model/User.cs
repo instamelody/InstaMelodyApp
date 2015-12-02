@@ -134,6 +134,8 @@ namespace InstaMelody.Model
         /// <returns></returns>
         public User StripSensitiveInfoForFriends()
         {
+            this.FirstName = string.Empty;
+            this.LastName = string.Empty;
             this.PhoneNumber = string.Empty;
             this.HashSalt = string.Empty;
             this.Password = string.Empty;
@@ -145,6 +147,31 @@ namespace InstaMelody.Model
             this.NumberLoginFailures = 0;
             this.IsLocked = false;
             this.DeviceToken = string.Empty;
+
+            return this;
+        }
+
+        /// <summary>
+        /// Strips the sensitive information for non friends.
+        /// </summary>
+        /// <returns></returns>
+        public User StripSensitiveInfoForNonFriends()
+        {
+            this.EmailAddress = string.Empty;
+            this.DateOfBirth = new DateTime();
+            this.PhoneNumber = string.Empty;
+            this.HashSalt = string.Empty;
+            this.Password = string.Empty;
+            this.FacebookToken = string.Empty;
+            this.TwitterSecret = string.Empty;
+            this.TwitterToken = string.Empty;
+            this.LastLoginFailure = null;
+            this.LastLoginSuccess = null;
+            this.NumberLoginFailures = 0;
+            this.IsLocked = false;
+            this.DeviceToken = string.Empty;
+            this.DateCreated = new DateTime();
+            this.DateModified = new DateTime();
 
             return this;
         }
