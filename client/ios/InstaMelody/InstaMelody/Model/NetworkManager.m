@@ -440,7 +440,7 @@
     //NSDictionary *loopDict = @{@"Id": [userDict objectForKey:@"LoopId"]};
     NSDictionary *loopDict = @{@"UserId": [defaults objectForKey:@"Id"], @"Name": melodyName };
     
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Loop": loopDict , @"LoopPart": @[userMelodyDict]}];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Loop": loopDict , @"LoopPart": userMelodyDict}];
     
     
     NSString *requestUrl = [NSString stringWithFormat:@"%@/Melody/Loop/Attach", API_BASE_URL];
