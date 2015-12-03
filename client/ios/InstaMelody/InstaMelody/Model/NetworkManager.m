@@ -64,17 +64,17 @@
     NSNumber *secondId = [userDict objectForKey:@"MelodyId2"];
     NSNumber *thirdId = [userDict objectForKey:@"MelodyId3"];
     
-    if (firstId) {
+    if (firstId != nil) {
         NSDictionary *entry = [NSDictionary dictionaryWithObject:firstId forKey:@"Id"];
         [partArray addObject:entry];
     }
     
-    if (secondId) {
+    if (secondId != nil) {
         NSDictionary *entry = [NSDictionary dictionaryWithObject:secondId forKey:@"Id"];
         [partArray addObject:entry];
     }
     
-    if (thirdId) {
+    if (thirdId != nil) {
         NSDictionary *entry = [NSDictionary dictionaryWithObject:thirdId forKey:@"Id"];
         [partArray addObject:entry];
         
@@ -116,6 +116,7 @@
         //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
         
         if ([isPublic boolValue] == TRUE) {
+            
             NSDictionary *melodyDict = [responseDict objectForKey:@"UserMelody"];
             NSDictionary *chatMsgDict = [responseDict objectForKey:@"ChatMessage"];
             
@@ -124,7 +125,10 @@
                 
                 //melody part
                 
-                [self makeLoopPublic:[responseDict objectForKey:@"Id"]];
+                NSDictionary *loopDict = [responseDict objectForKey:@"Loop"];
+                [self makeLoopPublic:loopDict];
+                
+                //[self makeLoopPublic:[responseDict objectForKey:@"Id"]];
             } else if (chatMsgDict != nil) {
                 
                 //chat loop part
@@ -133,7 +137,8 @@
                 
                 if (messageDict != nil) {
                     melodyDict = [messageDict objectForKey:@"UserMelody"];
-                    [self makeLoopPublic:[melodyDict objectForKey:@"Id"]];
+                    //[self makeLoopPublic:[melodyDict objectForKey:@"Id"]];
+                    [self makeLoopPublic:melodyDict];
                 }
             }
         }
@@ -181,18 +186,18 @@
     NSNumber *isExplicit = [userDict objectForKey:@"IsExplicit"];
     NSNumber *isPublic = [userDict objectForKey:@"IsStationPostMelody"];
     
-    if (firstId) {
+    if (firstId != nil) {
         NSDictionary *entry = [NSDictionary dictionaryWithObject:firstId forKey:@"Id"];
         [partArray addObject:entry];
     }
     
-    if (secondId) {
+    if (secondId != nil) {
         NSDictionary *entry = [NSDictionary dictionaryWithObject:secondId forKey:@"Id"];
         [partArray addObject:entry];
     }
     
     
-    if (thirdId) {
+    if (thirdId != nil) {
         NSDictionary *entry = [NSDictionary dictionaryWithObject:thirdId forKey:@"Id"];
         [partArray addObject:entry];
 
@@ -239,8 +244,12 @@
         [self uploadFile:recordingPath withFileToken:fileTokenString];
         //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
         if ([isPublic boolValue] == TRUE) {
+            /*
             NSDictionary *melodyDict = [responseDict objectForKey:@"UserMelody"];
             [self makeLoopPublic:[melodyDict objectForKey:@"Id"]];
+             */
+            NSDictionary *loopDict = [responseDict objectForKey:@"Loop"];
+            [self makeLoopPublic:loopDict];
         }
         
         
@@ -285,18 +294,18 @@
     NSNumber *isExplicit = [userDict objectForKey:@"IsExplicit"];
     NSNumber *isPublic = [userDict objectForKey:@"IsStationPostMelody"];
     
-    if (firstId) {
+    if (firstId != nil) {
         NSDictionary *entry = [NSDictionary dictionaryWithObject:firstId forKey:@"Id"];
         [partArray addObject:entry];
     }
     
-    if (secondId) {
+    if (secondId != nil) {
         NSDictionary *entry = [NSDictionary dictionaryWithObject:secondId forKey:@"Id"];
         [partArray addObject:entry];
     }
     
     
-    if (thirdId) {
+    if (thirdId != nil) {
         NSDictionary *entry = [NSDictionary dictionaryWithObject:thirdId forKey:@"Id"];
         [partArray addObject:entry];
         
@@ -347,7 +356,15 @@
         
         [self uploadFile:recordingPath withFileToken:fileTokenString];
         //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
+        
         if ([isPublic boolValue] == TRUE) {
+            
+            NSDictionary *loopDict = [responseDict objectForKey:@"Loop"];
+            [self makeLoopPublic:loopDict];
+
+            
+            /*
+            
             NSDictionary *melodyDict = [responseDict objectForKey:@"UserMelody"];
             
             if (melodyDict == nil) {
@@ -358,6 +375,7 @@
                 }
             }
             [self makeLoopPublic:[melodyDict objectForKey:@"Id"]];
+             */
         }
         
         
@@ -468,6 +486,11 @@
             [self uploadFile:recordingPath withFileToken:fileTokenString];
             //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
             if ([isPublic boolValue] == TRUE) {
+                
+                NSDictionary *loopDict = [responseDict objectForKey:@"Loop"];
+                [self makeLoopPublic:loopDict];
+                
+                /*
                 NSDictionary *melodyDict = [responseDict objectForKey:@"UserMelody"];
                 
                 if (melodyDict == nil) {
@@ -478,6 +501,7 @@
                     }
                 }
                 [self makeLoopPublic:[melodyDict objectForKey:@"Id"]];
+                 */
             }
         }
         
@@ -497,6 +521,7 @@
     
 }
 
+/*
 -(void)makeLoopPublic:(NSString *)loopId {
     NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
     
@@ -506,7 +531,6 @@
         
         if (loopId!=nil && ![loopId isEqualToString:@""]) {
             
-
             NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Station": @{@"Id" : stationId}, @"Message": @{@"Description" : @"station post", @"UserMelody" : @{@"Id": loopId}}}];
             
             
@@ -534,8 +558,71 @@
                     [alertView show];
                 }
             }];
-
+            
         }
+    }
+    
+}
+ */
+
+-(void)makeLoopPublic:(NSDictionary *)loopDict {
+    NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
+    
+    NSString *stationId = [[[NSUserDefaults standardUserDefaults] objectForKey:@"stationId"] stringValue];
+    
+    if (stationId!=nil && ![stationId isEqualToString:@""]) {
+        
+        //NSDictionary *messageDict = @{@"Description" : @"station post", @"UserMelody" : @{@"Id": loopId}}};
+        
+        NSMutableArray *partsArray = [NSMutableArray new];
+        
+        NSArray *inputParts = [loopDict objectForKey:@"Parts"];
+        NSDictionary *partDict = inputParts[0];
+        NSDictionary *userMelodyDict = [partDict objectForKey:@"UserMelody"];
+        NSArray *melodyParts = [userMelodyDict objectForKey:@"Parts"];
+        for (NSDictionary *partDict in melodyParts) {
+            if ([[partDict objectForKey:@"IsUserCreated"] boolValue] == NO) {
+                NSDictionary *part = @{@"Id": [partDict objectForKey:@"Id"]};
+                [partsArray addObject:part];
+            } else {
+                NSDictionary *part = @{@"Name": [loopDict objectForKey:@"Name"], @"FileName": [partDict objectForKey:@"FileName"]};
+                [partsArray addObject:part];
+            }
+        }
+        
+        NSDictionary *partsDict = @{@"Parts": partsArray};
+        NSDictionary *userLoopDict = @{@"Name": [loopDict objectForKey:@"Name"], @"Parts": @[@{@"UserMelody": partsDict}]};
+        NSDictionary *messageDict = @{@"Description":[loopDict objectForKey:@"Name"], @"UserLoop": userLoopDict};
+        
+        NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Station": @{@"Id" : stationId}, @"Message": messageDict }];
+        
+        
+        NSString *requestUrl = [NSString stringWithFormat:@"%@/Station/Post", API_BASE_URL];
+        
+        //add 64 char string
+        
+        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        
+        [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSLog(@"JSON: %@", responseObject);
+            
+            NSLog(@"----- loop is now public");
+            
+            
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
+                NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
+                
+                NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+                
+                NSLog(@"%@",ErrorResponse);
+                
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [alertView show];
+            }
+        }];
+        
+        
     }
     
 }
