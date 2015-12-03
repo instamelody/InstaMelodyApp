@@ -1255,21 +1255,22 @@ namespace InstaMelody.Business
             if (foundStationMessage.IsPrivate)
             {
                 InstaMelodyLogger.Log(
-                    string.Format("This User does not have acces to Like this Post. Station Message Id: {0}, Requestor Id: {1}",
+                    string.Format("This User does not have acces to Like this Message. Station Message Id: {0}, Requestor Id: {1}",
                         foundStationMessage.Id, requestor.Id), LogLevel.Error);
-                throw new UnauthorizedAccessException("This User does not have acces to Like this Post.");
+                throw new UnauthorizedAccessException("This User does not have acces to Like this Message.");
             }
 
+            // NOTE: this was commented out on 12/2 per Ahmed's request
             // validate user follows station
-            var stationDal = new Stations();
-            var userIsFollower = stationDal.DoesUserFollowStation(requestor.Id, foundStationMessage.StationId);
-            if (!userIsFollower && isUserLike)
-            {
-                InstaMelodyLogger.Log(
-                    string.Format("This User cannot like Posts from a Station that they do not follow. Station Message Id: {0}, Requestor Id: {1}",
-                        foundStationMessage.Id, requestor.Id), LogLevel.Error);
-                throw new UnauthorizedAccessException("This User cannot like Posts from a Station that they do not follow.");
-            }
+            //var stationDal = new Stations();
+            //var userIsFollower = stationDal.DoesUserFollowStation(requestor.Id, foundStationMessage.StationId);
+            //if (!userIsFollower && isUserLike)
+            //{
+            //    InstaMelodyLogger.Log(
+            //        string.Format("This User cannot like Posts from a Station that they do not follow. Station Message Id: {0}, Requestor Id: {1}",
+            //            foundStationMessage.Id, requestor.Id), LogLevel.Error);
+            //    throw new UnauthorizedAccessException("This User cannot like Posts from a Station that they do not follow.");
+            //}
 
             // like/unlike post
             var isLiked = dal.DoesUserLikeMessage(foundStationMessage.Id, requestor.Id);
