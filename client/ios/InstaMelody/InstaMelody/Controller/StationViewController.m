@@ -148,7 +148,12 @@
     NSLog(@"hello");
     
     UIButton *button = (UIButton *)sender;
-    NSString *messageId = [NSString stringWithFormat:@"%ld", button.tag];
+    
+    NSDictionary *loopDict = self.loopArray[button.tag];
+    
+    //NSDictionary *messageDict = [loopDict objectForKey:@"Message"];
+    //NSString *messageId = [messageDict objectForKey:@"Id"];
+    NSString *messageId = [loopDict objectForKey:@"Id"];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
@@ -183,9 +188,9 @@
             
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             //TODOAHMED
-            //[alertView show];
+            [alertView show];
             
-            [self fetchMyLoops];
+            //[self fetchMyLoops];
             //[self fetchMyMelodies];
         }
     }];
@@ -528,11 +533,8 @@
             }
             
             NSDate *dateObject = [self.fromDateFormatter dateFromString:oldDateString];
-            
-            if ([[loopDict objectForKey:@"Id"] integerValue]) {
-                cell.likeButton.tag = [[userMelodyDict objectForKey:@"Id"] integerValue];
-                
-            }
+
+            cell.likeButton.tag = indexPath.row;
             
             cell.dateLabel.text = [self.toDateFormatter stringFromDate:dateObject];
             
@@ -545,10 +547,7 @@
         NSString *oldDateString = [loopDict objectForKey:@"DateModified"];
         NSDate *dateObject = [self.fromDateFormatter dateFromString:oldDateString];
         
-        if ([[loopDict objectForKey:@"Id"] integerValue]) {
-            cell.likeButton.tag = [[loopDict objectForKey:@"Id"] integerValue];
-            
-        }
+        cell.likeButton.tag  = indexPath.row;
         
         cell.dateLabel.text = [self.toDateFormatter stringFromDate:dateObject];
 
