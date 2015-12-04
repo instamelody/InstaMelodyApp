@@ -711,6 +711,7 @@
             [alertView show];
             loopVC = nil;
         }
+        
     }
     
     if (loopVC != nil) {

@@ -351,31 +351,38 @@
         //step 2 - upload file
         
         NSDictionary *responseDict = (NSDictionary *)responseObject;
-        NSDictionary *tokenDict = [responseDict objectForKey:@"FileUploadToken"];
-        NSString *fileTokenString = [tokenDict objectForKey:@"Token"];
+        NSArray *tokenArray = [responseDict objectForKey:@"FileUploadTokens"];
         
-        [self uploadFile:recordingPath withFileToken:fileTokenString];
-        //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
-        
-        if ([isPublic boolValue] == TRUE) {
+        if (tokenArray !=nil && [tokenArray isKindOfClass:[NSArray class]] ) {
             
-            NSDictionary *loopDict = [responseDict objectForKey:@"Loop"];
-            [self makeLoopPublic:loopDict];
+            NSDictionary *tokenDict = tokenArray[0];
+            NSString *fileTokenString = [tokenDict objectForKey:@"Token"];
+            
+            [self uploadFile:recordingPath withFileToken:fileTokenString];
+            //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
+            
+            if ([isPublic boolValue] == TRUE) {
+                
+                NSDictionary *loopDict = [responseDict objectForKey:@"Loop"];
+                [self makeLoopPublic:loopDict];
+                
+                
+                /*
+                 
+                 NSDictionary *melodyDict = [responseDict objectForKey:@"UserMelody"];
+                 
+                 if (melodyDict == nil) {
+                 NSDictionary *loopDict = [responseDict objectForKey:@"Loop"];
+                 if (loopDict != nil) {
+                 NSArray * parts = [loopDict objectForKey:@"Parts"];
+                 melodyDict = [parts[0] objectForKey:@"UserMelody"];
+                 }
+                 }
+                 [self makeLoopPublic:[melodyDict objectForKey:@"Id"]];
+                 */
+            }
 
             
-            /*
-            
-            NSDictionary *melodyDict = [responseDict objectForKey:@"UserMelody"];
-            
-            if (melodyDict == nil) {
-                NSDictionary *loopDict = [responseDict objectForKey:@"Loop"];
-                if (loopDict != nil) {
-                    NSArray * parts = [loopDict objectForKey:@"Parts"];
-                    melodyDict = [parts[0] objectForKey:@"UserMelody"];
-                }
-            }
-            [self makeLoopPublic:[melodyDict objectForKey:@"Id"]];
-             */
         }
         
         
@@ -488,7 +495,7 @@
             if ([isPublic boolValue] == TRUE) {
                 
                 NSDictionary *loopDict = [responseDict objectForKey:@"Loop"];
-                [self makeLoopPublic:loopDict];
+                //[self makeLoopPublic:loopDict];
                 
                 /*
                 NSDictionary *melodyDict = [responseDict objectForKey:@"UserMelody"];
@@ -591,7 +598,8 @@
         }
         
         NSDictionary *partsDict = @{@"Parts": partsArray};
-        NSDictionary *userLoopDict = @{@"Name": [loopDict objectForKey:@"Name"], @"Parts": @[@{@"UserMelody": partsDict}]};
+        //NSDictionary *userLoopDict = @{@"Name": [loopDict objectForKey:@"Name"], @"Parts": @[@{@"UserMelody": partsDict}]};
+        NSDictionary *userLoopDict = @{@"Name": [loopDict objectForKey:@"Name"], @"Parts": @{@"UserMelody": partsDict}};
         NSDictionary *messageDict = @{@"Description":[loopDict objectForKey:@"Name"], @"UserLoop": userLoopDict};
         
         NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Station": @{@"Id" : stationId}, @"Message": messageDict }];

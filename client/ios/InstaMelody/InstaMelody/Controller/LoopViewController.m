@@ -348,11 +348,15 @@
             NSDictionary *responseDict = (NSDictionary *)responseObject;
             
             NSArray *parts = [responseDict objectForKey:@"Parts"];
-            if (parts.count > 0) {
-                [self.playButton setHidden:NO];
-            } else {
-                [self.playButton setHidden:YES];
+            
+            if (parts != nil && [parts isKindOfClass:[NSArray class]]) {
+                if (parts.count > 0) {
+                    [self.playButton setHidden:NO];
+                } else {
+                    [self.playButton setHidden:YES];
+                }
             }
+            
 
             /*
             [self.statusButton setTitle:@"Ready to play" forState:UIControlStateNormal];

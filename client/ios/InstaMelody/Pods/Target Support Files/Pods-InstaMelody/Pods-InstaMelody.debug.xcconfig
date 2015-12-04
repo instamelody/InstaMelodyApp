@@ -1,4 +1,4 @@
-FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Fabric/iOS" "${PODS_ROOT}/TwitterCore" "${PODS_ROOT}/TwitterKit"
+FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Fabric/iOS" "${PODS_ROOT}/TwitterCore/iOS" "${PODS_ROOT}/TwitterKit"
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
 HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/Fabric" "${PODS_ROOT}/Headers/Public/TwitterCore" "${PODS_ROOT}/Headers/Public/TwitterKit"
 LD_RUNPATH_SEARCH_PATHS = $(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'

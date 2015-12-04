@@ -144,7 +144,7 @@
             [self.HUD hide:YES];
             NSLog(@"%@",ErrorResponse);
             
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Not connected to an InstaMelody account, please create a new one" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [alertView show];
             
             [self signUpWithToken:token];
@@ -255,7 +255,9 @@
     self.userField.text = userId;
     self.passField.text = password;
     
-    [self signIn:nil];
+    //[self signIn:nil];
+    [self getUserDetails:self.userField.text];
+    
 }
 
 -(void)getUserDetails:(NSString*)displayName {
