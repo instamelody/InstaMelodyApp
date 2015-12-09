@@ -239,7 +239,14 @@
             NSArray *components = [message.senderDisplayName componentsSeparatedByString:@" "];
             NSString *initials = @"FR";
             if (components.count == 2) {
-                initials = [NSString stringWithFormat:@"%@%@", [[components[0] substringToIndex:1] uppercaseString], [[components[1] substringToIndex:1] uppercaseString]];
+                
+                NSString * first = components[0];
+                NSString * second = components[1];
+                
+                if (first.length > 0 && second.length > 0)
+                {
+                    initials = [NSString stringWithFormat:@"%@%@", [[components[0] substringToIndex:1] uppercaseString], [[components[1] substringToIndex:1] uppercaseString]];
+                }
             }
             
             JSQMessagesAvatarImage *jsqImage = [JSQMessagesAvatarImageFactory avatarImageWithUserInitials:initials

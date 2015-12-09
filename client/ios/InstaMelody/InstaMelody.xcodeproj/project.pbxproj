@@ -860,7 +860,7 @@
 			baseConfigurationReference = 7E4C9DC22F5EAEA430AB4E1D /* Pods-InstaMelody.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = InstaMelody/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
@@ -877,7 +877,7 @@
 			baseConfigurationReference = 85A8BE665FB43D9DB14E6A1E /* Pods-InstaMelody.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = InstaMelody/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
