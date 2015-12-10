@@ -720,7 +720,7 @@
     
 }
 
-
+/* Method not called?
 -(void)getLoop:(NSString *)loopId {
     
     NSString *requestUrl = [NSString stringWithFormat:@"%@/Melody/Loop", API_BASE_URL];
@@ -766,7 +766,7 @@
     }];
     
 }
-
+*/
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
