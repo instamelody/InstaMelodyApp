@@ -126,7 +126,7 @@
                 //melody part
                 
                 NSDictionary *loopDict = [responseDict objectForKey:@"Loop"];
-                [self makeLoopPublic:loopDict];
+                [self makeLoopPublic:loopDict withDataLoad:YES];
                 
                 //[self makeLoopPublic:[responseDict objectForKey:@"Id"]];
             } else if (chatMsgDict != nil) {
@@ -138,7 +138,7 @@
                 if (messageDict != nil) {
                     melodyDict = [messageDict objectForKey:@"UserMelody"];
                     //[self makeLoopPublic:[melodyDict objectForKey:@"Id"]];
-                    [self makeLoopPublic:melodyDict];
+                    [self makeLoopPublic:melodyDict withDataLoad:YES];
                 }
             }
         }
@@ -249,7 +249,7 @@
             [self makeLoopPublic:[melodyDict objectForKey:@"Id"]];
              */
             NSDictionary *loopDict = [responseDict objectForKey:@"Loop"];
-            [self makeLoopPublic:loopDict];
+            [self makeLoopPublic:loopDict withDataLoad:YES];
         }
         
         
@@ -364,7 +364,7 @@
             if ([isPublic boolValue] == TRUE) {
                 
                 NSDictionary *loopDict = [responseDict objectForKey:@"Loop"];
-                [self makeLoopPublic:loopDict];
+                [self makeLoopPublic:loopDict withDataLoad:NO];
                 
                 
                 /*
@@ -572,7 +572,10 @@
 }
  */
 
--(void)makeLoopPublic:(NSDictionary *)loopDict {
+-(void)makeLoopPublic:(NSDictionary *)loopDict withDataLoad:(BOOL)withLoad {
+    //withLoad parameter determines whether this call creates a new loop (YES)
+    //or just ties an existing loop into the public list (NO)
+    
     NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
     
     NSString *stationId = [[[NSUserDefaults standardUserDefaults] objectForKey:@"stationId"] stringValue];
@@ -601,9 +604,14 @@
         //NSDictionary *userLoopDict = @{@"Name": [loopDict objectForKey:@"Name"], @"Parts": @[@{@"UserMelody": partsDict}]};
         NSDictionary *userLoopDict = @{@"Name": [loopDict objectForKey:@"Name"], @"Parts": @{@"UserMelody": partsDict}};
         NSDictionary *messageDict = @{@"Description":[loopDict objectForKey:@"Name"], @"UserLoop": userLoopDict};
+        NSMutableDictionary *parameters;
         
-        NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Station": @{@"Id" : stationId}, @"Message": messageDict }];
-        
+        if (withLoad)
+        {
+            parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Station": @{@"Id" : stationId}, @"Message": messageDict }];
+        } else {
+            parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Station": @{@"Id" : stationId}, @"Message": @{@"Description" : @"station post", @"UserMelody" : @{@"Id":[loopDict objectForKey:@"Id"]}}}];
+        }
         
         NSString *requestUrl = [NSString stringWithFormat:@"%@/Station/Post", API_BASE_URL];
         
