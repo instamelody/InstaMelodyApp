@@ -95,9 +95,12 @@
     
     cell.dateLabel.text = [self.toDateFormatter stringFromDate:dateObject];
     
-    NSArray *parts = [loopDict objectForKey:@"Parts"];
+    //NSArray *parts = [loopDict objectForKey:@"Parts"];
     
-    if (parts.count > 1) {
+    if ([[loopDict objectForKey:@"Parts"] isEqual:[NSNull null]])
+    {
+        cell.subtitleLabel.text = [NSString stringWithFormat:@"No loop"];
+    } else if ([[loopDict objectForKey:@"Parts"] count] > 1) {
         cell.subtitleLabel.text = [NSString stringWithFormat:@"Social loop"];
     } else {
         cell.subtitleLabel.text = [NSString stringWithFormat:@"Solo loop"];
