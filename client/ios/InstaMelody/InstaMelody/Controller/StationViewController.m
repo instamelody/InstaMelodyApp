@@ -299,7 +299,18 @@
         NSLog(@"stations updated");
         
         
-        NSArray *tempArray = (NSArray *)responseObject;
+        //NSArray *tempArray = (NSArray *)responseObject;
+        NSMutableArray * tempArray0 = [[NSMutableArray alloc] init];
+        
+        for (NSDictionary * thisLoop in responseObject) {
+            if (![[thisLoop objectForKey:@"Parts"] isEqual:[NSNull null]])
+            {
+                [tempArray0 addObject:thisLoop];
+            }
+        }
+        
+        NSArray * tempArray = [[NSArray alloc] initWithArray:tempArray0];
+
         
         //NSArray *tempArray = [[DataManager sharedManager] userMelodyList];
         
@@ -426,7 +437,17 @@
         // NSLog(@"JSON: %@", responseObject);
         NSLog(@"loop updated");
         
-        NSArray *tempArray = (NSArray *)responseObject;
+        //NSArray *tempArray = (NSArray *)responseObject;
+        NSMutableArray * tempArray0 = [[NSMutableArray alloc] init];
+        
+        for (NSDictionary * thisLoop in responseObject) {
+            if (![[thisLoop objectForKey:@"Parts"] isEqual:[NSNull null]])
+            {
+                [tempArray0 addObject:thisLoop];
+            }
+        }
+        
+        NSArray * tempArray = [[NSArray alloc] initWithArray:tempArray0];
         
         //NSArray *tempArray = [[DataManager sharedManager] userMelodyList];
         
