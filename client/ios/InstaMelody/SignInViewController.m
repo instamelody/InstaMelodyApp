@@ -26,6 +26,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    //Remove cancel button for now
+    self.navigationItem.leftBarButtonItem = nil;
+    ////
+    
     self.userLabel.font  = [UIFont fontAwesomeFontOfSize:17.0f];
     self.passLabel.font  = [UIFont fontWithName:kFontAwesomeFamilyName size:17];
     
