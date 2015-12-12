@@ -81,12 +81,17 @@
          }
                            
         if ([self.selectedUserMelody.isExplicit boolValue]) {
-                self.explicitCheckbox.on = YES;
+            self.explicitCheckbox.on = YES;
+            self.publicCheckbox.on = NO;
+        } else {
+            self.explicitCheckbox.on = NO;
+            self.publicCheckbox.on = YES;
         }
          
-         if ([self.selectedUserMelody.isStationPostMelody boolValue]) {
-             self.publicCheckbox.on = YES;
-         }
+         //if ([self.selectedUserMelody.isStationPostMelody boolValue]) {
+           //  self.publicCheckbox.on = YES;
+         //}
+         //Dropping use of this flag. If explicit is off, it is public.
          
         for (UserMelodyPart *part in [self.selectedUserMelody parts]) {
             if ([part.isUserCreated boolValue] == true) {
@@ -164,6 +169,9 @@
          self.forwardButton.hidden = YES;
          self.isNewPart = YES;
          self.isMyStudio = YES;
+         
+         self.explicitCheckbox.on = NO;
+         self.publicCheckbox.on = YES;
      }
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"pickedMelody" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
@@ -355,6 +363,14 @@
                 } else {
                     [self.playButton setHidden:YES];
                 }
+                
+                if ([self.selectedUserMelody.isExplicit boolValue]) {
+                    self.explicitCheckbox.on = YES;
+                    self.publicCheckbox.on = NO;
+                } else {
+                    self.explicitCheckbox.on = NO;
+                    self.publicCheckbox.on = YES;
+                }
             }
             
 
@@ -407,11 +423,16 @@
         
         if (isExplicit) {
             self.explicitCheckbox.on = YES;
-        }
-        
-        if (isPublic) {
+            self.publicCheckbox.on = NO;
+        } else {
+            self.explicitCheckbox.on = NO;
             self.publicCheckbox.on = YES;
         }
+        
+        //if (isPublic) {
+        //    self.publicCheckbox.on = YES;
+        //}
+        //Using isExplicit only now
         
         [partDict setObject:userId forKey:@"UserId"];
         
