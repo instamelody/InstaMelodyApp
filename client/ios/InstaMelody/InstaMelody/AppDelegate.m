@@ -55,7 +55,7 @@
 -(void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {
     NSLog(@"Did Register for User Notifications");
 }
-
+/* Removing this for now to drop warning...
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     NSLog(@"Did Register for Remote Notifications with Device Token (%@)", deviceToken);
     //NSString *tokenString = [[NSString alloc] initWithData:deviceToken encoding:NSUTF8StringEncoding];
@@ -74,7 +74,7 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
     
 }
-
+*/
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
     NSLog(@"Did Fail to Register for Remote Notifications");
     NSLog(@"%@, %@", error, error.localizedDescription);
