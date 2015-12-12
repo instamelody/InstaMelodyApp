@@ -837,7 +837,6 @@
             NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
             self.loopArray = [tempArray sortedArrayUsingDescriptors:descriptors];
             
-            
             break;
         }
         case 1: {
@@ -845,8 +844,8 @@
             NSMutableArray *tempArray = [NSMutableArray new];
             
             for (NSDictionary *itemDict in self.loopArray) {
-                NSArray *parts = [itemDict objectForKey:@"Parts"];
-                if (parts.count > 1) {
+                NSInteger explicit = [[itemDict valueForKey:@"IsExplicit"] integerValue];
+                if (!explicit) {
                     [tempArray addObject:itemDict];
                 }
             }
@@ -875,8 +874,8 @@
             
             NSMutableArray *tempArray = [NSMutableArray new];
             for (NSDictionary *itemDict in self.loopArray) {
-                NSArray *parts = [itemDict objectForKey:@"Parts"];
-                if (parts.count == 1) {
+                NSInteger explicit = [[itemDict valueForKey:@"IsExplicit"] integerValue];
+                if (explicit) {
                     [tempArray addObject:itemDict];
                 }
             }
