@@ -51,11 +51,11 @@
                                                        annotation:annotation
             ];
 }
-
+/*
 -(void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {
     NSLog(@"Did Register for User Notifications");
 }
-/* Removing this for now to drop warning...
+
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     NSLog(@"Did Register for Remote Notifications with Device Token (%@)", deviceToken);
     //NSString *tokenString = [[NSString alloc] initWithData:deviceToken encoding:NSUTF8StringEncoding];
@@ -74,7 +74,7 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
     
 }
-*/
+
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
     NSLog(@"Did Fail to Register for Remote Notifications");
     NSLog(@"%@, %@", error, error.localizedDescription);
@@ -86,7 +86,7 @@
     // Handle your remote RemoteNotification
     NSLog(@"hay there");
 }
-
+*/
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
