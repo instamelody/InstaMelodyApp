@@ -114,7 +114,7 @@
         
         [self uploadFile:recordingPath withFileToken:fileTokenString];
         //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
-        
+        /*
         if ([isPublic boolValue] == TRUE) {
             
             NSDictionary *melodyDict = [responseDict objectForKey:@"UserMelody"];
@@ -142,7 +142,7 @@
                 }
             }
         }
-        
+        */
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
             NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
@@ -243,15 +243,16 @@
         
         [self uploadFile:recordingPath withFileToken:fileTokenString];
         //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
+        /*
         if ([isPublic boolValue] == TRUE) {
-            /*
+            / *
             NSDictionary *melodyDict = [responseDict objectForKey:@"UserMelody"];
             [self makeLoopPublic:[melodyDict objectForKey:@"Id"]];
-             */
+             * /
             NSDictionary *loopDict = [responseDict objectForKey:@"Loop"];
             [self makeLoopPublic:loopDict withDataLoad:YES];
         }
-        
+        */
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
@@ -360,14 +361,14 @@
             
             [self uploadFile:recordingPath withFileToken:fileTokenString];
             //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
-            
+            /*
             if ([isPublic boolValue] == TRUE) {
                 
                 NSDictionary *loopDict = [responseDict objectForKey:@"Loop"];
                 [self makeLoopPublic:loopDict withDataLoad:NO];
                 
                 
-                /*
+                / *
                  
                  NSDictionary *melodyDict = [responseDict objectForKey:@"UserMelody"];
                  
@@ -379,9 +380,9 @@
                  }
                  }
                  [self makeLoopPublic:[melodyDict objectForKey:@"Id"]];
-                 */
+                 * /
             }
-
+            */
             
         }
         
@@ -571,7 +572,7 @@
     
 }
  */
-
+/*
 -(void)makeLoopPublic:(NSDictionary *)loopDict withDataLoad:(BOOL)withLoad {
     //withLoad parameter determines whether this call creates a new loop (YES)
     //or just ties an existing loop into the public list (NO)
@@ -642,7 +643,7 @@
     }
     
 }
-
+*/
 -(void)updateProfilePicture:(UIImage *)image{
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
