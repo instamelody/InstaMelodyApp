@@ -260,11 +260,11 @@
                 //get all my loops
                 [self fetchMyLoops];
                 
-                [self getStationPosts:[selectedStation objectForKey:@"Id"] ];
+                //[self getStationPosts:[selectedStation objectForKey:@"Id"] ];
             } else {
                 //get my friend's public loops
-                
-                [self getStationPosts:[selectedStation objectForKey:@"Id"] ];
+#warning Code here to show loops on other people's stations.
+                //[self getStationPosts:[selectedStation objectForKey:@"Id"] ];
             }
 
         }
@@ -279,7 +279,7 @@
         
     }];
 }
-
+/*
 -(void)getStationPosts:(NSString *)stationId {
  
     
@@ -361,7 +361,7 @@
     }];
     
 }
-
+*/
 -(void)createStation {
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
