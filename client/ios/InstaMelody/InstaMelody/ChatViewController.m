@@ -822,7 +822,7 @@
 -(void)loadLoop {
     NSString *loopId = [self.chatDict objectForKey:@"ChatLoopId"];
     
-    if (loopId != nil) {
+    if (loopId != nil && ![loopId isEqual:[NSNull null]]) {
         [self getLoop:loopId];
         
         [self.micButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
