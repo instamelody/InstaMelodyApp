@@ -59,6 +59,11 @@
     
     [self applyFontAwesome];
     
+    self.explicitCheckbox.delegate = self;
+    self.explicitCheckbox.tag = 1;
+    self.publicCheckbox.delegate = self;
+    self.publicCheckbox.tag = 2;
+    
     self.progressView.roundedCorners = YES;
     self.progressView.trackTintColor = [UIColor clearColor];
     self.progressView.progressTintColor = INSTA_BLUE;
@@ -1783,6 +1788,9 @@
     }
 }
 
+
+
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -2165,6 +2173,21 @@
     }*/
     [textField resignFirstResponder];
     return YES;
+}
+
+- (void)didTapCheckBox:(BEMCheckBox *)checkBox
+{
+    if (checkBox.tag == 1)
+    {
+        //Explicit
+        self.publicCheckbox.on = NO;
+        
+    } else {
+        //Public
+        self.explicitCheckbox.on = NO;
+
+    }
+    
 }
 
 /*

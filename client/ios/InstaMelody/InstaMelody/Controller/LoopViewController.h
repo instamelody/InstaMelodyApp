@@ -30,7 +30,7 @@
 
 @end
 
-@interface LoopViewController : UIViewController <AVAudioPlayerDelegate, EZMicrophoneDelegate, UITableViewDataSource, UITableViewDelegate, CLTokenInputViewDelegate, UITextFieldDelegate>
+@interface LoopViewController : UIViewController <AVAudioPlayerDelegate, EZMicrophoneDelegate, UITableViewDataSource, UITableViewDelegate, CLTokenInputViewDelegate, UITextFieldDelegate, BEMCheckBoxDelegate>
 
 @property BOOL isMyStudio;
 
