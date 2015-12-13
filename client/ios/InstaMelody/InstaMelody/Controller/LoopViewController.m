@@ -13,6 +13,7 @@
 #import "AFURLSessionManager.h"
 #import "AFHTTPRequestOperationManager.h"
 #import "constants.h"
+#import "CustomActivityProvider.h"
 
 @interface LoopViewController ()
 
@@ -698,36 +699,19 @@
 }
 
 -(IBAction)share:(id)sender {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Share to" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    UIAlertAction *fbAction = [UIAlertAction actionWithTitle:@"Facebook" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        //sdf
-    }];
+
+    CustomActivityProvider *ActivityProvider = [[CustomActivityProvider alloc] initWithPlaceholderItem:@""];
+    NSArray *itemsToShare = @[ActivityProvider, @"Visit us at ...."];
+    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:itemsToShare applicationActivities:nil];
+    //activityVC.excludedActivityTypes = @[UIActivityTypePrint, UIActivityTypeAssignToContact, UIActivityTypeSaveToCameraRoll]; //or whichever you don't need
+    [activityVC setValue:@"InstaMelody" forKey:@"subject"];
     
-    UIAlertAction *twAction = [UIAlertAction actionWithTitle:@"Twitter" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        //sdf
-    }];
+    activityVC.completionWithItemsHandler = ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
+        NSLog(@"Completed successfully...");
+    };
     
-    UIAlertAction *scAction = [UIAlertAction actionWithTitle:@"SoundCloud" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        //sdf
-    }];
+    [self presentViewController:activityVC animated:YES completion:nil];
     
-    UIAlertAction *emailAction = [UIAlertAction actionWithTitle:@"E-mail" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        //sdf
-    }];
-    
-    UIAlertAction *textAction = [UIAlertAction actionWithTitle:@"Text" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        //sdf
-    }];
-    
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDestructive handler:nil];
-    
-    [alert addAction:fbAction];
-    [alert addAction:twAction];
-    [alert addAction:scAction];
-    [alert addAction:emailAction];
-    [alert addAction:textAction];
-    [alert addAction:cancelAction];
-    [self presentViewController:alert animated:YES completion:nil];
 }
 
 -(IBAction)showVolumeSettings:(id)sender {

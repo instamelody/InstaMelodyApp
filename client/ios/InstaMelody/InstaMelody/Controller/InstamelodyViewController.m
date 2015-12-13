@@ -8,6 +8,7 @@
 
 #import "InstamelodyViewController.h"
 #import "ChatViewController.h"
+#import "CustomActivityProvider.h"
 
 @interface InstamelodyViewController ()
 
@@ -136,6 +137,20 @@
 }
 
 -(IBAction)share:(id)sender {
+    
+    CustomActivityProvider *ActivityProvider = [[CustomActivityProvider alloc] initWithPlaceholderItem:@""];
+    NSArray *itemsToShare = @[ActivityProvider, @"Visit us at ...."];
+    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:itemsToShare applicationActivities:nil];
+    //activityVC.excludedActivityTypes = @[UIActivityTypePrint, UIActivityTypeAssignToContact, UIActivityTypeSaveToCameraRoll]; //or whichever you don't need
+    [activityVC setValue:@"InstaMelody" forKey:@"subject"];
+    
+    activityVC.completionWithItemsHandler = ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
+        NSLog(@"Completed successfully...");
+    };
+    
+    [self presentViewController:activityVC animated:YES completion:nil];
+    
+    /*
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Share to" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     UIAlertAction *fbAction = [UIAlertAction actionWithTitle:@"Facebook" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         //sdf
@@ -165,7 +180,7 @@
     [alert addAction:emailAction];
     [alert addAction:textAction];
     [alert addAction:cancelAction];
-    [self presentViewController:alert animated:YES completion:nil];
+    [self presentViewController:alert animated:YES completion:nil];  */
 }
 
 
