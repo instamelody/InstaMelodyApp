@@ -138,8 +138,8 @@
 
 -(IBAction)share:(id)sender {
     
-    CustomActivityProvider *ActivityProvider = [[CustomActivityProvider alloc] initWithPlaceholderItem:@""];
-    NSArray *itemsToShare = @[ActivityProvider, @"Visit us at ...."];
+    //CustomActivityProvider *ActivityProvider = [[CustomActivityProvider alloc] initWithPlaceholderItem:@""];
+    NSArray *itemsToShare = @[@"Check out InstaMelody in the App Store! https://itunes.apple.com/us/app/instamelody/id897451088"];
     UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:itemsToShare applicationActivities:nil];
     //activityVC.excludedActivityTypes = @[UIActivityTypePrint, UIActivityTypeAssignToContact, UIActivityTypeSaveToCameraRoll]; //or whichever you don't need
     [activityVC setValue:@"InstaMelody" forKey:@"subject"];
