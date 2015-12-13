@@ -18,4 +18,5 @@ target 'InstaMelody' do
   pod 'Fabric'
   pod 'TwitterKit'
   pod 'BEMCheckBox'
+  pod 'Crashlytics'
 end

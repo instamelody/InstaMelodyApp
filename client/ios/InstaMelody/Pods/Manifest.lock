@@ -7,6 +7,8 @@ PODS:
     - Bolts/Tasks
   - Bolts/Tasks (1.5.0)
   - CLTokenInputView (2.1.0)
+  - Crashlytics (3.4.1):
+    - Fabric (~> 1.6.0)
   - DAAlertController (0.1.4)
   - DACircularProgress (2.3.1)
   - EZAudio (1.1.2):
@@ -46,6 +48,7 @@ PODS:
 DEPENDENCIES:
   - BEMCheckBox
   - CLTokenInputView
+  - Crashlytics
   - DAAlertController
   - DACircularProgress
   - EZAudio
@@ -65,6 +68,7 @@ SPEC CHECKSUMS:
   BEMCheckBox: e1dd80417e0a9f1db4b55d8b8d2f3f477d120795
   Bolts: 722ab9a4f8b50fc4ed1b9998a5a7a2b3f16d80b4
   CLTokenInputView: dc40041faf76102cf96dede1635d93bd0f115a0d
+  Crashlytics: 41574a245bc6ae10c55d57f385ebd2004e5bee05
   DAAlertController: 4735313ec65d3d69f81fdd34d01308809680350f
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   EZAudio: 01373de2b1257b77be1bf13753fb1c4ea8a9777e

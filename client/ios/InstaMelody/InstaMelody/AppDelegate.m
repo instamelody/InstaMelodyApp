@@ -12,6 +12,7 @@
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <TwitterKit/TwitterKit.h>
 #import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
 
 @interface AppDelegate ()
 
@@ -35,8 +36,9 @@
     [MagicalRecord setupCoreDataStackWithStoreNamed:@"InstaMelody"];
     
     [[Twitter sharedInstance] startWithConsumerKey:@"Xq6cieg5b6FFEqSsJHzTnbrW8" consumerSecret:@"GtR8gm0JZySbZfVLlW4YwzCMc8D7ERXIz0C8kdN3TjZ5MBVkxc"];
-    [Fabric with:@[[Twitter sharedInstance]]];
-    
+    [[Crashlytics sharedInstance] setDebugMode:YES];
+    //[Fabric with:@[[Twitter sharedInstance]]];
+    [Fabric with:@[[Crashlytics class], [Twitter class]]];
     
     [FBSDKLoginButton classForCoder];
     [TWTRLogInButton classForCoder];
