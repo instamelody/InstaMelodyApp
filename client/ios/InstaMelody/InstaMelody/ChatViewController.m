@@ -837,6 +837,17 @@
         [self.playButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         [self.playButton addTarget:self action:@selector(togglePlayback:) forControlEvents:UIControlEventTouchUpInside];
         
+    } else {
+        
+        [self.statusButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [self.statusButton addTarget:self action:@selector(createLoop:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [self.loopTitleButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [self.loopTitleButton addTarget:self action:@selector(createLoop:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [self.micButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [self.micButton addTarget:self action:@selector(createLoop:) forControlEvents:UIControlEventTouchUpInside];
+
     }
     
 }
