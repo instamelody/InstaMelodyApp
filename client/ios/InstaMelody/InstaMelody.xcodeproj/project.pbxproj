@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0789C5DD1C1DC83F005C561E /* CustomActivityProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0789C5DC1C1DC83F005C561E /* CustomActivityProvider.m */; };
 		0A10B9D513BF2A431F2FEB6C /* Pods_InstaMelody.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C4BFAFF7F0F445B4DF19637 /* Pods_InstaMelody.framework */; };
 		8706E62E1BDA14A80017E560 /* InstamelodyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8706E62D1BDA14A80017E560 /* InstamelodyViewController.m */; };
 		8706E6311BDB37BB0017E560 /* StoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8706E6301BDB37BB0017E560 /* StoreViewController.m */; };
@@ -86,6 +87,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0789C5DB1C1DC83F005C561E /* CustomActivityProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomActivityProvider.h; sourceTree = "<group>"; };
+		0789C5DC1C1DC83F005C561E /* CustomActivityProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomActivityProvider.m; sourceTree = "<group>"; };
 		6C4BFAFF7F0F445B4DF19637 /* Pods_InstaMelody.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InstaMelody.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E4C9DC22F5EAEA430AB4E1D /* Pods-InstaMelody.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InstaMelody.debug.xcconfig"; path = "Pods/Target Support Files/Pods-InstaMelody/Pods-InstaMelody.debug.xcconfig"; sourceTree = "<group>"; };
 		85A8BE665FB43D9DB14E6A1E /* Pods-InstaMelody.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InstaMelody.release.xcconfig"; path = "Pods/Target Support Files/Pods-InstaMelody/Pods-InstaMelody.release.xcconfig"; sourceTree = "<group>"; };
@@ -454,6 +457,8 @@
 				8706E6301BDB37BB0017E560 /* StoreViewController.m */,
 				8706E6321BDB50700017E560 /* FeaturedViewController.h */,
 				8706E6331BDB50700017E560 /* FeaturedViewController.m */,
+				0789C5DB1C1DC83F005C561E /* CustomActivityProvider.h */,
+				0789C5DC1C1DC83F005C561E /* CustomActivityProvider.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -701,6 +706,7 @@
 				87DA195F1B72872A00941DCE /* SignInViewController.m in Sources */,
 				87C84E9C1BAC848400A99239 /* UserMelody.m in Sources */,
 				8707F9BB1B446F57004B4C20 /* FirstViewController.m in Sources */,
+				0789C5DD1C1DC83F005C561E /* CustomActivityProvider.m in Sources */,
 				873FCFE51BB7355F00CE2B44 /* MelodyCell.m in Sources */,
 				87CFE8BF1B829427009A4B6D /* Melody.m in Sources */,
 				8707F9F31B4476BD004B4C20 /* AFHTTPRequestOperationManager.m in Sources */,
