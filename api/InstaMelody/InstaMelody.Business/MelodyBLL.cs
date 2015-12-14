@@ -451,6 +451,36 @@ namespace InstaMelody.Business
         }
 
         /// <summary>
+        /// Updates the loop.
+        /// </summary>
+        /// <param name="loop">The loop.</param>
+        /// <param name="sessionToken">The session token.</param>
+        /// <returns></returns>
+        public UserLoop UpdateLoop(UserLoop loop, Guid sessionToken)
+        {
+            Utilities.GetUserBySession(sessionToken);
+
+            try
+            {
+                var foundLoop = GetUserLoop(loop);
+
+                var loopToUpdate = new UserLoop { Id = foundLoop.Id };
+                if (!foundLoop.IsExplicit.Equals(loop.IsExplicit))
+                {
+                    loopToUpdate.IsExplicit = loop.IsExplicit;
+                }
+
+                var dal = new UserLoops();
+                var updatedLoop = dal.UpdateUserLoop(loopToUpdate);
+                return GetUserLoop(updatedLoop);
+            }
+            catch(Exception exc)
+            {
+                throw exc;
+            }
+        }
+
+        /// <summary>
         /// Attaches the part to loop.
         /// </summary>
         /// <param name="loop">The loop.</param>

@@ -185,6 +185,11 @@
         public const string RouteLoopAttach = "Loop/Attach";
 
         /// <summary>
+        /// The route loop update
+        /// </summary>
+        public const string RouteLoopUpdate = "Loop/Update";
+
+        /// <summary>
         /// The route loop delete
         /// </summary>
         public const string RouteLoopDelete = "Loop/Delete";

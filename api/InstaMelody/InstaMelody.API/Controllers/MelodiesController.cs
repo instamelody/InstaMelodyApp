@@ -556,6 +556,65 @@ namespace InstaMelody.API.Controllers
         }
 
         /// <summary>
+        /// Updates the user loop.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route(Routes.RouteLoopUpdate)]
+        public HttpResponseMessage UpdateUserLoop(ApiRequest request)
+        {
+            HttpResponseMessage response;
+
+            if (request != null)
+            {
+                try
+                {
+                    // Log call
+                    InstaMelodyLogger.Log(
+                        string.Format("Update User Loop - Loop: {0}, Token: {1}",
+                            request.Loop.Id, request.Token),
+                        LogLevel.Trace);
+
+                    var bll = new MelodyBll();
+                    var result = bll.UpdateLoop(request.Loop, request.Token);
+
+                    if (result == null)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, string.Format(Exceptions.FailedUpdateLoop, request.Loop.Id));
+                    }
+                    else
+                    {
+                        response = this.Request.CreateResponse(HttpStatusCode.OK, result);
+                    }
+                }
+                catch (Exception exc)
+                {
+                    if (exc is UnauthorizedAccessException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, exc.Message);
+                    }
+                    else if (exc is DataException || exc is ArgumentException)
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, exc.Message);
+                    }
+                    else
+                    {
+                        response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
+                    }
+                    InstaMelodyLogger.Log(string.Format("{0}\r\n{1}", exc.Message, exc.StackTrace), LogLevel.Error);
+                }
+            }
+            else
+            {
+                InstaMelodyLogger.Log("Received NULL UpdateUserLoop request", LogLevel.Trace);
+                response = this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.NullLoop);
+            }
+
+            return response;
+        }
+
+        /// <summary>
         /// Deletes the loop.
         /// </summary>
         /// <param name="request">The request.</param>

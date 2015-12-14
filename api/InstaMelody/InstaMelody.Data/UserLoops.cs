@@ -90,6 +90,46 @@ namespace InstaMelody.Data
         }
 
         /// <summary>
+        /// Updates the user loop.
+        /// </summary>
+        /// <param name="loop">The loop.</param>
+        /// <returns></returns>
+        public UserLoop UpdateUserLoop(UserLoop loop)
+        {
+            var query = @"UPDATE dbo.UserLoops
+                        SET IsExplicit = @IsExplicit, DateModified = @DateModified
+                        WHERE Id = @LoopId";
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "LoopId",
+                    Value = loop.Id,
+                    SqlDbType = SqlDbType.UniqueIdentifier,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "IsExplicit",
+                    Value = loop.IsExplicit,
+                    SqlDbType = SqlDbType.Bit,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "DateModified",
+                    Value = DateTime.UtcNow,
+                    SqlDbType = SqlDbType.DateTime,
+                    Direction = ParameterDirection.Input
+                }
+            };
+
+            ExecuteNonQuery(query, parameters.ToArray());
+            return GetUserLoopById(loop.Id);
+        }
+
+        /// <summary>
         /// Gets the user loops by user identifier.
         /// </summary>
         /// <param name="userId">The user identifier.</param>

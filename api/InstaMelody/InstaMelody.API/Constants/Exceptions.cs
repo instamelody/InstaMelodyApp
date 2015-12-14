@@ -308,6 +308,11 @@
         public const string FailedCreateLoop = "Failed to create a new Loop.";
 
         /// <summary>
+        /// The failed update loop
+        /// </summary>
+        public const string FailedUpdateLoop = "Failed to update Loop {0}.";
+
+        /// <summary>
         /// The failed attach to loop
         /// </summary>
         public const string FailedAttachToLoop = "Failed to attach a new part to Loop {0}.";
