@@ -625,7 +625,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
             NSLog(@"%@",ErrorResponse);
             
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [alertView show];
+            //[alertView show];
         }
     }];
 }

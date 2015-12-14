@@ -348,11 +348,15 @@
             NSDictionary *responseDict = (NSDictionary *)responseObject;
             
             NSArray *parts = [responseDict objectForKey:@"Parts"];
-            if (parts.count > 0) {
-                [self.playButton setHidden:NO];
-            } else {
-                [self.playButton setHidden:YES];
+            
+            if (parts != nil && [parts isKindOfClass:[NSArray class]]) {
+                if (parts.count > 0) {
+                    [self.playButton setHidden:NO];
+                } else {
+                    [self.playButton setHidden:YES];
+                }
             }
+            
 
             /*
             [self.statusButton setTitle:@"Ready to play" forState:UIControlStateNormal];
@@ -1335,8 +1339,13 @@
             NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
             self.profileImageView.image = [UIImage imageWithContentsOfFile:imagePath];
             
-        } else {
+        } else if (friend != nil) {
             NSString *userName = [NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName];
+            
+            if (friend == nil) {
+                userName = @"User";
+            }
+            
             [self.profileImageView setImageWithString:userName color:nil circular:YES];
         }
         
@@ -1834,6 +1843,10 @@
                 
                 NSString *userName = [NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName];
                 
+                if (friend == nil) {
+                    userName = @"User";
+                }
+                
                 dispatch_async(dispatch_get_main_queue(), ^{
                     self.saveBarTopicLabel.text = [self.selectedLoop objectForKey:@"Name"];
                     //self.saveBarStationLabel.text = userName;
@@ -1995,8 +2008,12 @@
             NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
             cell.imageView.image = [UIImage imageWithContentsOfFile:imagePath];
             
-        } else {
+        } else if (friend !=nil ){
             NSString *userName = [NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName];
+            if (friend.firstName == nil) {
+                userName = @"User";
+            }
+            
             [cell.imageView setImageWithString:userName color:nil circular:YES];
         }
         

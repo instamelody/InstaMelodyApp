@@ -522,7 +522,26 @@
     if (messageDict != nil) {
         NSDictionary *userMelodyDict = [messageDict objectForKey:@"UserMelody"];
         
-        if (userMelodyDict != nil) {
+        NSDictionary *userLoopDict = [messageDict objectForKey:@"UserLoop"];
+        
+        if (userLoopDict != nil && [userLoopDict isKindOfClass:[NSDictionary class]]) {
+            
+            cell.nameLabel.text = [userLoopDict objectForKey:@"Name"];
+            
+            NSString *oldDateString = [userLoopDict objectForKey:@"DateModified"];
+            
+            if (oldDateString == nil) {
+                oldDateString = [userLoopDict objectForKey:@"DateCreated"];
+            }
+            
+            NSDate *dateObject = [self.fromDateFormatter dateFromString:oldDateString];
+            
+            cell.likeButton.tag = indexPath.row;
+            
+            cell.dateLabel.text = [self.toDateFormatter stringFromDate:dateObject];
+            
+            
+        } else if (userMelodyDict != nil && [userMelodyDict isKindOfClass:[NSDictionary class]]) {
             
             cell.nameLabel.text = [userMelodyDict objectForKey:@"Name"];
             
@@ -539,7 +558,6 @@
             cell.dateLabel.text = [self.toDateFormatter stringFromDate:dateObject];
             
         }
-        
     } else {
         
         cell.nameLabel.text = [loopDict objectForKey:@"Name"];
@@ -652,20 +670,54 @@
     NSDictionary *messageDict = [loopDict objectForKey:@"Message"];
     
     if (messageDict != nil) {
+        
+        
         NSDictionary *userMelodyDict = [messageDict objectForKey:@"UserMelody"];
         
-        UserMelody *tempMelody = [[DataManager sharedManager] createUserMelodyWithDict:userMelodyDict];
+        NSDictionary *userLoopDict = [messageDict objectForKey:@"UserLoop"];
         
-        //loopVC.selectedLoop = userMelodyDict;
-        loopVC.selectedUserMelody = tempMelody;
-        loopVC.delegate = self;
+        if (userLoopDict != nil && [userLoopDict isKindOfClass:[NSDictionary class]]) {
+            
+            NSArray *partArray = [userLoopDict objectForKey:@"Parts"];
+            
+            if (partArray!= nil && [partArray isKindOfClass:[NSArray class]]) {
+                loopVC.selectedLoop = userLoopDict;
+                loopVC.delegate = self;
+            } else {
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Invalid loop" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [alertView show];
+                loopVC = nil;
+            }
+            
+            
+        } else if (userMelodyDict != nil && [userMelodyDict isKindOfClass:[NSDictionary class]])  {
+            UserMelody *tempMelody = [[DataManager sharedManager] createUserMelodyWithDict:userMelodyDict];
+            
+            //loopVC.selectedLoop = userMelodyDict;
+            loopVC.selectedUserMelody = tempMelody;
+            loopVC.delegate = self;
+        }
+        
         
     } else {
-        loopVC.selectedLoop = loopDict;
-        loopVC.delegate = self;
+        
+        NSArray *partArray = [loopDict objectForKey:@"Parts"];
+        
+        if (partArray!= nil && [partArray isKindOfClass:[NSArray class]]) {
+            loopVC.selectedLoop = loopDict;
+            loopVC.delegate = self;
+        } else {
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Invalid loop" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
+            loopVC = nil;
+        }
+        
     }
     
-    [self.navigationController pushViewController:loopVC animated:YES];
+    if (loopVC != nil) {
+            [self.navigationController pushViewController:loopVC animated:YES];
+    }
+    
 }
 
 

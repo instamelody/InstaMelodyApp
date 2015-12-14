@@ -297,14 +297,14 @@
         NSLog(@"JSON: %@", responseObject);
         
         
-        if (self.savedImage != nil) {
-            [self prepareImage:self.savedImage];
-        }
-        
-        [self.HUD hide:YES];
-        
-        [self.navigationController popViewControllerAnimated:YES];
-        
+            if (self.savedImage != nil) {
+                [self prepareImage:self.savedImage];
+            }
+            
+            [self.HUD hide:YES];
+            
+            [self.navigationController popViewControllerAnimated:YES];
+
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
@@ -408,19 +408,60 @@
         [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"JSON: %@", responseObject);
             
+            NSDictionary *responseDict = (NSDictionary *)responseObject;
             
-            if (self.savedImage != nil) {
-                [self prepareImage:self.savedImage];
-            }
+            NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"DisplayName": self.usernameField.text, @"Password": self.passwordField.text}];
             
-            [self.HUD hide:YES];
+            NSString *requestUrl = [NSString stringWithFormat:@"%@/Auth/User", API_BASE_URL];
             
-            [self dismissViewControllerAnimated:YES completion:^{
+            //add 64 char string
+            
+            AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+            
+            [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                NSLog(@"JSON: %@", responseObject);
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"You are now logged in" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [alertView show];
                 
-                [self.delegate finishedWithUserId:self.usernameField.text andPassword:self.passwordField.text];
+                NSDictionary *responseDict =
+                (NSDictionary *)responseObject;
+                [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"Token"] forKey:@"authToken"];
                 
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                
+                
+                
+                if (self.savedImage != nil) {
+                    [self prepareImage:self.savedImage];
+                }
+                
+                [self.HUD hide:YES];
+                
+                [self dismissViewControllerAnimated:YES completion:^{
+                    
+                    [self.delegate finishedWithUserId:self.usernameField.text andPassword:self.passwordField.text];
+                    
+                }];
+                
+                
+                
+                
+            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
+                    NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
+                    
+                    NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+                    
+                    [self.HUD hide:YES];
+                    NSLog(@"%@",ErrorResponse);
+                    
+                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                    [alertView show];
+                }
             }];
-
+            
+            
+            
             
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             
@@ -592,6 +633,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     [image drawInRect:croppingRect];
     resizedImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
+    
     
     [[NetworkManager sharedManager] updateProfilePicture:resizedImage];
 }
