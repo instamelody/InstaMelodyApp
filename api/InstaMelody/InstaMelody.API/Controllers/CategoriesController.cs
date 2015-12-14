@@ -83,6 +83,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
+                    InstaMelodyLogger.Log(string.Format("{0}\r\n{1}", exc.Message, exc.StackTrace), LogLevel.Error);
                 }
             }
             else
@@ -143,6 +144,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
+                    InstaMelodyLogger.Log(string.Format("{0}\r\n{1}", exc.Message, exc.StackTrace), LogLevel.Error);
                 }
             }
             else
@@ -195,6 +197,7 @@ namespace InstaMelody.API.Controllers
                     {
                         response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                     }
+                    InstaMelodyLogger.Log(string.Format("{0}\r\n{1}", exc.Message, exc.StackTrace), LogLevel.Error);
                 }
             }
             else
@@ -240,9 +243,9 @@ namespace InstaMelody.API.Controllers
                 {
                     response = this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exc.Message, exc);
                 }
+                InstaMelodyLogger.Log(string.Format("{0}\r\n{1}", exc.Message, exc.StackTrace), LogLevel.Error);
             }
             
-
             return response;
         }
 

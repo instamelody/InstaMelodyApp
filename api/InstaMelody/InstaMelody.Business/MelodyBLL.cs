@@ -653,9 +653,12 @@ namespace InstaMelody.Business
         private IList<Tuple<UserLoopPart, FileUploadToken>> CreateUserLoopParts(User owner, Guid loopId, IList<UserLoopPart> parts)
         {
             var createdParts = new List<Tuple<UserLoopPart, FileUploadToken>>();
+            if (parts == null)
+                return createdParts;
+
             foreach (var part in parts)
             {
-                if (part.UserMelody == null)
+                if (part == null || part.UserMelody == null)
                     continue;
 
                 var createdMelody = GetExistingOrCreateNewUserMelody(part.UserMelody, owner);

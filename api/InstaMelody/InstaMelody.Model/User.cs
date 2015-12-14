@@ -134,8 +134,6 @@ namespace InstaMelody.Model
         /// <returns></returns>
         public User StripSensitiveInfoForFriends()
         {
-            this.FirstName = string.Empty;
-            this.LastName = string.Empty;
             this.PhoneNumber = string.Empty;
             this.HashSalt = string.Empty;
             this.Password = string.Empty;

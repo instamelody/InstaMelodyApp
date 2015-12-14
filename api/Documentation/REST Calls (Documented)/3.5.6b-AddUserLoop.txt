@@ -1,55 +1,25 @@
 // EXAMPLE B - Create New Loop with New UserMelody
 
 // REQUEST - POST https://api.instamelody.com/v1.0/Melody/Loop
-{
-	"Token": "9D0AB021-FCF8-4EC3-B6E3-BB1D0D03B12E",
-	"Loop":
-	{
-		"Name": "Test Loop 2",
-		"Parts": 
-		[
-			{
-				"UserMelody":
-				{
-					"Parts": 
-					[
-						{
-							"Id" : 1
-						},
-						{
-							"Id" : 2
-						},
-						{
-							"Id" : 3
-						},
-						{
-							"Name" : "Test API Melody 2",
-							"FileName" : "testuserapi.m4a",
-							"Description" : "This is a non-required field"
-						}
-					]
-				}
-			}
-		]
-	}
-}
+{	"Token": "DF5F67C6-B8C5-4878-9137-8DD0278EDB10",	"Loop":	{		"Name": "Test Loop 12/14",		"IsExplicit": 1,		"Parts": 		[			{				"UserMelody":				{				    "IsExplicit": 1,					"Parts": 					[						{							"Id" : 1						},						{							"Id" : 2						},						{							"Id" : 3						},						{							"Name" : "Test API Melody 12/14",							"FileName" : "testuserapi20151214.m4a",							"Description" : "This is a non-required field"						}					]				}			}		]	}}
 
 //RESPONSE - HTTP/1.1 200 OK
 {
-  "Loop": 
-  {
-    "Id": "35c4da6e-fd05-40b0-8394-68d7abb6f5fb",
-    "Name": "Test Loop 2",
-    "UserId": "5651a0ad-b934-4be8-88f2-c380f884adf5",
-    "DateCreated": "2015-07-17T16:54:37.87",
-    "DateModified": "2015-07-17T16:54:37.87",
+  "Loop": {
+    "Id": "89d05b98-e96b-413d-ac8d-741db655ca7d",
+    "Name": "Test Loop 12/14",
+    "UserId": "1da69a56-4a2b-4cd1-b88c-647db929d0c1",
+    "IsExplicit": true,
+    "DateCreated": "2015-12-14T16:16:42.273",
+    "DateModified": "2015-12-14T16:16:43.273",
     "IsDeleted": false,
-    "Parts": 
-    [
+    "IsChatLoop": false,
+    "ChatId": "00000000-0000-0000-0000-000000000000",
+    "Parts": [
       {
-        "Id": 5,
-        "UserLoopId": "35c4da6e-fd05-40b0-8394-68d7abb6f5fb",
-        "UserMelodyId": "c7ff0501-eb70-45f3-a8a5-8233f0f60ed7",
+        "Id": 11,
+        "UserLoopId": "89d05b98-e96b-413d-ac8d-741db655ca7d",
+        "UserMelodyId": "4dc99db6-320b-43df-973e-a4af13211166",
         "OrderIndex": 1,
         "StartTime": "00:00:00",
         "StartEffect": 0,
@@ -57,75 +27,81 @@
         "EndTime": null,
         "EndEffect": 0,
         "EndEffectDuration": "00:00:00",
-        "DateCreated": "2015-07-17T16:55:35.427",
+        "DateCreated": "2015-12-14T16:16:43.407",
         "IsDeleted": false,
-        "UserMelody": 
-        {
-          "Id": "c7ff0501-eb70-45f3-a8a5-8233f0f60ed7",
-          "Name": "Test API Melody 2",
-          "UserId": "5651a0ad-b934-4be8-88f2-c380f884adf5",
-          "DateCreated": "2015-07-17T16:55:35.23",
+        "UserMelody": {
+          "Id": "4dc99db6-320b-43df-973e-a4af13211166",
+          "Name": "Test API Melody 12/14",
+          "UserId": "1da69a56-4a2b-4cd1-b88c-647db929d0c1",
+          "IsExplicit": true,
+          "DateCreated": "2015-12-14T16:16:42.66",
           "IsDeleted": false,
-          "Parts": 
-          [
+          "IsChatLoopPart": false,
+          "ChatLoopId": "00000000-0000-0000-0000-000000000000",
+          "IsStationPostMelody": false,
+          "StationPostIds": null,
+          "Parts": [
             {
               "Id": 1,
               "IsUserCreated": false,
+              "IsPremiumContent": false,
               "Name": "01 Bass",
-              "Description": "",
+              "Description": null,
               "FileName": "01 Bass.wav",
-              "DateCreated": "2015-07-06T00:00:00",
-              "DateModified": "2015-07-06T00:00:00",
+              "DateCreated": "2015-07-30T00:00:00",
+              "DateModified": "2015-07-30T00:00:00",
               "IsDeleted": false,
               "FilePath": "Uploads/Melodies/01 Bass.wav"
             },
             {
               "Id": 2,
               "IsUserCreated": false,
+              "IsPremiumContent": false,
               "Name": "01 Drums",
-              "Description": "",
+              "Description": null,
               "FileName": "01 Drums.wav",
-              "DateCreated": "2015-07-06T00:00:00",
-              "DateModified": "2015-07-06T00:00:00",
+              "DateCreated": "2015-07-30T00:00:00",
+              "DateModified": "2015-07-30T00:00:00",
               "IsDeleted": false,
               "FilePath": "Uploads/Melodies/01 Drums.wav"
             },
             {
               "Id": 3,
               "IsUserCreated": false,
+              "IsPremiumContent": false,
               "Name": "01 Melody",
-              "Description": "",
+              "Description": null,
               "FileName": "01 Melody.wav",
-              "DateCreated": "2015-07-06T00:00:00",
-              "DateModified": "2015-07-06T00:00:00",
+              "DateCreated": "2015-07-30T00:00:00",
+              "DateModified": "2015-07-30T00:00:00",
               "IsDeleted": false,
               "FilePath": "Uploads/Melodies/01 Melody.wav"
             },
             {
-              "Id": 17,
+              "Id": 214,
               "IsUserCreated": true,
-              "Name": "Test API Melody 2",
+              "IsPremiumContent": false,
+              "Name": "Test API Melody 12/14",
               "Description": "This is a non-required field",
-              "FileName": "testuserapi.m4a",
-              "DateCreated": "2015-07-17T16:55:35.197",
-              "DateModified": "2015-07-17T16:55:35.197",
+              "FileName": "testuserapi20151214.m4a",
+              "DateCreated": "2015-12-14T16:16:42.597",
+              "DateModified": "2015-12-14T16:16:42.597",
               "IsDeleted": false,
-              "FilePath": "Uploads/Melodies/testuserapi.m4a"
+              "FilePath": "Uploads/Melodies/testuserapi20151214.m4a"
             }
           ]
         }
       }
     ]
   },
-  "FileUploadTokens": 
-  [
+  "FileUploadTokens": [
     {
-      "Token": "c2eb8573-2d04-43af-8c2e-9eb121f9cb2c",
-      "UserId": "5651a0ad-b934-4be8-88f2-c380f884adf5",
-      "FileName": "testuserapi.m4a",
+      "Token": "eeedfa1d-6c01-45db-b357-c1a4e7174416",
+      "UserId": "1da69a56-4a2b-4cd1-b88c-647db929d0c1",
+      "FileName": "testuserapi20151214.m4a",
       "MediaType": 2,
-      "DateExpires": "2015-07-17T17:05:35.363",
-      "DateCreated": "2015-07-17T16:55:35.363",
+      "DateExpires": "2015-12-14T16:26:43.14",
+      "DateCreated": "2015-12-14T16:16:43.14",
       "IsDeleted": false,
       "IsExpired": false
     }

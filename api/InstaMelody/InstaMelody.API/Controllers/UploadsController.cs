@@ -77,6 +77,8 @@ namespace InstaMelody.API.Controllers
                 }
                 catch (Exception exc)
                 {
+                    InstaMelodyLogger.Log(string.Format("{0}\r\n{1}", exc.Message, exc.StackTrace), LogLevel.Error);
+
                     if (exc is UnauthorizedAccessException)
                     {
                         return this.Request.CreateErrorResponse(HttpStatusCode.Unauthorized, exc.Message);
