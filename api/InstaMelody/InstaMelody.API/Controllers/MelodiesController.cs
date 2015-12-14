@@ -155,6 +155,12 @@ namespace InstaMelody.API.Controllers
             var melodyId = nvc["id"];
             Guid.TryParse(melodyId, out _melodyId);
 
+            Guid _userId;
+            var userId = nvc["userId"];
+            Guid.TryParse(userId, out _userId);
+
+            var userName = nvc["userName"];
+
             if (_token.Equals(default(Guid)))
             {
                 InstaMelodyLogger.Log("Received NULL GetUserMelodies request", LogLevel.Trace);
@@ -173,9 +179,14 @@ namespace InstaMelody.API.Controllers
                     var bll = new MelodyBll();
                     object result;
 
-                    if (_melodyId.Equals(default(Guid)))
+                    if (_melodyId.Equals(default(Guid)) 
+                        && _userId.Equals(default(Guid)))
                     {
                         result = bll.GetUserMelodies(_token);
+                    }
+                    else if (!_userId.Equals(default(Guid)) || !string.IsNullOrWhiteSpace(userName))
+                    {
+                        result = bll.GetUserMelodies(new User { Id = _userId, DisplayName = userName }, _token);
                     }
                     else
                     {
@@ -348,6 +359,8 @@ namespace InstaMelody.API.Controllers
             var userId = nvc["userId"];
             Guid.TryParse(userId, out _userId);
 
+            var userName = nvc["userName"];
+
             var name = nvc["name"];
 
             if (_token.Equals(default(Guid)))
@@ -370,9 +383,14 @@ namespace InstaMelody.API.Controllers
 
                     if (_loopId.Equals(default(Guid)) 
                         && _userId.Equals(default(Guid)) 
-                        && string.IsNullOrWhiteSpace(name))
+                        && string.IsNullOrWhiteSpace(name)
+                        && string.IsNullOrWhiteSpace(userName))
                     {
                         result = bll.GetUserLoops(_token);
+                    }
+                    else if (!_userId.Equals(default(Guid)) || !string.IsNullOrWhiteSpace(userName))
+                    {
+                        result = bll.GetUserLoops(new User { Id = _userId, DisplayName = userName }, _token);
                     }
                     else
                     {

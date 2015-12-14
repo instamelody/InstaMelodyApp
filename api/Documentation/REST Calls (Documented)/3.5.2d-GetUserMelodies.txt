@@ -1,0 +1,255 @@
+// EXAMPLE D - Get All User Melodies by a User Display Name
+
+// REQUEST - GET https://api.instamelody.com/v1.0/Melody/User?userName=JeffDennis&token=DF5F67C6-B8C5-4878-9137-8DD0278EDB10
+
+// RESPONSE - HTTP/1.1 200 OK
+[
+  {
+    "Id": "d768cee3-afc1-425a-b1d3-249a8952888b",
+    "Name": "Test API Melody",
+    "UserId": "6b49d708-c1f4-4322-9085-e37769245770",
+    "IsExplicit": true,
+    "DateCreated": "2015-12-01T21:32:33.347",
+    "IsDeleted": false,
+    "IsChatLoopPart": false,
+    "ChatLoopId": "00000000-0000-0000-0000-000000000000",
+    "IsStationPostMelody": false,
+    "StationPostIds": null,
+    "Parts": [
+      {
+        "Id": 1,
+        "IsUserCreated": false,
+        "IsPremiumContent": false,
+        "Name": "01 Bass",
+        "Description": null,
+        "FileName": "01 Bass.wav",
+        "DateCreated": "2015-07-30T00:00:00",
+        "DateModified": "2015-07-30T00:00:00",
+        "IsDeleted": false,
+        "FilePath": "Uploads/Melodies/01 Bass.wav"
+      },
+      {
+        "Id": 2,
+        "IsUserCreated": false,
+        "IsPremiumContent": false,
+        "Name": "01 Drums",
+        "Description": null,
+        "FileName": "01 Drums.wav",
+        "DateCreated": "2015-07-30T00:00:00",
+        "DateModified": "2015-07-30T00:00:00",
+        "IsDeleted": false,
+        "FilePath": "Uploads/Melodies/01 Drums.wav"
+      },
+      {
+        "Id": 3,
+        "IsUserCreated": false,
+        "IsPremiumContent": false,
+        "Name": "01 Melody",
+        "Description": null,
+        "FileName": "01 Melody.wav",
+        "DateCreated": "2015-07-30T00:00:00",
+        "DateModified": "2015-07-30T00:00:00",
+        "IsDeleted": false,
+        "FilePath": "Uploads/Melodies/01 Melody.wav"
+      },
+      {
+        "Id": 209,
+        "IsUserCreated": true,
+        "IsPremiumContent": false,
+        "Name": "Test API Melody",
+        "Description": "This is a non-required field",
+        "FileName": "testuserapi23a3.m4a",
+        "DateCreated": "2015-12-01T21:32:33.277",
+        "DateModified": "2015-12-01T21:32:33.277",
+        "IsDeleted": false,
+        "FilePath": "Uploads/Melodies/testuserapi23a3.m4a"
+      }
+    ]
+  },
+  {
+    "Id": "850b6b1d-3ef1-480e-b011-5f82fd92ecad",
+    "Name": "Test API Melody",
+    "UserId": "6b49d708-c1f4-4322-9085-e37769245770",
+    "IsExplicit": false,
+    "DateCreated": "2015-09-25T16:17:25.893",
+    "IsDeleted": false,
+    "IsChatLoopPart": true,
+    "ChatLoopId": "bd4b3a27-f94c-4aeb-8da1-3c1bd9786e4d",
+    "IsStationPostMelody": false,
+    "StationPostIds": [],
+    "Parts": [
+      {
+        "Id": 1,
+        "IsUserCreated": false,
+        "IsPremiumContent": false,
+        "Name": "01 Bass",
+        "Description": null,
+        "FileName": "01 Bass.wav",
+        "DateCreated": "2015-07-30T00:00:00",
+        "DateModified": "2015-07-30T00:00:00",
+        "IsDeleted": false,
+        "FilePath": "Uploads/Melodies/01 Bass.wav"
+      },
+      {
+        "Id": 2,
+        "IsUserCreated": false,
+        "IsPremiumContent": false,
+        "Name": "01 Drums",
+        "Description": null,
+        "FileName": "01 Drums.wav",
+        "DateCreated": "2015-07-30T00:00:00",
+        "DateModified": "2015-07-30T00:00:00",
+        "IsDeleted": false,
+        "FilePath": "Uploads/Melodies/01 Drums.wav"
+      },
+      {
+        "Id": 3,
+        "IsUserCreated": false,
+        "IsPremiumContent": false,
+        "Name": "01 Melody",
+        "Description": null,
+        "FileName": "01 Melody.wav",
+        "DateCreated": "2015-07-30T00:00:00",
+        "DateModified": "2015-07-30T00:00:00",
+        "IsDeleted": false,
+        "FilePath": "Uploads/Melodies/01 Melody.wav"
+      },
+      {
+        "Id": 204,
+        "IsUserCreated": true,
+        "IsPremiumContent": false,
+        "Name": "Test API Melody",
+        "Description": null,
+        "FileName": "testuserapi.m4a",
+        "DateCreated": "2015-09-25T16:17:25.823",
+        "DateModified": "2015-09-25T16:17:25.823",
+        "IsDeleted": false,
+        "FilePath": "Uploads/Melodies/testuserapi.m4a"
+      }
+    ]
+  },
+  {
+    "Id": "3042971b-2e7b-454c-9046-7fc7781f3eaf",
+    "Name": "Test API Melody 2",
+    "UserId": "6b49d708-c1f4-4322-9085-e37769245770",
+    "IsExplicit": false,
+    "DateCreated": "2015-09-25T16:22:46.987",
+    "IsDeleted": false,
+    "IsChatLoopPart": true,
+    "ChatLoopId": "bd4b3a27-f94c-4aeb-8da1-3c1bd9786e4d",
+    "IsStationPostMelody": false,
+    "StationPostIds": [],
+    "Parts": [
+      {
+        "Id": 1,
+        "IsUserCreated": false,
+        "IsPremiumContent": false,
+        "Name": "01 Bass",
+        "Description": null,
+        "FileName": "01 Bass.wav",
+        "DateCreated": "2015-07-30T00:00:00",
+        "DateModified": "2015-07-30T00:00:00",
+        "IsDeleted": false,
+        "FilePath": "Uploads/Melodies/01 Bass.wav"
+      },
+      {
+        "Id": 2,
+        "IsUserCreated": false,
+        "IsPremiumContent": false,
+        "Name": "01 Drums",
+        "Description": null,
+        "FileName": "01 Drums.wav",
+        "DateCreated": "2015-07-30T00:00:00",
+        "DateModified": "2015-07-30T00:00:00",
+        "IsDeleted": false,
+        "FilePath": "Uploads/Melodies/01 Drums.wav"
+      },
+      {
+        "Id": 3,
+        "IsUserCreated": false,
+        "IsPremiumContent": false,
+        "Name": "01 Melody",
+        "Description": null,
+        "FileName": "01 Melody.wav",
+        "DateCreated": "2015-07-30T00:00:00",
+        "DateModified": "2015-07-30T00:00:00",
+        "IsDeleted": false,
+        "FilePath": "Uploads/Melodies/01 Melody.wav"
+      },
+      {
+        "Id": 205,
+        "IsUserCreated": true,
+        "IsPremiumContent": false,
+        "Name": "Test API Melody 2",
+        "Description": null,
+        "FileName": "testuserapi2.m4a",
+        "DateCreated": "2015-09-25T16:22:46.917",
+        "DateModified": "2015-09-25T16:22:46.917",
+        "IsDeleted": false,
+        "FilePath": "Uploads/Melodies/testuserapi2.m4a"
+      }
+    ]
+  },
+  {
+    "Id": "97a489c4-0f54-44ae-8bc6-9309338c2dd9",
+    "Name": "Test API Melody",
+    "UserId": "6b49d708-c1f4-4322-9085-e37769245770",
+    "IsExplicit": false,
+    "DateCreated": "2015-12-01T21:29:17.597",
+    "IsDeleted": false,
+    "IsChatLoopPart": false,
+    "ChatLoopId": "00000000-0000-0000-0000-000000000000",
+    "IsStationPostMelody": false,
+    "StationPostIds": null,
+    "Parts": [
+      {
+        "Id": 1,
+        "IsUserCreated": false,
+        "IsPremiumContent": false,
+        "Name": "01 Bass",
+        "Description": null,
+        "FileName": "01 Bass.wav",
+        "DateCreated": "2015-07-30T00:00:00",
+        "DateModified": "2015-07-30T00:00:00",
+        "IsDeleted": false,
+        "FilePath": "Uploads/Melodies/01 Bass.wav"
+      },
+      {
+        "Id": 2,
+        "IsUserCreated": false,
+        "IsPremiumContent": false,
+        "Name": "01 Drums",
+        "Description": null,
+        "FileName": "01 Drums.wav",
+        "DateCreated": "2015-07-30T00:00:00",
+        "DateModified": "2015-07-30T00:00:00",
+        "IsDeleted": false,
+        "FilePath": "Uploads/Melodies/01 Drums.wav"
+      },
+      {
+        "Id": 3,
+        "IsUserCreated": false,
+        "IsPremiumContent": false,
+        "Name": "01 Melody",
+        "Description": null,
+        "FileName": "01 Melody.wav",
+        "DateCreated": "2015-07-30T00:00:00",
+        "DateModified": "2015-07-30T00:00:00",
+        "IsDeleted": false,
+        "FilePath": "Uploads/Melodies/01 Melody.wav"
+      },
+      {
+        "Id": 208,
+        "IsUserCreated": true,
+        "IsPremiumContent": false,
+        "Name": "Test API Melody",
+        "Description": "This is a non-required field",
+        "FileName": "testuserapi233.m4a",
+        "DateCreated": "2015-12-01T21:29:17.53",
+        "DateModified": "2015-12-01T21:29:17.53",
+        "IsDeleted": false,
+        "FilePath": "Uploads/Melodies/testuserapi233.m4a"
+      }
+    ]
+  }
+]

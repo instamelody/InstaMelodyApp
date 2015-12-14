@@ -200,6 +200,57 @@ namespace InstaMelody.Business
         }
 
         /// <summary>
+        /// Gets the user melodies.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <param name="sessionToken">The session token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Data.DataException">
+        /// No valid User data was provided to retrieve Melodies.
+        /// or
+        /// Could not find any created Melodies for this User.
+        /// </exception>
+        public IList<UserMelody> GetUserMelodies(User user, Guid sessionToken)
+        {
+            Utilities.GetUserBySession(sessionToken);
+
+            if (user == null)
+            {
+                InstaMelodyLogger.Log(
+                   "No valid User data provided to retrieve Melodies.", LogLevel.Error);
+                throw new DataException("No valid User data was provided to retrieve Melodies.");
+            }
+
+            var userBll = new UserBll();
+            var foundUser = userBll.FindUser(user);
+            if (foundUser == null)
+            {
+                InstaMelodyLogger.Log(
+                   string.Format("No valid User was found with the information provided. UserId: {0}, DisplayName: {1}", 
+                    user.Id, user.DisplayName), LogLevel.Error);
+                throw new DataException("No valid User was found with the information provided.");
+            }
+
+            var dal = new UserMelodies();
+            var userMelodies = dal.GetUserMelodiesByUserId(foundUser.Id);
+            if (userMelodies == null)
+            {
+                InstaMelodyLogger.Log(
+                    string.Format("Could not find any created Melodies for this User. User Id: {0}, Token: {1}",
+                        user.Id, sessionToken), LogLevel.Error);
+                throw new DataException("Could not find any created Melodies for this User.");
+            }
+
+            // get parts of user melody
+            foreach (var userMelody in userMelodies)
+            {
+                userMelody.Parts = GetUserMelodyParts(userMelody.Id);
+            }
+
+            return userMelodies.Select(GetMelodyRelationshipIds).ToList();
+        }
+
+        /// <summary>
         /// Gets the user melody.
         /// </summary>
         /// <param name="melody">The melody.</param>
@@ -289,6 +340,56 @@ namespace InstaMelody.Business
                 InstaMelodyLogger.Log(
                     string.Format("Could not find any created Loops beloging to this User. User Id: {0}", 
                         sessionUser.Id), LogLevel.Error);
+                throw new DataException("Could not find any created Loops beloging to this User.");
+            }
+
+            foreach (var userLoop in loops)
+            {
+                userLoop.Parts = GetUserLoopParts(userLoop.Id);
+            }
+
+            return loops.Select(GetLoopRelationshipIds).ToList();
+        }
+
+        /// <summary>
+        /// Gets the user loops.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <param name="sessionToken">The session token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Data.DataException">
+        /// No valid User data was provided to retrieve Loops.
+        /// or
+        /// Could not find any created Loops beloging to this User.
+        /// </exception>
+        public IList<UserLoop> GetUserLoops(User user, Guid sessionToken)
+        {
+            Utilities.GetUserBySession(sessionToken);
+
+            if (user == null)
+            {
+                InstaMelodyLogger.Log(
+                   "No valid User data provided to retrieve Loops.", LogLevel.Error);
+                throw new DataException("No valid User data was provided to retrieve Loops.");
+            }
+
+            var userBll = new UserBll();
+            var foundUser = userBll.FindUser(user);
+            if (foundUser == null)
+            {
+                InstaMelodyLogger.Log(
+                   string.Format("No valid User was found with the information provided. UserId: {0}, DisplayName: {1}",
+                    user.Id, user.DisplayName), LogLevel.Error);
+                throw new DataException("No valid User was found with the information provided.");
+            }
+
+            var dal = new UserLoops();
+            var loops = dal.GetUserLoopsByUserId(foundUser.Id);
+            if (loops == null || !loops.Any())
+            {
+                InstaMelodyLogger.Log(
+                    string.Format("Could not find any created Loops beloging to this User. User Id: {0}",
+                        user.Id), LogLevel.Error);
                 throw new DataException("Could not find any created Loops beloging to this User.");
             }
 
