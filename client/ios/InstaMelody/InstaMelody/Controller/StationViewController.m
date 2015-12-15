@@ -259,7 +259,7 @@
                 self.stationLabel.text = [selectedStation objectForKey:@"Name"];
                 
                 [self.fanButton setTitle:[NSString stringWithFormat:@"%ld Fans", numFans] forState:UIControlStateNormal];
-                [self.vipButton setTitle:[NSString stringWithFormat:@"%ld VIPs", numVips] forState:UIControlStateNormal];
+                //[self.vipButton setTitle:[NSString stringWithFormat:@"%ld VIPs", numVips] forState:UIControlStateNormal];
                 [self fixButtons];
                 
             });
@@ -979,11 +979,20 @@
     
     requestUrl = [NSString stringWithFormat:@"%@/User/Friends", API_BASE_URL];
     
-    parameters = @{@"id": userId};
+    parameters = @{@"id": userId, @"token":token};
     
     [manager GET:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         NSLog(@"results %@", responseObject);
+        
+        NSArray * results = [[NSArray alloc] initWithArray:responseObject];
+        self.vipButton.hidden = NO;
+        
+        NSString * labelText = (results.count == 1) ?
+        [NSString stringWithFormat:@"%lu VIP", (unsigned long)results.count] : [NSString stringWithFormat:@"%lu VIPs", (unsigned long)results.count];
+        
+        [self.vipButton setTitle:labelText forState:UIControlStateNormal];
+        
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
     
