@@ -33,7 +33,7 @@
 
 @interface LoopViewController : UIViewController <AVAudioPlayerDelegate, EZMicrophoneDelegate, UITableViewDataSource, UITableViewDelegate, CLTokenInputViewDelegate, UITextFieldDelegate, BEMCheckBoxDelegate>
 
-@property BOOL isMyStudio;
+@property BOOL isNotMyStudio;
 
 @property (nonatomic, strong) NSDictionary *selectedLoop;
 @property (nonatomic, strong) UserMelody *selectedUserMelody;

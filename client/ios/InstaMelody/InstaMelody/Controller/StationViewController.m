@@ -130,6 +130,7 @@
     } else {
 
         isUsersStation = FALSE;
+        
         self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", self.selectedFriend.firstName, self.selectedFriend.lastName];
         
         self.title = [NSString stringWithFormat:@"%@'s Station", self.selectedFriend.displayName];
@@ -720,6 +721,12 @@
     
     NSString *myUserId = [defaults objectForKey:@"Id"];
     
+    if ([userId isEqualToString:myUserId])
+    {
+        loopVC.isNotMyStudio = false;
+    } else {
+        loopVC.isNotMyStudio = true;
+    }
     
     NSDictionary *messageDict = [loopDict objectForKey:@"Message"];
     
@@ -835,7 +842,7 @@
     }
     
 }
-
+/*
 -(IBAction)showLoops:(id)sender {
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     LoopViewController *loopVc = (LoopViewController *)[sb instantiateViewControllerWithIdentifier:@"LoopViewController"];
@@ -843,7 +850,7 @@
     
     [self.navigationController pushViewController:loopVc animated:YES];
 }
-
+*/
 -(IBAction)change:(id)sender {
     UISegmentedControl *control = _filterControl; // (UISegmentedControl *)sender;
     

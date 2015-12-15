@@ -73,6 +73,15 @@
     self.progressView.progressTintColor = INSTA_BLUE;
     self.progressView.thicknessRatio = 0.1f;
     
+    if(_isNotMyStudio)
+    {
+        self.explicitView.userInteractionEnabled = NO;
+        self.publicView.userInteractionEnabled = NO;
+    } else {
+        self.explicitView.userInteractionEnabled = YES;
+        self.publicView.userInteractionEnabled = YES;
+    }
+    
     NSString *myUserId = [self.defaults objectForKey:@"Id"];
     
      if (self.selectedLoop !=nil) {
@@ -86,7 +95,7 @@
         NSLog(@"loaded with a melody");
          
          if ([self.selectedUserMelody.userId isEqualToString:myUserId]) {
-             self.isMyStudio = YES;
+             self.isNotMyStudio = NO;
          }
                            
         if ([self.selectedUserMelody.isExplicit boolValue]) {
@@ -179,7 +188,7 @@
          self.backwardButton.hidden = YES;
          self.forwardButton.hidden = YES;
          self.isNewPart = YES;
-         self.isMyStudio = YES;
+         self.isNotMyStudio = NO;
          
          self.explicitCheckbox.on = NO;
          self.publicCheckbox.on = YES;
@@ -647,7 +656,7 @@
 }
 
 -(IBAction)join:(id)sender {
-    self.isMyStudio = YES;
+    self.isNotMyStudio = NO;
     [self updateBarStatus];
 }
 
