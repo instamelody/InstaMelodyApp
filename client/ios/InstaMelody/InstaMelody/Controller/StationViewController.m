@@ -869,7 +869,8 @@
             NSMutableArray *tempArray = [NSMutableArray new];
             
             for (NSDictionary *itemDict in self.loopArray) {
-                if ([[itemDict objectForKey:@"IsChatLoop"] boolValue] == TRUE) {
+                if ([[itemDict objectForKey:@"IsChatLoop"] boolValue] == TRUE
+                    && ![[itemDict valueForKey:@"IsExplicit"] integerValue]) {
                     [tempArray addObject:itemDict];
                 }
             }
