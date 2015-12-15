@@ -821,7 +821,7 @@
 }
 
 -(IBAction)change:(id)sender {
-    UISegmentedControl *control = (UISegmentedControl *)sender;
+    UISegmentedControl *control = _filterControl; // (UISegmentedControl *)sender;
     
     self.loopArray = self.cleanLoopArray;
     
@@ -972,12 +972,25 @@
 
 -(void)setExplicit:(BOOL)isExplicit
 {
-    NSMutableArray *newLoopArray = [[NSMutableArray alloc] initWithArray:self.loopArray];
+    NSMutableArray *newLoopArray = [[NSMutableArray alloc] initWithArray:self.cleanLoopArray];
     NSMutableDictionary *loopDict = [[NSMutableDictionary alloc] initWithDictionary:[self.loopArray objectAtIndex:selectedIndexPath.row]];
     [loopDict setValue:[NSNumber numberWithBool:isExplicit] forKey:@"IsExplicit"];
-    [newLoopArray replaceObjectAtIndex:selectedIndexPath.row withObject:loopDict];
-    self.loopArray = [[NSArray alloc] initWithArray: newLoopArray];
-    [self.collectionView reloadData];
+
+    int index = 0;
+    for (NSDictionary * element in newLoopArray) {
+        if ([[element valueForKey:@"Id"] isEqualToString:[loopDict valueForKey:@"Id"]] )
+        {
+            break;
+        } else {
+            index = index + 1;
+        }
+    }
+    [newLoopArray replaceObjectAtIndex:index withObject:loopDict];
+    
+    self.loopArray = newLoopArray;
+    self.cleanLoopArray = newLoopArray;
+    //[self.collectionView reloadData];
+    [self change:nil];
     
 }
 @end

@@ -956,7 +956,9 @@
         
         [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"Explicit status updated");
-            [self.delegate setExplicit:self.explicitCheckbox.on];
+            
+            if ([self.delegate respondsToSelector:@selector(setExplicit:)])
+                [self.delegate setExplicit:self.explicitCheckbox.on];
             
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
          
