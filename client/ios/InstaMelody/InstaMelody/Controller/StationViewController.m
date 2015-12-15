@@ -23,6 +23,7 @@
 @implementation StationViewController
 {
     NSIndexPath * selectedIndexPath;
+    BOOL isUsersStation;
 }
 
 - (void)viewDidLoad {
@@ -93,6 +94,8 @@
     
     if (self.selectedFriend == nil) {
         
+        isUsersStation = TRUE;
+        
         if (self.stationDict != nil) {
             
             
@@ -102,7 +105,7 @@
             self.stationLabel.text = [self.stationDict objectForKey:@"Name"];
             
             //get station
-            [self getFirstStation];
+            //[self getFirstStation];
             
         } else {
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -126,6 +129,7 @@
         
     } else {
 
+        isUsersStation = FALSE;
         self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", self.selectedFriend.firstName, self.selectedFriend.lastName];
         
         self.title = [NSString stringWithFormat:@"%@'s Station", self.selectedFriend.displayName];
@@ -261,12 +265,15 @@
             
             if (self.stationDict == nil && self.selectedFriend == nil) {
                 //get all my loops
-                [self fetchMyLoops];
+                isUsersStation = TRUE;
+                [self fetchMyLoops:nil];
                 
                 //[self getStationPosts:[selectedStation objectForKey:@"Id"] ];
             } else {
                 //get my friend's public loops
-#warning Code here to show loops on other people's stations.
+                isUsersStation = FALSE;
+                [self fetchMyLoops:userId];
+
                 //[self getStationPosts:[selectedStation objectForKey:@"Id"] ];
             }
 
@@ -402,8 +409,8 @@
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             //TODOAHMED
             //[alertView show];
-            
-            [self fetchMyLoops];
+            isUsersStation = TRUE;
+            [self fetchMyLoops:nil];
             //[self fetchMyMelodies];
         }
     }];
@@ -424,17 +431,26 @@
 }
 
 
--(void)fetchMyLoops {
+-(void)fetchMyLoops:(NSString *)forUserID {
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     
     NSString *requestUrl = [NSString stringWithFormat:@"%@/Melody/Loop", API_BASE_URL];
     
     NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
     
-    //add 64 char string
+    NSDictionary *parameters;
     
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    
-    NSDictionary *parameters = @{@"token": token};
+    if (isUsersStation)
+    {
+        
+        parameters = @{@"token": token};
+        
+    } else {
+        
+        parameters = @{@"userId": forUserID, @"token": token};
+        
+    }
     
     [manager GET:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         // NSLog(@"JSON: %@", responseObject);
@@ -446,7 +462,10 @@
         for (NSDictionary * thisLoop in responseObject) {
             if (![[thisLoop objectForKey:@"Parts"] isEqual:[NSNull null]])
             {
-                [tempArray0 addObject:thisLoop];
+                if (isUsersStation || ![[thisLoop objectForKey:@"IsExplicit"] boolValue])
+                {
+                    [tempArray0 addObject:thisLoop];
+                }
             }
         }
         
@@ -490,6 +509,10 @@
     }];
 }
 
+    -(void)fetchLoopsContd
+    {
+        
+    }
 
 -(void)fetchMyMelodies {
     
@@ -633,7 +656,6 @@
             
             
         }
-
         
         NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
         
@@ -644,6 +666,8 @@
         cell.coverImage.image = [UIImage imageWithContentsOfFile:imagePath];
         
     } else {
+        
+        cell.joinButton.hidden = TRUE;
         
         if (self.selectedFriend != nil) {
             userId = self.selectedFriend.userId;
@@ -945,6 +969,20 @@
             //[alertView show];
         }
     }];
+    
+    requestUrl = [NSString stringWithFormat:@"%@/User/Friends", API_BASE_URL];
+    
+    parameters = @{@"id": userId};
+    
+    [manager GET:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        NSLog(@"results %@", responseObject);
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    
+        NSLog(@"failed!");
+    }];
+    
 }
 
 #pragma mark - loop delegate
