@@ -621,14 +621,14 @@
         //if my station + public
         
         if ([loopDict objectForKey:@"Parts"] != nil && [[loopDict objectForKey:@"Parts"] isKindOfClass:[NSArray class]]) {
-            NSArray *parts = [loopDict objectForKey:@"Parts"];
-            NSDictionary *firstPart = parts[0];
-            NSDictionary *melodyDict = [firstPart objectForKey:@"UserMelody"];
+            //NSArray *parts = [loopDict objectForKey:@"Parts"];
+            //NSDictionary *firstPart = parts[0];
+            //NSDictionary *melodyDict = [firstPart objectForKey:@"UserMelody"];
         
-             if ([[melodyDict objectForKey:@"IsStationPostMelody"] boolValue] == YES) {
+             if ([[loopDict objectForKey:@"IsExplicit"] boolValue] == NO) {
                  [cell.joinButton setTitle:@"Public" forState:UIControlStateNormal];
              } else {
-                 [cell.joinButton setTitle:@"Private" forState:UIControlStateNormal];
+                 [cell.joinButton setTitle:@"Explicit" forState:UIControlStateNormal];
              }
             
             
