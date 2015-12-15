@@ -92,6 +92,7 @@
 @property (nonatomic, strong) NSDictionary *loopDict;
 
 @property (nonatomic, strong) NSString *topicString;
+@property (nonatomic) BOOL isFromChat;
 
 /**
  The CoreGraphics based audio plot

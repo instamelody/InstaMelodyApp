@@ -1007,6 +1007,7 @@
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     LoopViewController *vc = (LoopViewController *)[sb instantiateViewControllerWithIdentifier:@"LoopViewController"];
     vc.delegate = self;
+    vc.isFromChat = TRUE;
     vc.selectedLoop = self.loopDict;
     
     NSString *nameString = [self.chatDict objectForKey:@"Name"];

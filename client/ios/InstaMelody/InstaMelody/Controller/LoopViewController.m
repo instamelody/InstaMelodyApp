@@ -48,7 +48,7 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
-    
+    //_isFromChat = TRUE;
     self.goBack = NO;
     
     self.defaults = [NSUserDefaults standardUserDefaults];
@@ -306,7 +306,7 @@
     }
      */
     
-    if(self.isNewPart)
+    if(self.isNewPart || _isFromChat)
     {
         self.saveBar.hidden = NO;
         self.recordButton.hidden = NO;
@@ -1908,7 +1908,7 @@
             MelodyCell *cell = (MelodyCell *)[tableView dequeueReusableCellWithIdentifier:@"MelodyCell" forIndexPath:indexPath];
             UILabel *melodyLabel = [cell viewWithTag:911];
             
-            if (self.selectedLoop !=nil) {
+            if (self.selectedLoop !=nil && !_isFromChat) {
                 cell.tokenInputView.tag = 99;
                 
                 melodyLabel.hidden = true;
