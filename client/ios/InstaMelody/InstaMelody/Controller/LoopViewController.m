@@ -45,6 +45,9 @@
 @end
 
 @implementation LoopViewController
+{
+    BOOL initialIsExplicitStatus;
+}
 
 -(void)viewDidLoad {
     [super viewDidLoad];
@@ -93,6 +96,8 @@
             self.explicitCheckbox.on = NO;
             self.publicCheckbox.on = YES;
         }
+         
+         initialIsExplicitStatus = [self.selectedUserMelody.isExplicit boolValue];
          
          //if ([self.selectedUserMelody.isStationPostMelody boolValue]) {
            //  self.publicCheckbox.on = YES;
@@ -388,13 +393,16 @@
                     [self.playButton setHidden:YES];
                 }
                 
-                if ([self.selectedUserMelody.isExplicit boolValue]) {
+                if ([[responseDict objectForKey:@"IsExplicit" ] boolValue]) {
                     self.explicitCheckbox.on = YES;
                     self.publicCheckbox.on = NO;
                 } else {
                     self.explicitCheckbox.on = NO;
                     self.publicCheckbox.on = YES;
                 }
+                
+                initialIsExplicitStatus = [[responseDict objectForKey:@"IsExplicit" ] boolValue];
+                
             }
             
 
@@ -440,7 +448,7 @@
         NSDictionary *userMelodyDict = [part objectForKey:@"UserMelody"];
         
         NSString *userId = [userMelodyDict objectForKey:@"UserId"];
-        
+        /*
         BOOL isExplicit =[[userMelodyDict objectForKey:@"IsExplicit"] boolValue];
         
         BOOL isPublic = [[userMelodyDict objectForKey:@"IsStationPostMelody"] boolValue];
@@ -452,7 +460,7 @@
             self.explicitCheckbox.on = NO;
             self.publicCheckbox.on = YES;
         }
-        
+        */
         //if (isPublic) {
         //    self.publicCheckbox.on = YES;
         //}
@@ -930,6 +938,34 @@
     UITextField *topicField = (UITextField *)[self.tableView viewWithTag:98];
     BOOL isPremium = [[DataManager sharedManager] isPremium];
     
+    if (self.explicitCheckbox.on != initialIsExplicitStatus && !self.isNewPart)
+    {
+        //need to save the Explicit state
+        NSString *requestUrl = [NSString stringWithFormat:@"%@/Melody/Loop/Update", API_BASE_URL];
+        
+        NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
+        
+        //add 64 char string
+        
+        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        
+        NSString * boolValueAsString = (self.explicitCheckbox.on) ? @"true":@"false";
+        
+        NSDictionary *loopInfo = @{@"Id": [self.loopDict objectForKey:@"Id"], @"IsExplicit": boolValueAsString};
+        NSDictionary *parameters = @{@"Token": token, @"Loop": loopInfo};
+        
+        [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSLog(@"Explicit status updated");
+            [self.delegate setExplicit:self.explicitCheckbox.on];
+            
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+         
+            NSLog(@"Problem updating explicit status");
+        }];
+        
+    }
+    
+    
     if (![topicField.text isEqualToString:@""] && self.currentRecordingURL) {
         
         NSMutableDictionary *userDict = [NSMutableDictionary new];
@@ -951,8 +987,6 @@
         
         [userDict setObject:[NSNumber numberWithBool:self.explicitCheckbox.on ] forKey:@"IsExplicit"];
         [userDict setObject:[NSNumber numberWithBool:self.publicCheckbox.on ] forKey:@"IsStationPostMelody"];
-        
-        
         
         if (!isPremium && self.selectedMelody2) {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Please upgrade" message:@"You must go premium to select more than 1 melody." preferredStyle:UIAlertControllerStyleAlert];

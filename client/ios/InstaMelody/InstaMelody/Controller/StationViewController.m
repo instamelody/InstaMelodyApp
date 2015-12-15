@@ -21,6 +21,9 @@
 @end
 
 @implementation StationViewController
+{
+    NSIndexPath * selectedIndexPath;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -455,6 +458,10 @@
             tempArray = [tempArray subarrayWithRange:NSMakeRange(0, 20)];
         }
         
+        for (NSDictionary * thisDict in tempArray) {
+            NSLog(@"Loop %@ isExplicit=%@, isChat=%@", [thisDict valueForKey:@"Name"], [thisDict valueForKey:@"IsExplicit"], [thisDict valueForKey:@"IsChatLoop"]);
+        }
+        
         NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateCreated" ascending:NO];
         
         NSString *userId = [self.loopArray[0] objectForKey:@"UserId"];
@@ -673,6 +680,8 @@
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    
+    selectedIndexPath = indexPath;
     
     NSDictionary *loopDict = [self.loopArray objectAtIndex:indexPath.row];
     
@@ -961,5 +970,14 @@
     
 }
 
-
+-(void)setExplicit:(BOOL)isExplicit
+{
+    NSMutableArray *newLoopArray = [[NSMutableArray alloc] initWithArray:self.loopArray];
+    NSMutableDictionary *loopDict = [[NSMutableDictionary alloc] initWithDictionary:[self.loopArray objectAtIndex:selectedIndexPath.row]];
+    [loopDict setValue:[NSNumber numberWithBool:isExplicit] forKey:@"IsExplicit"];
+    [newLoopArray replaceObjectAtIndex:selectedIndexPath.row withObject:loopDict];
+    self.loopArray = [[NSArray alloc] initWithArray: newLoopArray];
+    [self.collectionView reloadData];
+    
+}
 @end

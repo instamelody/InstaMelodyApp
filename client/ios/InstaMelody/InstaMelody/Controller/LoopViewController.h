@@ -27,6 +27,7 @@
 
 -(void)didFinishWithInfo:(NSDictionary *)userDict;
 -(void)cancel;
+-(void)setExplicit:(BOOL)isExplicit;
 
 @end
 
@@ -92,7 +93,7 @@
 @property (nonatomic, strong) NSDictionary *loopDict;
 
 @property (nonatomic, strong) NSString *topicString;
-@property (nonatomic) BOOL isFromChat;
+@property BOOL isFromChat;
 
 /**
  The CoreGraphics based audio plot
