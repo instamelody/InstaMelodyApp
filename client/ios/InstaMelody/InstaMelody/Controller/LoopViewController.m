@@ -53,7 +53,7 @@
     [super viewDidLoad];
     //_isFromChat = TRUE;
     self.goBack = NO;
-    
+    self.isNewPart = YES;
     self.defaults = [NSUserDefaults standardUserDefaults];
     
     self.groupArray = [[DataManager sharedManager] melodyGroupList];
@@ -87,7 +87,7 @@
      if (self.selectedLoop !=nil) {
          [self getLoop:[self.selectedLoop objectForKey:@"Id"]];
          
-        self.isNewPart = NO;
+        //self.isNewPart = NO;
          
      } else if (self.selectedUserMelody != nil) {
         
@@ -163,7 +163,7 @@
             }
         }
          
-        self.isNewPart = NO;
+        //self.isNewPart = NO;
      } else {
          //it's just me now
          
@@ -2092,7 +2092,7 @@
 
     }
     
-    self.isNewPart = NO;
+    //self.isNewPart = NO;
     
     self.currentPartIndex = indexPath.row - 1 ;
     [self audioPlayerDidFinishPlaying:self.fgPlayer successfully:YES];
