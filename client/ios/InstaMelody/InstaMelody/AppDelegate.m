@@ -37,9 +37,9 @@
     
     [[Twitter sharedInstance] startWithConsumerKey:@"Xq6cieg5b6FFEqSsJHzTnbrW8" consumerSecret:@"GtR8gm0JZySbZfVLlW4YwzCMc8D7ERXIz0C8kdN3TjZ5MBVkxc"];
     [[Crashlytics sharedInstance] setDebugMode:YES];
+
+    [Fabric with:@[[Crashlytics class], [Twitter class], [Twitter sharedInstance]]];
     //[Fabric with:@[[Twitter sharedInstance]]];
-    [Fabric with:@[[Crashlytics class], [Twitter class]]];
-    
     [FBSDKLoginButton classForCoder];
     [TWTRLogInButton classForCoder];
     
