@@ -320,36 +320,20 @@
     }
      */
     
-    if(self.isNewPart || _isFromChat)
-    {
-        self.saveBar.hidden = NO;
-        self.recordButton.hidden = NO;
-        
-        self.publicView.hidden = NO;
-        self.explicitView.hidden = NO;
-        
-        self.saveBarStationLabel.text = [NSString stringWithFormat:@"@%@", [[NSUserDefaults standardUserDefaults] objectForKey:@"DisplayName"]];
-        
-        UITextField *topicField = (UITextField *)[self.tableView viewWithTag:98];
-        topicField.delegate = self;
-        
-        self.joinBar.hidden = YES;
-        self.joinBarModLabel.hidden = YES;
-    } else {
-        self.saveBar.hidden = NO;
-        self.recordButton.hidden = YES;
-        
-        self.publicView.hidden = NO;
-        self.explicitView.hidden = NO;
-        
-        self.saveBarStationLabel.text = [NSString stringWithFormat:@"@%@", [[NSUserDefaults standardUserDefaults] objectForKey:@"DisplayName"]];
-        
-        UITextField *topicField = (UITextField *)[self.tableView viewWithTag:98];
-        topicField.delegate = self;
-        
-        self.joinBar.hidden = YES;
-        self.joinBarModLabel.hidden = YES;
-    }
+    self.saveBar.hidden = NO;
+    self.recordButton.hidden = NO;
+    
+    self.publicView.hidden = NO;
+    self.explicitView.hidden = NO;
+    
+    self.saveBarStationLabel.text = [NSString stringWithFormat:@"@%@", [[NSUserDefaults standardUserDefaults] objectForKey:@"DisplayName"]];
+    
+    UITextField *topicField = (UITextField *)[self.tableView viewWithTag:98];
+    topicField.delegate = self;
+    
+    self.joinBar.hidden = YES;
+    self.joinBarModLabel.hidden = YES;
+
 }
 
 -(void)initializeAudio {
@@ -1906,7 +1890,6 @@
             return cell;
         } else if (indexPath.row == 1) {
             TopicCell *cell = (TopicCell *)[tableView dequeueReusableCellWithIdentifier:@"TopicCell" forIndexPath:indexPath];
-            //MelodyCell *melodyCell = (MelodyCell *)[tableView dequeueReusableCellWithIdentifier:@"MelodyCell" forIndexPath:indexPath];
             cell.topicField.tag = 98;
             
             if (self.selectedLoop !=nil) {
@@ -1930,7 +1913,6 @@
                 });
 
                 [cell.topicField setEnabled:NO];
-                //[melodyCell.tokenInputView setHidden:YES];
                 [cell.topicField setBackgroundColor:[UIColor lightGrayColor]];
             } else if (self.topicString != nil) {
                 cell.topicField.text = self.topicString;
@@ -1951,28 +1933,17 @@
         } else if (indexPath.row == 2) {
             
             MelodyCell *cell = (MelodyCell *)[tableView dequeueReusableCellWithIdentifier:@"MelodyCell" forIndexPath:indexPath];
-            UILabel *melodyLabel = [cell viewWithTag:911];
+            //UILabel *melodyLabel = [cell viewWithTag:911];
             
-            if (self.selectedLoop !=nil && !_isFromChat) {
-                cell.tokenInputView.tag = 99;
-                
-                melodyLabel.hidden = true;
-                cell.tokenInputView.hidden = true;
-                
-            } else {
-                cell.tokenInputView.tag = 99;
-                
-                melodyLabel.hidden = false;
-                cell.tokenInputView.hidden = false;
-                
-                cell.tokenInputView.layer.cornerRadius = 4.0f;
-                cell.tokenInputView.layer.masksToBounds = YES;
-                
-                cell.tokenInputView.placeholderText = @"Add melodies";
-                
-                cell.tokenInputView.accessoryView = [self contactAddButton];
-            }
+            cell.tokenInputView.tag = 99;
             
+            cell.tokenInputView.layer.cornerRadius = 4.0f;
+            cell.tokenInputView.layer.masksToBounds = YES;
+            
+            cell.tokenInputView.placeholderText = @"Add melodies";
+            
+            cell.tokenInputView.accessoryView = [self contactAddButton];
+
             return cell;
         } else {
             StatusCell *cell = (StatusCell *)[tableView dequeueReusableCellWithIdentifier:@"StatusCell" forIndexPath:indexPath];
