@@ -10,6 +10,7 @@
 #import "UIFont+FontAwesome.h"
 #import "NSString+FontAwesome.h"
 #import "StationCell.h"
+#import "AppDelegate.h"
 
 @interface StationViewController ()
 
@@ -721,11 +722,15 @@
     
     NSString *myUserId = [defaults objectForKey:@"Id"];
     
+    AppDelegate *appDelegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+    
     if ([userId isEqualToString:myUserId])
     {
         loopVC.isNotMyStudio = false;
+        appDelegate.loopOwnersId = myUserId;
     } else {
         loopVC.isNotMyStudio = true;
+        appDelegate.loopOwnersId = userId;
     }
     
     NSDictionary *messageDict = [loopDict objectForKey:@"Message"];

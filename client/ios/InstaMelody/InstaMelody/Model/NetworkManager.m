@@ -7,6 +7,7 @@
 //
 
 #import "NetworkManager.h"
+#import "AppDelegate.h"
 
 @implementation NetworkManager
 
@@ -464,7 +465,11 @@
     NSDictionary *userMelodyDict = @{ @"UserMelody": @{@"Parts" : partArray, @"IsExplicit" : isExplicit}};
     
     //NSDictionary *loopDict = @{@"Id": [userDict objectForKey:@"LoopId"]};
-    NSDictionary *loopDict = @{@"UserId": [defaults objectForKey:@"Id"], @"Name": melodyName };
+    
+    AppDelegate *appDelegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+    NSString * loopOwnersId = (appDelegate.loopOwnersId.length>0) ? appDelegate.loopOwnersId : [defaults objectForKey:@"Id"];
+    
+    NSDictionary *loopDict = @{@"UserId": loopOwnersId, @"Name": melodyName };
     
     NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Loop": loopDict , @"LoopPart": userMelodyDict}];
     
