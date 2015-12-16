@@ -1233,11 +1233,11 @@
         [self.profileImageView setImage:[UIImage imageNamed:@"Profile"]];
         [self.progressLabel setText:@"Press Play to Start"];
         
-        if (!self.isNewPart) {
+        //if (!self.isNewPart) {
             self.selectedMelody = nil;
             self.selectedMelody2 = nil;
             self.selectedMelody3 = nil;
-        }
+        //}
         
         [toggleBtn setTitle:@"Preview melodies" forState:UIControlStateNormal];
         
@@ -1420,9 +1420,9 @@
     
     if (self.selectedLoop != nil) {
         
-        if (!self.isNewPart) {
+        //if (!self.isNewPart) {
             [self preload];
-        }
+        //}
     }
     
     [self playRecording:nil];
