@@ -890,7 +890,7 @@
             
             for (NSDictionary *itemDict in self.loopArray) {
                 NSInteger explicit = [[itemDict valueForKey:@"IsExplicit"] integerValue];
-                if (!explicit) {
+                if (!explicit && ![[itemDict objectForKey:@"IsChatLoop"] boolValue]) {
                     [tempArray addObject:itemDict];
                 }
             }
