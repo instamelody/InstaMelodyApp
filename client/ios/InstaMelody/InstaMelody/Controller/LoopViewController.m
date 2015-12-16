@@ -1245,43 +1245,61 @@
     } else {
         
         NSError *error = nil;
-
-        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-        [audioSession setCategory:AVAudioSessionCategoryPlayback
-                            error:&error];
-        /*
-        [[AudioSessionManager sharedInstance] changeMode:@"kAudioSessionManagerMode_Playback"];
-        [[AudioSessionManager sharedInstance] start];
-         */
         
-        if (error == nil) {
+        if (self.recorder != nil)
+        {
+            //there's something the user has just recorded; let's play just that.
+            [self playRecording:nil];
+            if (self.selectedMelody != nil) {
+                [self playLoop:nil];
+            }
             
+            if (self.selectedMelody2 != nil) {
+                [self playLoop2:nil];
+            }
+            
+            if (self.selectedMelody3 != nil) {
+                [self playLoop3:nil];
+            }
+            
+        } else {
+
+            AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+            [audioSession setCategory:AVAudioSessionCategoryPlayback
+                                error:&error];
             /*
+            [[AudioSessionManager sharedInstance] changeMode:@"kAudioSessionManagerMode_Playback"];
+            [[AudioSessionManager sharedInstance] start];
+             */
             
-            if ([self isHeadsetPluggedIn]) {
+            if (error == nil) {
+                
+                /*
+                
+                if ([self isHeadsetPluggedIn]) {
+                    
+                    [self playEverything];
+                } else {
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Headphones not detected" message:@"For the best results, please plug in your headphones" preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                        [self playEverything];
+                    }];
+                    [alert addAction:okAction];
+                    [self presentViewController:alert animated:YES completion:nil];
+                }
+                 
+                 */
                 
                 [self playEverything];
             } else {
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Headphones not detected" message:@"For the best results, please plug in your headphones" preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:@"Error setting audio" preferredStyle:UIAlertControllerStyleAlert];
                 UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                     [self playEverything];
                 }];
                 [alert addAction:okAction];
-                [self presentViewController:alert animated:YES completion:nil];
             }
-             
-             */
-            
-            [self playEverything];
-        } else {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:@"Error setting audio" preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                [self playEverything];
-            }];
-            [alert addAction:okAction];
+        
         }
-        
-        
         
     }
 }
@@ -1791,7 +1809,7 @@
             [self.bgPlayer3 stop];
         //}
         
-        if (self.selectedLoop) { // && !self.isNewPart) {
+        if (self.selectedLoop && !self.recorder) { // && !self.isNewPart) {
             
             NSInteger partCount = MAX(0, self.partArray.count -1);
             
