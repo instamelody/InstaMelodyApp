@@ -1054,4 +1054,15 @@
     [self change:nil];
     
 }
+
+#pragma mark InstaMelodyVC Delegate
+
+-(IBAction)showLoops:(id)sender {
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    LoopViewController *loopVc = (LoopViewController *)[sb instantiateViewControllerWithIdentifier:@"LoopViewController"];
+    loopVc.delegate = self;
+    
+    [self.navigationController pushViewController:loopVc animated:YES];
+}
+
 @end
