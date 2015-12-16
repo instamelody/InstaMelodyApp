@@ -66,6 +66,13 @@
     [self fixButtons];
 }
 
+-(void)dealloc
+{
+    AppDelegate *appDelegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+    appDelegate.loopOwnersId = nil;
+    //Clear this variable so another call to loopVC won't get confused.
+}
+
 -(void)fixButtons {
     
     [self centerButton:self.fanButton];
