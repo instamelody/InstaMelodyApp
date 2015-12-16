@@ -1791,7 +1791,7 @@
             [self.bgPlayer3 stop];
         //}
         
-        if (self.selectedLoop && !self.isNewPart) {
+        if (self.selectedLoop) { // && !self.isNewPart) {
             
             NSInteger partCount = MAX(0, self.partArray.count -1);
             
