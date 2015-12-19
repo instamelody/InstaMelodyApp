@@ -950,7 +950,7 @@
         
         [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"Explicit status updated");
-            initialIsExplicitStatus = (initialIsExplicitStatus) ? [NSNumber numberWithInt:0] : [NSNumber numberWithInt:1] ;
+            initialIsExplicitStatus = ([initialIsExplicitStatus isEqual: @1]) ? [NSNumber numberWithInt:0] : [NSNumber numberWithInt:1] ;
             if ([self.delegate respondsToSelector:@selector(setExplicit:)])
             {
                 [self.delegate setExplicit:[NSNumber numberWithInt:self.explicitCheckbox.on]];
