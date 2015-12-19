@@ -577,6 +577,11 @@
 					8707F9AE1B446F57004B4C20 = {
 						CreatedOnToolsVersion = 6.3.2;
 						DevelopmentTeam = CXVS93WJ5B;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					8707F9CA1B446F57004B4C20 = {
 						CreatedOnToolsVersion = 6.3.2;
