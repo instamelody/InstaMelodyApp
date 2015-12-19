@@ -430,7 +430,8 @@
     NSMutableArray *tempArray = [NSMutableArray new];
     if (inputArray != nil) {
         for (NSDictionary *itemDict in inputArray) {
-            if ([itemDict objectForKey:@"IsExplicit"] == 0) {
+            NSString * isExp = [NSString stringWithFormat:@"%@", [itemDict objectForKey:@"IsExplicit"]];
+            if ([isExp isEqualToString:@"0"]) {
                 [tempArray addObject:itemDict];
             }
         }
@@ -897,8 +898,8 @@
             NSMutableArray *tempArray = [NSMutableArray new];
             
             for (NSDictionary *itemDict in self.loopArray) {
-                NSInteger explicit = [[itemDict valueForKey:@"IsExplicit"] integerValue];
-                if (!explicit && ![[itemDict objectForKey:@"IsChatLoop"] boolValue]) {
+                NSString * explicit = [NSString stringWithFormat:@"%@", [itemDict valueForKey:@"IsExplicit"]];
+                if ([explicit isEqualToString:@"0"] && ![[itemDict objectForKey:@"IsChatLoop"] boolValue]) {
                     [tempArray addObject:itemDict];
                 }
             }
@@ -913,8 +914,10 @@
             NSMutableArray *tempArray = [NSMutableArray new];
             
             for (NSDictionary *itemDict in self.loopArray) {
+                
+                NSString * isExp = [NSString stringWithFormat:@"%@", [itemDict objectForKey:@"IsExplicit"]];
                 if ([[itemDict objectForKey:@"IsChatLoop"] boolValue] == TRUE
-                    && ![[itemDict valueForKey:@"IsExplicit"] integerValue]) {
+                    && [isExp isEqualToString:@"0"]) {
                     [tempArray addObject:itemDict];
                 }
             }
@@ -928,8 +931,8 @@
             
             NSMutableArray *tempArray = [NSMutableArray new];
             for (NSDictionary *itemDict in self.loopArray) {
-                NSInteger explicit = [[itemDict valueForKey:@"IsExplicit"] integerValue];
-                if (explicit) {
+                NSString * explicit = [NSString stringWithFormat:@"%@", [itemDict valueForKey:@"IsExplicit"]];
+                if ([explicit isEqualToString:@"1"]) {
                     [tempArray addObject:itemDict];
                 }
             }
@@ -1039,7 +1042,7 @@
     
 }
 
--(void)setExplicit:(NSNumber *)isExplicit
+-(void)setExplicit:(NSString *)isExplicit
 {
     NSMutableArray *newLoopArray = [[NSMutableArray alloc] initWithArray:self.cleanLoopArray];
     NSMutableDictionary *loopDict = [[NSMutableDictionary alloc] initWithDictionary:[self.loopArray objectAtIndex:selectedIndexPath.row]];

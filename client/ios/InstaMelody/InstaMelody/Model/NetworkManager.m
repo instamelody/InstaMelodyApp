@@ -38,8 +38,8 @@
     
     time_t unixTime = time(NULL);
     
-    NSNumber *isExplicit = [userDict objectForKey:@"IsExplicit"];
-    NSNumber *isPublic = [userDict objectForKey:@"IsStationPostMelody"];
+    NSString *isExplicit = [NSString stringWithFormat:@"%@", [userDict objectForKey:@"IsExplicit"]];
+    //NSNumber *isPublic = [userDict objectForKey:@"IsStationPostMelody"];
     
     NSString *recordingPath = [userDict objectForKey:@"LoopURL"];
     NSString *recordingName = [recordingPath lastPathComponent];
@@ -184,8 +184,8 @@
     NSNumber *secondId = [userDict objectForKey:@"MelodyId2"];
     NSNumber *thirdId = [userDict objectForKey:@"MelodyId3"];
     
-    NSNumber *isExplicit = [userDict objectForKey:@"IsExplicit"];
-    NSNumber *isPublic = [userDict objectForKey:@"IsStationPostMelody"];
+    NSString *isExplicit = [NSString stringWithFormat:@"%@", [userDict objectForKey:@"IsExplicit"]];
+    //NSNumber *isPublic = [userDict objectForKey:@"IsStationPostMelody"];
     
     if (firstId != nil) {
         NSDictionary *entry = [NSDictionary dictionaryWithObject:firstId forKey:@"Id"];
@@ -293,8 +293,8 @@
     NSNumber *secondId = [userDict objectForKey:@"MelodyId2"];
     NSNumber *thirdId = [userDict objectForKey:@"MelodyId3"];
     
-    NSNumber *isExplicit = [userDict objectForKey:@"IsExplicit"];
-    NSNumber *isPublic = [userDict objectForKey:@"IsStationPostMelody"];
+    NSString *isExplicit = [NSString stringWithFormat:@"%@", [userDict objectForKey:@"IsExplicit"]];
+    //NSNumber *isPublic = [userDict objectForKey:@"IsStationPostMelody"];
     
     if (firstId != nil) {
         NSDictionary *entry = [NSDictionary dictionaryWithObject:firstId forKey:@"Id"];
@@ -426,8 +426,8 @@
     NSNumber *secondId = [userDict objectForKey:@"MelodyId2"];
     NSNumber *thirdId = [userDict objectForKey:@"MelodyId3"];
     
-    NSNumber *isExplicit = [userDict objectForKey:@"IsExplicit"];
-    NSNumber *isPublic = [userDict objectForKey:@"IsStationPostMelody"];
+    NSString *isExplicit = [NSString stringWithFormat:@"%@", [userDict objectForKey:@"IsExplicit"]];
+    NSString *isStationPostMelody = [NSString stringWithFormat:@"%@",  [userDict objectForKey:@"IsStationPostMelody"]];
     
     if (firstId) {
         NSDictionary *entry = [NSDictionary dictionaryWithObject:firstId forKey:@"Id"];
@@ -498,7 +498,7 @@
             
             [self uploadFile:recordingPath withFileToken:fileTokenString];
             //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
-            if ([isPublic boolValue] == TRUE) {
+            if ([isStationPostMelody isEqualToString:@"1"]) {
                 
                 NSDictionary *loopDict = [responseDict objectForKey:@"Loop"];
                 //[self makeLoopPublic:loopDict];

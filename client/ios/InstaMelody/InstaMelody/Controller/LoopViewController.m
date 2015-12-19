@@ -953,7 +953,7 @@
             initialIsExplicitStatus = ([initialIsExplicitStatus isEqual: @1]) ? [NSNumber numberWithInt:0] : [NSNumber numberWithInt:1] ;
             if ([self.delegate respondsToSelector:@selector(setExplicit:)])
             {
-                [self.delegate setExplicit:[NSNumber numberWithInt:self.explicitCheckbox.on]];
+                [self.delegate setExplicit:[NSString stringWithFormat:@"%hhd", self.explicitCheckbox.on]];
             }
             
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -983,8 +983,8 @@
             [userDict setObject:self.selectedMelody3.melodyId forKey:@"MelodyId3"];
         }
         
-        [userDict setObject:[NSNumber numberWithBool:self.explicitCheckbox.on ] forKey:@"IsExplicit"];
-        [userDict setObject:[NSNumber numberWithBool:self.publicCheckbox.on ] forKey:@"IsStationPostMelody"];
+        [userDict setObject:[NSString stringWithFormat:@"%hhd", self.explicitCheckbox.on ] forKey:@"IsExplicit"];
+        [userDict setObject:[NSString stringWithFormat:@"%hhd", self.publicCheckbox.on ] forKey:@"IsStationPostMelody"];
         
         if (!isPremium && self.selectedMelody2) {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Please upgrade" message:@"You must go premium to select more than 1 melody." preferredStyle:UIAlertControllerStyleAlert];

@@ -27,7 +27,7 @@
 
 -(void)didFinishWithInfo:(NSDictionary *)userDict;
 -(void)cancel;
--(void)setExplicit:(NSNumber *)isExplicit;
+-(void)setExplicit:(NSString *)isExplicit;
 
 @end
 
