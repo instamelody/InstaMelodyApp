@@ -658,7 +658,7 @@
             //NSDictionary *firstPart = parts[0];
             //NSDictionary *melodyDict = [firstPart objectForKey:@"UserMelody"];
         
-             if ([loopDict objectForKey:@"IsExplicit"] == 0) {
+             if ([[NSString stringWithFormat:@"%@", [loopDict objectForKey:@"IsExplicit"]] isEqualToString: @"0"]) {
                  [cell.joinButton setTitle:@"Public" forState:UIControlStateNormal];
              } else {
                  [cell.joinButton setTitle:@"Explicit" forState:UIControlStateNormal];
