@@ -46,7 +46,7 @@
 
 @implementation LoopViewController
 {
-    BOOL initialIsExplicitStatus;
+    NSNumber * initialIsExplicitStatus;
 }
 
 -(void)viewDidLoad {
@@ -106,7 +106,7 @@
             self.publicCheckbox.on = YES;
         }
          
-         initialIsExplicitStatus = [self.selectedUserMelody.isExplicit boolValue];
+         initialIsExplicitStatus = self.selectedUserMelody.isExplicit;
          
          //if ([self.selectedUserMelody.isStationPostMelody boolValue]) {
            //  self.publicCheckbox.on = YES;
@@ -385,8 +385,9 @@
                 } else {
                     [self.playButton setHidden:YES];
                 }
-                
-                if ([[responseDict objectForKey:@"IsExplicit" ] boolValue]) {
+
+                NSString * isExp = [NSString stringWithFormat:@"%@", [responseDict valueForKey:@"IsExplicit"]];
+                if ([isExp isEqualToString:@"1"]) {
                     self.explicitCheckbox.on = YES;
                     self.publicCheckbox.on = NO;
                 } else {
@@ -394,7 +395,7 @@
                     self.publicCheckbox.on = YES;
                 }
                 
-                initialIsExplicitStatus = [[responseDict objectForKey:@"IsExplicit" ] boolValue];
+                initialIsExplicitStatus = [NSNumber numberWithInt:[isExp intValue]];
                 
             }
             
@@ -931,7 +932,7 @@
     UITextField *topicField = (UITextField *)[self.tableView viewWithTag:98];
     BOOL isPremium = [[DataManager sharedManager] isPremium];
     
-    if (self.explicitCheckbox.on != initialIsExplicitStatus && !self.isNewPart)
+    if (self.explicitCheckbox.on != [initialIsExplicitStatus intValue] && !self.recorder) // && !self.isNewPart)
     {
         //need to save the Explicit state
         NSString *requestUrl = [NSString stringWithFormat:@"%@/Melody/Loop/Update", API_BASE_URL];
@@ -949,9 +950,11 @@
         
         [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"Explicit status updated");
-            
+            initialIsExplicitStatus = (initialIsExplicitStatus) ? [NSNumber numberWithInt:0] : [NSNumber numberWithInt:1] ;
             if ([self.delegate respondsToSelector:@selector(setExplicit:)])
-                [self.delegate setExplicit:self.explicitCheckbox.on];
+            {
+                [self.delegate setExplicit:[NSNumber numberWithInt:self.explicitCheckbox.on]];
+            }
             
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
          
@@ -961,7 +964,7 @@
     }
     
     
-    if (![topicField.text isEqualToString:@""] && self.currentRecordingURL) {
+    if (![topicField.text isEqualToString:@""] && self.currentRecordingURL && self.recorder) {
         
         NSMutableDictionary *userDict = [NSMutableDictionary new];
         [userDict setObject:[self.currentRecordingURL path] forKey:@"LoopURL"];
@@ -1009,7 +1012,7 @@
             
             [self.navigationController popViewControllerAnimated:YES];
         }
-    } else {
+    } else if (self.recorder) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:@"Please make sure you have selected a loop topic and recording" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
         [alert addAction:action];

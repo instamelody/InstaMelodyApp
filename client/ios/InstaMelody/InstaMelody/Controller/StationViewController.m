@@ -430,7 +430,7 @@
     NSMutableArray *tempArray = [NSMutableArray new];
     if (inputArray != nil) {
         for (NSDictionary *itemDict in inputArray) {
-            if ([[itemDict objectForKey:@"IsExplicit"] boolValue] == false) {
+            if ([itemDict objectForKey:@"IsExplicit"] == 0) {
                 [tempArray addObject:itemDict];
             }
         }
@@ -471,7 +471,7 @@
         for (NSDictionary * thisLoop in responseObject) {
             if (![[thisLoop objectForKey:@"Parts"] isEqual:[NSNull null]])
             {
-                if (isUsersStation || ![[thisLoop objectForKey:@"IsExplicit"] boolValue])
+                if (isUsersStation || ([thisLoop objectForKey:@"IsExplicit"] == [NSNumber numberWithInt:0]))
                 {
                     [tempArray0 addObject:thisLoop];
                 }
@@ -657,7 +657,7 @@
             //NSDictionary *firstPart = parts[0];
             //NSDictionary *melodyDict = [firstPart objectForKey:@"UserMelody"];
         
-             if ([[loopDict objectForKey:@"IsExplicit"] boolValue] == NO) {
+             if ([loopDict objectForKey:@"IsExplicit"] == 0) {
                  [cell.joinButton setTitle:@"Public" forState:UIControlStateNormal];
              } else {
                  [cell.joinButton setTitle:@"Explicit" forState:UIControlStateNormal];
@@ -1038,11 +1038,11 @@
     
 }
 
--(void)setExplicit:(BOOL)isExplicit
+-(void)setExplicit:(NSNumber *)isExplicit
 {
     NSMutableArray *newLoopArray = [[NSMutableArray alloc] initWithArray:self.cleanLoopArray];
     NSMutableDictionary *loopDict = [[NSMutableDictionary alloc] initWithDictionary:[self.loopArray objectAtIndex:selectedIndexPath.row]];
-    [loopDict setValue:[NSNumber numberWithBool:isExplicit] forKey:@"IsExplicit"];
+    [loopDict setValue:isExplicit forKey:@"IsExplicit"];
 
     int index = 0;
     for (NSDictionary * element in newLoopArray) {
