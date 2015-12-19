@@ -115,6 +115,37 @@
         NSString *fileTokenString = [tokenDict objectForKey:@"Token"];
         
         [self uploadFile:recordingPath withFileToken:fileTokenString];
+        
+        
+        //Workaround for issue with /Message/Chat/Message not setting isExplicit flag correctly on new loop
+        
+        //NSString * returningExplicitValue = [NSString stringWithFormat:@"%@", [responseDict valueForKey:@"IsExplicit"]];
+        if ([isExplicit isEqualToString:@"1"])
+             {
+                 NSString * newLoopID = [[responseDict objectForKey:@"Chat"] valueForKey:@"ChatLoopId"];
+                 
+                 NSString *requestUrl = [NSString stringWithFormat:@"%@/Melody/Loop/Update", API_BASE_URL];
+                 
+                 NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
+                 
+                 //add 64 char string
+                 
+                 AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+                 
+                 NSDictionary *loopInfo = @{@"Id": newLoopID, @"IsExplicit": @"true"};
+                 NSDictionary *parameters = @{@"Token": token, @"Loop": loopInfo};
+                 
+                 [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                     NSLog(@"Explicit status updated after creating new chat loop");
+                     
+                 } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                     
+                     NSLog(@"Problem updating explicit status after creating new chat loop");
+                 }];
+
+                 
+             }
+
         //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
         /*
         if ([isPublic boolValue] == TRUE) {
