@@ -872,7 +872,12 @@
     
     NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateCreated" ascending:NO];
     
-    NSString *userId = [self.loopArray[0] objectForKey:@"UserId"];
+    NSString * userId;
+    
+    if (self.loopArray.count > 0)
+    {
+        userId = [self.loopArray[0] objectForKey:@"UserId"];
+    } 
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
