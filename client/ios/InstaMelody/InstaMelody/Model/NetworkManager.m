@@ -39,6 +39,7 @@
     time_t unixTime = time(NULL);
     
     NSString *isExplicit = [NSString stringWithFormat:@"%@", [userDict objectForKey:@"IsExplicit"]];
+    NSString * isExpTF = ([isExplicit isEqualToString:@"1"]) ? @"true":@"false";
     //NSNumber *isPublic = [userDict objectForKey:@"IsStationPostMelody"];
     
     NSString *recordingPath = [userDict objectForKey:@"LoopURL"];
@@ -91,7 +92,7 @@
     //NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"UserMelody": @{@"Parts" : partArray}}];
     
     
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Chat": @{@"Id" : [userDict objectForKey:@"Id"]}, @"Message": @{@"Description" : @"User Melody Message", @"UserMelody": @{@"Parts" : partArray,  @"IsExplicit" : isExplicit} }}];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Chat": @{@"Id" : [userDict objectForKey:@"Id"]}, @"Message": @{@"Description" : @"User Melody Message", @"UserMelody": @{@"Parts" : partArray,  @"IsExplicit" : isExpTF} }}];
     
     
     NSString *requestUrl = [NSString stringWithFormat:@"%@/Message/Chat/Message", API_BASE_URL];
