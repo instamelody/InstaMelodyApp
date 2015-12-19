@@ -471,7 +471,8 @@
         for (NSDictionary * thisLoop in responseObject) {
             if (![[thisLoop objectForKey:@"Parts"] isEqual:[NSNull null]])
             {
-                if (isUsersStation || ([thisLoop objectForKey:@"IsExplicit"] == [NSNumber numberWithInt:0]))
+                NSString * isExp = [NSString stringWithFormat:@"%@", [thisLoop objectForKey:@"IsExplicit"]];
+                if (isUsersStation || [isExp isEqualToString:@"0"])
                 {
                     [tempArray0 addObject:thisLoop];
                 }
