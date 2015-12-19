@@ -1010,6 +1010,16 @@
     vc.isFromChat = TRUE;
     vc.selectedLoop = self.loopDict;
     
+    NSString * loopOwner = [self.loopDict objectForKey:@"UserId"];
+    NSString * myID = [[NSUserDefaults standardUserDefaults] objectForKey:@"Id"];
+
+    if ([myID isEqualToString:loopOwner])
+    {
+        vc.isNotMyStudio = NO;
+    } else {
+        vc.isNotMyStudio = YES;
+    }
+    
     NSString *nameString = [self.chatDict objectForKey:@"Name"];
     if (nameString != nil && [nameString isKindOfClass:[NSString class]] && ![nameString containsString:@"ChatLoop_"]) {
         if (self.loopDict == nil) {
@@ -1026,6 +1036,8 @@
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     LoopViewController *vc = (LoopViewController *)[sb instantiateViewControllerWithIdentifier:@"LoopViewController"];
     vc.delegate = self;
+    vc.isFromChat = TRUE;
+    vc.isNotMyStudio = FALSE;
     
     NSString *nameString = [self.chatDict objectForKey:@"Name"];
     if (nameString != nil && [nameString isKindOfClass:[NSString class]] && ![nameString containsString:@"ChatLoop_"]) {
