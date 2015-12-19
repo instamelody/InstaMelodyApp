@@ -283,7 +283,7 @@
     
     
     [[UIBarButtonItem appearance] setTitleTextAttributes:buttonTextAttributes forState:UIControlStateNormal];
-    
+    self.backwardButton.hidden = YES;
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
