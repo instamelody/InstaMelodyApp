@@ -325,7 +325,8 @@
     NSNumber *secondId = [userDict objectForKey:@"MelodyId2"];
     NSNumber *thirdId = [userDict objectForKey:@"MelodyId3"];
     
-    NSString *isExplicit = [NSString stringWithFormat:@"%@", [userDict objectForKey:@"IsExplicit"]];
+    NSString *isExpl = [NSString stringWithFormat:@"%@", [userDict objectForKey:@"IsExplicit"]];
+    NSString * isExpTF = ([isExpl isEqualToString:@"1"]) ? @"true":@"false";
     //NSNumber *isPublic = [userDict objectForKey:@"IsStationPostMelody"];
     
     if (firstId != nil) {
@@ -362,9 +363,9 @@
     [partArray addObject:recordingDict];
     
     //NSDictionary *userMelodyDict = @{ @"UserMelody": @{@"Parts" : partArray, @"IsExplicit" : isExplicit}};
-    NSDictionary *userMelodyDict = @{ @"UserMelody": @{@"Parts" : partArray, @"IsExplicit" : isExplicit}};
+    NSDictionary *userMelodyDict = @{ @"UserMelody": @{@"Parts" : partArray, @"IsExplicit" : isExpTF}};
     
-    NSDictionary *loopDict = @{@"Name": melodyName, @"IsExplicit": isExplicit, @"Parts": @[userMelodyDict]};
+    NSDictionary *loopDict = @{@"Name": melodyName, @"IsExplicit": isExpTF, @"Parts": @[userMelodyDict]};
     
     NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Loop": loopDict}];
     
