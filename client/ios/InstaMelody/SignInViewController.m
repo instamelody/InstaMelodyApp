@@ -26,6 +26,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    //Remove cancel button for now
+    self.navigationItem.leftBarButtonItem = nil;
+    ////
+    
     self.userLabel.font  = [UIFont fontAwesomeFontOfSize:17.0f];
     self.passLabel.font  = [UIFont fontWithName:kFontAwesomeFamilyName size:17];
     
@@ -107,8 +111,16 @@
     //[self signUp:nil];
     
     NSString *deviceToken =  [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"];
+    //This is the push notification device token, if there is one. If not, it is nil.
+    
+    if (!token)
+    {
+        //User cancelled out of Facebook login process
+        return;
+    }
     
     NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"FacebookToken": token}];
+    //Crash here if token is nil.
     
     if (deviceToken != nil) {
         [parameters setObject:deviceToken forKey:@"DeviceToken"];

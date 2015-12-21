@@ -7,6 +7,7 @@
 //
 
 #import "NetworkManager.h"
+#import "AppDelegate.h"
 
 @implementation NetworkManager
 
@@ -37,8 +38,9 @@
     
     time_t unixTime = time(NULL);
     
-    NSNumber *isExplicit = [userDict objectForKey:@"IsExplicit"];
-    NSNumber *isPublic = [userDict objectForKey:@"IsStationPostMelody"];
+    NSString *isExplicit = [NSString stringWithFormat:@"%@", [userDict objectForKey:@"IsExplicit"]];
+    NSString * isExpTF = ([isExplicit isEqualToString:@"1"]) ? @"true":@"false";
+    //NSNumber *isPublic = [userDict objectForKey:@"IsStationPostMelody"];
     
     NSString *recordingPath = [userDict objectForKey:@"LoopURL"];
     NSString *recordingName = [recordingPath lastPathComponent];
@@ -90,7 +92,7 @@
     //NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"UserMelody": @{@"Parts" : partArray}}];
     
     
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Chat": @{@"Id" : [userDict objectForKey:@"Id"]}, @"Message": @{@"Description" : @"User Melody Message", @"UserMelody": @{@"Parts" : partArray,  @"IsExplicit" : isExplicit} }}];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Chat": @{@"Id" : [userDict objectForKey:@"Id"]}, @"Message": @{@"Description" : @"User Melody Message", @"UserMelody": @{@"Parts" : partArray,  @"IsExplicit" : isExpTF} }}];
     
     
     NSString *requestUrl = [NSString stringWithFormat:@"%@/Message/Chat/Message", API_BASE_URL];
@@ -113,8 +115,39 @@
         NSString *fileTokenString = [tokenDict objectForKey:@"Token"];
         
         [self uploadFile:recordingPath withFileToken:fileTokenString];
-        //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
         
+        
+        //Workaround for issue with /Message/Chat/Message not setting isExplicit flag correctly on new loop
+        
+        //NSString * returningExplicitValue = [NSString stringWithFormat:@"%@", [responseDict valueForKey:@"IsExplicit"]];
+        if ([isExplicit isEqualToString:@"1"])
+             {
+                 NSString * newLoopID = [[responseDict objectForKey:@"Chat"] valueForKey:@"ChatLoopId"];
+                 
+                 NSString *requestUrl = [NSString stringWithFormat:@"%@/Melody/Loop/Update", API_BASE_URL];
+                 
+                 NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
+                 
+                 //add 64 char string
+                 
+                 AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+                 
+                 NSDictionary *loopInfo = @{@"Id": newLoopID, @"IsExplicit": @"true"};
+                 NSDictionary *parameters = @{@"Token": token, @"Loop": loopInfo};
+                 
+                 [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                     NSLog(@"Explicit status updated after creating new chat loop");
+                     
+                 } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                     
+                     NSLog(@"Problem updating explicit status after creating new chat loop");
+                 }];
+
+                 
+             }
+
+        //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
+        /*
         if ([isPublic boolValue] == TRUE) {
             
             NSDictionary *melodyDict = [responseDict objectForKey:@"UserMelody"];
@@ -126,7 +159,7 @@
                 //melody part
                 
                 NSDictionary *loopDict = [responseDict objectForKey:@"Loop"];
-                [self makeLoopPublic:loopDict];
+                [self makeLoopPublic:loopDict withDataLoad:YES];
                 
                 //[self makeLoopPublic:[responseDict objectForKey:@"Id"]];
             } else if (chatMsgDict != nil) {
@@ -138,11 +171,11 @@
                 if (messageDict != nil) {
                     melodyDict = [messageDict objectForKey:@"UserMelody"];
                     //[self makeLoopPublic:[melodyDict objectForKey:@"Id"]];
-                    [self makeLoopPublic:melodyDict];
+                    [self makeLoopPublic:melodyDict withDataLoad:YES];
                 }
             }
         }
-        
+        */
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
             NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
@@ -183,8 +216,8 @@
     NSNumber *secondId = [userDict objectForKey:@"MelodyId2"];
     NSNumber *thirdId = [userDict objectForKey:@"MelodyId3"];
     
-    NSNumber *isExplicit = [userDict objectForKey:@"IsExplicit"];
-    NSNumber *isPublic = [userDict objectForKey:@"IsStationPostMelody"];
+    NSString *isExplicit = [NSString stringWithFormat:@"%@", [userDict objectForKey:@"IsExplicit"]];
+    //NSNumber *isPublic = [userDict objectForKey:@"IsStationPostMelody"];
     
     if (firstId != nil) {
         NSDictionary *entry = [NSDictionary dictionaryWithObject:firstId forKey:@"Id"];
@@ -243,15 +276,16 @@
         
         [self uploadFile:recordingPath withFileToken:fileTokenString];
         //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
+        /*
         if ([isPublic boolValue] == TRUE) {
-            /*
+            / *
             NSDictionary *melodyDict = [responseDict objectForKey:@"UserMelody"];
             [self makeLoopPublic:[melodyDict objectForKey:@"Id"]];
-             */
+             * /
             NSDictionary *loopDict = [responseDict objectForKey:@"Loop"];
-            [self makeLoopPublic:loopDict];
+            [self makeLoopPublic:loopDict withDataLoad:YES];
         }
-        
+        */
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
@@ -291,8 +325,9 @@
     NSNumber *secondId = [userDict objectForKey:@"MelodyId2"];
     NSNumber *thirdId = [userDict objectForKey:@"MelodyId3"];
     
-    NSNumber *isExplicit = [userDict objectForKey:@"IsExplicit"];
-    NSNumber *isPublic = [userDict objectForKey:@"IsStationPostMelody"];
+    NSString *isExpl = [NSString stringWithFormat:@"%@", [userDict objectForKey:@"IsExplicit"]];
+    NSString * isExpTF = ([isExpl isEqualToString:@"1"]) ? @"true":@"false";
+    //NSNumber *isPublic = [userDict objectForKey:@"IsStationPostMelody"];
     
     if (firstId != nil) {
         NSDictionary *entry = [NSDictionary dictionaryWithObject:firstId forKey:@"Id"];
@@ -328,9 +363,9 @@
     [partArray addObject:recordingDict];
     
     //NSDictionary *userMelodyDict = @{ @"UserMelody": @{@"Parts" : partArray, @"IsExplicit" : isExplicit}};
-    NSDictionary *userMelodyDict = @{ @"UserMelody": @{@"Parts" : partArray, @"IsExplicit" : isExplicit}};
+    NSDictionary *userMelodyDict = @{ @"UserMelody": @{@"Parts" : partArray, @"IsExplicit" : isExpTF}};
     
-    NSDictionary *loopDict = @{@"Name": melodyName, @"IsExplicit": isExplicit, @"Parts": @[userMelodyDict]};
+    NSDictionary *loopDict = @{@"Name": melodyName, @"IsExplicit": isExpTF, @"Parts": @[userMelodyDict]};
     
     NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Loop": loopDict}];
     
@@ -360,14 +395,14 @@
             
             [self uploadFile:recordingPath withFileToken:fileTokenString];
             //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
-            
+            /*
             if ([isPublic boolValue] == TRUE) {
                 
                 NSDictionary *loopDict = [responseDict objectForKey:@"Loop"];
-                [self makeLoopPublic:loopDict];
+                [self makeLoopPublic:loopDict withDataLoad:NO];
                 
                 
-                /*
+                / *
                  
                  NSDictionary *melodyDict = [responseDict objectForKey:@"UserMelody"];
                  
@@ -379,9 +414,9 @@
                  }
                  }
                  [self makeLoopPublic:[melodyDict objectForKey:@"Id"]];
-                 */
+                 * /
             }
-
+            */
             
         }
         
@@ -424,8 +459,8 @@
     NSNumber *secondId = [userDict objectForKey:@"MelodyId2"];
     NSNumber *thirdId = [userDict objectForKey:@"MelodyId3"];
     
-    NSNumber *isExplicit = [userDict objectForKey:@"IsExplicit"];
-    NSNumber *isPublic = [userDict objectForKey:@"IsStationPostMelody"];
+    NSString *isExplicit = [NSString stringWithFormat:@"%@", [userDict objectForKey:@"IsExplicit"]];
+    NSString *isStationPostMelody = [NSString stringWithFormat:@"%@",  [userDict objectForKey:@"IsStationPostMelody"]];
     
     if (firstId) {
         NSDictionary *entry = [NSDictionary dictionaryWithObject:firstId forKey:@"Id"];
@@ -463,7 +498,11 @@
     NSDictionary *userMelodyDict = @{ @"UserMelody": @{@"Parts" : partArray, @"IsExplicit" : isExplicit}};
     
     //NSDictionary *loopDict = @{@"Id": [userDict objectForKey:@"LoopId"]};
-    NSDictionary *loopDict = @{@"UserId": [defaults objectForKey:@"Id"], @"Name": melodyName };
+    
+    AppDelegate *appDelegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+    NSString * loopOwnersId = (appDelegate.loopOwnersId.length>0) ? appDelegate.loopOwnersId : [defaults objectForKey:@"Id"];
+    
+    NSDictionary *loopDict = @{@"UserId": loopOwnersId, @"Name": melodyName };
     
     NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Loop": loopDict , @"LoopPart": userMelodyDict}];
     
@@ -492,7 +531,7 @@
             
             [self uploadFile:recordingPath withFileToken:fileTokenString];
             //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
-            if ([isPublic boolValue] == TRUE) {
+            if ([isStationPostMelody isEqualToString:@"1"]) {
                 
                 NSDictionary *loopDict = [responseDict objectForKey:@"Loop"];
                 //[self makeLoopPublic:loopDict];
@@ -571,8 +610,11 @@
     
 }
  */
-
--(void)makeLoopPublic:(NSDictionary *)loopDict {
+/*
+-(void)makeLoopPublic:(NSDictionary *)loopDict withDataLoad:(BOOL)withLoad {
+    //withLoad parameter determines whether this call creates a new loop (YES)
+    //or just ties an existing loop into the public list (NO)
+    
     NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
     
     NSString *stationId = [[[NSUserDefaults standardUserDefaults] objectForKey:@"stationId"] stringValue];
@@ -601,9 +643,14 @@
         //NSDictionary *userLoopDict = @{@"Name": [loopDict objectForKey:@"Name"], @"Parts": @[@{@"UserMelody": partsDict}]};
         NSDictionary *userLoopDict = @{@"Name": [loopDict objectForKey:@"Name"], @"Parts": @{@"UserMelody": partsDict}};
         NSDictionary *messageDict = @{@"Description":[loopDict objectForKey:@"Name"], @"UserLoop": userLoopDict};
+        NSMutableDictionary *parameters;
         
-        NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Station": @{@"Id" : stationId}, @"Message": messageDict }];
-        
+        if (withLoad)
+        {
+            parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Station": @{@"Id" : stationId}, @"Message": messageDict }];
+        } else {
+            parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"Token": token, @"Station": @{@"Id" : stationId}, @"Message": @{@"Description" : @"station post", @"UserMelody" : @{@"Id":[loopDict objectForKey:@"Id"]}}}];
+        }
         
         NSString *requestUrl = [NSString stringWithFormat:@"%@/Station/Post", API_BASE_URL];
         
@@ -634,7 +681,7 @@
     }
     
 }
-
+*/
 -(void)updateProfilePicture:(UIImage *)image{
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
