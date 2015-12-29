@@ -715,8 +715,14 @@
     //save to folder
     NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
     NSData *imageData = UIImageJPEGRepresentation(image, 0.7);
-    [imageData writeToFile:imagePath atomically:YES];
-    
+    BOOL result = [imageData writeToFile:imagePath atomically:YES];
+    if (!result)
+    {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:@"There was a problem saving the file on the phone." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+        return;
+        
+    }
     
     //step 1 - get file token
     NSString *token =  [defaults objectForKey:@"authToken"];

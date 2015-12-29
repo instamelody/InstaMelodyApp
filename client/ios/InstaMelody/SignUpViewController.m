@@ -287,7 +287,7 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     
     self.HUD.indeterminate = YES;
-    self.HUD.status = @"Signing up";
+    self.HUD.status = @"Updating";
     [self.HUD show:YES];
     
     
