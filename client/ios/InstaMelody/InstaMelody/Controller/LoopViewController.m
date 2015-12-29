@@ -82,7 +82,7 @@
         self.publicView.userInteractionEnabled = YES;
     }
     
-    NSString *myUserId = [self.defaults objectForKey:@"Id"];
+    //NSString *myUserId = [self.defaults objectForKey:@"Id"];
     
      if (self.selectedLoop !=nil) {
          [self getLoop:[self.selectedLoop objectForKey:@"Id"]];

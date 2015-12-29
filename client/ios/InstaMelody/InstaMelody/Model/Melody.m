@@ -20,5 +20,6 @@
 @dynamic melodyName;
 @dynamic melodyDesc;
 @dynamic melodyGroup;
+@dynamic isPremiumContent;
 
 @end
