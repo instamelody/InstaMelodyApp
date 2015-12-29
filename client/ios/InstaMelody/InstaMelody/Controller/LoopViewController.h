@@ -42,10 +42,10 @@
 
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *volumeBarButtonItem;
 
-@property (nonatomic, strong) IBOutlet UIButton *chooseLoopButton;
-@property (nonatomic, strong) IBOutlet UIButton *chooseLoop2Button;
-@property (nonatomic, strong) IBOutlet UIButton *playLoopButton;
-@property (nonatomic, strong) IBOutlet UIButton *playLoop2Button;
+//@property (nonatomic, strong) IBOutlet UIButton *chooseLoopButton;
+//@property (nonatomic, strong) IBOutlet UIButton *chooseLoop2Button;
+//@property (nonatomic, strong) IBOutlet UIButton *playLoopButton;
+//@property (nonatomic, strong) IBOutlet UIButton *playLoop2Button;
 @property (nonatomic, strong) IBOutlet UIButton *shareButton;
 @property (nonatomic, strong) IBOutlet UIButton *volumeButton;
 

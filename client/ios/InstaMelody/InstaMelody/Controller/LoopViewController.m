@@ -396,8 +396,8 @@
         self.playButton.hidden = YES;
     }
     
-    self.playLoopButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:25.0f];
-    self.playLoop2Button.titleLabel.font = [UIFont fontAwesomeFontOfSize:25.0f];
+    //self.playLoopButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:25.0f];
+    //self.playLoop2Button.titleLabel.font = [UIFont fontAwesomeFontOfSize:25.0f];
     
     self.forwardButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:40.0f];
     self.backwardButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:40.0f];
@@ -411,9 +411,9 @@
     
     
     [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
-    [self.playLoopButton setTitle:[NSString fontAwesomeIconStringForEnum:FARefresh] forState:UIControlStateNormal];
+    //[self.playLoopButton setTitle:[NSString fontAwesomeIconStringForEnum:FARefresh] forState:UIControlStateNormal];
     
-    [self.playLoop2Button setTitle:[NSString fontAwesomeIconStringForEnum:FARefresh] forState:UIControlStateNormal];
+    //[self.playLoop2Button setTitle:[NSString fontAwesomeIconStringForEnum:FARefresh] forState:UIControlStateNormal];
     
     
     [self.forwardButton setTitle:[NSString fontAwesomeIconStringForEnum:FAFastForward] forState:UIControlStateNormal];
@@ -446,6 +446,18 @@
     
 }
 
+-(IBAction)previewMelodies:(id)sender {
+    
+    UIButton *toggleBtn = (UIButton *)[self.view viewWithTag:5];
+    
+    if ([self.bgPlayer isPlaying]) {
+        [toggleBtn setTitle:@"Preview melodies" forState:UIControlStateNormal];
+        [self stopEverything:nil];
+    } else {
+        [toggleBtn setTitle:@"Stop melodies" forState:UIControlStateNormal];
+        [self toggleMelodies:nil];
+    }
+}
 
 #pragma mark - Audio handling
 
@@ -812,18 +824,7 @@
 */
 
 
--(IBAction)previewMelodies:(id)sender {
-    
-    UIButton *toggleBtn = (UIButton *)[self.view viewWithTag:5];
-    
-    if ([self.bgPlayer isPlaying]) {
-        [toggleBtn setTitle:@"Preview melodies" forState:UIControlStateNormal];
-        [self stopEverything:nil];
-    } else {
-        [toggleBtn setTitle:@"Stop melodies" forState:UIControlStateNormal];
-        [self toggleMelodies:nil];
-    }
-}
+
 
 -(IBAction)playLoop:(id)sender {
     
@@ -1495,13 +1496,13 @@
 }
 
 -(void)didSelectMelody:(Melody *)melody {
-    [self.chooseLoopButton setTitle:melody.melodyName forState:UIControlStateNormal];
+    //[self.chooseLoopButton setTitle:melody.melodyName forState:UIControlStateNormal];
     
     [self loadMelody:melody];
 }
 
 -(void)didSelectMelody2:(Melody *)melody {
-    [self.chooseLoop2Button setTitle:melody.melodyName forState:UIControlStateNormal];
+    //[self.chooseLoop2Button setTitle:melody.melodyName forState:UIControlStateNormal];
     
     [self loadMelody2:melody];
 }
