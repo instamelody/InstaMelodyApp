@@ -49,6 +49,8 @@
     NSNumber * initialIsExplicitStatus;
 }
 
+#pragma mark - lifecycle methods
+
 -(void)viewDidLoad {
     [super viewDidLoad];
     //_isFromChat = TRUE;
@@ -193,7 +195,6 @@
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"pickedMelody" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
         //
-        
         if (note.userInfo != nil) {
             Melody *melody = [Melody MR_findFirstByAttribute:@"melodyId" withValue:[note.userInfo objectForKey:@"melodyId"]];
             
@@ -288,6 +289,9 @@
     [self stopEverything:nil];
 }
 
+
+#pragma mark - UI handlers
+
 -(void)updateBarStatus {
     /*
     if (self.isMyStudio) {
@@ -350,6 +354,8 @@
 
 }
 
+#pragma mark - Audio handling
+
 -(void)initializeAudio {
     // Background color
     self.audioPlot.backgroundColor = [UIColor blackColor];
@@ -373,6 +379,8 @@
     self.inputs = [EZAudioDevice inputDevices];
     self.audioPlot.hidden = YES;
 }
+
+#pragma mark - download routines
 
 -(void)getLoop:(NSString *)loopId {
     
@@ -440,6 +448,9 @@
     }];
     
 }
+
+
+#pragma mark - remaining routines
 
 -(void)buildPartArray {
     
