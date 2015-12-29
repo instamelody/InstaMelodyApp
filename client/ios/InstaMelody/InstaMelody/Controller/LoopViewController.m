@@ -362,6 +362,7 @@
     //
     // Create the microphone
     //
+    [EZAudio setShouldExitOnCheckResultFail:NO];
     self.microphone = [EZMicrophone microphoneWithDelegate:self];
     
     //
