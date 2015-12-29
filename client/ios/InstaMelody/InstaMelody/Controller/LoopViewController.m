@@ -354,6 +354,99 @@
 
 }
 
+-(void)roundView:(UIView *)view {
+    view.layer.cornerRadius = view.frame.size.height / 2;
+    view.layer.masksToBounds = YES;
+}
+
+-(void)updatePlaybackProgress {
+    
+    float oldProgress = self.progressView.progress;
+    float newProgress =self.fgPlayer.currentTime/self.fgPlayer.duration;
+    
+    if (newProgress - oldProgress > 0.02) {
+        [self.progressView setProgress:newProgress  animated:YES];
+    }
+    //NSLog(@"playback progress: %f", newProgress);
+}
+
+-(void)updateRecordProgress {
+    NSDate *now = [NSDate date];
+    
+    float RECORDING_LIMIT = [[DataManager sharedManager] isPremium] ? PREM_RECORDING_LIMIT :  FREE_RECORDING_LIMIT;
+    NSTimeInterval interval = [now timeIntervalSinceDate:self.startTime];
+    
+    if (interval > RECORDING_LIMIT) {
+        self.startTime = [NSDate date];
+        interval = 0;
+    }
+    
+    float oldProgress = self.progressView.progress;
+    float newProgress =interval/RECORDING_LIMIT;
+    
+    if (newProgress - oldProgress > 0.02) {
+        [self.progressView setProgress:newProgress animated:YES];
+    }
+}
+
+-(void)applyFontAwesome {
+    //self.playButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:50.0f];
+    
+    if (self.selectedUserMelody != nil) {
+        self.playButton.hidden = YES;
+    }
+    
+    self.playLoopButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:25.0f];
+    self.playLoop2Button.titleLabel.font = [UIFont fontAwesomeFontOfSize:25.0f];
+    
+    self.forwardButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:40.0f];
+    self.backwardButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:40.0f];
+    
+    self.saveBarDelete.titleLabel.font = [UIFont fontAwesomeFontOfSize:25.0f];
+    self.saveBarSave.titleLabel.font = [UIFont fontAwesomeFontOfSize:25.0f];
+    
+    [self.saveBarDelete setTitle:[NSString fontAwesomeIconStringForEnum:FAtrash] forState:UIControlStateNormal];
+    [self.saveBarSave setTitle:[NSString fontAwesomeIconStringForEnum:FAFloppyO] forState:UIControlStateNormal];
+    
+    
+    
+    [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+    [self.playLoopButton setTitle:[NSString fontAwesomeIconStringForEnum:FARefresh] forState:UIControlStateNormal];
+    
+    [self.playLoop2Button setTitle:[NSString fontAwesomeIconStringForEnum:FARefresh] forState:UIControlStateNormal];
+    
+    
+    [self.forwardButton setTitle:[NSString fontAwesomeIconStringForEnum:FAFastForward] forState:UIControlStateNormal];
+    [self.backwardButton setTitle:[NSString fontAwesomeIconStringForEnum:FAFastBackward] forState:UIControlStateNormal];
+    
+    
+}
+
+-(IBAction)share:(id)sender {
+    
+    //CustomActivityProvider *ActivityProvider = [[CustomActivityProvider alloc] initWithPlaceholderItem:@""];
+    NSArray *itemsToShare = @[@"Check out InstaMelody in the App Store! https://itunes.apple.com/us/app/instamelody/id897451088"];
+    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:itemsToShare applicationActivities:nil];
+    //activityVC.excludedActivityTypes = @[UIActivityTypePrint, UIActivityTypeAssignToContact, UIActivityTypeSaveToCameraRoll]; //or whichever you don't need
+    [activityVC setValue:@"InstaMelody" forKey:@"subject"];
+    
+    activityVC.completionWithItemsHandler = ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
+        NSLog(@"Completed successfully...");
+    };
+    
+    [self presentViewController:activityVC animated:YES completion:nil];
+    
+}
+
+-(IBAction)showVolumeSettings:(id)sender {
+    
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    VolumeViewController *vc = [sb instantiateViewControllerWithIdentifier:@"VolumeViewController"];
+    [self presentViewController:vc animated:YES completion:nil];
+    
+}
+
+
 #pragma mark - Audio handling
 
 -(void)initializeAudio {
@@ -379,6 +472,46 @@
     self.inputs = [EZAudioDevice inputDevices];
     self.audioPlot.hidden = YES;
 }
+
+-(IBAction)toggleChannel:(id)sender {
+    
+    //UIButton *toggleBtn = (UIButton *)[self.view viewWithTag:5];
+    
+    if ([self.bgPlayer isPlaying]) {
+        [self.bgPlayer stop];
+        
+    } else {
+        
+        if (self.selectedMelody != nil) {
+            [self playLoop:nil];
+        }
+        
+    }
+}
+
+
+-(IBAction)toggleChannel2:(id)sender {
+    if ([self.bgPlayer2 isPlaying]) {
+        [self.bgPlayer2 stop];
+    } else {
+        
+        if (self.selectedMelody2 != nil) {
+            [self playLoop2:nil];
+        }
+    }
+}
+
+
+-(IBAction)toggleChannel3:(id)sender {
+    if ([self.bgPlayer3 isPlaying]) {
+        [self.bgPlayer3 stop];
+    } else {
+        if (self.selectedMelody3 != nil) {
+            [self playLoop3:nil];
+        }
+    }
+}
+
 
 #pragma mark - download routines
 
@@ -598,79 +731,12 @@
     }
 }
 
--(void)roundView:(UIView *)view {
-    view.layer.cornerRadius = view.frame.size.height / 2;
-    view.layer.masksToBounds = YES;
-}
-
--(void)updatePlaybackProgress {
-    
-    float oldProgress = self.progressView.progress;
-    float newProgress =self.fgPlayer.currentTime/self.fgPlayer.duration;
-    
-    if (newProgress - oldProgress > 0.02) {
-        [self.progressView setProgress:newProgress  animated:YES];
-    }
-    //NSLog(@"playback progress: %f", newProgress);
-}
-
--(void)updateRecordProgress {
-    NSDate *now = [NSDate date];
-    
-    float RECORDING_LIMIT = [[DataManager sharedManager] isPremium] ? PREM_RECORDING_LIMIT :  FREE_RECORDING_LIMIT;
-    NSTimeInterval interval = [now timeIntervalSinceDate:self.startTime];
-    
-    if (interval > RECORDING_LIMIT) {
-        self.startTime = [NSDate date];
-        interval = 0;
-    }
-    
-    float oldProgress = self.progressView.progress;
-    float newProgress =interval/RECORDING_LIMIT;
-    
-    if (newProgress - oldProgress > 0.02) {
-            [self.progressView setProgress:newProgress animated:YES];
-    }
-}
-
--(void)applyFontAwesome {
-    //self.playButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:50.0f];
-    
-    if (self.selectedUserMelody != nil) {
-        self.playButton.hidden = YES;
-    }
-    
-    self.playLoopButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:25.0f];
-    self.playLoop2Button.titleLabel.font = [UIFont fontAwesomeFontOfSize:25.0f];
-    
-    self.forwardButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:40.0f];
-    self.backwardButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:40.0f];
-    
-    self.saveBarDelete.titleLabel.font = [UIFont fontAwesomeFontOfSize:25.0f];
-    self.saveBarSave.titleLabel.font = [UIFont fontAwesomeFontOfSize:25.0f];
-    
-    [self.saveBarDelete setTitle:[NSString fontAwesomeIconStringForEnum:FAtrash] forState:UIControlStateNormal];
-    [self.saveBarSave setTitle:[NSString fontAwesomeIconStringForEnum:FAFloppyO] forState:UIControlStateNormal];
-
-    
-    
-    [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
-    [self.playLoopButton setTitle:[NSString fontAwesomeIconStringForEnum:FARefresh] forState:UIControlStateNormal];
-    
-    [self.playLoop2Button setTitle:[NSString fontAwesomeIconStringForEnum:FARefresh] forState:UIControlStateNormal];
-    
-    
-    [self.forwardButton setTitle:[NSString fontAwesomeIconStringForEnum:FAFastForward] forState:UIControlStateNormal];
-    [self.backwardButton setTitle:[NSString fontAwesomeIconStringForEnum:FAFastBackward] forState:UIControlStateNormal];
-    
-    
-}
-
+/*
 -(IBAction)join:(id)sender {
     self.isNotMyStudio = NO;
     [self updateBarStatus];
-}
-
+} */
+/*
 -(IBAction)chooseLoop:(id)sender {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Loops" message:@"Choose a loop" preferredStyle:UIAlertControllerStyleActionSheet];
     
@@ -743,69 +809,8 @@
     
     [self presentViewController:alert animated:YES completion:nil];
 }
+*/
 
--(IBAction)share:(id)sender {
-
-    //CustomActivityProvider *ActivityProvider = [[CustomActivityProvider alloc] initWithPlaceholderItem:@""];
-    NSArray *itemsToShare = @[@"Check out InstaMelody in the App Store! https://itunes.apple.com/us/app/instamelody/id897451088"];
-    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:itemsToShare applicationActivities:nil];
-    //activityVC.excludedActivityTypes = @[UIActivityTypePrint, UIActivityTypeAssignToContact, UIActivityTypeSaveToCameraRoll]; //or whichever you don't need
-    [activityVC setValue:@"InstaMelody" forKey:@"subject"];
-    
-    activityVC.completionWithItemsHandler = ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
-        NSLog(@"Completed successfully...");
-    };
-    
-    [self presentViewController:activityVC animated:YES completion:nil];
-    
-}
-
--(IBAction)showVolumeSettings:(id)sender {
-    
-    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    VolumeViewController *vc = [sb instantiateViewControllerWithIdentifier:@"VolumeViewController"];
-    [self presentViewController:vc animated:YES completion:nil];
-
-}
-
--(IBAction)toggleLoop:(id)sender {
-    
-    //UIButton *toggleBtn = (UIButton *)[self.view viewWithTag:5];
-    
-    if ([self.bgPlayer isPlaying]) {
-        [self.bgPlayer stop];
-        
-    } else {
-        
-        if (self.selectedMelody != nil) {
-            [self playLoop:nil];
-        }
-
-    }
-}
-
-
--(IBAction)toggleLoop2:(id)sender {
-    if ([self.bgPlayer2 isPlaying]) {
-        [self.bgPlayer2 stop];
-    } else {
-        
-        if (self.selectedMelody2 != nil) {
-            [self playLoop2:nil];
-        }
-    }
-}
-
-
--(IBAction)toggleLoop3:(id)sender {
-    if ([self.bgPlayer3 isPlaying]) {
-        [self.bgPlayer3 stop];
-    } else {
-        if (self.selectedMelody3 != nil) {
-            [self playLoop3:nil];
-        }
-    }
-}
 
 -(IBAction)previewMelodies:(id)sender {
     
@@ -1222,9 +1227,9 @@
 
 -(IBAction)toggleMelodies:(id)sender {
     
-    [self toggleLoop:nil];
-    [self toggleLoop2:nil];
-    [self toggleLoop3:nil];
+    [self toggleChannel:nil];
+    [self toggleChannel2:nil];
+    [self toggleChannel3:nil];
     
     
 }

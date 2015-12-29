@@ -117,8 +117,8 @@
 -(IBAction)togglePlayback:(id)sender;
 -(IBAction)save:(id)sender;
 
--(IBAction)toggleLoop:(id)sender;
--(IBAction)toggleLoop2:(id)sender;
+//-(IBAction)toggleLoop:(id)sender;
+//-(IBAction)toggleLoop2:(id)sender;
 
 -(IBAction)back:(id)sender;
 -(IBAction)forward:(id)sender;
