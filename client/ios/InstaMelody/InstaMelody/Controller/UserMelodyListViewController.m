@@ -210,8 +210,8 @@
     //get friends from core data
     self.melodyList = [[DataManager sharedManager] userMelodyList];
     
-    NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateCreated" ascending:NO];
-    NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
+    //NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateCreated" ascending:NO];
+    //NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
     //self.filteredList = [self.melodyList sortedArrayUsingDescriptors:descriptors];
 
     

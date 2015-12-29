@@ -198,7 +198,7 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     //save to file
     
-    time_t unixTime = time(NULL);
+    //time_t unixTime = time(NULL);
     
     
     NSString *recordingPath = [userDict objectForKey:@"LoopURL"];
@@ -307,7 +307,7 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     //save to file
     
-    time_t unixTime = time(NULL);
+    //time_t unixTime = time(NULL);
     
     
     NSString *recordingPath = [userDict objectForKey:@"LoopURL"];
@@ -441,7 +441,7 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     //save to file
     
-    time_t unixTime = time(NULL);
+    //time_t unixTime = time(NULL);
     
     
     NSString *recordingPath = [userDict objectForKey:@"LoopURL"];
@@ -533,7 +533,7 @@
             //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
             if ([isStationPostMelody isEqualToString:@"1"]) {
                 
-                NSDictionary *loopDict = [responseDict objectForKey:@"Loop"];
+                //NSDictionary *loopDict = [responseDict objectForKey:@"Loop"];
                 //[self makeLoopPublic:loopDict];
                 
                 /*
@@ -692,7 +692,7 @@
     NSString *imageName = [NSString stringWithFormat:@"%@_%@_profile_%d.jpg", [defaults objectForKey:@"FirstName"], [defaults objectForKey:@"LastName"], (int)unixTime];
     
     //try to create folder
-    NSFileManager *fileManager = [NSFileManager defaultManager];
+    //NSFileManager *fileManager = [NSFileManager defaultManager];
     
     NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     
@@ -783,8 +783,8 @@
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"File uploaded successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alertView show];
         
-        NSArray *responseArray = (NSArray *)responseObject;
-        NSDictionary *responseDict = responseArray[0];
+        //NSArray *responseArray = (NSArray *)responseObject;
+        //NSDictionary *responseDict = responseArray[0];
         
         //[[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"Path"] forKey:@"ProfileFilePath"];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"uploadDone" object:nil];

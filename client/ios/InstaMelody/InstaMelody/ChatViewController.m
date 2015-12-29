@@ -1606,7 +1606,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     
     NSNumber *volume = [self.defaults objectForKey:@"melodyVolume"];
     
-    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    //NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     
    NSString *pathString = self.selectedMelodyPath;
     
@@ -1636,7 +1636,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 
 -(IBAction)playLoop2:(id)sender {
     NSNumber *volume = [self.defaults objectForKey:@"melodyVolume"];
-    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    //NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     
     NSString *pathString = self.selectedMelodyPath2;
     
@@ -1666,7 +1666,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 
 -(IBAction)playLoop3:(id)sender {
     NSNumber *volume = [self.defaults objectForKey:@"melodyVolume"];
-    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    //NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     
     NSString *pathString = self.selectedMelodyPath2;
     

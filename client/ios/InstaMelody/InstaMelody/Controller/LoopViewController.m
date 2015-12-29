@@ -169,7 +169,7 @@
          
          NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
          
-         NSString *myUserId = [defaults objectForKey:@"Id"];
+         //NSString *myUserId = [defaults objectForKey:@"Id"];
          
          NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
          
@@ -744,7 +744,7 @@
 
 -(IBAction)toggleLoop:(id)sender {
     
-    UIButton *toggleBtn = (UIButton *)[self.view viewWithTag:5];
+    //UIButton *toggleBtn = (UIButton *)[self.view viewWithTag:5];
     
     if ([self.bgPlayer isPlaying]) {
         [self.bgPlayer stop];
@@ -1405,7 +1405,7 @@
     } else {
         Friend *friend = [Friend MR_findFirstByAttribute:@"userId" withValue:userId];
         
-        NSString *userName = [NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName];
+        //NSString *userName = [NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName];
         
         if (friend.profileFilePath != nil && ![friend.profileFilePath isEqualToString:@""]) {
             
@@ -1503,13 +1503,13 @@
     }
     
     
-    NSURL *docURL = [NSURL fileURLWithPath:documentsPath];
-    NSArray *contents = [fileManager contentsOfDirectoryAtURL:docURL
+    //NSURL *docURL = [NSURL fileURLWithPath:documentsPath];
+    /*NSArray *contents = [fileManager contentsOfDirectoryAtURL:docURL
                                    includingPropertiesForKeys:@[]
                                                       options:NSDirectoryEnumerationSkipsHiddenFiles
                                                         error:nil];
     
-    
+    */
     
     NSString *pathString = [melodyPath stringByAppendingPathComponent:melody.fileName];
     
@@ -1557,12 +1557,12 @@
     }
     
     
-    NSURL *docURL = [NSURL fileURLWithPath:documentsPath];
-    NSArray *contents = [fileManager contentsOfDirectoryAtURL:docURL
+    //NSURL *docURL = [NSURL fileURLWithPath:documentsPath];
+    /* NSArray *contents = [fileManager contentsOfDirectoryAtURL:docURL
                                    includingPropertiesForKeys:@[]
                                                       options:NSDirectoryEnumerationSkipsHiddenFiles
                                                         error:nil];
-    
+    */
     
     
     NSString *pathString = [melodyPath stringByAppendingPathComponent:melody.fileName];
@@ -1611,12 +1611,12 @@
     }
     
     
-    NSURL *docURL = [NSURL fileURLWithPath:documentsPath];
+    /* NSURL *docURL = [NSURL fileURLWithPath:documentsPath];
     NSArray *contents = [fileManager contentsOfDirectoryAtURL:docURL
                                    includingPropertiesForKeys:@[]
                                                       options:NSDirectoryEnumerationSkipsHiddenFiles
                                                         error:nil];
-    
+    */
     
     
     NSString *pathString = [melodyPath stringByAppendingPathComponent:melody.fileName];
@@ -2077,7 +2077,7 @@
     } else {
         Friend *friend = [Friend MR_findFirstByAttribute:@"userId" withValue:userId];
         
-        NSString *userName = [NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName];
+        //NSString *userName = [NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName];
         cell.nameLabel.text = friend.firstName;
         
         if (friend.profileFilePath != nil && ![friend.profileFilePath isEqualToString:@""]) {

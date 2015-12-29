@@ -415,7 +415,7 @@
             
             NSLog(@"%@",ErrorResponse);
             
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            //UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             //TODOAHMED
             //[alertView show];
             isUsersStation = TRUE;
@@ -702,7 +702,7 @@
             cell.coverImage.image = [UIImage imageWithContentsOfFile:imagePath];
             
         } else {
-            NSString *userName = [NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName];
+            //NSString *userName = [NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName];
             //[cell.coverImage setImageWithString:userName color:nil circular:YES];
         }
         
@@ -993,7 +993,7 @@
             
             NSLog(@"%@",ErrorResponse);
             
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            //UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             //[alertView show];
         }
     }];

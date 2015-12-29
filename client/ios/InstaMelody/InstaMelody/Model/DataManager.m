@@ -159,7 +159,7 @@
         // NSLog(@"JSON: %@", responseObject);
         NSLog(@"melodies updated");
         
-        NSArray *infoList = (NSArray *)responseObject;
+        //NSArray *infoList = (NSArray *)responseObject;
         
         //get profile pic
         
@@ -468,7 +468,7 @@
         // NSLog(@"JSON: %@", responseObject);
         NSLog(@"melodies updated");
         
-        NSArray *melodyList = (NSArray *)responseObject;
+        //NSArray *melodyList = (NSArray *)responseObject;
         
         //[self addUserMelody:melodyList];
         

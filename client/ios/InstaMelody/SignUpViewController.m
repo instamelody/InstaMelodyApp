@@ -279,7 +279,7 @@
     
     NSNumber *isFemale = self.genderField.enabled ? [NSNumber numberWithBool:NO] : [NSNumber numberWithBool:YES];
     
-    NSString *monthYear = self.dobField.text;
+    //NSString *monthYear = self.dobField.text;
     
     NSString *encodedEmail = [self.emailAddressField.text stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
     NSDictionary *parameters = @{@"Token" : userToken ,  @"User": @{@"DisplayName": self.usernameField.text, @"FirstName": self.firstNameField.text, @"LastName": self.lastNameField.text, @"PhoneNumber" : self.phoneNumberField.text, @"EmailAddress" : encodedEmail, @"IsFemale": isFemale}};
@@ -408,7 +408,7 @@
         [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"JSON: %@", responseObject);
             
-            NSDictionary *responseDict = (NSDictionary *)responseObject;
+            //NSDictionary *responseDict = (NSDictionary *)responseObject;
             
             NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"DisplayName": self.usernameField.text, @"Password": self.passwordField.text}];
             
