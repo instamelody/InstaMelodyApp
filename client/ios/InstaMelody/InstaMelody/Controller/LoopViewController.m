@@ -1690,9 +1690,13 @@
         
         //NSString *fileString = [NSString stringWithFormat:@"file://%@", destinationFilePath];
         NSURL *fileURL = [NSURL fileURLWithPath:destinationFilePath];
-        
+        NSError *error = nil;
+        BOOL success = [fileURL setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
+        if(!success){
+            NSLog(@"Error excluding %@ from backup %@", [fileURL lastPathComponent], error);
+        }
         return fileURL;
-         
+        
         //NSURL *documentsDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
         //return [documentsDirectoryURL URLByAppendingPathComponent:[response suggestedFilename]];
     } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
@@ -1752,7 +1756,11 @@
         
         //NSString *fileString = [NSString stringWithFormat:@"file://%@", destinationFilePath];
         NSURL *fileURL = [NSURL fileURLWithPath:destinationFilePath];
-        
+        NSError *error = nil;
+        BOOL success = [fileURL setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
+        if(!success){
+            NSLog(@"Error excluding %@ from backup %@", [fileURL lastPathComponent], error);
+        }
         return fileURL;
         
         //NSURL *documentsDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];

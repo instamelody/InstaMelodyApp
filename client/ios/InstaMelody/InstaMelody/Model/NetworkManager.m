@@ -722,6 +722,13 @@
         [alertView show];
         return;
         
+    } else {
+        NSError *error = nil;
+        NSURL *localURL = [NSURL fileURLWithPath:imagePath];
+        BOOL success = [localURL setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
+        if(!success){
+            NSLog(@"Error excluding %@ from backup %@", [localURL lastPathComponent], error);
+        }
     }
     
     //step 1 - get file token

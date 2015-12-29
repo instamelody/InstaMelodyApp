@@ -368,7 +368,11 @@
             
             //NSString *fileString = [NSString stringWithFormat:@"file://%@", destinationFilePath];
             NSURL *fileURL = [NSURL fileURLWithPath:pathString];
-            
+            NSError *error = nil;
+            BOOL success = [fileURL setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
+            if(!success){
+                NSLog(@"Error excluding %@ from backup %@", [fileURL lastPathComponent], error);
+            }
             return fileURL;
             
             //NSURL *documentsDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
