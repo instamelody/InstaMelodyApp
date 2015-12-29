@@ -201,7 +201,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (indexPath.section == 0) {
+    if (indexPath.section == 0 && self.friendsList.count > 0) {
         Friend *selectedFriend = [self.friendsList objectAtIndex:indexPath.row];
         
         if (selectedFriend != nil) {
