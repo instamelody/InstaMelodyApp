@@ -1691,11 +1691,6 @@
         
         //NSString *fileString = [NSString stringWithFormat:@"file://%@", destinationFilePath];
         NSURL *fileURL = [NSURL fileURLWithPath:destinationFilePath];
-        NSError *error = nil;
-        BOOL success = [fileURL setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
-        if(!success){
-            NSLog(@"Error excluding %@ from backup %@", [fileURL lastPathComponent], error);
-        }
         return fileURL;
         
         //NSURL *documentsDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
@@ -1704,6 +1699,11 @@
         
         if (error == nil) {
             NSLog(@"File downloaded to: %@", filePath);
+            NSError *error = nil;
+            BOOL success = [filePath setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
+            if(!success){
+                NSLog(@"Error excluding %@ from backup %@", [filePath lastPathComponent], error);
+            }
             self.loopStatusLabel.text = @"Melody loaded!";
             
             //self.playButton.hidden = NO;
@@ -1757,11 +1757,7 @@
         
         //NSString *fileString = [NSString stringWithFormat:@"file://%@", destinationFilePath];
         NSURL *fileURL = [NSURL fileURLWithPath:destinationFilePath];
-        NSError *error = nil;
-        BOOL success = [fileURL setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
-        if(!success){
-            NSLog(@"Error excluding %@ from backup %@", [fileURL lastPathComponent], error);
-        }
+
         return fileURL;
         
         //NSURL *documentsDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
@@ -1770,6 +1766,13 @@
         
         if (error == nil) {
             NSLog(@"File downloaded to: %@", filePath);
+            
+            NSError *error = nil;
+            BOOL success = [filePath setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
+            if(!success){
+                NSLog(@"Error excluding %@ from backup %@", [filePath lastPathComponent], error);
+            }
+            
             self.loopStatusLabel.text = @"Recording loaded!";
             self.progressView.progress = 0.0;
             [self.timer invalidate];
