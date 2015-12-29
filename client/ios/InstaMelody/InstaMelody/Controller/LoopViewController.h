@@ -37,6 +37,7 @@
 
 @property (nonatomic, strong) NSDictionary *selectedLoop;
 @property (nonatomic, strong) UserMelody *selectedUserMelody;
+//Should comment out above
 
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *volumeBarButtonItem;
 

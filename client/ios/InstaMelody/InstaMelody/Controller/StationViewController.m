@@ -741,7 +741,7 @@
         loopVC.isNotMyStudio = true;
         appDelegate.loopOwnersId = userId;
     }
-    
+    /* OBJECT MESSAGE NEVER FOUND IN LOOPDICT?
     NSDictionary *messageDict = [loopDict objectForKey:@"Message"];
     
     if (messageDict != nil) {
@@ -774,8 +774,10 @@
         }
         
         
-    } else {
-        
+    }
+    
+    else {
+    */
         NSArray *partArray = [loopDict objectForKey:@"Parts"];
         
         if (partArray!= nil && [partArray isKindOfClass:[NSArray class]]) {
@@ -787,7 +789,7 @@
             loopVC = nil;
         }
         
-    }
+    //}
     
     if (loopVC != nil) {
             [self.navigationController pushViewController:loopVC animated:YES];

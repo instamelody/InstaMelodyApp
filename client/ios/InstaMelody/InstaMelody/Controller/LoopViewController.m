@@ -89,7 +89,10 @@
          
         //self.isNewPart = NO;
          
-     } else if (self.selectedUserMelody != nil) {
+     }
+    
+    /* SELECTEDUSERMELODY ONLY SET IN STATIONVIEWCONTROLLER AND SEEMINGLY NEVER SET
+     else if (self.selectedUserMelody != nil) {
         
         int count = 0;
         NSLog(@"loaded with a melody");
@@ -164,8 +167,11 @@
         }
          
         //self.isNewPart = NO;
-     } else {
-         //it's just me now
+     }
+    */
+    
+     else {
+         //creating a loop from scratch...
          
          NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
          
