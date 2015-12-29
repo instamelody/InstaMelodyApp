@@ -73,15 +73,6 @@
     self.progressView.progressTintColor = INSTA_BLUE;
     self.progressView.thicknessRatio = 0.1f;
     
-    if(_isNotMyStudio)
-    {
-        self.explicitView.userInteractionEnabled = NO;
-        self.publicView.userInteractionEnabled = NO;
-    } else {
-        self.explicitView.userInteractionEnabled = YES;
-        self.publicView.userInteractionEnabled = YES;
-    }
-    
     //NSString *myUserId = [self.defaults objectForKey:@"Id"];
     
      if (self.selectedLoop !=nil) {
@@ -326,8 +317,25 @@
     }
      */
     
+    if(_isNotMyStudio)
+    {
+        self.explicitView.userInteractionEnabled = NO;
+        self.publicView.userInteractionEnabled = NO;
+    } else {
+        self.explicitView.userInteractionEnabled = YES;
+        self.publicView.userInteractionEnabled = YES;
+    }
+    
+    if (_isForeignChatLoop)
+    {
+        self.recordButton.hidden = YES;
+    } else {
+        self.recordButton.hidden = NO;
+    }
+    
     self.saveBar.hidden = NO;
-    self.recordButton.hidden = NO;
+    
+    //self.recordButton.hidden = NO;
     
     self.publicView.hidden = NO;
     self.explicitView.hidden = NO;

@@ -1019,6 +1019,8 @@
     } else {
         vc.isNotMyStudio = YES;
     }
+    vc.isForeignChatLoop = NO;
+    //I'm in the chat, so it's not foreign
     
     NSString *nameString = [self.chatDict objectForKey:@"Name"];
     if (nameString != nil && [nameString isKindOfClass:[NSString class]] && ![nameString containsString:@"ChatLoop_"]) {
@@ -1038,6 +1040,7 @@
     vc.delegate = self;
     vc.isFromChat = TRUE;
     vc.isNotMyStudio = FALSE;
+    vc.isForeignChatLoop = NO;
     
     NSString *nameString = [self.chatDict objectForKey:@"Name"];
     if (nameString != nil && [nameString isKindOfClass:[NSString class]] && ![nameString containsString:@"ChatLoop_"]) {

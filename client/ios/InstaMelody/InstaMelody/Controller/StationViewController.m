@@ -736,11 +736,17 @@
     if ([userId isEqualToString:myUserId])
     {
         loopVC.isNotMyStudio = false;
+        loopVC.isForeignChatLoop = NO;
         appDelegate.loopOwnersId = myUserId;
     } else {
         loopVC.isNotMyStudio = true;
+        loopVC.isForeignChatLoop = YES;
+        //Really should see if this user is a participant in the chat;
+        //For now, just block the ability to add a part. They can always go in via chat.
+        
         appDelegate.loopOwnersId = userId;
     }
+    
     /* OBJECT MESSAGE NEVER FOUND IN LOOPDICT?
     NSDictionary *messageDict = [loopDict objectForKey:@"Message"];
     

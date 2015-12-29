@@ -34,6 +34,7 @@
 @interface LoopViewController : UIViewController <AVAudioPlayerDelegate, EZMicrophoneDelegate, UITableViewDataSource, UITableViewDelegate, CLTokenInputViewDelegate, UITextFieldDelegate, BEMCheckBoxDelegate>
 
 @property BOOL isNotMyStudio;
+@property BOOL isForeignChatLoop;
 
 @property (nonatomic, strong) NSDictionary *selectedLoop;
 @property (nonatomic, strong) UserMelody *selectedUserMelody;
