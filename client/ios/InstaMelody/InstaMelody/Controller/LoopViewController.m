@@ -473,7 +473,7 @@
 -(IBAction)forward:(id)sender {
     //check if part < max
     //skip to next
-    if (self.currentPartIndex < self.partArray.count) {
+    if (self.currentPartIndex < self.partArray.count - 1 && [self.bgPlayer isPlaying]) {
         //self.currentPartIndex++;
         [self audioPlayerDidFinishPlaying:self.fgPlayer successfully:YES];
     }
@@ -511,7 +511,6 @@
     
     UIButton *toggleBtn = (UIButton *)[self.view viewWithTag:5];
     self.currentPartIndex = 0;
-    
     
     if ([self.fgPlayer isPlaying] || [self.bgPlayer isPlaying]) {
         
