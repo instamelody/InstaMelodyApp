@@ -392,10 +392,11 @@
 -(void)applyFontAwesome {
     //self.playButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:50.0f];
     
+    /*
     if (self.selectedUserMelody != nil) {
         self.playButton.hidden = YES;
     }
-    
+    */
     //self.playLoopButton.titleLabel.font = [UIFont fontAwesomeFontOfSize:25.0f];
     //self.playLoop2Button.titleLabel.font = [UIFont fontAwesomeFontOfSize:25.0f];
     
@@ -862,7 +863,7 @@
                 
                 self.currentRecordingURL = fileURL;
                 
-                if (self.selectedLoop || self.selectedUserMelody) {
+                if (self.selectedLoop) { // || self.selectedUserMelody) {
                     self.isNewPart = YES;
                 }
                 
@@ -1982,7 +1983,7 @@
             } else if (self.topicString != nil) {
                 cell.topicField.text = self.topicString;
             }
-            
+            /*
             if (self.selectedUserMelody != nil) {
                 cell.topicField.text = self.selectedUserMelody.userMelodyName;
                 
@@ -1991,7 +1992,8 @@
                 });
                 [cell.topicField setEnabled:NO];
                 [cell.topicField setBackgroundColor:[UIColor lightGrayColor]];
-            } else if (self.topicString != nil) {
+            } else */
+            if (self.topicString != nil) {
                 cell.topicField.text = self.topicString;
             }
             return cell;
@@ -2025,6 +2027,7 @@
         if (indexPath.row == 0) {
             TopicCell *cell = (TopicCell *)[tableView dequeueReusableCellWithIdentifier:@"TopicCell" forIndexPath:indexPath];
             cell.topicField.tag = 98;
+            /*
             if (self.selectedUserMelody != nil) {
                 cell.topicField.text = self.selectedUserMelody.userMelodyName;
                 [cell.topicField setEnabled:NO];
@@ -2032,7 +2035,8 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     self.saveBarTopicLabel.text = self.selectedUserMelody.userMelodyName;
                 });
-            } else if (self.topicString != nil) {
+            } else */
+            if (self.topicString != nil) {
                 cell.topicField.text = self.topicString;
             }
             
