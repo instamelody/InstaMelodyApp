@@ -454,7 +454,7 @@
     if ([self.bgPlayer isPlaying]) {
         [toggleBtn setTitle:@"Preview melodies" forState:UIControlStateNormal];
         [self stopEverything:nil];
-    } else {
+    } else if (self.selectedMelody != nil) {
         [toggleBtn setTitle:@"Stop melodies" forState:UIControlStateNormal];
         [self toggleAllChannels:nil];
     }
