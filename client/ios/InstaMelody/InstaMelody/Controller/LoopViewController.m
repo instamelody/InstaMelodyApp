@@ -23,6 +23,14 @@
 @property (nonatomic, strong) Melody *selectedMelody3;
 @property (nonatomic, strong) NSURL *currentRecordingURL;
 
+//Need variables to store the melody that is being composed by the user
+@property (nonatomic, strong) Melody *compositionMelody;
+@property (nonatomic, strong) Melody *compositionMelody2;
+@property (nonatomic, strong) Melody *compositionMelody3;
+@property (nonatomic, strong) NSURL *compositionRecordingURL;
+
+
+
 @property (nonatomic, strong) AVAudioPlayer *bgPlayer;
 @property (nonatomic, strong) AVAudioPlayer *bgPlayer2;
 @property (nonatomic, strong) AVAudioPlayer *bgPlayer3;
@@ -210,12 +218,15 @@
                 
                 switch (tokenInputView.allTokens.count) {
                     case 0:
+                        self.compositionMelody = melody;
                         [self didSelectMelody:melody];
                         break;
                     case 1:
+                        self.compositionMelody2 = melody;
                         [self didSelectMelody2:melody];
                         break;
                     case 2:
+                        self.compositionMelody3 = melody;
                         [self didSelectMelody3:melody];
                         break;
                     default:
@@ -463,7 +474,7 @@
 -(IBAction)back:(id)sender {
     //check if part > 0
     
-    if (self.currentPartIndex > 0) {
+    if (self.currentPartIndex > 0 && [self.bgPlayer isPlaying]) {
         //skip to prv
         self.goBack = YES;
         [self audioPlayerDidFinishPlaying:self.fgPlayer successfully:YES];
@@ -508,28 +519,11 @@
 
 -(IBAction)togglePlayback:(id)sender {
     //sdf
-    
-    UIButton *toggleBtn = (UIButton *)[self.view viewWithTag:5];
     self.currentPartIndex = 0;
     
     if ([self.fgPlayer isPlaying] || [self.bgPlayer isPlaying]) {
         
-        [self stopEverything:nil];
-        
-        
-        [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
-        
-        [self.profileImageView setImage:[UIImage imageNamed:@"Profile"]];
-        [self.progressLabel setText:@"Press Play to Start"];
-        
-        //if (!self.isNewPart) {
-        self.selectedMelody = nil;
-        self.selectedMelody2 = nil;
-        self.selectedMelody3 = nil;
-        //}
-        
-        [toggleBtn setTitle:@"Preview melodies" forState:UIControlStateNormal];
-        
+        [self handleEndOfPlayback];
         
     } else {
         
@@ -591,6 +585,36 @@
         }
         
     }
+}
+
+-(void)handleEndOfPlayback
+{
+    
+    [self stopEverything:nil];
+    
+    [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+    
+    [self.profileImageView setImage:[UIImage imageNamed:@"Profile"]];
+    [self.progressLabel setText:@"Press Play to Start"];
+    
+    if (self.compositionRecordingURL || self.compositionMelody)
+    {
+        //The user is creating a composition
+        self.selectedMelody = self.compositionMelody;
+        self.selectedMelody2 = self.compositionMelody2;
+        self.selectedMelody3 = self.compositionMelody3;
+        self.currentRecordingURL = self.compositionRecordingURL;
+        
+    } else {
+        self.selectedMelody = nil;
+        self.selectedMelody2 = nil;
+        self.selectedMelody3 = nil;
+        self.currentRecordingURL = nil;
+    }
+    
+    UIButton *toggleBtn = (UIButton *)[self.view viewWithTag:5];
+    [toggleBtn setTitle:@"Preview melodies" forState:UIControlStateNormal];
+    
 }
 
 -(IBAction)toggleAllChannels:(id)sender {
@@ -923,6 +947,8 @@
         self.progressView.progress = 0;
         
         self.playButton.hidden = NO;
+        
+        self.compositionRecordingURL = self.currentRecordingURL;
     }
     
 }
@@ -974,6 +1000,54 @@
     [self.playButton setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
 }
 
+#pragma mark - AVAudioPlayerDelegate protocol handlers
+
+-(void)audioPlayerDidFinishPlaying: (AVAudioPlayer *)player successfully:(BOOL)flag
+{
+    
+    [self.timer invalidate];
+    self.progressView.progress = 0;
+    UIButton *toggleBtn = (UIButton *)[self.view viewWithTag:5];
+    [toggleBtn setTitle:@"Preview melodies" forState:UIControlStateNormal];
+    
+    if (flag && player == self.fgPlayer) {
+        [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+        
+        //if (player == self.fgPlayer) {
+        [self.bgPlayer stop];
+        [self.bgPlayer2 stop];
+        [self.bgPlayer3 stop];
+        //}
+        
+        if (self.selectedLoop && !self.recorder) { // && !self.isNewPart) {
+            
+            NSInteger partCount = MAX(0, self.partArray.count -1);
+            
+            if (self.currentPartIndex < partCount) {
+                
+                if (self.goBack) {
+                    self.currentPartIndex--;
+                    //[self preload];
+                    self.goBack = NO;
+                } else {
+                    self.currentPartIndex++;
+                }
+                //[self preload];
+                [self performSelector:@selector(playEverything) withObject:nil afterDelay:0.1];
+                //[self playEverything];
+            } else {
+                
+                [self handleEndOfPlayback];
+                [self.profileImageView setImage:[UIImage imageNamed:@"Profile"]];
+                self.currentPartIndex = 0;
+            }
+            
+        } else {
+            [self.profileImageView setImage:[UIImage imageNamed:@"Profile"]];
+            self.currentPartIndex = 0;
+        }
+    }
+}
 
 #pragma mark - download routines
 
@@ -1504,7 +1578,7 @@
 
 -(void)didSelectMelody2:(Melody *)melody {
     //[self.chooseLoop2Button setTitle:melody.melodyName forState:UIControlStateNormal];
-    
+
     [self loadMelody2:melody];
 }
 
@@ -1837,55 +1911,6 @@
     }
     return NO;
 }
-
--(void)audioPlayerDidFinishPlaying: (AVAudioPlayer *)player successfully:(BOOL)flag
-{
-    
-    [self.timer invalidate];
-    self.progressView.progress = 0;
-    UIButton *toggleBtn = (UIButton *)[self.view viewWithTag:5];
-    [toggleBtn setTitle:@"Preview melodies" forState:UIControlStateNormal];
-    
-    
-    if (flag && player == self.fgPlayer) {
-        [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
-
-        //if (player == self.fgPlayer) {
-            [self.bgPlayer stop];
-            [self.bgPlayer2 stop];
-            [self.bgPlayer3 stop];
-        //}
-        
-        if (self.selectedLoop && !self.recorder) { // && !self.isNewPart) {
-            
-            NSInteger partCount = MAX(0, self.partArray.count -1);
-            
-            if (self.currentPartIndex < partCount) {
-                
-                if (self.goBack) {
-                    self.currentPartIndex--;
-                    //[self preload];
-                    self.goBack = NO;
-                } else {
-                    self.currentPartIndex++;
-                }
-                //[self preload];
-                [self performSelector:@selector(playEverything) withObject:nil afterDelay:0.1];
-                //[self playEverything];
-            } else {
-                [self.profileImageView setImage:[UIImage imageNamed:@"Profile"]];
-                self.currentPartIndex = 0;
-            }
-            
-        } else {
-            [self.profileImageView setImage:[UIImage imageNamed:@"Profile"]];
-            self.currentPartIndex = 0;
-        }
-    }
-}
-
-
-
 
 #pragma mark - Table view data source
 
