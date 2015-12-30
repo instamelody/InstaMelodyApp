@@ -109,10 +109,10 @@
 
 -(IBAction)showVolumeSettings:(id)sender;
 -(IBAction)share:(id)sender;
--(IBAction)chooseLoop:(id)sender;
--(IBAction)chooseLoop2:(id)sender;
--(IBAction)playLoop:(id)sender;
--(IBAction)playLoop2:(id)sender;
+//-(IBAction)chooseLoop:(id)sender;
+//-(IBAction)chooseLoop2:(id)sender;
+//-(IBAction)playLoop:(id)sender;
+//-(IBAction)playLoop2:(id)sender;
 -(IBAction)toggleRecording:(id)sender;
 -(IBAction)togglePlayback:(id)sender;
 -(IBAction)save:(id)sender;

@@ -3373,43 +3373,6 @@ We are committed to conducting our business in accordance with these principles 
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ahu-PP-QDL" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fbj-8C-Upf">
-                    <rect key="frame" x="0.0" y="0.0" width="304" height="36"/>
-                    <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yzD-tv-QKn">
-                            <rect key="frame" x="8" y="0.0" width="250" height="36"/>
-                            <state key="normal" title="Pick a Loop">
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="chooseLoop:" destination="zFq-Vd-UtH" eventType="touchUpInside" id="Xu9-CV-xOZ"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M4n-95-6Ns">
-                            <rect key="frame" x="266" y="0.0" width="30" height="36"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="30" id="kia-xu-MpN"/>
-                            </constraints>
-                            <state key="normal" title="L">
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="playLoop:" destination="zFq-Vd-UtH" eventType="touchUpInside" id="COz-j6-EWO"/>
-                            </connections>
-                        </button>
-                    </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <constraints>
-                        <constraint firstItem="M4n-95-6Ns" firstAttribute="leading" secondItem="yzD-tv-QKn" secondAttribute="trailing" constant="8" id="1qZ-aJ-zUW"/>
-                        <constraint firstItem="M4n-95-6Ns" firstAttribute="top" secondItem="fbj-8C-Upf" secondAttribute="top" id="24Y-fN-8DN"/>
-                        <constraint firstAttribute="bottom" secondItem="yzD-tv-QKn" secondAttribute="bottom" id="3xv-oj-noX"/>
-                        <constraint firstAttribute="height" constant="36" id="4tp-W3-Vfx"/>
-                        <constraint firstAttribute="trailing" secondItem="M4n-95-6Ns" secondAttribute="trailing" constant="8" id="MvI-uf-c6o"/>
-                        <constraint firstItem="yzD-tv-QKn" firstAttribute="top" secondItem="fbj-8C-Upf" secondAttribute="top" id="XKp-Tb-jfv"/>
-                        <constraint firstAttribute="bottom" secondItem="M4n-95-6Ns" secondAttribute="bottom" id="Zj4-Kg-00A"/>
-                        <constraint firstItem="yzD-tv-QKn" firstAttribute="leading" secondItem="fbj-8C-Upf" secondAttribute="leading" constant="8" id="eaO-DA-soP"/>
-                    </constraints>
-                </view>
             </objects>
             <point key="canvasLocation" x="2137" y="91"/>
         </scene>
