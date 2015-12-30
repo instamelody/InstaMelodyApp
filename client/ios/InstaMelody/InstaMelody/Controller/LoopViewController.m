@@ -455,9 +455,29 @@
         [self stopEverything:nil];
     } else {
         [toggleBtn setTitle:@"Stop melodies" forState:UIControlStateNormal];
-        [self toggleMelodies:nil];
+        [self toggleAllChannels:nil];
     }
 }
+
+-(IBAction)back:(id)sender {
+    //check if part > 0
+    
+    if (self.currentPartIndex > 0) {
+        //skip to prv
+        self.goBack = YES;
+        [self audioPlayerDidFinishPlaying:self.fgPlayer successfully:YES];
+    }
+}
+
+-(IBAction)forward:(id)sender {
+    //check if part < max
+    //skip to next
+    if (self.currentPartIndex < self.partArray.count) {
+        //self.currentPartIndex++;
+        [self audioPlayerDidFinishPlaying:self.fgPlayer successfully:YES];
+    }
+}
+
 
 #pragma mark - Audio handling
 
@@ -483,6 +503,103 @@
     //
     self.inputs = [EZAudioDevice inputDevices];
     self.audioPlot.hidden = YES;
+}
+
+-(IBAction)togglePlayback:(id)sender {
+    //sdf
+    
+    UIButton *toggleBtn = (UIButton *)[self.view viewWithTag:5];
+    self.currentPartIndex = 0;
+    
+    
+    if ([self.fgPlayer isPlaying] || [self.bgPlayer isPlaying]) {
+        
+        [self stopEverything:nil];
+        
+        
+        [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+        
+        [self.profileImageView setImage:[UIImage imageNamed:@"Profile"]];
+        [self.progressLabel setText:@"Press Play to Start"];
+        
+        //if (!self.isNewPart) {
+        self.selectedMelody = nil;
+        self.selectedMelody2 = nil;
+        self.selectedMelody3 = nil;
+        //}
+        
+        [toggleBtn setTitle:@"Preview melodies" forState:UIControlStateNormal];
+        
+        
+    } else {
+        
+        NSError *error = nil;
+        
+        if (self.recorder != nil)
+        {
+            //there's something the user has just recorded; let's play just that.
+            [self playRecording:nil];
+            if (self.selectedMelody != nil) {
+                [self playLoop:nil];
+            }
+            
+            if (self.selectedMelody2 != nil) {
+                [self playLoop2:nil];
+            }
+            
+            if (self.selectedMelody3 != nil) {
+                [self playLoop3:nil];
+            }
+            
+        } else {
+            
+            AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+            [audioSession setCategory:AVAudioSessionCategoryPlayback
+                                error:&error];
+            /*
+             [[AudioSessionManager sharedInstance] changeMode:@"kAudioSessionManagerMode_Playback"];
+             [[AudioSessionManager sharedInstance] start];
+             */
+            
+            if (error == nil) {
+                
+                /*
+                 
+                 if ([self isHeadsetPluggedIn]) {
+                 
+                 [self playEverything];
+                 } else {
+                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Headphones not detected" message:@"For the best results, please plug in your headphones" preferredStyle:UIAlertControllerStyleAlert];
+                 UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                 [self playEverything];
+                 }];
+                 [alert addAction:okAction];
+                 [self presentViewController:alert animated:YES completion:nil];
+                 }
+                 
+                 */
+                
+                [self playEverything];
+            } else {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:@"Error setting audio" preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                    [self playEverything];
+                }];
+                [alert addAction:okAction];
+            }
+            
+        }
+        
+    }
+}
+
+-(IBAction)toggleAllChannels:(id)sender {
+    
+    [self toggleChannel:nil];
+    [self toggleChannel2:nil];
+    [self toggleChannel3:nil];
+    
+    
 }
 
 -(IBAction)toggleChannel:(id)sender {
@@ -522,6 +639,339 @@
             [self playLoop3:nil];
         }
     }
+}
+
+-(IBAction)playLoop:(id)sender {
+    
+    NSNumber *volume = [self.defaults objectForKey:@"melodyVolume"];
+    
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    
+    NSString *pathString = [NSString stringWithFormat:@"%@/Melodies/%@", documentsPath, self.selectedMelody.fileName];
+    
+    //pathString = [pathString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    
+    NSURL *docURL = [NSURL fileURLWithPath:pathString];
+    
+    NSError *error = nil;
+    
+    self.bgPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:docURL error:&error];
+    self.bgPlayer.delegate = self;
+    
+    if (error == nil) {
+        
+        [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+        [self.bgPlayer setNumberOfLoops:-1];
+        [self.bgPlayer setVolume:[volume floatValue]];
+        [self.bgPlayer play];
+        
+    } else {
+        NSLog(@"Error loading file: %@", [error description]);
+        
+    }
+    
+}
+
+-(IBAction)playLoop2:(id)sender {
+    NSNumber *volume = [self.defaults objectForKey:@"melodyVolume"];
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    
+    NSString *pathString = [NSString stringWithFormat:@"%@/Melodies/%@", documentsPath, self.selectedMelody2.fileName];
+    
+    //pathString = [pathString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    
+    NSURL *docURL = [NSURL fileURLWithPath:pathString];
+    
+    NSError *error = nil;
+    
+    self.bgPlayer2 = [[AVAudioPlayer alloc] initWithContentsOfURL:docURL error:&error];
+    self.bgPlayer2.delegate = self;
+    
+    if (error == nil) {
+        
+        [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+        [self.bgPlayer2 setNumberOfLoops:-1];
+        [self.bgPlayer2 setVolume:[volume floatValue]];
+        [self.bgPlayer2 play];
+        
+    } else {
+        NSLog(@"Error loading file: %@", [error description]);
+        
+    }
+    
+}
+
+-(IBAction)playLoop3:(id)sender {
+    NSNumber *volume = [self.defaults objectForKey:@"melodyVolume"];
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    
+    NSString *pathString = [NSString stringWithFormat:@"%@/Melodies/%@", documentsPath, self.selectedMelody3.fileName];
+    
+    //pathString = [pathString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    
+    NSURL *docURL = [NSURL fileURLWithPath:pathString];
+    
+    NSError *error = nil;
+    
+    self.bgPlayer3 = [[AVAudioPlayer alloc] initWithContentsOfURL:docURL error:&error];
+    self.bgPlayer3.delegate = self;
+    
+    if (error == nil) {
+        
+        [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+        
+        [self.bgPlayer3 setNumberOfLoops:-1];
+        [self.bgPlayer3 setVolume:[volume floatValue]];
+        [self.bgPlayer3 play];
+        
+        
+    } else {
+        NSLog(@"Error loading file: %@", [error description]);
+        
+    }
+    
+}
+
+-(IBAction)playRecording:(id)sender {
+    
+    NSNumber *volume = [self.defaults objectForKey:@"micVolume"];
+    //pathString = [pathString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    
+    NSURL *docURL = self.currentRecordingURL;
+    
+    NSError *error = nil;
+    
+    self.fgPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:docURL error:&error];
+    self.fgPlayer.delegate = self;
+    
+    if (error == nil) {
+        
+        [self.playButton setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
+        [self.fgPlayer setVolume:volume.floatValue];
+        
+        [self.fgPlayer play];
+        
+        NSTimeInterval interval = 0.15;
+        
+        /*
+         if (self.fgPlayer.duration < 5.0) {
+         interval = 0.2;
+         }*/
+        
+        if (self.timer !=nil) {
+            [self.timer invalidate];
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.progressView.progress = 0.0;
+        });
+        
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(updatePlaybackProgress) userInfo:nil repeats:YES];
+    } else {
+        NSLog(@"Error loading file: %@", [error description]);
+        
+    }
+    
+}
+
+-(IBAction)toggleRecording:(id)sender {
+    if (self.recorder.isRecording) {
+        
+        [self.timer invalidate];
+        self.progressView.progress = 0;
+        
+        [self stopRecording];
+        
+        [self.microphone stopFetchingAudio];
+        self.profileImageView.hidden = NO;
+        self.audioPlot.hidden = YES;
+        self.playButton.hidden = NO;
+        
+    } else {
+        NSError *error = nil;
+        
+        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+        
+        if ([self isHeadsetPluggedIn]) {
+            
+            [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord
+                                error:&error];
+        } else {
+            
+            [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:&error];
+        }
+        
+        /*
+         [[AudioSessionManager sharedInstance] changeMode:@"kAudioSessionManagerMode_Record"];
+         [[AudioSessionManager sharedInstance] start];
+         */
+        
+        [self.microphone startFetchingAudio];
+        [self.microphone setDevice:self.inputs[0]];
+        self.profileImageView.hidden = YES;
+        self.audioPlot.hidden = NO;
+        self.playButton.hidden = YES;
+        
+        if (error == nil) {
+            NSArray *paths =
+            NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                NSUserDomainMask, YES);
+            NSString *documentsPath = [paths objectAtIndex:0];
+            
+            NSString *recordingPath = [documentsPath stringByAppendingPathComponent:@"Recordings"];
+            
+            if (![[NSFileManager defaultManager] fileExistsAtPath:recordingPath]){
+                
+                NSError* error;
+                if(  [[NSFileManager defaultManager] createDirectoryAtPath:recordingPath withIntermediateDirectories:NO attributes:nil error:&error]) {
+                    
+                    NSLog(@"success creating folder");
+                    
+                } else {
+                    NSLog(@"[%@] ERROR: attempting to write create MyFolder directory", [self class]);
+                    NSAssert( FALSE, @"Failed to create directory maybe out of disk space?");
+                }
+                
+            }
+            
+            time_t unixTime = time(NULL);
+            
+            NSString *fileName = [NSString stringWithFormat:@"recording_%d.wav", (int)unixTime];
+            
+            NSString *filePath = [recordingPath
+                                  stringByAppendingPathComponent:fileName];
+            NSURL *fileURL = [NSURL fileURLWithPath:filePath];
+            NSMutableDictionary *settingsDict = [NSMutableDictionary new];
+            [settingsDict setObject:[NSNumber numberWithInt:44100.0]
+                             forKey:AVSampleRateKey];
+            [settingsDict setObject:[NSNumber numberWithInt:2]
+                             forKey:AVNumberOfChannelsKey];
+            [settingsDict setObject:[NSNumber
+                                     numberWithInt:AVAudioQualityMedium]
+                             forKey:AVEncoderAudioQualityKey];
+            
+            [settingsDict setObject:[NSNumber numberWithInt:kAudioFormatLinearPCM] forKey:AVFormatIDKey];
+            
+            [settingsDict setObject:[NSNumber numberWithInt:16]
+                             forKey:AVEncoderBitRateKey];
+            self.recorder = [[AVAudioRecorder alloc]
+                             initWithURL:fileURL
+                             settings:settingsDict error:&error];
+            if (error == nil) {
+                NSLog(@"audio recorder initialized successfully!");
+                
+                self.currentRecordingURL = fileURL;
+                
+                if (self.selectedLoop || self.selectedUserMelody) {
+                    self.isNewPart = YES;
+                }
+                
+                [self.recorder record];
+                
+                [self toggleAllChannels:nil];
+                
+                self.startTime = [NSDate date];
+                self.timer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(updateRecordProgress) userInfo:nil repeats:YES];
+                
+                [self.recordButton setImage:[UIImage imageNamed:@"stop"] forState:UIControlStateNormal];
+                
+                float RECORDING_LIMIT = [[DataManager sharedManager] isPremium] ? PREM_RECORDING_LIMIT :  FREE_RECORDING_LIMIT;
+                
+                [self performSelector:@selector(stopRecording) withObject:self afterDelay:RECORDING_LIMIT];
+                
+                /*
+                 if (self.selectedMelody != nil) {
+                 [self playLoop:nil];
+                 }
+                 if (self.selectedMelody2 != nil) {
+                 [self playLoop2:nil];
+                 }*/
+            } else {
+                NSLog(@"error initializing audio recorder: %@",
+                      [error description]);
+            }
+        } else {
+            NSLog(@"error initializing audio session: %@",
+                  [error description]);
+        }
+        
+    }
+}
+
+-(void)stopRecording {
+    
+    if ([self.recorder isRecording]) {
+        [self.recorder stop];
+        
+        if ([self.bgPlayer isPlaying]) {
+            [self.bgPlayer stop];
+        }
+        
+        if ([self.bgPlayer2 isPlaying]) {
+            [self.bgPlayer2 stop];
+        }
+        
+        
+        if ([self.bgPlayer3 isPlaying]) {
+            [self.bgPlayer3 stop];
+        }
+        
+        [self.recordButton setImage:[UIImage imageNamed:@"redo"] forState:UIControlStateNormal];
+        
+        [self.timer invalidate];
+        
+        self.progressView.progress = 0;
+        
+        self.playButton.hidden = NO;
+    }
+    
+}
+
+-(IBAction)stopEverything:(id)sender {
+    
+    if (self.timer != nil) {
+        [self.timer invalidate];
+        
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.progressView.progress = 0;
+    });
+    [self.fgPlayer stop];
+    [self.bgPlayer stop];
+    [self.bgPlayer2 stop];
+    [self.bgPlayer3 stop];
+    
+}
+
+-(void)playEverything {
+    
+    [self.fgPlayer stop];
+    [self.bgPlayer stop];
+    [self.bgPlayer2 stop];
+    [self.bgPlayer3 stop];
+    
+    if (self.selectedLoop != nil) {
+        
+        //if (!self.isNewPart) {
+        [self preload];
+        //}
+    }
+    
+    [self playRecording:nil];
+    
+    if (self.selectedMelody != nil) {
+        [self playLoop:nil];
+    }
+    
+    if (self.selectedMelody2 != nil) {
+        [self playLoop2:nil];
+    }
+    
+    if (self.selectedMelody3 != nil) {
+        [self playLoop3:nil];
+    }
+    
+    [self.playButton setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
 }
 
 
@@ -826,138 +1276,6 @@
 
 
 
--(IBAction)playLoop:(id)sender {
-    
-    NSNumber *volume = [self.defaults objectForKey:@"melodyVolume"];
-    
-    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-    
-    NSString *pathString = [NSString stringWithFormat:@"%@/Melodies/%@", documentsPath, self.selectedMelody.fileName];
-    
-    //pathString = [pathString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    
-    NSURL *docURL = [NSURL fileURLWithPath:pathString];
-    
-    NSError *error = nil;
-    
-    self.bgPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:docURL error:&error];
-    self.bgPlayer.delegate = self;
-    
-    if (error == nil) {
-        
-        [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
-        [self.bgPlayer setNumberOfLoops:-1];
-        [self.bgPlayer setVolume:[volume floatValue]];
-        [self.bgPlayer play];
-        
-    } else {
-        NSLog(@"Error loading file: %@", [error description]);
-        
-    }
-
-}
-
--(IBAction)playLoop2:(id)sender {
-    NSNumber *volume = [self.defaults objectForKey:@"melodyVolume"];
-    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-    
-    NSString *pathString = [NSString stringWithFormat:@"%@/Melodies/%@", documentsPath, self.selectedMelody2.fileName];
-    
-    //pathString = [pathString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    
-    NSURL *docURL = [NSURL fileURLWithPath:pathString];
-    
-    NSError *error = nil;
-    
-    self.bgPlayer2 = [[AVAudioPlayer alloc] initWithContentsOfURL:docURL error:&error];
-    self.bgPlayer2.delegate = self;
-    
-    if (error == nil) {
-        
-        [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
-        [self.bgPlayer2 setNumberOfLoops:-1];
-        [self.bgPlayer2 setVolume:[volume floatValue]];
-        [self.bgPlayer2 play];
-        
-    } else {
-        NSLog(@"Error loading file: %@", [error description]);
-        
-    }
-    
-}
-
--(IBAction)playLoop3:(id)sender {
-    NSNumber *volume = [self.defaults objectForKey:@"melodyVolume"];
-    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-    
-    NSString *pathString = [NSString stringWithFormat:@"%@/Melodies/%@", documentsPath, self.selectedMelody3.fileName];
-    
-    //pathString = [pathString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    
-    NSURL *docURL = [NSURL fileURLWithPath:pathString];
-    
-    NSError *error = nil;
-    
-    self.bgPlayer3 = [[AVAudioPlayer alloc] initWithContentsOfURL:docURL error:&error];
-    self.bgPlayer3.delegate = self;
-    
-    if (error == nil) {
-        
-        [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
-        
-        [self.bgPlayer3 setNumberOfLoops:-1];
-        [self.bgPlayer3 setVolume:[volume floatValue]];
-        [self.bgPlayer3 play];
-        
-
-    } else {
-        NSLog(@"Error loading file: %@", [error description]);
-        
-    }
-    
-}
-
--(IBAction)playRecording:(id)sender {
-    
-    NSNumber *volume = [self.defaults objectForKey:@"micVolume"];
-    //pathString = [pathString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    
-    NSURL *docURL = self.currentRecordingURL;
-    
-    NSError *error = nil;
-    
-    self.fgPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:docURL error:&error];
-    self.fgPlayer.delegate = self;
-    
-    if (error == nil) {
-        
-        [self.playButton setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
-        [self.fgPlayer setVolume:volume.floatValue];
-        
-        [self.fgPlayer play];
-        
-        NSTimeInterval interval = 0.15;
-        
-        /*
-        if (self.fgPlayer.duration < 5.0) {
-            interval = 0.2;
-        }*/
-        
-        if (self.timer !=nil) {
-            [self.timer invalidate];
-        }
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.progressView.progress = 0.0;
-        });
-        
-        self.timer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(updatePlaybackProgress) userInfo:nil repeats:YES];
-    } else {
-        NSLog(@"Error loading file: %@", [error description]);
-        
-    }
-    
-}
 
 -(IBAction)save:(id)sender {
 
@@ -1051,292 +1369,6 @@
         [self presentViewController:alert animated:YES completion:nil];
     }
     
-}
-
-
--(IBAction)back:(id)sender {
-    //check if part > 0
-    
-    if (self.currentPartIndex > 0) {
-         //skip to prv
-        self.goBack = YES;
-        [self audioPlayerDidFinishPlaying:self.fgPlayer successfully:YES];
-    }
-}
-
--(IBAction)forward:(id)sender {
-    //check if part < max
-    //skip to next
-    if (self.currentPartIndex < self.partArray.count) {
-        //self.currentPartIndex++;
-        [self audioPlayerDidFinishPlaying:self.fgPlayer successfully:YES];
-    }
-}
-
--(IBAction)toggleRecording:(id)sender {
-    if (self.recorder.isRecording) {
-        
-        [self.timer invalidate];
-        self.progressView.progress = 0;
-        
-        [self stopRecording];
-        
-        [self.microphone stopFetchingAudio];
-        self.profileImageView.hidden = NO;
-        self.audioPlot.hidden = YES;
-        self.playButton.hidden = NO;
-        
-    } else {
-        NSError *error = nil;
-        
-        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-        
-        if ([self isHeadsetPluggedIn]) {
-        
-            [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord
-                            error:&error];
-        } else {
-        
-            [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:&error];
-        }
-        
-        /*
-        [[AudioSessionManager sharedInstance] changeMode:@"kAudioSessionManagerMode_Record"];
-        [[AudioSessionManager sharedInstance] start];
-         */
-        
-        [self.microphone startFetchingAudio];
-        [self.microphone setDevice:self.inputs[0]];
-        self.profileImageView.hidden = YES;
-        self.audioPlot.hidden = NO;
-        self.playButton.hidden = YES;
-        
-        if (error == nil) {
-            NSArray *paths =
-            NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-                                                NSUserDomainMask, YES);
-            NSString *documentsPath = [paths objectAtIndex:0];
-            
-            NSString *recordingPath = [documentsPath stringByAppendingPathComponent:@"Recordings"];
-            
-            if (![[NSFileManager defaultManager] fileExistsAtPath:recordingPath]){
-                
-                NSError* error;
-                if(  [[NSFileManager defaultManager] createDirectoryAtPath:recordingPath withIntermediateDirectories:NO attributes:nil error:&error]) {
-                    
-                    NSLog(@"success creating folder");
-                    
-                } else {
-                    NSLog(@"[%@] ERROR: attempting to write create MyFolder directory", [self class]);
-                    NSAssert( FALSE, @"Failed to create directory maybe out of disk space?");
-                }
-                
-            }
-            
-            time_t unixTime = time(NULL);
-            
-            NSString *fileName = [NSString stringWithFormat:@"recording_%d.wav", (int)unixTime];
-            
-            NSString *filePath = [recordingPath
-                                  stringByAppendingPathComponent:fileName];
-            NSURL *fileURL = [NSURL fileURLWithPath:filePath];
-            NSMutableDictionary *settingsDict = [NSMutableDictionary new];
-            [settingsDict setObject:[NSNumber numberWithInt:44100.0]
-                             forKey:AVSampleRateKey];
-            [settingsDict setObject:[NSNumber numberWithInt:2]
-                             forKey:AVNumberOfChannelsKey];
-            [settingsDict setObject:[NSNumber
-                                     numberWithInt:AVAudioQualityMedium]
-                             forKey:AVEncoderAudioQualityKey];
-            
-            [settingsDict setObject:[NSNumber numberWithInt:kAudioFormatLinearPCM] forKey:AVFormatIDKey];
-            
-            [settingsDict setObject:[NSNumber numberWithInt:16]
-                             forKey:AVEncoderBitRateKey];
-            self.recorder = [[AVAudioRecorder alloc]
-                             initWithURL:fileURL
-                             settings:settingsDict error:&error];
-            if (error == nil) {
-                NSLog(@"audio recorder initialized successfully!");
-                
-                self.currentRecordingURL = fileURL;
-                
-                if (self.selectedLoop || self.selectedUserMelody) {
-                    self.isNewPart = YES;
-                }
-                
-                [self.recorder record];
-                
-                [self toggleMelodies:nil];
-                
-                self.startTime = [NSDate date];
-                self.timer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(updateRecordProgress) userInfo:nil repeats:YES];
-                
-                [self.recordButton setImage:[UIImage imageNamed:@"stop"] forState:UIControlStateNormal];
-                
-                float RECORDING_LIMIT = [[DataManager sharedManager] isPremium] ? PREM_RECORDING_LIMIT :  FREE_RECORDING_LIMIT;
-                
-                [self performSelector:@selector(stopRecording) withObject:self afterDelay:RECORDING_LIMIT];
-                
-                /*
-                if (self.selectedMelody != nil) {
-                    [self playLoop:nil];
-                }
-                if (self.selectedMelody2 != nil) {
-                    [self playLoop2:nil];
-                }*/
-            } else {
-                NSLog(@"error initializing audio recorder: %@",
-                      [error description]);
-            }
-        } else {
-            NSLog(@"error initializing audio session: %@",
-                  [error description]);
-        }
-        
-    }
-}
-
--(void)stopRecording {
-    
-    if ([self.recorder isRecording]) {
-        [self.recorder stop];
-        
-        if ([self.bgPlayer isPlaying]) {
-            [self.bgPlayer stop];
-        }
-        
-        if ([self.bgPlayer2 isPlaying]) {
-            [self.bgPlayer2 stop];
-        }
-        
-        
-        if ([self.bgPlayer3 isPlaying]) {
-            [self.bgPlayer3 stop];
-        }
-        
-        [self.recordButton setImage:[UIImage imageNamed:@"redo"] forState:UIControlStateNormal];
-        
-        [self.timer invalidate];
-        
-        self.progressView.progress = 0;
-        
-        self.playButton.hidden = NO;
-    }
-
-}
-
--(IBAction)toggleMelodies:(id)sender {
-    
-    [self toggleChannel:nil];
-    [self toggleChannel2:nil];
-    [self toggleChannel3:nil];
-    
-    
-}
-
--(IBAction)stopEverything:(id)sender {
-    
-    if (self.timer != nil) {
-        [self.timer invalidate];
-        
-    }
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.progressView.progress = 0;
-    });
-    [self.fgPlayer stop];
-    [self.bgPlayer stop];
-    [self.bgPlayer2 stop];
-    [self.bgPlayer3 stop];
-    
-}
-
--(IBAction)togglePlayback:(id)sender {
-    //sdf
-
-    UIButton *toggleBtn = (UIButton *)[self.view viewWithTag:5];
-    self.currentPartIndex = 0;
-    
-    
-    if ([self.fgPlayer isPlaying] || [self.bgPlayer isPlaying]) {
-    
-        [self stopEverything:nil];
-        
-        
-        [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
-        
-        [self.profileImageView setImage:[UIImage imageNamed:@"Profile"]];
-        [self.progressLabel setText:@"Press Play to Start"];
-        
-        //if (!self.isNewPart) {
-            self.selectedMelody = nil;
-            self.selectedMelody2 = nil;
-            self.selectedMelody3 = nil;
-        //}
-        
-        [toggleBtn setTitle:@"Preview melodies" forState:UIControlStateNormal];
-        
-
-    } else {
-        
-        NSError *error = nil;
-        
-        if (self.recorder != nil)
-        {
-            //there's something the user has just recorded; let's play just that.
-            [self playRecording:nil];
-            if (self.selectedMelody != nil) {
-                [self playLoop:nil];
-            }
-            
-            if (self.selectedMelody2 != nil) {
-                [self playLoop2:nil];
-            }
-            
-            if (self.selectedMelody3 != nil) {
-                [self playLoop3:nil];
-            }
-            
-        } else {
-
-            AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-            [audioSession setCategory:AVAudioSessionCategoryPlayback
-                                error:&error];
-            /*
-            [[AudioSessionManager sharedInstance] changeMode:@"kAudioSessionManagerMode_Playback"];
-            [[AudioSessionManager sharedInstance] start];
-             */
-            
-            if (error == nil) {
-                
-                /*
-                
-                if ([self isHeadsetPluggedIn]) {
-                    
-                    [self playEverything];
-                } else {
-                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Headphones not detected" message:@"For the best results, please plug in your headphones" preferredStyle:UIAlertControllerStyleAlert];
-                    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                        [self playEverything];
-                    }];
-                    [alert addAction:okAction];
-                    [self presentViewController:alert animated:YES completion:nil];
-                }
-                 
-                 */
-                
-                [self playEverything];
-            } else {
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:@"Error setting audio" preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                    [self playEverything];
-                }];
-                [alert addAction:okAction];
-            }
-        
-        }
-        
-    }
 }
 
 -(void)preload {
@@ -1462,37 +1494,6 @@
     }
     
     
-}
-
--(void)playEverything {
-    
-    [self.fgPlayer stop];
-    [self.bgPlayer stop];
-    [self.bgPlayer2 stop];
-    [self.bgPlayer3 stop];
-    
-    if (self.selectedLoop != nil) {
-        
-        //if (!self.isNewPart) {
-            [self preload];
-        //}
-    }
-    
-    [self playRecording:nil];
-    
-    if (self.selectedMelody != nil) {
-        [self playLoop:nil];
-    }
-    
-    if (self.selectedMelody2 != nil) {
-        [self playLoop2:nil];
-    }
-    
-    if (self.selectedMelody3 != nil) {
-        [self playLoop3:nil];
-    }
-    
-    [self.playButton setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
 }
 
 -(void)didSelectMelody:(Melody *)melody {
