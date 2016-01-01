@@ -180,12 +180,20 @@
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
             NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
             
-            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %td: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            if ([[errorDict objectForKey:@"Message"] isEqualToString:@"Cannot send a message to a Chat that User is not a member of."])
+            {
+                //They are not a member of this chat, so we need to make a different API call...
+                [self uploadLoopPart:userDict];
+                
+            } else {
             
-            NSLog(@"%@",ErrorResponse);
-            
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [alertView show];
+                NSString *ErrorResponse = [NSString stringWithFormat:@"Error %td: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+                
+                NSLog(@"%@",ErrorResponse);
+                
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [alertView show];
+            }
         }
     }];
     

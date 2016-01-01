@@ -340,14 +340,14 @@
         self.explicitView.userInteractionEnabled = YES;
         self.publicView.userInteractionEnabled = YES;
     }
-    
+    /*
     if (_isForeignChatLoop)
     {
         self.recordButton.hidden = YES;
     } else {
         self.recordButton.hidden = NO;
     }
-    
+    */
     self.saveBar.hidden = NO;
     
     //self.recordButton.hidden = NO;
