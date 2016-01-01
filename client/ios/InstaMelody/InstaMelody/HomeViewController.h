@@ -32,7 +32,7 @@
 @property (nonatomic, strong) IBOutlet UIImageView *liveImageView;
 
 @property (nonatomic, strong) IBOutlet UIView *pathMenuView;
-@property (nonatomic, strong) NSDateFormatter *dateFormatter;
+//@property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
 -(IBAction)showSettings:(id)sender;
 

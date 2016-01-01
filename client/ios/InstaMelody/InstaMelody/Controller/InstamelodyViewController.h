@@ -15,7 +15,7 @@
 #import "constants.h"
 #import "CreateChatViewController.h"
 
-@interface InstamelodyViewController : UIViewController <AwesomeMenuDelegate>
+@interface InstamelodyViewController : UIViewController <AwesomeMenuDelegate, CreateChatDelegate>
 
 @property NSDateFormatter *dateFormatter;
 

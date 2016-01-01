@@ -10,7 +10,7 @@
 #import "LoopViewController.h"
 #import "NetworkManager.h"
 
-@interface UserMelodyListViewController : UIViewController
+@interface UserMelodyListViewController : UIViewController <LoopDelegate>
 
 @property (nonatomic, strong) IBOutlet UISegmentedControl *filterControl;
 
