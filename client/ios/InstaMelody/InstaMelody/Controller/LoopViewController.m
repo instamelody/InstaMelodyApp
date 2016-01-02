@@ -1118,9 +1118,6 @@
     
 }
 
-
-#pragma mark - remaining routines
-
 -(void)buildPartArray {
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -1267,6 +1264,9 @@
     }
 }
 
+
+#pragma mark - remaining routines
+
 /*
 -(IBAction)join:(id)sender {
     self.isNotMyStudio = NO;
@@ -1347,15 +1347,79 @@
 }
 */
 
+-(void)createComboAudioFile
+{
+    if (self.partArray.count == 0)
+        return;
+    
+    AVMutableComposition * loop = [AVMutableComposition composition];
+    
+    for (NSDictionary * thisPart in self.partArray) {
+        //Iterate through each part in the loop
+        
+        AVMutableCompositionTrack * loopPart =
+        [loop addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+        
+        for (NSString * filename in [thisPart objectForKey:@"Files"]) {
+            //Need to merge these files
+            AVURLAsset * audioAssetPart = [AVURLAsset URLAssetWithURL:[NSURL URLWithString:filename] options:nil];
+            CMTimeRange audioTimeRange = CMTimeRangeMake(kCMTimeZero, audioAssetPart.duration);
+            
+            [loopPart insertTimeRange:audioTimeRange ofTrack:[[audioAssetPart tracksWithMediaType:AVMediaTypeAudio] firstObject] atTime:kCMTimeZero error:nil];
+            
+        }
+        
+        NSLog(@"%@", loop);
 
+        //Define player item with the composition
+        
+        
+    }
+    
+    NSArray *paths =
+    NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                        NSUserDomainMask, YES);
+    NSString *documentsPath = [paths objectAtIndex:0];
+    
+    NSString *recordingPath = [documentsPath stringByAppendingPathComponent:@"Recordings"];
+    
+    NSString *filePath = [recordingPath
+                          stringByAppendingPathComponent:@"combo-audio"];
+    
+    NSURL *outputFileUrl = [NSURL fileURLWithPath:filePath];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
+        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+    
+    AVAssetExportSession * export = [[AVAssetExportSession alloc] initWithAsset:loop presetName:AVAssetExportPresetAppleM4A];
+    export.outputFileType = AVFileTypeAppleM4A;
+    export.outputURL = outputFileUrl;
+    
+    [export exportAsynchronouslyWithCompletionHandler:
+     ^(void ) {
+         
+         NSLog(@"error? %@", export.error);
+         
+         dispatch_async(dispatch_get_main_queue(), ^{
+            
+             self.bgPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:@"combo-audio"] error:nil];
+             self.bgPlayer.delegate = self;
+             [self.bgPlayer play];
+             
+         });
+     }
+     ];
+    
+    
 
-
+    
+    
+}
 
 -(IBAction)save:(id)sender {
 
     UITextField *topicField = (UITextField *)[self.tableView viewWithTag:98];
     BOOL isPremium = [[DataManager sharedManager] isPremium];
-    
+    [self createComboAudioFile];
     if (self.explicitCheckbox.on != [initialIsExplicitStatus intValue] && !self.recorder) // && !self.isNewPart)
     {
         //need to save the Explicit state
