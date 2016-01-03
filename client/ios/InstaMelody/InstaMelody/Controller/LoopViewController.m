@@ -62,6 +62,7 @@
 {
     NSNumber * initialIsExplicitStatus;
     NSURL *comboAudioFileUrl; //Used for sharing
+    NSMutableArray *audioMixParams; //Used for audio mixing combo sound file
 }
 
 #pragma mark - lifecycle methods
@@ -1354,6 +1355,32 @@
 }
 */
 
+- (AVURLAsset*) setUpAndAddAudioAtPath:(NSURL*)assetURL toComposition:(AVMutableComposition *)composition
+                                atTime:(CMTime)startTime withDuration:(CMTime)trackDuration
+{
+    AVURLAsset *songAsset = [AVURLAsset URLAssetWithURL:assetURL options:nil];
+    
+    AVMutableCompositionTrack *track = [composition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+    AVAssetTrack *sourceAudioTrack = [[songAsset tracksWithMediaType:AVMediaTypeAudio] objectAtIndex:0];
+    
+    NSError *error = nil;
+    BOOL ok = NO;
+    
+    //CMTime trackDuration = songAsset.duration;
+    //CMTime longestTime = CMTimeMake(848896, 44100); //(19.24 seconds)
+    CMTimeRange tRange = CMTimeRangeMake(startTime, trackDuration);
+    
+    //Set Volume
+    AVMutableAudioMixInputParameters *trackMix = [AVMutableAudioMixInputParameters audioMixInputParametersWithTrack:track];
+    [trackMix setVolume:0.8f atTime:startTime];
+    [audioMixParams addObject:trackMix];
+    
+    //Insert audio into track
+    ok = [track insertTimeRange:tRange ofTrack:sourceAudioTrack atTime:startTime error:&error];
+    
+    return songAsset;
+}
+
 -(void)createComboAudioFile
 {
     if (self.partArray.count == 0)
@@ -1363,14 +1390,17 @@
     NSString *melodyPath = [documentsPath stringByAppendingPathComponent:@"Melodies"];
     NSString *recordingPath = [documentsPath stringByAppendingPathComponent:@"Recordings"];
     
-    AVMutableComposition * loop = [AVMutableComposition composition];
+    //AVMutableComposition * loop = [AVMutableComposition composition];
     CMTime startTimeOfLoop = kCMTimeZero;
+    
+    audioMixParams = [[NSMutableArray alloc] init];
+    AVMutableComposition * composition = [AVMutableComposition composition];
     
     for (NSDictionary * thisPart in self.partArray) {
         //Iterate through each part in the loop
         
-        AVMutableCompositionTrack * loopPart =
-        [loop addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+        //AVMutableCompositionTrack * loopPart =
+        //[loop addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
         
         NSMutableArray * files = [thisPart objectForKey:@"Files"];
         //Get the elements that make up this part
@@ -1389,15 +1419,17 @@
         NSString * recordingFilename = files[recordingIndex];
         [files removeObjectAtIndex:recordingIndex];
         
+        //////////
+        
         //Need to merge these files
         NSURL * fileURL = [NSURL fileURLWithPath:[recordingPath stringByAppendingPathComponent:[recordingFilename lastPathComponent]]];
         NSLog(@"URL = %@", fileURL.absoluteString);
+        
         AVURLAsset * audioAssetPart = [AVURLAsset URLAssetWithURL:fileURL options:nil];
-        CMTimeRange audioTimeRange = CMTimeRangeMake(startTimeOfLoop, audioAssetPart.duration);
-        //Use audioTimeRange for all other melodies in this part.
+        //Get duration of recording to govern the length of this group
         NSLog(@"duration of recording = %f secs", CMTimeGetSeconds(audioAssetPart.duration));
         
-        [loopPart insertTimeRange:audioTimeRange ofTrack:[[audioAssetPart tracksWithMediaType:AVMediaTypeAudio] firstObject] atTime:startTimeOfLoop error:nil];
+        [self setUpAndAddAudioAtPath:fileURL toComposition:composition atTime:startTimeOfLoop withDuration:audioAssetPart.duration];
         
         //Now we need to handle the other melodies in this part
         for (NSString * filename in files) {
@@ -1405,17 +1437,34 @@
             NSLog(@"URL = %@", fileURL.absoluteString);
             AVURLAsset * AnotherAudioAssetPart = [AVURLAsset URLAssetWithURL:fileURL options:nil];
             NSLog(@"duration of melody = %f secs", CMTimeGetSeconds(AnotherAudioAssetPart.duration));
-            [loopPart insertTimeRange:audioTimeRange ofTrack:[[AnotherAudioAssetPart tracksWithMediaType:AVMediaTypeAudio] firstObject] atTime:startTimeOfLoop error:nil];
+            [self setUpAndAddAudioAtPath:fileURL toComposition:composition atTime:startTimeOfLoop withDuration:audioAssetPart.duration];
             
         }
+        
+        
+        
+        
+
+/*
+        NSMutableArray * audioMixParams = [[NSMutableArray alloc] init];
+        AVMutableCompositionTrack * compositionTrack =
+        [loop addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+
+        AVAssetTrack * assetTrack = [[audioAssetPart tracksWithMediaType:AVMediaTypeAudio] firstObject];
+        
+        AVMutableAudioMixInputParameters *trackMix = [AVMutableAudioMixInputParameters audioMixInputParametersWithTrack:compositionTrack];
+        [trackMix setVolume:0.8f atTime:startTimeOfLoop];
+        [audioMixParams addObject:trackMix];
+        
+        [compositionTrack insertTimeRange:audioTimeRange ofTrack:[[audioAssetPart tracksWithMediaType:AVMediaTypeAudio] firstObject] atTime:startTimeOfLoop error:nil];
+        
+*/
         
         //Now set things up for the next loop...
         break;
         startTimeOfLoop = CMTimeAdd(startTimeOfLoop, audioAssetPart.duration);
         NSLog(@"start time of next part = %f secs", CMTimeGetSeconds(startTimeOfLoop));
     }
-    
-    NSLog(@"%@", loop);
     
     //Now create and save the combo audio file.
     
@@ -1426,9 +1475,14 @@
     if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
         [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
     
-    AVAssetExportSession * export = [[AVAssetExportSession alloc] initWithAsset:[loop copy] presetName:AVAssetExportPresetAppleM4A];
+    AVMutableAudioMix * audioMix = [AVMutableAudioMix audioMix];
+    audioMix.inputParameters = [NSArray arrayWithArray:audioMixParams];
+    
+    AVAssetExportSession * export = [[AVAssetExportSession alloc] initWithAsset:composition presetName:AVAssetExportPresetAppleM4A];
+    export.audioMix = audioMix;
     export.outputFileType = AVFileTypeAppleM4A;
     export.outputURL = comboAudioFileUrl;
+    
     NSLog(@"writing m4a file to %@", comboAudioFileUrl);
     [export exportAsynchronouslyWithCompletionHandler:
      ^(void ) {
