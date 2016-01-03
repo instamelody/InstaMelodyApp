@@ -1358,6 +1358,9 @@
     if (self.partArray.count == 0)
         return;
     
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    NSString *melodyPath = [documentsPath stringByAppendingPathComponent:@"Melodies"];
+    
     AVMutableComposition * loop = [AVMutableComposition composition];
     
     for (NSDictionary * thisPart in self.partArray) {
@@ -1368,7 +1371,9 @@
         
         for (NSString * filename in [thisPart objectForKey:@"Files"]) {
             //Need to merge these files
-            AVURLAsset * audioAssetPart = [AVURLAsset URLAssetWithURL:[NSURL URLWithString:filename] options:nil];
+            NSURL * fileURL = [NSURL fileURLWithPath:[melodyPath stringByAppendingPathComponent:[filename lastPathComponent]]];
+            NSLog(@"URL = %@", fileURL.absoluteString);
+            AVURLAsset * audioAssetPart = [AVURLAsset URLAssetWithURL:fileURL options:nil];
             CMTimeRange audioTimeRange = CMTimeRangeMake(kCMTimeZero, audioAssetPart.duration);
             
             [loopPart insertTimeRange:audioTimeRange ofTrack:[[audioAssetPart tracksWithMediaType:AVMediaTypeAudio] firstObject] atTime:kCMTimeZero error:nil];
@@ -1376,48 +1381,84 @@
         }
         
         NSLog(@"%@", loop);
-
+        
         //Define player item with the composition
         
         
     }
+    ///////////
+    /*
+    NSString * oneWAVFileName = [[[self.partArray firstObject] objectForKey:@"Files"] firstObject];
+    NSURL * oneWAVURL = [NSURL fileURLWithPath:[melodyPath stringByAppendingPathComponent:[oneWAVFileName lastPathComponent]]];
+    NSError * error;
+    NSLog(@"file URL = %@", oneWAVURL);
+    AVAsset *wavAsset = [AVAsset assetWithURL:oneWAVURL];
     
-    NSArray *paths =
-    NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-                                        NSUserDomainMask, YES);
-    NSString *documentsPath = [paths objectAtIndex:0];
+    NSLog(@"%@", [AVAssetExportSession exportPresetsCompatibleWithAsset:wavAsset]);
+    NSLog(@"duration = %f", CMTimeGetSeconds(wavAsset.duration));
+    NSLog(@"meta = %@", wavAsset.metadata);
+    
+    AVMutableComposition *mutableComposition = [AVMutableComposition composition];
+    [mutableComposition insertTimeRange:CMTimeRangeMake(kCMTimeZero, wavAsset.duration)
+                                ofAsset:wavAsset atTime:kCMTimeZero error:&error];
+    
+    
+    AVAssetExportSession *exportSession = [[AVAssetExportSession alloc]
+                                           initWithAsset:[mutableComposition copy] presetName:AVAssetExportPresetAppleM4A];
     
     NSString *recordingPath = [documentsPath stringByAppendingPathComponent:@"Recordings"];
     
     NSString *filePath = [recordingPath
-                          stringByAppendingPathComponent:@"combo-audio"];
+                          stringByAppendingPathComponent:@"combo-audio-xyz123.m4a"];
+    
+    NSURL *outputFileUrl = [NSURL fileURLWithPath:filePath];
+    
+    exportSession.outputURL = outputFileUrl;
+    exportSession.outputFileType = AVFileTypeAppleM4A;
+    
+    [exportSession exportAsynchronouslyWithCompletionHandler:^{
+        
+         NSLog(@"status: %ld", (long)exportSession.status);
+         NSLog(@"error? %@", exportSession.error);
+    
+    }];
+    
+    */
+    
+    
+    NSArray *paths =
+    NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                        NSUserDomainMask, YES);
+    //NSString *documentsPath = [paths objectAtIndex:0];
+    
+    NSString *recordingPath = [documentsPath stringByAppendingPathComponent:@"Recordings"];
+    
+    NSString *filePath = [recordingPath
+                          stringByAppendingPathComponent:@"combo-audio-999.m4a"];
     
     NSURL *outputFileUrl = [NSURL fileURLWithPath:filePath];
     if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
         [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
     
-    AVAssetExportSession * export = [[AVAssetExportSession alloc] initWithAsset:loop presetName:AVAssetExportPresetAppleM4A];
+    AVAssetExportSession * export = [[AVAssetExportSession alloc] initWithAsset:[loop copy] presetName:AVAssetExportPresetAppleM4A];
     export.outputFileType = AVFileTypeAppleM4A;
     export.outputURL = outputFileUrl;
     
     [export exportAsynchronouslyWithCompletionHandler:
      ^(void ) {
          
-         NSLog(@"error? %@", export.error);
+         NSLog(@"status: %ld; error? %@", (long)export.status, export.error);
          
+         /*
          dispatch_async(dispatch_get_main_queue(), ^{
             
              self.bgPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:@"combo-audio"] error:nil];
              self.bgPlayer.delegate = self;
              [self.bgPlayer play];
              
-         });
-     }
-     ];
-    
-    
+         }); */
+     }];
 
-    
     
 }
 
