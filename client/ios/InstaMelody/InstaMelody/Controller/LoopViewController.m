@@ -1360,8 +1360,10 @@
     
     NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     NSString *melodyPath = [documentsPath stringByAppendingPathComponent:@"Melodies"];
+    NSString *recordingPath = [documentsPath stringByAppendingPathComponent:@"Recordings"];
     
     AVMutableComposition * loop = [AVMutableComposition composition];
+    CMTime startTimeOfLoop = kCMTimeZero;
     
     for (NSDictionary * thisPart in self.partArray) {
         //Iterate through each part in the loop
@@ -1369,23 +1371,47 @@
         AVMutableCompositionTrack * loopPart =
         [loop addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
         
-        for (NSString * filename in [thisPart objectForKey:@"Files"]) {
-            //Need to merge these files
+        NSMutableArray * files = [thisPart objectForKey:@"Files"];
+        //Get the elements that make up this part
+        
+        NSInteger recordingIndex = [files indexOfObjectPassingTest:^BOOL(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([obj containsString:@"recording"])
+                return true;
+            else
+                return false;
+        }];
+        //Start with the recording; its length with determine the length of the other components of this part.
+        
+        NSString * recordingFilename = files[recordingIndex];
+        [files removeObjectAtIndex:recordingIndex];
+        
+        //Need to merge these files
+        NSURL * fileURL = [NSURL fileURLWithPath:[recordingPath stringByAppendingPathComponent:[recordingFilename lastPathComponent]]];
+        NSLog(@"URL = %@", fileURL.absoluteString);
+        AVURLAsset * audioAssetPart = [AVURLAsset URLAssetWithURL:fileURL options:nil];
+        CMTimeRange audioTimeRange = CMTimeRangeMake(startTimeOfLoop, audioAssetPart.duration);
+        //Use audioTimeRange for all other melodies in this part.
+        
+        [loopPart insertTimeRange:audioTimeRange ofTrack:[[audioAssetPart tracksWithMediaType:AVMediaTypeAudio] firstObject] atTime:startTimeOfLoop error:nil];
+        
+        //Now we need to handle the other melodies in this part
+        for (NSString * filename in files) {
             NSURL * fileURL = [NSURL fileURLWithPath:[melodyPath stringByAppendingPathComponent:[filename lastPathComponent]]];
             NSLog(@"URL = %@", fileURL.absoluteString);
-            AVURLAsset * audioAssetPart = [AVURLAsset URLAssetWithURL:fileURL options:nil];
-            CMTimeRange audioTimeRange = CMTimeRangeMake(kCMTimeZero, audioAssetPart.duration);
-            
-            [loopPart insertTimeRange:audioTimeRange ofTrack:[[audioAssetPart tracksWithMediaType:AVMediaTypeAudio] firstObject] atTime:kCMTimeZero error:nil];
+            AVURLAsset * AnotherAudioAssetPart = [AVURLAsset URLAssetWithURL:fileURL options:nil];
+
+            [loopPart insertTimeRange:audioTimeRange ofTrack:[[AnotherAudioAssetPart tracksWithMediaType:AVMediaTypeAudio] firstObject] atTime:startTimeOfLoop error:nil];
             
         }
         
-        NSLog(@"%@", loop);
+        //Now set things up for the next loop...
         
-        //Define player item with the composition
-        
+        startTimeOfLoop = CMTimeAdd(startTimeOfLoop, audioAssetPart.duration);
         
     }
+    
+    NSLog(@"%@", loop);
+    
     ///////////
     /*
     NSString * oneWAVFileName = [[[self.partArray firstObject] objectForKey:@"Files"] firstObject];
@@ -1431,7 +1457,7 @@
                                         NSUserDomainMask, YES);
     //NSString *documentsPath = [paths objectAtIndex:0];
     
-    NSString *recordingPath = [documentsPath stringByAppendingPathComponent:@"Recordings"];
+    //NSString *recordingPath = [documentsPath stringByAppendingPathComponent:@"Recordings"];
     
     NSString *filePath = [recordingPath
                           stringByAppendingPathComponent:@"combo-audio-999.m4a"];
