@@ -63,6 +63,7 @@
     NSNumber * initialIsExplicitStatus;
     NSURL *comboAudioFileUrl; //Used for sharing
     NSMutableArray *audioMixParams; //Used for audio mixing combo sound file
+    NSMutableArray *compositionArray; //Used to store components in the loop
 }
 
 #pragma mark - lifecycle methods
@@ -1392,15 +1393,14 @@
     
     //AVMutableComposition * loop = [AVMutableComposition composition];
     CMTime startTimeOfLoop = kCMTimeZero;
-    
-    audioMixParams = [[NSMutableArray alloc] init];
-    AVMutableComposition * composition = [AVMutableComposition composition];
+    compositionArray = [[NSMutableArray alloc] init];
+    int loopCounter = 0;
     
     for (NSDictionary * thisPart in self.partArray) {
         //Iterate through each part in the loop
         
-        //AVMutableCompositionTrack * loopPart =
-        //[loop addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+        audioMixParams = [[NSMutableArray alloc] init];
+        AVMutableComposition * composition = [AVMutableComposition composition];
         
         NSMutableArray * files = [thisPart objectForKey:@"Files"];
         //Get the elements that make up this part
@@ -1441,56 +1441,43 @@
             
         }
         
+        //Now do an export of this segment
         
+        NSString *filePath = [recordingPath
+                              stringByAppendingPathComponent:[NSString stringWithFormat:@"combo-audio-file-%d.m4a", loopCounter]];
         
+        comboAudioFileUrl = [NSURL fileURLWithPath:filePath];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
+            [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
         
-
-/*
-        NSMutableArray * audioMixParams = [[NSMutableArray alloc] init];
-        AVMutableCompositionTrack * compositionTrack =
-        [loop addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
-
-        AVAssetTrack * assetTrack = [[audioAssetPart tracksWithMediaType:AVMediaTypeAudio] firstObject];
+        AVMutableAudioMix * audioMix = [AVMutableAudioMix audioMix];
+        audioMix.inputParameters = [NSArray arrayWithArray:audioMixParams];
         
-        AVMutableAudioMixInputParameters *trackMix = [AVMutableAudioMixInputParameters audioMixInputParametersWithTrack:compositionTrack];
-        [trackMix setVolume:0.8f atTime:startTimeOfLoop];
-        [audioMixParams addObject:trackMix];
+        AVAssetExportSession * export = [[AVAssetExportSession alloc] initWithAsset:composition presetName:AVAssetExportPresetAppleM4A];
+        export.audioMix = audioMix;
+        export.outputFileType = AVFileTypeAppleM4A;
+        export.outputURL = comboAudioFileUrl;
         
-        [compositionTrack insertTimeRange:audioTimeRange ofTrack:[[audioAssetPart tracksWithMediaType:AVMediaTypeAudio] firstObject] atTime:startTimeOfLoop error:nil];
+        NSLog(@"writing m4a file to %@", comboAudioFileUrl);
+        [export exportAsynchronouslyWithCompletionHandler:
+         ^(void ) {
+             
+             NSLog(@"status: %ld; error? %@", (long)export.status, export.error);
+             NSLog(@"final file duration = %f", CMTimeGetSeconds(export.asset.duration));
+             
+         }];
         
-*/
-        
+        [compositionArray addObject:comboAudioFileUrl];
         //Now set things up for the next loop...
-        break;
-        startTimeOfLoop = CMTimeAdd(startTimeOfLoop, audioAssetPart.duration);
-        NSLog(@"start time of next part = %f secs", CMTimeGetSeconds(startTimeOfLoop));
+        loopCounter ++;
+        
+        //startTimeOfLoop = CMTimeAdd(startTimeOfLoop, audioAssetPart.duration);
+        //NSLog(@"start time of next part = %f secs", CMTimeGetSeconds(startTimeOfLoop));
     }
     
     //Now create and save the combo audio file.
     
-    NSString *filePath = [recordingPath
-                          stringByAppendingPathComponent:@"combo-audio-file.m4a"];
-    
-    comboAudioFileUrl = [NSURL fileURLWithPath:filePath];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
-        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
-    
-    AVMutableAudioMix * audioMix = [AVMutableAudioMix audioMix];
-    audioMix.inputParameters = [NSArray arrayWithArray:audioMixParams];
-    
-    AVAssetExportSession * export = [[AVAssetExportSession alloc] initWithAsset:composition presetName:AVAssetExportPresetAppleM4A];
-    export.audioMix = audioMix;
-    export.outputFileType = AVFileTypeAppleM4A;
-    export.outputURL = comboAudioFileUrl;
-    
-    NSLog(@"writing m4a file to %@", comboAudioFileUrl);
-    [export exportAsynchronouslyWithCompletionHandler:
-     ^(void ) {
-         
-         NSLog(@"status: %ld; error? %@", (long)export.status, export.error);
-         NSLog(@"final file duration = %f", CMTimeGetSeconds(export.asset.duration));
-         
-     }];
+    NSLog(@"final array = %@", compositionArray);
 
     
 }
