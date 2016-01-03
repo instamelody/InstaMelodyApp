@@ -41,7 +41,13 @@
 @property NSNumber *savedGroupId;
 
 @property (nonatomic, strong) AVAudioRecorder *recorder;
+
+
 @property (nonatomic, strong) NSMutableArray *partArray;
+//This array is THE array that contains the data for the currently loaded loop
+
+
+
 @property NSInteger currentPartIndex;
 @property BOOL goBack;
 @property BOOL isNewPart;
