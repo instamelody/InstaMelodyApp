@@ -1482,17 +1482,20 @@
     dispatch_group_notify(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         NSLog(@"Now able to process combining all the segments into a single file");
         
-        CMTime startTimeOfLoop = kCMTimeZero;
         AVMutableComposition * composition = [AVMutableComposition composition];
         
         NSEnumerator *enumerator = [compositionArray reverseObjectEnumerator];
+        //We are reversing the order here because we're inserting each part into the composition
+        //at the beginning, so we need to insert the last part first.
+        
+        //There was some kind of bug inserting #0 at time 0, then #1 and time (0 + duration of #0);
+        //It created the output file only containing parts 0 and 1, not 2 or 3. Very strange.
         
         for (NSURL * fileURL in enumerator) {
-        //for (NSURL * fileURL in compositionArray) {
             
             AVURLAsset * thisAsset = [AVURLAsset URLAssetWithURL:fileURL options:nil];
             NSError * error;
-            [composition insertTimeRange:CMTimeRangeMake(startTimeOfLoop, thisAsset.duration) ofAsset:thisAsset atTime:startTimeOfLoop error:&error];
+            [composition insertTimeRange:CMTimeRangeMake(kCMTimeZero, thisAsset.duration) ofAsset:thisAsset atTime:kCMTimeZero error:&error];
         
         }
         
