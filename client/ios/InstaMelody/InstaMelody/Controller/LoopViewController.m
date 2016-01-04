@@ -1384,18 +1384,50 @@
 
 -(void)createComboAudioFile
 {
-    if (self.partArray.count == 0)
+    if (self.partArray.count == 0 && !self.compositionRecordingURL)
         return;
     
     NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     NSString *melodyPath = [documentsPath stringByAppendingPathComponent:@"Melodies"];
     NSString *recordingPath = [documentsPath stringByAppendingPathComponent:@"Recordings"];
     
+    NSMutableArray * newPartArray = [NSMutableArray arrayWithArray:self.partArray];
+    
+    //Create a new element for self.partArray if there is a new user recording to be added to the loop
+    if (self.compositionRecordingURL)
+    {
+        NSMutableArray * newFiles = [NSMutableArray new];
+        //Putting the URLs of all the tracks into this array
+        
+        [newFiles addObject:[self.currentRecordingURL absoluteString]];
+        if (self.compositionMelody)
+        {
+            [newFiles addObject:self.compositionMelody.filePathUrlString];
+            //using the fileName property would be more useful here, but the main array uses filePathUrlString
+        }
+
+        if (self.compositionMelody2)
+        {
+            [newFiles addObject:self.compositionMelody2.filePathUrlString];
+            //using the fileName property would be more useful here, but the main array uses filePathUrlString
+        }
+        
+        if (self.compositionMelody3)
+        {
+            [newFiles addObject:self.compositionMelody3.filePathUrlString];
+            //using the fileName property would be more useful here, but the main array uses filePathUrlString
+        }
+        
+        NSDictionary * newDict = [NSDictionary dictionaryWithObjectsAndKeys:newFiles,@"Files", nil];
+        
+        [newPartArray addObject:newDict];
+    }
+    
     compositionArray = [[NSMutableArray alloc] init];
     int loopCounter = 0;
     dispatch_group_t group = dispatch_group_create();
     
-    for (NSDictionary * thisPart in self.partArray) {
+    for (NSDictionary * thisPart in newPartArray) {
         //Iterate through each part in the loop
         
         audioMixParams = [[NSMutableArray alloc] init];
@@ -1525,9 +1557,9 @@
 
 -(IBAction)save:(id)sender {
 
+    [self createComboAudioFile];
     UITextField *topicField = (UITextField *)[self.tableView viewWithTag:98];
     BOOL isPremium = [[DataManager sharedManager] isPremium];
-    [self createComboAudioFile];
     if (self.explicitCheckbox.on != [initialIsExplicitStatus intValue] && !self.recorder) // && !self.isNewPart)
     {
         //need to save the Explicit state
@@ -1601,6 +1633,7 @@
                 } else if ([self.loopDict objectForKey:@"Id"] != nil) {
                     [mutableDict setObject:[self.loopDict objectForKey:@"Id"] forKey:@"LoopId"];
                 }
+                
                 [self.delegate didFinishWithInfo:mutableDict];
                 
             }
