@@ -446,7 +446,14 @@
 -(IBAction)share:(id)sender {
     
     //CustomActivityProvider *ActivityProvider = [[CustomActivityProvider alloc] initWithPlaceholderItem:@""];
-    NSArray *itemsToShare = @[@"Check out InstaMelody in the App Store! https://itunes.apple.com/us/app/instamelody/id897451088"];
+    NSArray *itemsToShare = [NSArray new];
+    if (comboAudioUrl)
+    {
+        NSLog(@"including audio file in share");
+        itemsToShare = @[@"Check out InstaMelody in the App Store! https://itunes.apple.com/us/app/instamelody/id897451088", comboAudioUrl];
+    } else {
+        itemsToShare = @[@"Check out InstaMelody in the App Store! https://itunes.apple.com/us/app/instamelody/id897451088"];
+    }
     UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:itemsToShare applicationActivities:nil];
     //activityVC.excludedActivityTypes = @[UIActivityTypePrint, UIActivityTypeAssignToContact, UIActivityTypeSaveToCameraRoll]; //or whichever you don't need
     [activityVC setValue:@"InstaMelody" forKey:@"subject"];
@@ -819,6 +826,8 @@
         self.profileImageView.hidden = NO;
         self.audioPlot.hidden = YES;
         self.playButton.hidden = NO;
+        
+        [self createComboAudioFile];
         
     } else {
         NSError *error = nil;
@@ -1206,6 +1215,9 @@
 }
 
 -(void)downloadAllFiles {
+    
+    dispatch_group_t group = dispatch_group_create();
+    
     for (NSDictionary *part in self.partArray) {
         NSArray *files = [part objectForKey:@"Files"];
         
@@ -1239,7 +1251,7 @@
                 if ([[NSFileManager defaultManager] fileExistsAtPath:localFilePath]){
                     self.currentRecordingURL = [NSURL URLWithString:localFilePath];
                 } else {
-                    [self downloadRecording:filePath toPath:localFilePath];
+                    [self downloadRecording:filePath toPath:localFilePath withDispatchGroup:group];
                 }
                 
             } else {
@@ -1265,12 +1277,18 @@
                 if ([[NSFileManager defaultManager] fileExistsAtPath:localFilePath]){
                     NSLog(@"file already downloaded");
                 } else {
-                    [self downloadFile:filePath toPath:localFilePath];
+                    [self downloadFile:filePath toPath:localFilePath withDispatchGroup:group];
                 }
                 
             }
         }
     }
+    
+    dispatch_group_notify(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        NSLog(@"All files downloaded!");
+        [self createComboAudioFile];
+    });
+    
 }
 
 
@@ -1652,7 +1670,6 @@
 
 -(void)preload {
     
-    
     NSArray *paths =
     NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
                                         NSUserDomainMask, YES);
@@ -1684,7 +1701,7 @@
             if ([[NSFileManager defaultManager] fileExistsAtPath:localFilePath]){
                 self.currentRecordingURL = [NSURL URLWithString:localFilePath];
             } else {
-                [self downloadRecording:filePath toPath:localFilePath];
+                [self downloadRecording:filePath toPath:localFilePath withDispatchGroup:nil];
             }
             
         }
@@ -1936,6 +1953,15 @@
 }
 
 -(void)downloadFile:(NSString *)sourceFilePath toPath:(NSString *)destinationFilePath {
+    
+    [self downloadFile:sourceFilePath toPath:destinationFilePath withDispatchGroup:nil];
+    
+}
+
+-(void)downloadFile:(NSString *)sourceFilePath toPath:(NSString *)destinationFilePath withDispatchGroup:(dispatch_group_t)group {
+    if (group)
+        dispatch_group_enter(group);
+    
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
     
@@ -1992,6 +2018,10 @@
             self.loopStatusLabel.text = @"Error loading melody";
         }
         [progress removeObserver:self forKeyPath:@"fractionCompleted" context:NULL];
+        
+        if (group)
+            dispatch_group_leave(group);
+        
     }];
     [downloadTask resume];
     
@@ -2001,7 +2031,9 @@
                   context:NULL];
 }
 
--(void)downloadRecording:(NSString *)sourceFilePath toPath:(NSString *)destinationFilePath {
+-(void)downloadRecording:(NSString *)sourceFilePath toPath:(NSString *)destinationFilePath withDispatchGroup:(dispatch_group_t)group {
+    if (group)
+        dispatch_group_enter(group);
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
     
@@ -2065,6 +2097,8 @@
             self.loopStatusLabel.text = @"Error loading recording";
         }
         [progress removeObserver:self forKeyPath:@"fractionCompleted" context:NULL];
+        if (group)
+            dispatch_group_leave(group);
     }];
     [downloadTask resume];
     
