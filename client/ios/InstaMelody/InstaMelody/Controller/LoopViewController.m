@@ -228,15 +228,15 @@
                 switch (tokenInputView.allTokens.count) {
                     case 0:
                         self.compositionMelody = melody;
-                        [self didSelectMelody:melody];
+                        [self loadMelody:melody];
                         break;
                     case 1:
                         self.compositionMelody2 = melody;
-                        [self didSelectMelody2:melody];
+                        [self loadMelody2:melody];
                         break;
                     case 2:
                         self.compositionMelody3 = melody;
-                        [self didSelectMelody3:melody];
+                        [self loadMelody3:melody];
                         break;
                     default:
                         break;
@@ -1704,20 +1704,20 @@
             Melody *melody = [Melody MR_findFirstByAttribute:@"melodyId" withValue:partId];
             
             //get and set system melodies
-            [self didSelectMelody:melody];
+            [self loadMelody:melody];
         } else if (count == 1) {
             //
             
             Melody *melody = [Melody MR_findFirstByAttribute:@"melodyId" withValue:partId];
             
-            [self didSelectMelody2:melody];
+            [self loadMelody2:melody];
             
         } else if (count == 2) {
             //
             
             Melody *melody = [Melody MR_findFirstByAttribute:@"melodyId" withValue:partId];
             
-            [self didSelectMelody3:melody];
+            [self loadMelody3:melody];
             
         }
         count = count+ 1;
@@ -1773,23 +1773,6 @@
     }
     
     
-}
-
--(void)didSelectMelody:(Melody *)melody {
-    //[self.chooseLoopButton setTitle:melody.melodyName forState:UIControlStateNormal];
-    
-    [self loadMelody:melody];
-}
-
--(void)didSelectMelody2:(Melody *)melody {
-    //[self.chooseLoop2Button setTitle:melody.melodyName forState:UIControlStateNormal];
-
-    [self loadMelody2:melody];
-}
-
--(void)didSelectMelody3:(Melody *)melody {
-    
-    [self loadMelody3:melody];
 }
 
 -(void)loadMelody:(Melody *)melody {
