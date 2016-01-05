@@ -1740,6 +1740,18 @@
         count = count+ 1;
     }
     
+    //Now need to nullify the remaining parts to ensure there isn't hangover from one segment to next...
+    
+    if (count == 1)
+    {
+        //Just one part in this loop
+        self.selectedMelody2 = self.selectedMelody3 = nil;
+    } else if (count == 2)
+    {
+        //Two parts
+        self.selectedMelody3 = nil;
+    }
+    
     
     NSString *stringText = [NSString stringWithFormat:@"%@ (%td/%td)", [[self.partArray objectAtIndex:self.currentPartIndex] objectForKey:@"PartName"], (self.currentPartIndex+1), self.partArray.count];
     
