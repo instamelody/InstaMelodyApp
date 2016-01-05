@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9060" systemVersion="15C47a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="century-gothic.ttf">
@@ -31,13 +31,11 @@
             <subviews>
                 <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="HSG-1O-4VS" customClass="JSQMessagesCollectionView">
                     <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                    <animations/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <collectionViewLayout key="collectionViewLayout" id="GUb-7q-9VE" customClass="JSQMessagesCollectionViewFlowLayout"/>
                 </collectionView>
                 <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DVb-hh-ZVB" customClass="JSQMessagesInputToolbar">
                     <rect key="frame" x="0.0" y="556" width="600" height="44"/>
-                    <animations/>
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="hG8-9U-QeL"/>
                     </constraints>
@@ -49,12 +47,10 @@
                     <subviews>
                         <view alpha="0.34999999999999998" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r93-Tn-hPF">
                             <rect key="frame" x="0.0" y="0.0" width="600" height="48"/>
-                            <animations/>
                             <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gwI-xx-p5L">
                             <rect key="frame" x="560" y="8" width="32" height="32"/>
-                            <animations/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="32" id="P9m-Av-XKZ"/>
                                 <constraint firstAttribute="height" constant="32" id="w0N-Pw-v54"/>
@@ -65,7 +61,6 @@
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k2m-WJ-OJb">
                             <rect key="frame" x="8" y="8" width="32" height="32"/>
-                            <animations/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="32" id="5Py-kM-Kqp"/>
                                 <constraint firstAttribute="height" constant="32" id="qXn-0h-c3H"/>
@@ -76,7 +71,6 @@
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RZT-0U-D08">
                             <rect key="frame" x="52" y="6" width="496" height="21"/>
-                            <animations/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="21" id="J8O-CB-j8B"/>
                             </constraints>
@@ -87,14 +81,12 @@
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pJp-2L-5gt">
                             <rect key="frame" x="52" y="29" width="496" height="14"/>
-                            <animations/>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                             <state key="normal" title="Status">
                                 <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                         </button>
                     </subviews>
-                    <animations/>
                     <constraints>
                         <constraint firstItem="r93-Tn-hPF" firstAttribute="top" secondItem="Zfl-Lf-Xxj" secondAttribute="top" id="BI9-JZ-BxL"/>
                         <constraint firstItem="gwI-xx-p5L" firstAttribute="leading" secondItem="RZT-0U-D08" secondAttribute="trailing" constant="12" id="BXY-5h-CLa"/>
@@ -116,7 +108,6 @@
                     </constraints>
                 </view>
             </subviews>
-            <animations/>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="HSG-1O-4VS" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="0DJ-c1-5y3"/>
