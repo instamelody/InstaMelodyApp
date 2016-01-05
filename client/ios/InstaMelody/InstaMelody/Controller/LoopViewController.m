@@ -1409,7 +1409,7 @@
     NSString *melodyPath = [documentsPath stringByAppendingPathComponent:@"Melodies"];
     NSString *recordingPath = [documentsPath stringByAppendingPathComponent:@"Recordings"];
     
-    NSMutableArray * newPartArray = [NSMutableArray arrayWithArray:self.partArray];
+    NSMutableArray * newPartArray = [self.partArray copy];
     
     //Create a new element for self.partArray if there is a new user recording to be added to the loop
     if (self.compositionRecordingURL)
@@ -1451,8 +1451,9 @@
         audioMixParams = [[NSMutableArray alloc] init];
         AVMutableComposition * composition = [AVMutableComposition composition];
         
-        NSMutableArray * files = [thisPart objectForKey:@"Files"];
+        NSMutableArray * files = [[NSMutableArray alloc] initWithArray:[[thisPart objectForKey:@"Files"] copy]];
         //Get the elements that make up this part
+        //Use copy to avoid the elements in the array from retaining a link to the underlying self.partArray
         
         NSInteger recordingIndex = [files indexOfObjectPassingTest:^BOOL(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             if ([obj containsString:@"recording"])
