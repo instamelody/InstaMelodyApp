@@ -1409,7 +1409,7 @@
     NSString *melodyPath = [documentsPath stringByAppendingPathComponent:@"Melodies"];
     NSString *recordingPath = [documentsPath stringByAppendingPathComponent:@"Recordings"];
     
-    NSMutableArray * newPartArray = [self.partArray copy];
+    NSMutableArray * newPartArray = [[NSMutableArray alloc] initWithArray:[self.partArray copy]];
     
     //Create a new element for self.partArray if there is a new user recording to be added to the loop
     if (self.compositionRecordingURL)
