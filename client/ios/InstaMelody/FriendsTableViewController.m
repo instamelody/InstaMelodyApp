@@ -14,6 +14,8 @@
 #import "NSString+FontAwesome.h"
 #import "DataManager.h"
 #import "StationViewController.h"
+//@import Contacts;
+@import ContactsUI;
 
 @interface FriendsTableViewController ()
 
@@ -525,30 +527,46 @@
 }
 
 -(IBAction)requestFriend:(id)sender {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Add a friend" message:@"Enter a friend's email address or user name" preferredStyle:UIAlertControllerStyleAlert];
     
-    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-        textField.placeholder = @"Username or e-mail address";
+    if ([CNContactPickerViewController class]) {
+        //iOS 9 or better, we're good to go
+        CNContactPickerViewController *cVC = [[CNContactPickerViewController alloc] init];
+        cVC.delegate = self;
+        NSPredicate * emailOnly = [NSPredicate predicateWithFormat:@"emailAddresses.@count > 0"];
+        cVC.predicateForEnablingContact = emailOnly;
+        //cVC.predicateForSelectionOfContact = [NSPredicate predicateWithFormat:@"TRUEPREDICATE"];
+        cVC.predicateForSelectionOfContact= [NSPredicate predicateWithFormat:@"FALSEPREDICATE"];
+        cVC.displayedPropertyKeys = @[@"emailAddresses"];
         
-    }];
-    
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDestructive handler:nil];
-    
-    UIAlertAction *submitAction = [UIAlertAction actionWithTitle:@"Submit" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        //
-        UITextField *textField = alert.textFields[0];
+        [self.view.window.rootViewController presentViewController:cVC animated:YES completion:nil];
+    } else {
+        // iOS 8 or worse, use the old code
         
-        if ([self NSStringIsValidEmail:textField.text]) {
-            [self requestFriendWithEmail:textField.text];
-        } else {
-            [self requestFriendWithUsername:textField.text];
-        }
-    }];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Add a friend" message:@"Enter a friend's email address or user name" preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+            textField.placeholder = @"Username or e-mail address";
+            
+        }];
+        
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDestructive handler:nil];
+        
+        UIAlertAction *submitAction = [UIAlertAction actionWithTitle:@"Submit" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            //
+            UITextField *textField = alert.textFields[0];
+            
+            if ([self NSStringIsValidEmail:textField.text]) {
+                [self requestFriendWithEmail:textField.text];
+            } else {
+                [self requestFriendWithUsername:textField.text];
+            }
+        }];
 
-    [alert addAction:cancelAction];
-    [alert addAction:submitAction];
-    
-    [self presentViewController:alert animated:YES completion:nil];
+        [alert addAction:cancelAction];
+        [alert addAction:submitAction];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+    }
 }
 
 -(BOOL) NSStringIsValidEmail:(NSString *)checkString
@@ -560,6 +578,27 @@
     NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
     return [emailTest evaluateWithObject:checkString];
 }
+
+#pragma mark Contact Picker Delegate
+
+- (void)contactPicker:(CNContactPickerViewController *)picker
+     didSelectContact:(CNContact *)contact
+{
+    NSLog(@"didselect!");
+    
+    //if (contact.emailAddresses)
+    
+}
+
+- (void)contactPicker:(CNContactPickerViewController *)picker
+didSelectContactProperty:(CNContactProperty *)contactProperty
+//didSelectContactProperties:(NSArray<CNContactProperty *> *)contactProperties
+{
+    NSLog(@"didselectcontactproperty value = %@", contactProperty.value);
+    [self requestFriendWithEmail:contactProperty.value];
+    
+}
+
 
 #pragma mark Swipe Delegate
 
