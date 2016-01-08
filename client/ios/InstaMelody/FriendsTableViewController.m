@@ -528,6 +528,7 @@
 
 -(IBAction)requestFriend:(id)sender {
     
+    /* Remove this feature for now...
     if ([CNContactPickerViewController class]) {
         //iOS 9 or better, we're good to go
         CNContactPickerViewController *cVC = [[CNContactPickerViewController alloc] init];
@@ -541,7 +542,7 @@
         [self.view.window.rootViewController presentViewController:cVC animated:YES completion:nil];
     } else {
         // iOS 8 or worse, use the old code
-        
+        */
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Add a friend" message:@"Enter a friend's email address or user name" preferredStyle:UIAlertControllerStyleAlert];
         
         [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
@@ -566,7 +567,7 @@
         [alert addAction:submitAction];
         
         [self presentViewController:alert animated:YES completion:nil];
-    }
+    //}
 }
 
 -(BOOL) NSStringIsValidEmail:(NSString *)checkString
