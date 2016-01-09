@@ -5,7 +5,7 @@
 /* Generic share text format used in all sharing options includes screenname (%1$@) and URL to the Tweet (%2$@) */
 "tw__share_tweet_generic_template_format" = "Check out @%1$@\'s Tweet: %2$@";
 /* Label for Sign in with Twitter button */
-"tw__sign_in_with_twitter_button" = "Log in with Twitter";
+"tw__sign_in_with_twitter_button" = "Log in";
 /* Label Email Share Screen negative button */
 "tw__email_share_negative_button" = "Not now";
 /* Label Email Share Screen affirmative button */
