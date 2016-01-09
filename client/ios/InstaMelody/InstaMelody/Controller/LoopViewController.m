@@ -1606,7 +1606,7 @@
     }
     
     self.partArray = newPartArray;
-
+/*
     if (self.partArray.count == 0)
     {
         //We've removed parts down to an empty set
@@ -1615,7 +1615,8 @@
         });
         return;
     }
-    
+ It's OK to have an empty array; it just means the user can record something.
+    */
     dispatch_async(dispatch_get_main_queue(), ^{
         
         UICollectionView *collectionView = (UICollectionView *)[self.tableView viewWithTag:97];
