@@ -40,7 +40,7 @@
 //@property (nonatomic, strong) UserMelody *selectedUserMelody;
 //Should comment out above
 
-@property (nonatomic, strong) IBOutlet UIBarButtonItem *volumeBarButtonItem;
+//@property (nonatomic, strong) IBOutlet UIBarButtonItem *volumeBarButtonItem;
 
 //@property (nonatomic, strong) IBOutlet UIButton *chooseLoopButton;
 //@property (nonatomic, strong) IBOutlet UIButton *chooseLoop2Button;
@@ -60,7 +60,7 @@
 
 @property (nonatomic, strong) IBOutlet UILabel *saveBarTopicLabel;
 @property (nonatomic, strong) IBOutlet UILabel *saveBarStationLabel;
-@property (nonatomic, strong) IBOutlet UILabel *joinBarTopicLabel;
+//@property (nonatomic, strong) IBOutlet UILabel *joinBarTopicLabel;
 @property (nonatomic, strong) IBOutlet UILabel *joinBarStationLabel;
 @property (nonatomic, strong) IBOutlet UILabel *joinBarModLabel;
 @property (nonatomic, strong) IBOutlet UIImageView *joinBarProfile;
@@ -85,8 +85,8 @@
 @property (nonatomic, strong) IBOutlet DACircularProgressView *progressView;
 @property (nonatomic, strong) IBOutlet UIImageView *profileImageView;
 
-@property (nonatomic, strong) IBOutlet UIScrollView *scrollView;
-@property (nonatomic, strong) IBOutlet UICollectionView *participantsView;
+//@property (nonatomic, strong) IBOutlet UIScrollView *scrollView;
+//@property (nonatomic, strong) IBOutlet UICollectionView *participantsView;
 
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 
