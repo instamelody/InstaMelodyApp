@@ -563,6 +563,9 @@
             
         } else {
             
+            if (self.partArray.count ==0)
+                return;
+            
             AVAudioSession *audioSession = [AVAudioSession sharedInstance];
             [audioSession setCategory:AVAudioSessionCategoryPlayback
                                 error:&error];
@@ -1906,6 +1909,9 @@
     NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
                                         NSUserDomainMask, YES);
     NSString *documentsPath = [paths objectAtIndex:0];
+    
+    if (self.partArray.count == 0)
+        return;
     
     NSArray *files = [[self.partArray objectAtIndex:self.currentPartIndex] objectForKey:@"Files"];
     NSArray *partIds = [[self.partArray objectAtIndex:self.currentPartIndex] objectForKey:@"Ids"];
