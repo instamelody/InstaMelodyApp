@@ -1606,6 +1606,15 @@
     }
     
     self.partArray = newPartArray;
+
+    if (self.partArray.count == 0)
+    {
+        //We've removed parts down to an empty set
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.navigationController popViewControllerAnimated:YES];
+        });
+        return;
+    }
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
@@ -2430,8 +2439,10 @@
     NSDictionary *partDict;
     if (indexPath.row <= self.partArray.count - 1)
         partDict = [self.partArray objectAtIndex:indexPath.row];
-    else
+    else if (self.partArray.count > 0)
         partDict = [self.partArray objectAtIndex:0];
+    else
+        return cell;
     
     //NSDictionary *melodyDict = [partDict objectForKey:@"UserMelody"];
     
