@@ -511,6 +511,7 @@
         self.cleanLoopArray = [tempArray sortedArrayUsingDescriptors:descriptors];
         
         [self.collectionView reloadData];
+        [self change:nil];
         
         
         //NSDictionary *responseDict = (NSDictionary *)responseObject;
@@ -899,9 +900,22 @@
     switch (control.selectedSegmentIndex) {
         case 0: {
             
-            NSArray *tempArray = self.loopArray;
-           
+            //NSArray *tempArray = self.loopArray;
+            //NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
+            //Initially this tab showed all loops
+            
+            //Change: first tab shows only public loops
+            NSMutableArray *tempArray = [NSMutableArray new];
+            for (NSDictionary *itemDict in self.loopArray) {
+                NSString * explicit = [NSString stringWithFormat:@"%@", [itemDict valueForKey:@"IsExplicit"]];
+                if ([explicit isEqualToString:@"0"]) {
+                    [tempArray addObject:itemDict];
+                }
+            }
+            
             NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
+            
+            
             self.loopArray = [tempArray sortedArrayUsingDescriptors:descriptors];
             
             break;
