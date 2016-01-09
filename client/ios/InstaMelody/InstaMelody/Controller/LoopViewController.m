@@ -1844,8 +1844,17 @@
         
     }
     
+    BOOL tooShort = FALSE;
+    //Test here to make sure the user's recording is longer than 1 second...
+    if (self.currentRecordingURL && self.recorder)
+    {
+        AVURLAsset * recordingPart = [AVURLAsset URLAssetWithURL:self.currentRecordingURL options:nil];
+        
+        if (CMTimeGetSeconds(recordingPart.duration) < 1.0f)
+            tooShort = TRUE;
+    }
     
-    if (![topicField.text isEqualToString:@""] && self.currentRecordingURL && self.recorder) {
+    if (![topicField.text isEqualToString:@""] && self.currentRecordingURL && self.recorder && !tooShort) {
         
         NSMutableDictionary *userDict = [NSMutableDictionary new];
         [userDict setObject:[self.currentRecordingURL path] forKey:@"LoopURL"];
