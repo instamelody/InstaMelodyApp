@@ -315,7 +315,7 @@
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     NotificationsViewController *vc = (NotificationsViewController *)[sb instantiateViewControllerWithIdentifier:@"NotificationsViewController"];
     vc.title = @"Notifications";
-    vc.isFeed = NO;
+    vc.isFeed = YES; //NO;
     
     [self.navigationController pushViewController:vc animated:YES];
 }
