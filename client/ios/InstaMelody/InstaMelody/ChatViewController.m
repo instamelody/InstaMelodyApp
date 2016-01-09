@@ -13,6 +13,7 @@
 #import "constants.h"
 #import "Friend.h"
 #import <MagicalRecord/MagicalRecord.h>
+#import "zoomPopup.h"
 
 @interface ChatViewController ()
 
@@ -464,6 +465,32 @@
 {
     NSLog(@"Tapped message bubble!");
     
+    /*JSQMessage *message = [self.messages objectAtIndex:indexPath.row];
+    
+    if (message.isMediaMessage) {
+        id<JSQMessageMediaData> mediaItem = message.media;
+        
+        if ([mediaItem isKindOfClass:[JSQPhotoMediaItem class]]) {
+            
+            NSLog(@"Tapped photo message bubble!");
+            
+            JSQPhotoMediaItem *photoItem = (JSQPhotoMediaItem *)mediaItem;
+            [self popupImage:photoItem.image];
+        }
+    } */
+}
+
+- (void) popupImage: (UIImage*)image
+{
+    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    UIView *topView = window.rootViewController.view;
+    UIImageView * imageView = [[UIImageView alloc] initWithImage:image];
+    
+    zoomPopup  *popup = [[zoomPopup alloc] initWithMainview:topView andStartRect:CGRectMake(topView.frame.size.width/5, topView.frame.size.height/5, 0, 0)];
+    [popup showPopup:imageView];
+}
+
+    
     /*
     JSQMessage *message = (JSQMessage *)[self.messages objectAtIndex:indexPath.row];
     NSString *tag = message.tag;
@@ -501,7 +528,6 @@
         //NSString *umId = [umDict objectForKey:@""]
     }
      */
-}
 
 - (void)collectionView:(JSQMessagesCollectionView *)collectionView didTapCellAtIndexPath:(NSIndexPath *)indexPath touchLocation:(CGPoint)touchLocation
 {
