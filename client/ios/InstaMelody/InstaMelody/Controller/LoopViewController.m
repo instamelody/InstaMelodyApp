@@ -94,12 +94,19 @@
     
     //NSString *myUserId = [self.defaults objectForKey:@"Id"];
     
+    UITapGestureRecognizer *singleFingerTap =
+    [[UITapGestureRecognizer alloc] initWithTarget:self
+                                            action:@selector(handleSingleTap)];
+    [self.view addGestureRecognizer:singleFingerTap];
+    
      if (self.selectedLoop !=nil) {
          [self getLoop:[self.selectedLoop objectForKey:@"Id"]];
          
         //self.isNewPart = NO;
          
      }
+    
+
     
     /* SELECTEDUSERMELODY ONLY SET IN STATIONVIEWCONTROLLER AND SEEMINGLY NEVER SET
      else if (self.selectedUserMelody != nil) {
@@ -506,6 +513,11 @@
     }
 }
 
+-(void)handleSingleTap {
+    
+    [self.view endEditing:YES];
+    
+}
 
 #pragma mark - Audio handling
 
