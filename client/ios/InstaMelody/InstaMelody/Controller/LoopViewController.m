@@ -1607,6 +1607,13 @@
     
     self.partArray = newPartArray;
     
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        UICollectionView *collectionView = (UICollectionView *)[self.tableView viewWithTag:97];
+        [collectionView reloadData];
+        
+    });
+    
 }
 
 -(void)createComboAudioFile
@@ -2418,7 +2425,13 @@
     cell.imageView.layer.cornerRadius = cell.imageView.frame.size.height / 2;
     cell.imageView.layer.masksToBounds = YES;
     
-    NSDictionary *partDict = [self.partArray objectAtIndex:indexPath.row];
+    //block below to catch scenario where self.partArray changes while collectionView in process of refreshing
+    //just avoid crash and it will self-correct later
+    NSDictionary *partDict;
+    if (indexPath.row <= self.partArray.count - 1)
+        partDict = [self.partArray objectAtIndex:indexPath.row];
+    else
+        partDict = [self.partArray objectAtIndex:0];
     
     //NSDictionary *melodyDict = [partDict objectForKey:@"UserMelody"];
     
