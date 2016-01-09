@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		0789C5DD1C1DC83F005C561E /* CustomActivityProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 0789C5DC1C1DC83F005C561E /* CustomActivityProvider.m */; };
+		07B360301C419AFF00D90310 /* UIImage+StackBlur.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B3602C1C419AFF00D90310 /* UIImage+StackBlur.m */; };
+		07B360311C419AFF00D90310 /* zoomPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = 07B3602E1C419AFF00D90310 /* zoomPopup.m */; };
+		07B360321C419AFF00D90310 /* zoomPopupClose@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 07B3602F1C419AFF00D90310 /* zoomPopupClose@2x.png */; };
 		0A10B9D513BF2A431F2FEB6C /* Pods_InstaMelody.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C4BFAFF7F0F445B4DF19637 /* Pods_InstaMelody.framework */; };
 		8706E62E1BDA14A80017E560 /* InstamelodyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8706E62D1BDA14A80017E560 /* InstamelodyViewController.m */; };
 		8706E6311BDB37BB0017E560 /* StoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8706E6301BDB37BB0017E560 /* StoreViewController.m */; };
@@ -89,6 +92,11 @@
 /* Begin PBXFileReference section */
 		0789C5DB1C1DC83F005C561E /* CustomActivityProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomActivityProvider.h; sourceTree = "<group>"; };
 		0789C5DC1C1DC83F005C561E /* CustomActivityProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomActivityProvider.m; sourceTree = "<group>"; };
+		07B3602B1C419AFF00D90310 /* UIImage+StackBlur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+StackBlur.h"; sourceTree = "<group>"; };
+		07B3602C1C419AFF00D90310 /* UIImage+StackBlur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+StackBlur.m"; sourceTree = "<group>"; };
+		07B3602D1C419AFF00D90310 /* zoomPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zoomPopup.h; sourceTree = "<group>"; };
+		07B3602E1C419AFF00D90310 /* zoomPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = zoomPopup.m; sourceTree = "<group>"; };
+		07B3602F1C419AFF00D90310 /* zoomPopupClose@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zoomPopupClose@2x.png"; sourceTree = "<group>"; };
 		6C4BFAFF7F0F445B4DF19637 /* Pods_InstaMelody.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InstaMelody.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E4C9DC22F5EAEA430AB4E1D /* Pods-InstaMelody.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InstaMelody.debug.xcconfig"; path = "Pods/Target Support Files/Pods-InstaMelody/Pods-InstaMelody.debug.xcconfig"; sourceTree = "<group>"; };
 		85A8BE665FB43D9DB14E6A1E /* Pods-InstaMelody.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InstaMelody.release.xcconfig"; path = "Pods/Target Support Files/Pods-InstaMelody/Pods-InstaMelody.release.xcconfig"; sourceTree = "<group>"; };
@@ -236,6 +244,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		07B3602A1C419AEE00D90310 /* zoomPopUp */ = {
+			isa = PBXGroup;
+			children = (
+				07B3602B1C419AFF00D90310 /* UIImage+StackBlur.h */,
+				07B3602C1C419AFF00D90310 /* UIImage+StackBlur.m */,
+				07B3602D1C419AFF00D90310 /* zoomPopup.h */,
+				07B3602E1C419AFF00D90310 /* zoomPopup.m */,
+				07B3602F1C419AFF00D90310 /* zoomPopupClose@2x.png */,
+			);
+			name = zoomPopUp;
+			sourceTree = "<group>";
+		};
 		8707F9A61B446F57004B4C20 = {
 			isa = PBXGroup;
 			children = (
@@ -466,6 +486,7 @@
 		87CFE8C71B82AAB3009A4B6D /* Third Party */ = {
 			isa = PBXGroup;
 			children = (
+				07B3602A1C419AEE00D90310 /* zoomPopUp */,
 				8751BAD11BEC22500025EB8D /* LTHMonthYearPickerView */,
 				872BB59B1B74CAD1004CDBE7 /* AwesomeMenu */,
 				8707F9DE1B4476BC004B4C20 /* AFNetworking */,
@@ -619,6 +640,7 @@
 				8707F9C11B446F57004B4C20 /* Main.storyboard in Resources */,
 				877040BC1BF7BA6E003D1F27 /* showcase2.png in Resources */,
 				8707F9C61B446F57004B4C20 /* LaunchScreen.xib in Resources */,
+				07B360321C419AFF00D90310 /* zoomPopupClose@2x.png in Resources */,
 				8707F9C31B446F57004B4C20 /* Images.xcassets in Resources */,
 				87A8A63E1BC83A19009AF895 /* century-gothic.ttf in Resources */,
 				877040BB1BF7BA6E003D1F27 /* showcase1.png in Resources */,
@@ -732,6 +754,7 @@
 				879CCC541B81D2870031FDCC /* Model.xcdatamodeld in Sources */,
 				87EDA7631BED4DB80075F38E /* NotificationCell.m in Sources */,
 				878FAD601BAC6E1D00260D5B /* UserMelodyListViewController.m in Sources */,
+				07B360311C419AFF00D90310 /* zoomPopup.m in Sources */,
 				879CCC5D1B81D6460031FDCC /* DataManager.m in Sources */,
 				87E6F4741BB6936D009E3EA8 /* IMMessagesViewController.m in Sources */,
 				8751BAD41BEC22500025EB8D /* LTHMonthYearPickerView.m in Sources */,
@@ -746,6 +769,7 @@
 				872BB56B1B74B56C004CDBE7 /* ChatCell.m in Sources */,
 				8707F9DD1B4475E9004B4C20 /* SignUpViewController.m in Sources */,
 				877040C01BF7C4DF003D1F27 /* CurrentCell.m in Sources */,
+				07B360301C419AFF00D90310 /* UIImage+StackBlur.m in Sources */,
 				87538B7D1BB72BE500F7F9D8 /* UsersCell.m in Sources */,
 				8707F9F41B4476BD004B4C20 /* AFHTTPSessionManager.m in Sources */,
 				87D472351B749891008075B8 /* HomeViewController.m in Sources */,
