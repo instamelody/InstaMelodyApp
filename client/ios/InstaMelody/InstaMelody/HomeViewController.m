@@ -572,8 +572,6 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 
 -(void)getUserDetails:(NSString*)displayName {
     
-    //https://api.instamelody.com/v1.0/User?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&displayName=testeraccount
-    
     NSString *requestUrl = [NSString stringWithFormat:@"%@/User", API_BASE_URL];
     
     NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
@@ -600,9 +598,13 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         
         [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"IsFemale"] forKey:@"IsFemale"];
         
-        [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"PhoneNumber"] forKey:@"PhoneNumber"];
+        NSString * phone = ([responseDict objectForKey:@"PhoneNumber"] == [NSNull null]) ? @"" : [responseDict objectForKey:@"PhoneNumber"];
         
-        [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"EmailAddress"] forKey:@"EmailAddress"];
+        [[NSUserDefaults standardUserDefaults] setObject:phone forKey:@"PhoneNumber"];
+        
+        NSString * email = ([responseDict objectForKey:@"EmailAddress"] == [NSNull null]) ? @"" : [responseDict objectForKey:@"EmailAddress"];
+        
+        [[NSUserDefaults standardUserDefaults] setObject:email forKey:@"EmailAddress"];
         
         if ([responseDict objectForKey:@"Image"] != nil && [[responseDict objectForKey:@"Image"] isKindOfClass:[NSDictionary class]]) {
             NSDictionary *imageDict = [responseDict objectForKey:@"Image"];
