@@ -217,8 +217,9 @@
     
     if ([self.userInfo objectForKey:@"EmailAddress"] != nil) {
         self.emailAddressField.text = [self.userInfo objectForKey:@"EmailAddress"];
-        self.emailAddressField.textColor = [UIColor lightGrayColor];
-        self.emailAddressField.enabled = NO;
+        //self.emailAddressField.textColor = [UIColor lightGrayColor];
+        //self.emailAddressField.enabled = NO;
+        //Change above to make email address editable
     }
     
     if ([self.userInfo objectForKey:@"PhoneNumber"] != nil) {
