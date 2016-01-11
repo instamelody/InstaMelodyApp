@@ -2543,7 +2543,7 @@
                                                         <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="16"/>
                                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
                                                     </textField>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="First name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UGk-5h-jrp">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="First name *" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UGk-5h-jrp">
                                                         <rect key="frame" x="0.0" y="0.0" width="124" height="20"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="20" id="FvL-6D-fej"/>
@@ -2584,7 +2584,7 @@
                                                         <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="16"/>
                                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
                                                     </textField>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RPA-sE-mI3">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last name *" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RPA-sE-mI3">
                                                         <rect key="frame" x="0.0" y="0.0" width="124" height="20"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="20" id="cwX-0T-K46"/>
@@ -2671,7 +2671,7 @@
                                                 <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="16"/>
                                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress"/>
                                             </textField>
-                                            <label opaque="NO" userInteractionEnabled="NO" tag="3" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="E-Mail" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fb3-Xg-t6z">
+                                            <label opaque="NO" userInteractionEnabled="NO" tag="3" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="E-Mail *" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fb3-Xg-t6z">
                                                 <rect key="frame" x="0.0" y="0.0" width="260" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="20" id="R5w-RF-y4J"/>
@@ -2712,7 +2712,7 @@
                                                 <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="16"/>
                                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
                                             </textField>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Username" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3t6-l6-MaB">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Username *" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3t6-l6-MaB">
                                                 <rect key="frame" x="0.0" y="0.0" width="260" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="20" id="S37-h5-sTE"/>
@@ -2753,7 +2753,7 @@
                                                 <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="16"/>
                                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" secureTextEntry="YES"/>
                                             </textField>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vxT-b5-Lzf">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Password *" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vxT-b5-Lzf">
                                                 <rect key="frame" x="0.0" y="0.0" width="260" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="20" id="dCe-su-iED"/>
