@@ -1,4 +1,4 @@
-//
+    //
 //  HomeViewController.m
 //  
 //
@@ -209,7 +209,10 @@
         
         SignUpViewController *signupVC = (SignUpViewController *)segue.destinationViewController;
         
-        signupVC.userInfo = @{@"FirstName": [defaults objectForKey:@"FirstName"], @"LastName": [defaults objectForKey:@"LastName"], @"PhoneNumber":  [defaults objectForKey:@"PhoneNumber"], @"EmailAddress": [defaults objectForKey:@"EmailAddress"], @"DateOfBirth": [defaults objectForKey:@"DateOfBirth"], @"IsFemale":[defaults objectForKey:@"IsFemale"], @"DisplayName" : [defaults objectForKey:@"DisplayName"]};
+        NSString * phone = ([defaults objectForKey:@"PhoneNumber"]) ? [defaults objectForKey:@"PhoneNumber"] : @"";
+        NSString * email = ([defaults objectForKey:@"EmailAddress"]) ? [defaults objectForKey:@"EmailAddress"] : @"";
+        
+        signupVC.userInfo = @{@"FirstName": [defaults objectForKey:@"FirstName"], @"LastName": [defaults objectForKey:@"LastName"], @"PhoneNumber":  phone, @"EmailAddress": email, @"DateOfBirth": [defaults objectForKey:@"DateOfBirth"], @"IsFemale":[defaults objectForKey:@"IsFemale"], @"DisplayName" : [defaults objectForKey:@"DisplayName"]};
         signupVC.title = @"Edit Profile";
         
     }
