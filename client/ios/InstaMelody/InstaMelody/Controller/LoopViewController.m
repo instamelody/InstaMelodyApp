@@ -457,7 +457,25 @@
     if (comboAudioUrl)
     {
         NSLog(@"including audio file in share");
-        itemsToShare = @[@"Check out InstaMelody in the App Store! https://itunes.apple.com/us/app/instamelody/id897451088", comboAudioUrl];
+        
+        //Copy file to new name before sharing...
+        NSError * error;
+        NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+        NSString *recordingPath = [documentsPath stringByAppendingPathComponent:@"Recordings"];
+        
+        NSURL *newFileURL = [NSURL fileURLWithPath:[recordingPath
+                              stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.m4a", [self.selectedLoop valueForKey:@"Name"]]]];
+        
+        if ([[NSFileManager defaultManager] fileExistsAtPath:newFileURL.absoluteString])
+            [[NSFileManager defaultManager] removeItemAtPath:newFileURL.absoluteString error:nil];
+        
+        [[NSFileManager defaultManager] copyItemAtURL:comboAudioUrl toURL:newFileURL error:&error];
+        BOOL success = [newFileURL setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
+        if(!success){
+            NSLog(@"Error excluding %@ from backup %@", [newFileURL lastPathComponent], error);
+        }
+        
+        itemsToShare = @[@"Check out InstaMelody in the App Store! https://itunes.apple.com/us/app/instamelody/id897451088", newFileURL];
     } else {
         itemsToShare = @[@"Check out InstaMelody in the App Store! https://itunes.apple.com/us/app/instamelody/id897451088"];
     }
