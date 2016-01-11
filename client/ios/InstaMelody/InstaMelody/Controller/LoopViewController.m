@@ -1758,6 +1758,11 @@
             [export exportAsynchronouslyWithCompletionHandler:
              ^(void ) {
                  
+                 NSError * error;
+                 BOOL success = [comboAudioFileUrl setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
+                 if(!success){
+                     NSLog(@"Error excluding %@ from backup %@", [comboAudioFileUrl lastPathComponent], error);
+                 }
                  NSLog(@"status: %ld; error? %@", (long)export.status, export.error);
                  NSLog(@"final file duration = %f", CMTimeGetSeconds(export.asset.duration));
                  dispatch_group_leave(group);
@@ -1813,6 +1818,11 @@
              
              NSLog(@"status: %ld; error? %@", (long)export.status, export.error);
              NSLog(@"final file duration = %f", CMTimeGetSeconds(export.asset.duration));
+             NSError * error;
+             BOOL success = [comboAudioUrl setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
+             if(!success){
+                 NSLog(@"Error excluding %@ from backup %@", [comboAudioUrl lastPathComponent], error);
+             }
 
          }];
         
