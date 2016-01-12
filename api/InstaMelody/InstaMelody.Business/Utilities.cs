@@ -320,6 +320,16 @@ namespace InstaMelody.Business
         }
 
         /// <summary>
+        /// Deletes the invalid device token.
+        /// </summary>
+        /// <param name="token">The token.</param>
+        public static void DeleteInvalidDeviceToken(string token)
+        {
+            var dal = new UserSessions();
+            dal.DeleteDeviceToken(token);
+        }
+
+        /// <summary>
         /// Sends the push notification.
         /// </summary>
         /// <param name="deviceToken">The device token.</param>
@@ -336,15 +346,14 @@ namespace InstaMelody.Business
         /// <param name="data">The data.</param>
         public static void SendPushNotification(Guid userId, APNSTypeEnum type, params object[] data)
         {
-            var token = GetDeviceTokens(new List<Guid> {userId});
+            var token = GetDeviceTokens(new List<Guid> { userId });
             if (token == null || !token.Any())
             {
                 return;
             }
-
             var key = Infrastructure.Utilities.GetApnsTypeString(type);
             SendApplePushNotification(token.First(), key, data);
-            InstaMelodyLogger.Log(string.Format("Push notification triggered: Token: {0}, Type: {1}", 
+            InstaMelodyLogger.Log(string.Format("Push notification triggered: Token: {0}, Type: {1}",
                 token, key), LogLevel.Trace);
         }
 
@@ -407,7 +416,6 @@ namespace InstaMelody.Business
             {
                 return;
             }
-
             var key = Infrastructure.Utilities.GetApnsTypeString(type);
             var alert = Infrastructure.Utilities.GetApnsAlertString(type, senderDisplayName);
             if (alert == null)
@@ -577,12 +585,32 @@ namespace InstaMelody.Business
         /// <param name="notificationFailureException">The notification failure exception.</param>
         private static void NotificationFailed(object sender, INotification notification, Exception notificationFailureException)
         {
+            var exception = notificationFailureException as NotificationFailureException;
+            if (exception == null)
+            {
+                InstaMelodyLogger.Log(
+                    string.Format("APNS Failure: {0} -> {1} -> {2}",
+                        sender,
+                        notificationFailureException.Message,
+                        notification),
+                    LogLevel.Error);
+                return;
+            }
+
             InstaMelodyLogger.Log(
-                string.Format("APNS Failure: {0} -> {1} -> {2}", 
-                    sender, 
-                    notificationFailureException.Message, 
-                    notification), 
+                string.Format("APNS Failure: {0} -> {1} -> {2}",
+                    sender,
+                    exception.ErrorStatusDescription,
+                    notification),
                 LogLevel.Error);
+
+            if (exception.ErrorStatusCode.Equals(8)) // invalid token
+            {
+                var n = notification as AppleNotification;
+                if (n == null) return;
+
+                Utilities.DeleteInvalidDeviceToken(n.DeviceToken);
+            }
         }
 
         /// <summary>

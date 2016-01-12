@@ -322,5 +322,36 @@ namespace InstaMelody.Data
             };
             return AddSession(session);
         }
+
+        /// <summary>
+        /// Deletes the device token.
+        /// </summary>
+        /// <param name="deviceToken">The device token.</param>
+        public void DeleteDeviceToken(string deviceToken)
+        {
+            var query = @"UPDATE dbo.UserSessions
+                        SET DeviceToken = NULL, LastActivity = @LastActivity
+                        WHERE DeviceToken = @DeviceToken AND IsDeleted = 0";
+
+            var parameters = new List<SqlParameter>()
+            {
+                new SqlParameter
+                {
+                    ParameterName = "LastActivity",
+                    Value = DateTime.UtcNow,
+                    SqlDbType = SqlDbType.DateTime,
+                    Direction = ParameterDirection.Input
+                },
+                new SqlParameter
+                {
+                    ParameterName = "DeviceToken",
+                    Value = deviceToken,
+                    SqlDbType = SqlDbType.VarChar,
+                    Direction = ParameterDirection.Input
+                }
+            };
+
+            ExecuteNonQuery(query, parameters.ToArray());
+        }
     }
 }

@@ -37,10 +37,12 @@
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.4.0.0\lib\net45\NLog.dll</HintPath>
     </Reference>
-    <Reference Include="PushSharp.Apple">
+    <Reference Include="PushSharp.Apple, Version=2.2.1.0, Culture=neutral, PublicKeyToken=cf74b75eab2c0170, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_bin\PushSharp.Apple.dll</HintPath>
     </Reference>
-    <Reference Include="PushSharp.Core">
+    <Reference Include="PushSharp.Core, Version=2.2.1.0, Culture=neutral, PublicKeyToken=cf74b75eab2c0170, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_bin\PushSharp.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />

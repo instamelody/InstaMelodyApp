@@ -74,7 +74,7 @@ namespace InstaMelody.API.Controllers
                     if (!string.IsNullOrEmpty(request.DisplayName) || !string.IsNullOrEmpty(request.EmailAddress))
                         result = bll.Authenticate(request.DisplayName, request.EmailAddress, request.Password, request.DeviceToken);
                     else if (!string.IsNullOrEmpty(request.FacebookToken) || !string.IsNullOrEmpty(request.TwitterToken))
-                        result = bll.Authenticate(request.Id, request.FacebookToken, request.TwitterToken, request.DeviceToken);
+                        result = bll.Authenticate(request.Id, request.FacebookUserId, request.TwitterUserId, request.DeviceToken);
 
                     if (result == null || result.Token.Equals(default(Guid)))
                     {

@@ -296,7 +296,9 @@ namespace InstaMelody.Business
 
             // check to make sure updated user name or email address is not taken
             var userExisting = GetUserByDisplayName(unifiedUserData.DisplayName);
-            if (userExisting != null && !userExisting.Id.Equals(unifiedUserData.Id))
+            if (userExisting != null 
+                && (!userExisting.Id.Equals(default(Guid)) 
+                && !userExisting.Id.Equals(unifiedUserData.Id)))
             {
                 InstaMelodyLogger.Log(
                     string.Format("Tried to update User with an existing display name. Display Name: {0}",
@@ -305,7 +307,9 @@ namespace InstaMelody.Business
             }
 
             userExisting = GetUserByEmailAddress(unifiedUserData.EmailAddress);
-            if (userExisting != null && !userExisting.Id.Equals(unifiedUserData.Id))
+            if (userExisting != null
+                && (!userExisting.Id.Equals(default(Guid))
+                && !userExisting.Id.Equals(unifiedUserData.Id)))
             {
                 InstaMelodyLogger.Log(
                     string.Format("Tried to update User with an existing email. Email: {0}",

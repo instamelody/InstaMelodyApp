@@ -108,29 +108,29 @@ namespace InstaMelody.Business
         /// <exception cref="System.UnauthorizedAccessException">No User found with the provided information.</exception>
         /// <exception cref="System.Data.DataException">
         /// </exception>
-        public ApiToken Authenticate(Guid userId, string facebookToken, string twitterToken, string deviceToken)
+        public ApiToken Authenticate(Guid userId, string facebookId, string twitterId, string deviceToken)
         {
             User existingUser = null;
             var userDal = new Users();
 
             // find user by facebook token
-            if (!string.IsNullOrWhiteSpace(facebookToken))
+            if (!string.IsNullOrWhiteSpace(facebookId))
             {
-                existingUser = userDal.FindByFacebookToken(facebookToken);
+                existingUser = userDal.FindByFacebookId(facebookId);
             }
 
             // if no user was found with the facebook token, try the twitter token
-            if (existingUser == null && !string.IsNullOrWhiteSpace(twitterToken))
+            if (existingUser == null && !string.IsNullOrWhiteSpace(twitterId))
             {
-                existingUser = userDal.FindByTwitterToken(twitterToken);
+                existingUser = userDal.FindByTwitterId(twitterId);
             }
 
             // if no user was found, then eject!
             if (existingUser == null || existingUser.IsDeleted || !existingUser.Id.Equals(userId))
             {
                 InstaMelodyLogger.Log(
-                    string.Format("No User / Token Match Was Found. Id: {0}, Facebook Token: {1}, Twitter Token: {2}",
-                        userId, facebookToken, twitterToken), LogLevel.Error);
+                    string.Format("No User / Token Match Was Found. Id: {0}, Facebook Id: {1}, Twitter Id: {2}",
+                        userId, facebookId, twitterId), LogLevel.Error);
                 throw new UnauthorizedAccessException("No User found with the provided information.");
             }
 
@@ -139,8 +139,8 @@ namespace InstaMelody.Business
             if (credentialedUser == null)
             {
                 InstaMelodyLogger.Log(
-                       string.Format("Error validating credentials. Id: {0}, Facebook Token: {1}, Twitter Token: {2}",
-                           userId, facebookToken, twitterToken), LogLevel.Error);
+                       string.Format("Error validating credentials. Id: {0}, Facebook Id: {1}, Twitter Id: {2}",
+                           userId, facebookId, twitterId), LogLevel.Error);
                 throw new DataException(string.Format("Error validating credentials for user: {0}", userId));
             }
 
@@ -153,8 +153,8 @@ namespace InstaMelody.Business
             }
 
             InstaMelodyLogger.Log(
-                string.Format("Error creating session. Id: {0}, Facebook Token: {1}, Twitter Token: {2}",
-                           userId, facebookToken, twitterToken), LogLevel.Error);
+                string.Format("Error creating session. Id: {0}, Facebook Id: {1}, Twitter Id: {2}",
+                           userId, facebookId, twitterId), LogLevel.Error);
             throw new DataException(string.Format("Error creating session for user: {0}", userId));
         }
 

@@ -295,6 +295,30 @@ namespace InstaMelody.Data
         }
 
         /// <summary>
+        /// Finds the by facebook identifier.
+        /// </summary>
+        /// <param name="fbid">The fbid.</param>
+        /// <returns></returns>
+        public User FindByFacebookId(string fbid)
+        {
+            var query = @"SELECT TOP 1 * FROM dbo.Users
+                        WHERE FacebookUserId = @FacebookId AND IsDeleted = 0";
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "FacebookId",
+                    Value = fbid,
+                    SqlDbType = SqlDbType.VarChar,
+                    Direction = ParameterDirection.Input
+                },
+            };
+
+            return GetRecord<User>(query, parameters.ToArray());
+        }
+
+        /// <summary>
         /// Finds the by twitter token.
         /// </summary>
         /// <param name="token">The token.</param>
@@ -310,6 +334,30 @@ namespace InstaMelody.Data
                 {
                     ParameterName = "TwitterToken",
                     Value = token,
+                    SqlDbType = SqlDbType.VarChar,
+                    Direction = ParameterDirection.Input
+                },
+            };
+
+            return GetRecord<User>(query, parameters.ToArray());
+        }
+
+        /// <summary>
+        /// Finds the by twitter identifier.
+        /// </summary>
+        /// <param name="twid">The twid.</param>
+        /// <returns></returns>
+        public User FindByTwitterId(string twid)
+        {
+            var query = @"SELECT TOP 1 * FROM dbo.Users
+                        WHERE TwitterUserId = @TwitterId AND IsDeleted = 0";
+
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter
+                {
+                    ParameterName = "TwitterId",
+                    Value = twid,
                     SqlDbType = SqlDbType.VarChar,
                     Direction = ParameterDirection.Input
                 },
