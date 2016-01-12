@@ -299,7 +299,7 @@
         
         
             if (self.savedImage != nil) {
-                [self prepareImage:self.savedImage];
+                [[NetworkManager sharedManager] prepareImage:self.savedImage];
             }
             
             [self.HUD hide:YES];
@@ -433,7 +433,7 @@
                 
                 
                 if (self.savedImage != nil) {
-                    [self prepareImage:self.savedImage];
+                    [[NetworkManager sharedManager] prepareImage:self.savedImage];
                 }
                 
                 [self.HUD hide:YES];
@@ -604,7 +604,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     }];
 }
 
-
+/*
 -(void)prepareImage:(UIImage *)image {
     
     UIImage *resizedImage = nil;
@@ -638,6 +638,6 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     
     [[NetworkManager sharedManager] updateProfilePicture:resizedImage];
 }
-
+*/
 
 @end
