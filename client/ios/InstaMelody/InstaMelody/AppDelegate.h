@@ -13,5 +13,10 @@
 @property (strong, nonatomic) UIWindow *window;
 
 
+@property (strong, nonatomic) NSString *loopOwnersId;
+//This is a bad hack, but loopVC is difficult to follow
+//and the app needs to get to the app store asap.
+//Need to go through loopVC and streamline code later.
+
 @end
 

@@ -13,6 +13,7 @@
 #import "AFURLSessionManager.h"
 #import "AFHTTPRequestOperationManager.h"
 #import "constants.h"
+#import "CustomActivityProvider.h"
 
 @interface LoopViewController ()
 
@@ -44,12 +45,15 @@
 @end
 
 @implementation LoopViewController
+{
+    NSNumber * initialIsExplicitStatus;
+}
 
 -(void)viewDidLoad {
     [super viewDidLoad];
-    
+    //_isFromChat = TRUE;
     self.goBack = NO;
-    
+    self.isNewPart = YES;
     self.defaults = [NSUserDefaults standardUserDefaults];
     
     self.groupArray = [[DataManager sharedManager] melodyGroupList];
@@ -59,17 +63,31 @@
     
     [self applyFontAwesome];
     
+    self.explicitCheckbox.delegate = self;
+    self.explicitCheckbox.tag = 1;
+    self.publicCheckbox.delegate = self;
+    self.publicCheckbox.tag = 2;
+    
     self.progressView.roundedCorners = YES;
     self.progressView.trackTintColor = [UIColor clearColor];
     self.progressView.progressTintColor = INSTA_BLUE;
     self.progressView.thicknessRatio = 0.1f;
+    
+    if(_isNotMyStudio)
+    {
+        self.explicitView.userInteractionEnabled = NO;
+        self.publicView.userInteractionEnabled = NO;
+    } else {
+        self.explicitView.userInteractionEnabled = YES;
+        self.publicView.userInteractionEnabled = YES;
+    }
     
     NSString *myUserId = [self.defaults objectForKey:@"Id"];
     
      if (self.selectedLoop !=nil) {
          [self getLoop:[self.selectedLoop objectForKey:@"Id"]];
          
-        self.isNewPart = NO;
+        //self.isNewPart = NO;
          
      } else if (self.selectedUserMelody != nil) {
         
@@ -77,16 +95,23 @@
         NSLog(@"loaded with a melody");
          
          if ([self.selectedUserMelody.userId isEqualToString:myUserId]) {
-             self.isMyStudio = YES;
+             self.isNotMyStudio = NO;
          }
                            
         if ([self.selectedUserMelody.isExplicit boolValue]) {
-                self.explicitCheckbox.on = YES;
+            self.explicitCheckbox.on = YES;
+            self.publicCheckbox.on = NO;
+        } else {
+            self.explicitCheckbox.on = NO;
+            self.publicCheckbox.on = YES;
         }
          
-         if ([self.selectedUserMelody.isStationPostMelody boolValue]) {
-             self.publicCheckbox.on = YES;
-         }
+         initialIsExplicitStatus = self.selectedUserMelody.isExplicit;
+         
+         //if ([self.selectedUserMelody.isStationPostMelody boolValue]) {
+           //  self.publicCheckbox.on = YES;
+         //}
+         //Dropping use of this flag. If explicit is off, it is public.
          
         for (UserMelodyPart *part in [self.selectedUserMelody parts]) {
             if ([part.isUserCreated boolValue] == true) {
@@ -138,7 +163,7 @@
             }
         }
          
-        self.isNewPart = NO;
+        //self.isNewPart = NO;
      } else {
          //it's just me now
          
@@ -163,7 +188,10 @@
          self.backwardButton.hidden = YES;
          self.forwardButton.hidden = YES;
          self.isNewPart = YES;
-         self.isMyStudio = YES;
+         self.isNotMyStudio = NO;
+         
+         self.explicitCheckbox.on = NO;
+         self.publicCheckbox.on = YES;
      }
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"pickedMelody" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
@@ -255,7 +283,7 @@
     
     
     [[UIBarButtonItem appearance] setTitleTextAttributes:buttonTextAttributes forState:UIControlStateNormal];
-    
+    self.backwardButton.hidden = YES;
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
@@ -291,6 +319,7 @@
         
     }
      */
+    
     self.saveBar.hidden = NO;
     self.recordButton.hidden = NO;
     
@@ -304,6 +333,7 @@
     
     self.joinBar.hidden = YES;
     self.joinBarModLabel.hidden = YES;
+
 }
 
 -(void)initializeAudio {
@@ -355,6 +385,18 @@
                 } else {
                     [self.playButton setHidden:YES];
                 }
+
+                NSString * isExp = [NSString stringWithFormat:@"%@", [responseDict valueForKey:@"IsExplicit"]];
+                if ([isExp isEqualToString:@"1"]) {
+                    self.explicitCheckbox.on = YES;
+                    self.publicCheckbox.on = NO;
+                } else {
+                    self.explicitCheckbox.on = NO;
+                    self.publicCheckbox.on = YES;
+                }
+                
+                initialIsExplicitStatus = [NSNumber numberWithInt:[isExp intValue]];
+                
             }
             
 
@@ -400,18 +442,23 @@
         NSDictionary *userMelodyDict = [part objectForKey:@"UserMelody"];
         
         NSString *userId = [userMelodyDict objectForKey:@"UserId"];
-        
+        /*
         BOOL isExplicit =[[userMelodyDict objectForKey:@"IsExplicit"] boolValue];
         
         BOOL isPublic = [[userMelodyDict objectForKey:@"IsStationPostMelody"] boolValue];
         
         if (isExplicit) {
             self.explicitCheckbox.on = YES;
-        }
-        
-        if (isPublic) {
+            self.publicCheckbox.on = NO;
+        } else {
+            self.explicitCheckbox.on = NO;
             self.publicCheckbox.on = YES;
         }
+        */
+        //if (isPublic) {
+        //    self.publicCheckbox.on = YES;
+        //}
+        //Using isExplicit only now
         
         [partDict setObject:userId forKey:@"UserId"];
         
@@ -594,7 +641,7 @@
 }
 
 -(IBAction)join:(id)sender {
-    self.isMyStudio = YES;
+    self.isNotMyStudio = NO;
     [self updateBarStatus];
 }
 
@@ -672,36 +719,19 @@
 }
 
 -(IBAction)share:(id)sender {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Share to" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    UIAlertAction *fbAction = [UIAlertAction actionWithTitle:@"Facebook" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        //sdf
-    }];
+
+    //CustomActivityProvider *ActivityProvider = [[CustomActivityProvider alloc] initWithPlaceholderItem:@""];
+    NSArray *itemsToShare = @[@"Check out InstaMelody in the App Store! https://itunes.apple.com/us/app/instamelody/id897451088"];
+    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:itemsToShare applicationActivities:nil];
+    //activityVC.excludedActivityTypes = @[UIActivityTypePrint, UIActivityTypeAssignToContact, UIActivityTypeSaveToCameraRoll]; //or whichever you don't need
+    [activityVC setValue:@"InstaMelody" forKey:@"subject"];
     
-    UIAlertAction *twAction = [UIAlertAction actionWithTitle:@"Twitter" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        //sdf
-    }];
+    activityVC.completionWithItemsHandler = ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
+        NSLog(@"Completed successfully...");
+    };
     
-    UIAlertAction *scAction = [UIAlertAction actionWithTitle:@"SoundCloud" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        //sdf
-    }];
+    [self presentViewController:activityVC animated:YES completion:nil];
     
-    UIAlertAction *emailAction = [UIAlertAction actionWithTitle:@"E-mail" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        //sdf
-    }];
-    
-    UIAlertAction *textAction = [UIAlertAction actionWithTitle:@"Text" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        //sdf
-    }];
-    
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDestructive handler:nil];
-    
-    [alert addAction:fbAction];
-    [alert addAction:twAction];
-    [alert addAction:scAction];
-    [alert addAction:emailAction];
-    [alert addAction:textAction];
-    [alert addAction:cancelAction];
-    [self presentViewController:alert animated:YES completion:nil];
 }
 
 -(IBAction)showVolumeSettings:(id)sender {
@@ -902,7 +932,39 @@
     UITextField *topicField = (UITextField *)[self.tableView viewWithTag:98];
     BOOL isPremium = [[DataManager sharedManager] isPremium];
     
-    if (![topicField.text isEqualToString:@""] && self.currentRecordingURL) {
+    if (self.explicitCheckbox.on != [initialIsExplicitStatus intValue] && !self.recorder) // && !self.isNewPart)
+    {
+        //need to save the Explicit state
+        NSString *requestUrl = [NSString stringWithFormat:@"%@/Melody/Loop/Update", API_BASE_URL];
+        
+        NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
+        
+        //add 64 char string
+        
+        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        
+        NSString * boolValueAsString = (self.explicitCheckbox.on) ? @"true":@"false";
+        
+        NSDictionary *loopInfo = @{@"Id": [self.loopDict objectForKey:@"Id"], @"IsExplicit": boolValueAsString};
+        NSDictionary *parameters = @{@"Token": token, @"Loop": loopInfo};
+        
+        [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSLog(@"Explicit status updated");
+            initialIsExplicitStatus = ([initialIsExplicitStatus isEqual: @1]) ? [NSNumber numberWithInt:0] : [NSNumber numberWithInt:1] ;
+            if ([self.delegate respondsToSelector:@selector(setExplicit:)])
+            {
+                [self.delegate setExplicit:[NSString stringWithFormat:@"%hhd", self.explicitCheckbox.on]];
+            }
+            
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+         
+            NSLog(@"Problem updating explicit status");
+        }];
+        
+    }
+    
+    
+    if (![topicField.text isEqualToString:@""] && self.currentRecordingURL && self.recorder) {
         
         NSMutableDictionary *userDict = [NSMutableDictionary new];
         [userDict setObject:[self.currentRecordingURL path] forKey:@"LoopURL"];
@@ -921,10 +983,8 @@
             [userDict setObject:self.selectedMelody3.melodyId forKey:@"MelodyId3"];
         }
         
-        [userDict setObject:[NSNumber numberWithBool:self.explicitCheckbox.on ] forKey:@"IsExplicit"];
-        [userDict setObject:[NSNumber numberWithBool:self.publicCheckbox.on ] forKey:@"IsStationPostMelody"];
-        
-        
+        [userDict setObject:[NSString stringWithFormat:@"%hhd", self.explicitCheckbox.on ] forKey:@"IsExplicit"];
+        [userDict setObject:[NSString stringWithFormat:@"%hhd", self.publicCheckbox.on ] forKey:@"IsStationPostMelody"];
         
         if (!isPremium && self.selectedMelody2) {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Please upgrade" message:@"You must go premium to select more than 1 melody." preferredStyle:UIAlertControllerStyleAlert];
@@ -952,7 +1012,7 @@
             
             [self.navigationController popViewControllerAnimated:YES];
         }
-    } else {
+    } else if (self.recorder) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:@"Please make sure you have selected a loop topic and recording" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
         [alert addAction:action];
@@ -1176,11 +1236,11 @@
         [self.profileImageView setImage:[UIImage imageNamed:@"Profile"]];
         [self.progressLabel setText:@"Press Play to Start"];
         
-        if (!self.isNewPart) {
+        //if (!self.isNewPart) {
             self.selectedMelody = nil;
             self.selectedMelody2 = nil;
             self.selectedMelody3 = nil;
-        }
+        //}
         
         [toggleBtn setTitle:@"Preview melodies" forState:UIControlStateNormal];
         
@@ -1188,43 +1248,61 @@
     } else {
         
         NSError *error = nil;
-
-        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-        [audioSession setCategory:AVAudioSessionCategoryPlayback
-                            error:&error];
-        /*
-        [[AudioSessionManager sharedInstance] changeMode:@"kAudioSessionManagerMode_Playback"];
-        [[AudioSessionManager sharedInstance] start];
-         */
         
-        if (error == nil) {
+        if (self.recorder != nil)
+        {
+            //there's something the user has just recorded; let's play just that.
+            [self playRecording:nil];
+            if (self.selectedMelody != nil) {
+                [self playLoop:nil];
+            }
             
+            if (self.selectedMelody2 != nil) {
+                [self playLoop2:nil];
+            }
+            
+            if (self.selectedMelody3 != nil) {
+                [self playLoop3:nil];
+            }
+            
+        } else {
+
+            AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+            [audioSession setCategory:AVAudioSessionCategoryPlayback
+                                error:&error];
             /*
+            [[AudioSessionManager sharedInstance] changeMode:@"kAudioSessionManagerMode_Playback"];
+            [[AudioSessionManager sharedInstance] start];
+             */
             
-            if ([self isHeadsetPluggedIn]) {
+            if (error == nil) {
+                
+                /*
+                
+                if ([self isHeadsetPluggedIn]) {
+                    
+                    [self playEverything];
+                } else {
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Headphones not detected" message:@"For the best results, please plug in your headphones" preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                        [self playEverything];
+                    }];
+                    [alert addAction:okAction];
+                    [self presentViewController:alert animated:YES completion:nil];
+                }
+                 
+                 */
                 
                 [self playEverything];
             } else {
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Headphones not detected" message:@"For the best results, please plug in your headphones" preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:@"Error setting audio" preferredStyle:UIAlertControllerStyleAlert];
                 UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                     [self playEverything];
                 }];
                 [alert addAction:okAction];
-                [self presentViewController:alert animated:YES completion:nil];
             }
-             
-             */
-            
-            [self playEverything];
-        } else {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:@"Error setting audio" preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                [self playEverything];
-            }];
-            [alert addAction:okAction];
+        
         }
-        
-        
         
     }
 }
@@ -1363,9 +1441,9 @@
     
     if (self.selectedLoop != nil) {
         
-        if (!self.isNewPart) {
+        //if (!self.isNewPart) {
             [self preload];
-        }
+        //}
     }
     
     [self playRecording:nil];
@@ -1734,7 +1812,7 @@
             [self.bgPlayer3 stop];
         //}
         
-        if (self.selectedLoop && !self.isNewPart) {
+        if (self.selectedLoop && !self.recorder) { // && !self.isNewPart) {
             
             NSInteger partCount = MAX(0, self.partArray.count -1);
             
@@ -1761,6 +1839,9 @@
         }
     }
 }
+
+
+
 
 #pragma mark - Table view data source
 
@@ -1873,6 +1954,7 @@
         } else if (indexPath.row == 2) {
             
             MelodyCell *cell = (MelodyCell *)[tableView dequeueReusableCellWithIdentifier:@"MelodyCell" forIndexPath:indexPath];
+            //UILabel *melodyLabel = [cell viewWithTag:911];
             
             cell.tokenInputView.tag = 99;
             
@@ -1882,7 +1964,7 @@
             cell.tokenInputView.placeholderText = @"Add melodies";
             
             cell.tokenInputView.accessoryView = [self contactAddButton];
-            
+
             return cell;
         } else {
             StatusCell *cell = (StatusCell *)[tableView dequeueReusableCellWithIdentifier:@"StatusCell" forIndexPath:indexPath];
@@ -2031,7 +2113,7 @@
 
     }
     
-    self.isNewPart = NO;
+    //self.isNewPart = NO;
     
     self.currentPartIndex = indexPath.row - 1 ;
     [self audioPlayerDidFinishPlaying:self.fgPlayer successfully:YES];
@@ -2144,6 +2226,21 @@
     }*/
     [textField resignFirstResponder];
     return YES;
+}
+
+- (void)didTapCheckBox:(BEMCheckBox *)checkBox
+{
+    if (checkBox.tag == 1)
+    {
+        //Explicit
+        self.publicCheckbox.on = NO;
+        
+    } else {
+        //Public
+        self.explicitCheckbox.on = NO;
+
+    }
+    
 }
 
 /*

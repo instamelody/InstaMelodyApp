@@ -10,6 +10,7 @@
 #import "UIFont+FontAwesome.h"
 #import "NSString+FontAwesome.h"
 #import "StationCell.h"
+#import "AppDelegate.h"
 
 @interface StationViewController ()
 
@@ -21,6 +22,10 @@
 @end
 
 @implementation StationViewController
+{
+    NSIndexPath * selectedIndexPath;
+    BOOL isUsersStation;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -61,6 +66,13 @@
     [self fixButtons];
 }
 
+-(void)dealloc
+{
+    AppDelegate *appDelegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+    appDelegate.loopOwnersId = nil;
+    //Clear this variable so another call to loopVC won't get confused.
+}
+
 -(void)fixButtons {
     
     [self centerButton:self.fanButton];
@@ -90,6 +102,8 @@
     
     if (self.selectedFriend == nil) {
         
+        isUsersStation = TRUE;
+        
         if (self.stationDict != nil) {
             
             
@@ -99,7 +113,7 @@
             self.stationLabel.text = [self.stationDict objectForKey:@"Name"];
             
             //get station
-            [self getFirstStation];
+            //[self getFirstStation];
             
         } else {
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -123,6 +137,8 @@
         
     } else {
 
+        isUsersStation = FALSE;
+        
         self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", self.selectedFriend.firstName, self.selectedFriend.lastName];
         
         self.title = [NSString stringWithFormat:@"%@'s Station", self.selectedFriend.displayName];
@@ -251,20 +267,23 @@
                 self.stationLabel.text = [selectedStation objectForKey:@"Name"];
                 
                 [self.fanButton setTitle:[NSString stringWithFormat:@"%ld Fans", numFans] forState:UIControlStateNormal];
-                [self.vipButton setTitle:[NSString stringWithFormat:@"%ld VIPs", numVips] forState:UIControlStateNormal];
+                //[self.vipButton setTitle:[NSString stringWithFormat:@"%ld VIPs", numVips] forState:UIControlStateNormal];
                 [self fixButtons];
                 
             });
             
             if (self.stationDict == nil && self.selectedFriend == nil) {
                 //get all my loops
-                [self fetchMyLoops];
+                isUsersStation = TRUE;
+                [self fetchMyLoops:nil];
                 
-                [self getStationPosts:[selectedStation objectForKey:@"Id"] ];
+                //[self getStationPosts:[selectedStation objectForKey:@"Id"] ];
             } else {
                 //get my friend's public loops
-                
-                [self getStationPosts:[selectedStation objectForKey:@"Id"] ];
+                isUsersStation = FALSE;
+                [self fetchMyLoops:userId];
+
+                //[self getStationPosts:[selectedStation objectForKey:@"Id"] ];
             }
 
         }
@@ -279,7 +298,7 @@
         
     }];
 }
-
+/*
 -(void)getStationPosts:(NSString *)stationId {
  
     
@@ -299,7 +318,18 @@
         NSLog(@"stations updated");
         
         
-        NSArray *tempArray = (NSArray *)responseObject;
+        //NSArray *tempArray = (NSArray *)responseObject;
+        NSMutableArray * tempArray0 = [[NSMutableArray alloc] init];
+        
+        for (NSDictionary * thisLoop in responseObject) {
+            if (![[thisLoop objectForKey:@"Parts"] isEqual:[NSNull null]])
+            {
+                [tempArray0 addObject:thisLoop];
+            }
+        }
+        
+        NSArray * tempArray = [[NSArray alloc] initWithArray:tempArray0];
+
         
         //NSArray *tempArray = [[DataManager sharedManager] userMelodyList];
         
@@ -350,7 +380,7 @@
     }];
     
 }
-
+*/
 -(void)createStation {
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -388,8 +418,8 @@
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             //TODOAHMED
             //[alertView show];
-            
-            [self fetchMyLoops];
+            isUsersStation = TRUE;
+            [self fetchMyLoops:nil];
             //[self fetchMyMelodies];
         }
     }];
@@ -400,7 +430,8 @@
     NSMutableArray *tempArray = [NSMutableArray new];
     if (inputArray != nil) {
         for (NSDictionary *itemDict in inputArray) {
-            if ([[itemDict objectForKey:@"IsExplicit"] boolValue] == false) {
+            NSString * isExp = [NSString stringWithFormat:@"%@", [itemDict objectForKey:@"IsExplicit"]];
+            if ([isExp isEqualToString:@"0"]) {
                 [tempArray addObject:itemDict];
             }
         }
@@ -410,28 +441,55 @@
 }
 
 
--(void)fetchMyLoops {
+-(void)fetchMyLoops:(NSString *)forUserID {
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     
     NSString *requestUrl = [NSString stringWithFormat:@"%@/Melody/Loop", API_BASE_URL];
     
     NSString *token =  [[NSUserDefaults standardUserDefaults] objectForKey:@"authToken"];
     
-    //add 64 char string
+    NSDictionary *parameters;
     
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    
-    NSDictionary *parameters = @{@"token": token};
+    if (isUsersStation)
+    {
+        
+        parameters = @{@"token": token};
+        
+    } else {
+        
+        parameters = @{@"userId": forUserID, @"token": token};
+        
+    }
     
     [manager GET:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         // NSLog(@"JSON: %@", responseObject);
         NSLog(@"loop updated");
         
-        NSArray *tempArray = (NSArray *)responseObject;
+        //NSArray *tempArray = (NSArray *)responseObject;
+        NSMutableArray * tempArray0 = [[NSMutableArray alloc] init];
+        
+        for (NSDictionary * thisLoop in responseObject) {
+            if (![[thisLoop objectForKey:@"Parts"] isEqual:[NSNull null]])
+            {
+                NSString * isExp = [NSString stringWithFormat:@"%@", [thisLoop objectForKey:@"IsExplicit"]];
+                if (isUsersStation || [isExp isEqualToString:@"0"])
+                {
+                    [tempArray0 addObject:thisLoop];
+                }
+            }
+        }
+        
+        NSArray * tempArray = [[NSArray alloc] initWithArray:tempArray0];
         
         //NSArray *tempArray = [[DataManager sharedManager] userMelodyList];
         
         if (tempArray.count > 20) {
             tempArray = [tempArray subarrayWithRange:NSMakeRange(0, 20)];
+        }
+        
+        for (NSDictionary * thisDict in tempArray) {
+            NSLog(@"Loop %@ isExplicit=%@, isChat=%@", [thisDict valueForKey:@"Name"], [thisDict valueForKey:@"IsExplicit"], [thisDict valueForKey:@"IsChatLoop"]);
         }
         
         NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateCreated" ascending:NO];
@@ -462,6 +520,10 @@
     }];
 }
 
+    -(void)fetchLoopsContd
+    {
+        
+    }
 
 -(void)fetchMyMelodies {
     
@@ -593,19 +655,18 @@
         //if my station + public
         
         if ([loopDict objectForKey:@"Parts"] != nil && [[loopDict objectForKey:@"Parts"] isKindOfClass:[NSArray class]]) {
-            NSArray *parts = [loopDict objectForKey:@"Parts"];
-            NSDictionary *firstPart = parts[0];
-            NSDictionary *melodyDict = [firstPart objectForKey:@"UserMelody"];
+            //NSArray *parts = [loopDict objectForKey:@"Parts"];
+            //NSDictionary *firstPart = parts[0];
+            //NSDictionary *melodyDict = [firstPart objectForKey:@"UserMelody"];
         
-             if ([[melodyDict objectForKey:@"IsStationPostMelody"] boolValue] == YES) {
+             if ([[NSString stringWithFormat:@"%@", [loopDict objectForKey:@"IsExplicit"]] isEqualToString: @"0"]) {
                  [cell.joinButton setTitle:@"Public" forState:UIControlStateNormal];
              } else {
-                 [cell.joinButton setTitle:@"Private" forState:UIControlStateNormal];
+                 [cell.joinButton setTitle:@"Explicit" forState:UIControlStateNormal];
              }
             
             
         }
-
         
         NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
         
@@ -616,6 +677,8 @@
         cell.coverImage.image = [UIImage imageWithContentsOfFile:imagePath];
         
     } else {
+        
+        cell.joinButton.hidden = TRUE;
         
         if (self.selectedFriend != nil) {
             userId = self.selectedFriend.userId;
@@ -653,6 +716,8 @@
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     
+    selectedIndexPath = indexPath;
+    
     NSDictionary *loopDict = [self.loopArray objectAtIndex:indexPath.row];
     
     UIStoryboard *mainSB = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
@@ -666,6 +731,16 @@
     
     NSString *myUserId = [defaults objectForKey:@"Id"];
     
+    AppDelegate *appDelegate=(AppDelegate*)[[UIApplication sharedApplication] delegate];
+    
+    if ([userId isEqualToString:myUserId])
+    {
+        loopVC.isNotMyStudio = false;
+        appDelegate.loopOwnersId = myUserId;
+    } else {
+        loopVC.isNotMyStudio = true;
+        appDelegate.loopOwnersId = userId;
+    }
     
     NSDictionary *messageDict = [loopDict objectForKey:@"Message"];
     
@@ -720,7 +795,7 @@
     
 }
 
-
+/* Method not called?
 -(void)getLoop:(NSString *)loopId {
     
     NSString *requestUrl = [NSString stringWithFormat:@"%@/Melody/Loop", API_BASE_URL];
@@ -766,7 +841,7 @@
     }];
     
 }
-
+*/
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -781,7 +856,7 @@
     }
     
 }
-
+/*
 -(IBAction)showLoops:(id)sender {
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     LoopViewController *loopVc = (LoopViewController *)[sb instantiateViewControllerWithIdentifier:@"LoopViewController"];
@@ -789,15 +864,20 @@
     
     [self.navigationController pushViewController:loopVc animated:YES];
 }
-
+*/
 -(IBAction)change:(id)sender {
-    UISegmentedControl *control = (UISegmentedControl *)sender;
+    UISegmentedControl *control = _filterControl; // (UISegmentedControl *)sender;
     
     self.loopArray = self.cleanLoopArray;
     
     NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"DateCreated" ascending:NO];
     
-    NSString *userId = [self.loopArray[0] objectForKey:@"UserId"];
+    NSString * userId;
+    
+    if (self.loopArray.count > 0)
+    {
+        userId = [self.loopArray[0] objectForKey:@"UserId"];
+    } 
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
@@ -816,7 +896,6 @@
             NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
             self.loopArray = [tempArray sortedArrayUsingDescriptors:descriptors];
             
-            
             break;
         }
         case 1: {
@@ -824,8 +903,8 @@
             NSMutableArray *tempArray = [NSMutableArray new];
             
             for (NSDictionary *itemDict in self.loopArray) {
-                NSArray *parts = [itemDict objectForKey:@"Parts"];
-                if (parts.count > 1) {
+                NSString * explicit = [NSString stringWithFormat:@"%@", [itemDict valueForKey:@"IsExplicit"]];
+                if ([explicit isEqualToString:@"0"] && ![[itemDict objectForKey:@"IsChatLoop"] boolValue]) {
                     [tempArray addObject:itemDict];
                 }
             }
@@ -840,7 +919,10 @@
             NSMutableArray *tempArray = [NSMutableArray new];
             
             for (NSDictionary *itemDict in self.loopArray) {
-                if ([[itemDict objectForKey:@"IsChatLoop"] boolValue] == TRUE) {
+                
+                NSString * isExp = [NSString stringWithFormat:@"%@", [itemDict objectForKey:@"IsExplicit"]];
+                if ([[itemDict objectForKey:@"IsChatLoop"] boolValue] == TRUE
+                    && [isExp isEqualToString:@"0"]) {
                     [tempArray addObject:itemDict];
                 }
             }
@@ -854,8 +936,8 @@
             
             NSMutableArray *tempArray = [NSMutableArray new];
             for (NSDictionary *itemDict in self.loopArray) {
-                NSArray *parts = [itemDict objectForKey:@"Parts"];
-                if (parts.count == 1) {
+                NSString * explicit = [NSString stringWithFormat:@"%@", [itemDict valueForKey:@"IsExplicit"]];
+                if ([explicit isEqualToString:@"1"]) {
                     [tempArray addObject:itemDict];
                 }
             }
@@ -915,6 +997,29 @@
             //[alertView show];
         }
     }];
+    
+    requestUrl = [NSString stringWithFormat:@"%@/User/Friends", API_BASE_URL];
+    
+    parameters = @{@"id": userId, @"token":token};
+    
+    [manager GET:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        NSLog(@"results %@", responseObject);
+        
+        NSArray * results = [[NSArray alloc] initWithArray:responseObject];
+        self.vipButton.hidden = NO;
+        
+        NSString * labelText = (results.count == 1) ?
+        [NSString stringWithFormat:@"%lu VIP", (unsigned long)results.count] : [NSString stringWithFormat:@"%lu VIPs", (unsigned long)results.count];
+        
+        [self.vipButton setTitle:labelText forState:UIControlStateNormal];
+        
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    
+        NSLog(@"failed!");
+    }];
+    
 }
 
 #pragma mark - loop delegate
@@ -928,9 +1033,52 @@
     } else if ([userDict objectForKey:@"LoopId"] != nil) {
         [[NetworkManager sharedManager] uploadLoopPart:userDict];
     } else {
-         [[NetworkManager sharedManager] uploadUserMelody:userDict];
+         [[NetworkManager sharedManager] uploadLoop:userDict];
     }
+    
+    //copying from HomeViewController which works
+    /*
+    if ([userDict objectForKey:@"Id"] != nil) {
+        [[NetworkManager sharedManager] uploadChatUserMelody:userDict];
+    } else {
+        [[NetworkManager sharedManager] uploadLoop:userDict];
+    }
+     */
+    
 }
 
+-(void)setExplicit:(NSString *)isExplicit
+{
+    NSMutableArray *newLoopArray = [[NSMutableArray alloc] initWithArray:self.cleanLoopArray];
+    NSMutableDictionary *loopDict = [[NSMutableDictionary alloc] initWithDictionary:[self.loopArray objectAtIndex:selectedIndexPath.row]];
+    [loopDict setValue:isExplicit forKey:@"IsExplicit"];
+
+    int index = 0;
+    for (NSDictionary * element in newLoopArray) {
+        if ([[element valueForKey:@"Id"] isEqualToString:[loopDict valueForKey:@"Id"]] )
+        {
+            break;
+        } else {
+            index = index + 1;
+        }
+    }
+    [newLoopArray replaceObjectAtIndex:index withObject:loopDict];
+    
+    self.loopArray = newLoopArray;
+    self.cleanLoopArray = newLoopArray;
+    //[self.collectionView reloadData];
+    [self change:nil];
+    
+}
+
+#pragma mark InstaMelodyVC Delegate
+
+-(IBAction)showLoops:(id)sender {
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    LoopViewController *loopVc = (LoopViewController *)[sb instantiateViewControllerWithIdentifier:@"LoopViewController"];
+    loopVc.delegate = self;
+    
+    [self.navigationController pushViewController:loopVc animated:YES];
+}
 
 @end

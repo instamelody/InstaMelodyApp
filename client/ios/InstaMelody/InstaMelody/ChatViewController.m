@@ -239,7 +239,14 @@
             NSArray *components = [message.senderDisplayName componentsSeparatedByString:@" "];
             NSString *initials = @"FR";
             if (components.count == 2) {
-                initials = [NSString stringWithFormat:@"%@%@", [[components[0] substringToIndex:1] uppercaseString], [[components[1] substringToIndex:1] uppercaseString]];
+                
+                NSString * first = components[0];
+                NSString * second = components[1];
+                
+                if (first.length > 0 && second.length > 0)
+                {
+                    initials = [NSString stringWithFormat:@"%@%@", [[components[0] substringToIndex:1] uppercaseString], [[components[1] substringToIndex:1] uppercaseString]];
+                }
             }
             
             JSQMessagesAvatarImage *jsqImage = [JSQMessagesAvatarImageFactory avatarImageWithUserInitials:initials
@@ -815,7 +822,7 @@
 -(void)loadLoop {
     NSString *loopId = [self.chatDict objectForKey:@"ChatLoopId"];
     
-    if (loopId != nil) {
+    if (loopId != nil && ![loopId isEqual:[NSNull null]]) {
         [self getLoop:loopId];
         
         [self.micButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
@@ -830,6 +837,17 @@
         [self.playButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         [self.playButton addTarget:self action:@selector(togglePlayback:) forControlEvents:UIControlEventTouchUpInside];
         
+    } else {
+        
+        [self.statusButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [self.statusButton addTarget:self action:@selector(createLoop:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [self.loopTitleButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [self.loopTitleButton addTarget:self action:@selector(createLoop:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [self.micButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [self.micButton addTarget:self action:@selector(createLoop:) forControlEvents:UIControlEventTouchUpInside];
+
     }
     
 }
@@ -989,7 +1007,18 @@
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     LoopViewController *vc = (LoopViewController *)[sb instantiateViewControllerWithIdentifier:@"LoopViewController"];
     vc.delegate = self;
+    vc.isFromChat = TRUE;
     vc.selectedLoop = self.loopDict;
+    
+    NSString * loopOwner = [self.loopDict objectForKey:@"UserId"];
+    NSString * myID = [[NSUserDefaults standardUserDefaults] objectForKey:@"Id"];
+
+    if ([myID isEqualToString:loopOwner])
+    {
+        vc.isNotMyStudio = NO;
+    } else {
+        vc.isNotMyStudio = YES;
+    }
     
     NSString *nameString = [self.chatDict objectForKey:@"Name"];
     if (nameString != nil && [nameString isKindOfClass:[NSString class]] && ![nameString containsString:@"ChatLoop_"]) {
@@ -1007,6 +1036,17 @@
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     LoopViewController *vc = (LoopViewController *)[sb instantiateViewControllerWithIdentifier:@"LoopViewController"];
     vc.delegate = self;
+    vc.isFromChat = TRUE;
+    vc.isNotMyStudio = FALSE;
+    
+    NSString *nameString = [self.chatDict objectForKey:@"Name"];
+    if (nameString != nil && [nameString isKindOfClass:[NSString class]] && ![nameString containsString:@"ChatLoop_"]) {
+        if (self.loopDict == nil) {
+            vc.topicString = nameString;
+        }
+        
+    }
+    
     [self.navigationController pushViewController:vc animated:YES];
 }
 

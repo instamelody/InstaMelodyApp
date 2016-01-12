@@ -27,12 +27,13 @@
 
 -(void)didFinishWithInfo:(NSDictionary *)userDict;
 -(void)cancel;
+-(void)setExplicit:(NSString *)isExplicit;
 
 @end
 
-@interface LoopViewController : UIViewController <AVAudioPlayerDelegate, EZMicrophoneDelegate, UITableViewDataSource, UITableViewDelegate, CLTokenInputViewDelegate, UITextFieldDelegate>
+@interface LoopViewController : UIViewController <AVAudioPlayerDelegate, EZMicrophoneDelegate, UITableViewDataSource, UITableViewDelegate, CLTokenInputViewDelegate, UITextFieldDelegate, BEMCheckBoxDelegate>
 
-@property BOOL isMyStudio;
+@property BOOL isNotMyStudio;
 
 @property (nonatomic, strong) NSDictionary *selectedLoop;
 @property (nonatomic, strong) UserMelody *selectedUserMelody;
@@ -92,6 +93,7 @@
 @property (nonatomic, strong) NSDictionary *loopDict;
 
 @property (nonatomic, strong) NSString *topicString;
+@property BOOL isFromChat;
 
 /**
  The CoreGraphics based audio plot
