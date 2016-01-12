@@ -45,7 +45,7 @@
     UIWindow *window = [[[UIApplication sharedApplication] windows] objectAtIndex:0];
     [window addSubview:self.HUD];
     
-    self.fbButton.readPermissions = @[@"public_profile", @"email", @"user_friends"];
+    self.fbButton.readPermissions = @[@"public_profile", @"email"]; // , @"user_friends"];
     self.fbButton.delegate = self;
     self.fbButton.layer.cornerRadius = 4.0f;
     self.fbButton.layer.masksToBounds = YES;
