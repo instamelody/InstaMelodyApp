@@ -14,6 +14,8 @@
 #import "AFHTTPRequestOperationManager.h"
 #import "constants.h"
 #import "CustomActivityProvider.h"
+#import "M13ProgressHUD.h"
+#import "M13ProgressViewRing.h"
 
 @interface LoopViewController ()
 
@@ -64,6 +66,8 @@
     NSURL *comboAudioUrl; //Used for sharing
     NSMutableArray *audioMixParams; //Used for audio mixing combo sound file
     NSMutableArray *compositionArray; //Used to store components in the loop
+    
+    M13ProgressHUD * HUD;
 }
 
 #pragma mark - lifecycle methods
@@ -91,6 +95,13 @@
     self.progressView.trackTintColor = [UIColor clearColor];
     self.progressView.progressTintColor = INSTA_BLUE;
     self.progressView.thicknessRatio = 0.1f;
+    
+    
+    HUD = [[M13ProgressHUD alloc] initWithProgressView:[[M13ProgressViewRing alloc] init]];
+    HUD.progressViewSize = CGSizeMake(60.0, 60.0);
+    HUD.animationPoint = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height / 2);
+    UIWindow *window = [[[UIApplication sharedApplication] windows] objectAtIndex:0];
+    [window addSubview:HUD];
     
     //NSString *myUserId = [self.defaults objectForKey:@"Id"];
     
@@ -1249,6 +1260,11 @@
 
 -(void)downloadAllFiles {
     
+    
+    HUD.indeterminate = YES;
+    HUD.status = @"Downloading Audio";
+    [HUD show:YES];
+    
     dispatch_group_t group = dispatch_group_create();
     
     for (NSDictionary *part in self.partArray) {
@@ -1320,6 +1336,13 @@
     dispatch_group_notify(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         NSLog(@"All files downloaded!");
         [self createComboAudioFile];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+
+            [HUD hide:YES];
+            
+        });
+        
     });
     
 }
