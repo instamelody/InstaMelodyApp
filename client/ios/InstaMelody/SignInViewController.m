@@ -409,7 +409,10 @@
             
             [self.HUD hide:YES];
             
-            [self dismissViewControllerAnimated:YES completion:nil];
+            self.userField.text = userName;
+            self.passField.text = password;
+            
+            [self getUserDetails:userName];
             
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
