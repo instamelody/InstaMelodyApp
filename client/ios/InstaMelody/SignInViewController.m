@@ -132,7 +132,7 @@
         return;
     }
     
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"FacebookToken": userId}];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"FacebookUserId": userId}];
     //Crash here if token is nil.
     
     if (deviceToken != nil) {
@@ -406,7 +406,7 @@
                                          @"DateOfBirth": monthYear}];
     
     if (FBID) {
-        [parameters setObject:FBID forKey:@"FacebookToken"];
+        [parameters setObject:FBID forKey:@"FacebookUserId"];
     }
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];

@@ -392,9 +392,9 @@
         NSString *encodedEmail = [self.emailAddressField.text stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
         NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"DisplayName": self.usernameField.text, @"Password": self.passwordField.text, @"FirstName": self.firstNameField.text, @"LastName": self.lastNameField.text, @"PhoneNumber" : self.phoneNumberField.text, @"EmailAddress" : encodedEmail, @"IsFemale": isFemale, @"DateOfBirth": monthYear}];
         
-        if (self.fbToken != nil) {
-            [parameters setObject:self.fbToken forKey:@"FacebookToken"];
-        }
+        //if (self.fbToken != nil) {
+        //    [parameters setObject:self.fbToken forKey:@"FacebookUserId"];
+        //}
         
         
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
