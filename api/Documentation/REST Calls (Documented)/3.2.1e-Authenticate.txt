@@ -2,9 +2,7 @@
 
 // REQUEST - POST https://api.instamelody.com/v1.0/Auth/User
 {
-	"Id" : "1DA69A56-4A2B-4CD1-B88C-647DB929D0C1",
 	"FacebookUserId" : "examplefacebookid”,
-	"DeviceToken" : "FE66489F304DC75B8D6E8200DFF8A456E8DAEACEC428B427E9518741C92C6660"
 }
 
 // RESPONSE - HTTP/1.1 200 OK

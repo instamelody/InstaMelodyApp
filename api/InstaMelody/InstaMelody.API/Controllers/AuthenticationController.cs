@@ -59,13 +59,13 @@ namespace InstaMelody.API.Controllers
                 {
                     InstaMelodyLogger.Log(
                         string.Format(
-                            "Authentication request - Display Name: {0}, Email Address: {1}, Password: {2}, Device Token: {3}, Facebook Token: {4}, Twitter Token: {5}",
+                            "Authentication request - Display Name: {0}, Email Address: {1}, Password: {2}, Device Token: {3}, Facebook User Id: {4}, Twitter User Id: {5}",
                             request.DisplayName ?? "NULL",
                             request.EmailAddress ?? "NULL",
                             request.Password ?? "NULL",
                             request.DeviceToken,
-                            request.FacebookToken ?? "NULL",
-                            request.TwitterToken ?? "NULL"),
+                            request.FacebookUserId ?? "NULL",
+                            request.TwitterUserId ?? "NULL"),
                         LogLevel.Trace);
 
                     var bll = new AuthenticationBll();
@@ -73,8 +73,10 @@ namespace InstaMelody.API.Controllers
 
                     if (!string.IsNullOrEmpty(request.DisplayName) || !string.IsNullOrEmpty(request.EmailAddress))
                         result = bll.Authenticate(request.DisplayName, request.EmailAddress, request.Password, request.DeviceToken);
+                    else if (!string.IsNullOrEmpty(request.FacebookUserId) || !string.IsNullOrEmpty(request.TwitterUserId))
+                        result = bll.Authenticate(request.FacebookUserId, request.TwitterUserId, request.DeviceToken);
                     else if (!string.IsNullOrEmpty(request.FacebookToken) || !string.IsNullOrEmpty(request.TwitterToken))
-                        result = bll.Authenticate(request.Id, request.FacebookUserId, request.TwitterUserId, request.DeviceToken);
+                        result = bll.AuthenticateWithToken(request.Id, request.FacebookToken, request.TwitterToken, request.DeviceToken);
 
                     if (result == null || result.Token.Equals(default(Guid)))
                     {
