@@ -179,35 +179,61 @@
             FBSDKGraphRequest * thisRequest = [[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields" : @"id,email,first_name,last_name,picture.width(100).height(100)"}];
             
             [thisRequest startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
-                 
-                NSString * userName = @"tbd0001";
-                NSString * password = @"doesnt matter";
-                NSString * firstName = [self handleBlank:[result objectForKey:@"first_name"]];
-                NSString * lastName = [self handleBlank:[result objectForKey:@"last_name"]];
-                NSString * email = [self handleBlank:[result objectForKey:@"email"]];
-            
-                UIImage * profImage;
-                if ([result objectForKey:@"picture"]) {
-                    NSURL * profilePicURL = [NSURL URLWithString:[[[result objectForKey:@"picture"] objectForKey:@"data"] objectForKey:@"url"]];
-                    NSData *pullFBPP = [[NSData alloc]initWithContentsOfURL:profilePicURL];
+                
+                UIAlertController * alert = [self promptUserForUsernameWithID:userId result:result];
                     
-                    profImage = [UIImage imageWithData:pullFBPP];
-                }
-                
-                [self doSignUpForUser:userName
-                         withPassword:password
-                            withFirst:firstName
-                             withLast:lastName
-                            withEmail:email
-                             withFBID:userId
-                       withProfilePic:profImage];
-            
-                
+                [self presentViewController:alert animated:YES completion:nil];
                 
             }];
             
         }
     }];
+}
+
+-(UIAlertController *)promptUserForUsernameWithID:(NSString *)userId result:(NSDictionary *)result
+{
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Please enter a username" message:@"Enter a username for your InstaMelody account" preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+        textField.placeholder = @"Username";
+        
+    }];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDestructive handler:nil];
+    
+    UIAlertAction *submitAction = [UIAlertAction actionWithTitle:@"Submit" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        
+        UITextField *textField = alert.textFields[0];
+        NSString * userName = textField.text;
+        NSString * password = @"doesnt matter";
+        NSString * firstName = [self handleBlank:[result objectForKey:@"first_name"]];
+        NSString * lastName = [self handleBlank:[result objectForKey:@"last_name"]];
+        NSString * email = [self handleBlank:[result objectForKey:@"email"]];
+        
+        UIImage * profImage;
+        if ([result objectForKey:@"picture"]) {
+            NSURL * profilePicURL = [NSURL URLWithString:[[[result objectForKey:@"picture"] objectForKey:@"data"] objectForKey:@"url"]];
+            NSData *pullFBPP = [[NSData alloc]initWithContentsOfURL:profilePicURL];
+            
+            profImage = [UIImage imageWithData:pullFBPP];
+        }
+        
+        [self doSignUpForUser:userName
+                 withPassword:password
+                    withFirst:firstName
+                     withLast:lastName
+                    withEmail:email
+                     withFBID:userId
+               withProfilePic:profImage];
+        
+    }];
+
+    [alert addAction:cancelAction];
+    [alert addAction:submitAction];
+
+    return alert;
+
 }
 
 #pragma mark - Twitter sdk handling
@@ -353,12 +379,12 @@
 {
     if (!input)
     {
-        return @" ";
+        return @"X";
     }
     
     if (input.length == 0)
     {
-        return @" ";
+        return @"X";
     }
     
     return input;
@@ -387,7 +413,7 @@
     firstName = [self handleBlank:firstName];
     lastName = [self handleBlank:lastName];
     email = [self handleBlank:email];
-    if ([email isEqualToString:@" "])
+    if ([email isEqualToString:@"X"])
         email = [NSString stringWithFormat:@"%@@unknown.com", userName];
     
     NSNumber *isFemale = [NSNumber numberWithBool:NO];
