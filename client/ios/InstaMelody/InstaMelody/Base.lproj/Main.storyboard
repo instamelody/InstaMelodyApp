@@ -270,7 +270,7 @@
                                         <rect key="frame" x="0.0" y="470" width="320" height="50"/>
                                         <subviews>
                                             <button opaque="NO" alpha="0.79999999999999982" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XFB-dO-Yy8" customClass="FBSDKLoginButton">
-                                                <rect key="frame" x="8" y="0.0" width="114" height="50"/>
+                                                <rect key="frame" x="8" y="0.0" width="135" height="50"/>
                                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <state key="normal" title="Facebook">
@@ -279,7 +279,7 @@
                                                 </state>
                                             </button>
                                             <button opaque="NO" alpha="0.79999999999999982" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6sq-Md-cvw" customClass="TWTRLogInButton">
-                                                <rect key="frame" x="139" y="0.0" width="173" height="50"/>
+                                                <rect key="frame" x="174" y="0.0" width="135" height="50"/>
                                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <state key="normal" title="Twitter">
