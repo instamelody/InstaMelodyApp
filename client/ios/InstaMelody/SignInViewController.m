@@ -352,6 +352,8 @@
     firstName = [self handleBlank:firstName];
     lastName = [self handleBlank:lastName];
     email = [self handleBlank:email];
+    if ([email isEqualToString:@" "])
+        email = [NSString stringWithFormat:@"%@@unknown.com", userName];
     
     NSNumber *isFemale = [NSNumber numberWithBool:NO];
     
