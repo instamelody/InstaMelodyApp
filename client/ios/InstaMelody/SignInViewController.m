@@ -15,6 +15,7 @@
 #import "UIFont+FontAwesome.h"
 #import "NSString+FontAwesome.h"
 #import "FAImageView.h"
+#import "NetworkManager.h"
 
 @interface SignInViewController ()
     @property M13ProgressHUD *HUD;
@@ -223,7 +224,7 @@
                                      withFirst:firstName
                                       withLast:lastName
                                      withEmail:email
-                                withProfilePic:url];
+                                withProfilePic:profImage];
                          
                      } else {
                          NSLog(@"Twitter error getting profile : %@", [error localizedDescription]);
@@ -332,7 +333,7 @@
 
 -(void)doSignUpForUser:(NSString *)userName withPassword:(NSString *)password
              withFirst:(NSString *)firstName withLast:(NSString *)lastName
-             withEmail:(NSString *)email withProfilePic:(NSURL *)profileURL
+             withEmail:(NSString *)email withProfilePic:(UIImage *)profileImage
 {
     //Do something to trap/handle blank or null params
     
@@ -403,8 +404,8 @@
             
             [[NSUserDefaults standardUserDefaults] synchronize];
             
-            if (profileURL != nil) {
-              //  [self prepareImage:self.savedImage];
+            if (profileImage != nil) {
+                [[NetworkManager sharedManager] prepareImage:profileImage];
             }
             
             [self.HUD hide:YES];
