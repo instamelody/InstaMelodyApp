@@ -911,6 +911,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/Crashlytics\"",
+					"\"${PODS_ROOT}/Headers/Public/Fabric\"",
+					"\"${PODS_ROOT}/Headers/Public/TwitterCore\"",
+					"\"${PODS_ROOT}/Headers/Public/TwitterKit\"",
+					"\"${PODS_ROOT}/Headers/Private/FBSDKCoreKit\"/**",
+				);
 				INFOPLIST_FILE = InstaMelody/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -928,6 +937,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/Crashlytics\"",
+					"\"${PODS_ROOT}/Headers/Public/Fabric\"",
+					"\"${PODS_ROOT}/Headers/Public/TwitterCore\"",
+					"\"${PODS_ROOT}/Headers/Public/TwitterKit\"",
+					"\"${PODS_ROOT}/Headers/Private/FBSDKCoreKit\"/**",
+				);
 				INFOPLIST_FILE = InstaMelody/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
