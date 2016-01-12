@@ -55,6 +55,7 @@
     [loginManager logOut];
     
     // setup twitter login button and callback
+    /*
     self.twitterButton = [TWTRLogInButton buttonWithLogInCompletion:^(TWTRSession* session, NSError* error) {
         if (session) {
             NSLog(@"signed in as %@", [session userName]);
@@ -62,7 +63,18 @@
         } else {
             NSLog(@"error: %@", [error localizedDescription]);
         }
+    }];*/
+    
+
+    //Note: once the user has logged in once, a logout will end their session but the next login will just
+    //log them straight back in.
+    
+    [self.twitterButton setLogInCompletion:^(TWTRSession *session, NSError *error) {
+        
+        [self doTwitterLogin:session withError:error];
+        
     }];
+    
     //self.twitterButton.titleLabel.text = @"Log in";
     self.twitterButton.layer.cornerRadius = 4.0;
     self.twitterButton.layer.masksToBounds = true;
@@ -164,43 +176,85 @@
     }];
 }
 
-/*
- 
- //facebook delegate methods
- 
- func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
- 
- Flurry.logEvent("Login Facebook");
- 
- if result != nil {
- if (!result!.isCancelled) {
- let fbToken = result!.token
- self.facebookSuccess(fbToken.tokenString)
- } else {
- let alert = UIAlertController(title: defaultAlertTitle, message: "Error linking Facebook", preferredStyle: UIAlertControllerStyle.Alert)
- alert.addAction(UIAlertAction(title: okButtonText, style: UIAlertActionStyle.Default, handler: nil))
- self.presentViewController(alert, animated: true, completion: nil)
- }
- }
- }
- 
- */
+#pragma mark - Twitter sdk handling
 
--(IBAction)signUp:(id)sender {
-    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
-    SignUpViewController *signupVC = [mainStoryboard instantiateViewControllerWithIdentifier:@"SignUpViewController"];
-    [self.navigationController pushViewController:signupVC animated:YES];
+-(void)doTwitterLogin:(TWTRSession *)session withError:(NSError *)error
+{
+    //If the user clicks Twitter login button...
+    if (session) {
+        NSLog(@"signed in as %@", [session userName]);
+        //First, check to see if this user has an account already
+        
+        self.userField.text = session.userName;
+        self.passField.text = [NSString stringWithFormat:@"%@xRT67q1a",session.userID];
+        //Making up a password based on the Twitter user's ID
+        //Not CIA level security, but good enough
+        
+        [self signIn:nil withFailureBlock:^(void){
+        
+            //They don't already have an account, so need to get info to create it
+            //Now ask for email address
+            TWTRShareEmailViewController* shareEmailViewController = [[TWTRShareEmailViewController alloc] initWithCompletion:^(NSString* email, NSError* error) {
+                
+                NSLog(@"Email %@, Error: %@", email, error);
+                
+                //Finally get their first/last name and profile pic
+                [[[Twitter sharedInstance] APIClient] loadUserWithID:[session userID]
+                                                          completion:^(TWTRUser *user,
+                                                                       NSError *error)
+                 {
+                     // handle the response or error
+                     if (![error isEqual:nil]) {
+                         NSLog(@"Twitter info   -> user = %@ ",user);
+                         NSString *urlString = [[NSString alloc]initWithString:user.profileImageLargeURL];
+                         NSURL *url = [[NSURL alloc]initWithString:urlString];
+                         NSData *pullTwitterPP = [[NSData alloc]initWithContentsOfURL:url];
+                         
+                         UIImage *profImage = [UIImage imageWithData:pullTwitterPP];
+                         
+                         //Split whole name into first and last
+                         NSArray *nameArray = [user.name componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                         NSString * lastName = [nameArray lastObject];
+                         NSString * firstName = [user.name stringByReplacingOccurrencesOfString:lastName withString:@""];
+                         
+                         [self doSignUpForUser:user.screenName
+                                     withFirst:firstName
+                                      withLast:lastName
+                                     withEmail:email
+                                withProfilePic:url];
+                         
+                     } else {
+                         NSLog(@"Twitter error getting profile : %@", [error localizedDescription]);
+                     }
+                 }];
+
+            }];
+            [self presentViewController:shareEmailViewController animated:YES completion:nil];
+        
+        }];
+        
+        
+    } else {
+        NSLog(@"error: %@", [error localizedDescription]);
+    }
 }
 
 
--(void)signUpWithToken:(NSString *)token {
-    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
-    SignUpViewController *signupVC = [mainStoryboard instantiateViewControllerWithIdentifier:@"SignUpViewController"];
-    signupVC.fbToken = token;
-    [self.navigationController pushViewController:signupVC animated:YES];
+#pragma mark - new login methods
+
+-(void)doSignUpForUser:(NSString *)userName withFirst:(NSString *)firstName withLast:(NSString *)lastName
+             withEmail:(NSString *)email withProfilePic:(NSURL *)profileURL
+{
+    
 }
 
 -(IBAction)signIn:(id)sender {
+ 
+    [self signIn:sender withFailureBlock:nil];
+    
+}
+
+-(void)signIn:(id)sender withFailureBlock:(void (^) (void))failureBlock {
  
     NSString *deviceToken =  [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"];
  
@@ -239,15 +293,22 @@
 
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
-                NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
                 
-                NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
-                
-                [self.HUD hide:YES];
-                NSLog(@"%@",ErrorResponse);
-                
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                [alertView show];
+                if (failureBlock)
+                {
+                    failureBlock();
+                } else {
+
+                    NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
+                    
+                    NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+                    
+                    [self.HUD hide:YES];
+                    NSLog(@"%@",ErrorResponse);
+                    
+                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                    [alertView show];
+                }
             }
         }];
     } else {
@@ -255,6 +316,22 @@
         [alertView show];
     }
     
+}
+
+#pragma mark - old login methods
+
+-(IBAction)signUp:(id)sender {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
+    SignUpViewController *signupVC = [mainStoryboard instantiateViewControllerWithIdentifier:@"SignUpViewController"];
+    [self.navigationController pushViewController:signupVC animated:YES];
+}
+
+
+-(void)signUpWithToken:(NSString *)token {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
+    SignUpViewController *signupVC = [mainStoryboard instantiateViewControllerWithIdentifier:@"SignUpViewController"];
+    signupVC.fbToken = token;
+    [self.navigationController pushViewController:signupVC animated:YES];
 }
 
 -(IBAction)cancel:(id)sender {
