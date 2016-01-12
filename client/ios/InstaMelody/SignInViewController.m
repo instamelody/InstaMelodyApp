@@ -10,7 +10,7 @@
 #import "AFHTTPRequestOperationManager.h"
 #import "AFURLSessionManager.h"
 #import "constants.h"
-#import "FBSDKAccessToken.h"
+#import <FBSDKCoreKit.h>
 
 #import "UIFont+FontAwesome.h"
 #import "NSString+FontAwesome.h"
@@ -104,10 +104,10 @@
 -(void)loginButton:(FBSDKLoginButton *)loginButton didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result error:(NSError *)error {
     if (error == nil && result != nil) {
         
-        NSString *fbToken = result.token.tokenString;
+        //NSString *fbToken = result.token.tokenString;
         NSString *userId = result.token.userID;
         
-        [self loginWithToken:fbToken andId:userId];
+        [self doFBLoginWithUserID:userId result:(FBSDKLoginManagerLoginResult *) result];
     } else {
         NSLog(@"Facebook error: %@", error.description);
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Error connecting to Facebook" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -119,20 +119,20 @@
     
 }
 
--(void)loginWithToken:(NSString *)token andId:(NSString *)userId {
+-(void)doFBLoginWithUserID:(NSString *)userId result:(FBSDKLoginManagerLoginResult *) result {
     
     //[self signUp:nil];
     
     NSString *deviceToken =  [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceToken"];
     //This is the push notification device token, if there is one. If not, it is nil.
     
-    if (!token)
+    if (!userId)
     {
         //User cancelled out of Facebook login process
         return;
     }
     
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"FacebookToken": token}];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"FacebookToken": userId}];
     //Crash here if token is nil.
     
     if (deviceToken != nil) {
@@ -165,7 +165,7 @@
             NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
             
             NSString *ErrorResponse = [NSString stringWithFormat:@"Error %td: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
-            
+            /*
             [self.HUD hide:YES];
             NSLog(@"%@",ErrorResponse);
             
@@ -173,6 +173,39 @@
             [alertView show];
             
             [self signUpWithToken:token];
+             */
+
+            //Going to get user info now for account creation.
+            FBSDKGraphRequest * thisRequest = [[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{@"fields" : @"id,email,first_name,last_name,picture.width(100).height(100)"}];
+            
+            [thisRequest startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+                 
+                NSString * userName = @"tbd0001";
+                NSString * password = @"doesnt matter";
+                NSString * firstName = [self handleBlank:[result objectForKey:@"first_name"]];
+                NSString * lastName = [self handleBlank:[result objectForKey:@"last_name"]];
+                NSString * email = [self handleBlank:[result objectForKey:@"email"]];
+            
+                UIImage * profImage;
+                if ([result objectForKey:@"picture"]) {
+                    NSURL * profilePicURL = [NSURL URLWithString:[[[result objectForKey:@"picture"] objectForKey:@"data"] objectForKey:@"url"]];
+                    NSData *pullFBPP = [[NSData alloc]initWithContentsOfURL:profilePicURL];
+                    
+                    profImage = [UIImage imageWithData:pullFBPP];
+                }
+                
+                [self doSignUpForUser:userName
+                         withPassword:password
+                            withFirst:firstName
+                             withLast:lastName
+                            withEmail:email
+                             withFBID:userId
+                       withProfilePic:profImage];
+            
+                
+                
+            }];
+            
         }
     }];
 }
@@ -224,6 +257,7 @@
                                      withFirst:firstName
                                       withLast:lastName
                                      withEmail:email
+                                      withFBID:nil
                                 withProfilePic:profImage];
                          
                      } else {
@@ -333,7 +367,8 @@
 
 -(void)doSignUpForUser:(NSString *)userName withPassword:(NSString *)password
              withFirst:(NSString *)firstName withLast:(NSString *)lastName
-             withEmail:(NSString *)email withProfilePic:(UIImage *)profileImage
+             withEmail:(NSString *)email withFBID:(NSString *)FBID
+        withProfilePic:(UIImage *)profileImage
 {
     //Do something to trap/handle blank or null params
     
@@ -369,6 +404,10 @@
                                          @"EmailAddress" : encodedEmail,
                                          @"IsFemale": isFemale,
                                          @"DateOfBirth": monthYear}];
+    
+    if (FBID) {
+        [parameters setObject:FBID forKey:@"FacebookToken"];
+    }
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     
