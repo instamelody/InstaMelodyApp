@@ -32,7 +32,7 @@
     
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
-    
+    NSLog(@"Facebook SDK version %@",  [FBSDKSettings sdkVersion]);
     [MagicalRecord setupCoreDataStackWithStoreNamed:@"InstaMelody"];
     NSURL * dbURL = [NSPersistentStore MR_urlForStoreName:@"InstaMelody"];
     NSError *error = nil;
