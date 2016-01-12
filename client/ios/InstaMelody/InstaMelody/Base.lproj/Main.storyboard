@@ -3007,8 +3007,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="SrH-z7-fIS">
-                                <rect key="frame" x="160" y="104" width="280" height="3175"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="SrH-z7-fIS">
+                                <rect key="frame" x="160" y="104" width="280" height="456"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="280" id="mqE-hu-NGn"/>
@@ -3561,8 +3561,8 @@ We are committed to conducting our business in accordance with these principles 
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KWL-bh-Kyx">
                                 <rect key="frame" x="0.0" y="64" width="600" height="156"/>
                                 <subviews>
-                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="rkL-Gd-n7P">
-                                        <rect key="frame" x="181" y="9" width="240" height="138"/>
+                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="rkL-Gd-n7P">
+                                        <rect key="frame" x="180" y="9" width="240" height="138"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="240" id="Qcw-uy-Gj1"/>
@@ -3782,7 +3782,7 @@ We are committed to conducting our business in accordance with these principles 
         <image name="wave" width="104" height="70"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="4ps-ka-4X8"/>
         <segue reference="42P-9A-i60"/>
+        <segue reference="SjU-KU-hD4"/>
     </inferredMetricsTieBreakers>
 </document>
