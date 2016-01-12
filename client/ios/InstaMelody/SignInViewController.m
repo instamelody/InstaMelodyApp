@@ -184,9 +184,10 @@
     if (session) {
         NSLog(@"signed in as %@", [session userName]);
         //First, check to see if this user has an account already
+        __weak typeof(self) weakSelf = self;
         
-        self.userField.text = session.userName;
-        self.passField.text = [NSString stringWithFormat:@"%@xRT67q1a",session.userID];
+        weakSelf.userField.text = session.userName;
+        weakSelf.passField.text = [NSString stringWithFormat:@"%@xRT67q1a",session.userID];
         //Making up a password based on the Twitter user's ID
         //Not CIA level security, but good enough
         
@@ -218,6 +219,7 @@
                          NSString * firstName = [user.name stringByReplacingOccurrencesOfString:lastName withString:@""];
                          
                          [self doSignUpForUser:user.screenName
+                                  withPassword:weakSelf.passField.text
                                      withFirst:firstName
                                       withLast:lastName
                                      withEmail:email
@@ -241,12 +243,6 @@
 
 
 #pragma mark - new login methods
-
--(void)doSignUpForUser:(NSString *)userName withFirst:(NSString *)firstName withLast:(NSString *)lastName
-             withEmail:(NSString *)email withProfilePic:(NSURL *)profileURL
-{
-    
-}
 
 -(IBAction)signIn:(id)sender {
  
@@ -316,6 +312,140 @@
         [alertView show];
     }
     
+}
+
+-(NSString *)handleBlank:(NSString *)input
+{
+    if (!input)
+    {
+        return @" ";
+    }
+    
+    if (input.length == 0)
+    {
+        return @" ";
+    }
+    
+    return input;
+    
+}
+
+-(void)doSignUpForUser:(NSString *)userName withPassword:(NSString *)password
+             withFirst:(NSString *)firstName withLast:(NSString *)lastName
+             withEmail:(NSString *)email withProfilePic:(NSURL *)profileURL
+{
+    //Do something to trap/handle blank or null params
+    
+    if (!userName || userName.length == 0)
+    {
+        NSLog(@"nil username");
+        return;
+    }
+
+    if (!password || password.length == 0)
+    {
+        NSLog(@"nil password");
+        return;
+    }
+    
+    firstName = [self handleBlank:firstName];
+    lastName = [self handleBlank:lastName];
+    email = [self handleBlank:email];
+    
+    NSNumber *isFemale = [NSNumber numberWithBool:NO];
+    
+    NSString *monthYear = @"01/2000";
+    
+    NSString *encodedEmail = [email stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:
+                                       @{@"DisplayName": userName,
+                                         @"Password": password,
+                                         @"FirstName": firstName,
+                                         @"LastName": lastName,
+                                         @"PhoneNumber" : @"",
+                                         @"EmailAddress" : encodedEmail,
+                                         @"IsFemale": isFemale,
+                                         @"DateOfBirth": monthYear}];
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    //self.HUD.indeterminate = YES;
+    //self.HUD.status = @"Signing up";
+    //[self.HUD show:YES];
+    
+    NSString *requestUrl = [NSString stringWithFormat:@"%@/User/New", API_BASE_URL];
+    
+    [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        
+        //NSDictionary *responseDict = (NSDictionary *)responseObject;
+        
+        NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"DisplayName": userName, @"Password": password}];
+        
+        NSString *requestUrl = [NSString stringWithFormat:@"%@/Auth/User", API_BASE_URL];
+        
+        //add 64 char string
+        
+        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        
+        [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSLog(@"JSON: %@", responseObject);
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"You are now logged in" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [alertView show];
+                
+            });
+            
+            NSDictionary *responseDict =
+            (NSDictionary *)responseObject;
+            [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"Token"] forKey:@"authToken"];
+            
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
+            if (profileURL != nil) {
+              //  [self prepareImage:self.savedImage];
+            }
+            
+            [self.HUD hide:YES];
+            
+            [self dismissViewControllerAnimated:YES completion:nil];
+            
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
+                NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
+                
+                NSString *ErrorResponse = [NSString stringWithFormat:@"Error %td: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+                
+                [self.HUD hide:YES];
+                NSLog(@"%@",ErrorResponse);
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                    [alertView show];
+                });
+            }
+        }];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+        [self.HUD hide:YES];
+        
+        if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
+            
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %td: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            
+            NSLog(@"%@",ErrorResponse);
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [alertView show];
+            });
+            
+        }
+    }];
+   
 }
 
 #pragma mark - old login methods
