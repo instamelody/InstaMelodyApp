@@ -750,7 +750,7 @@
     
     if (error == nil) {
         
-        [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+        [self.playButton setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
         [self.bgPlayer setNumberOfLoops:-1];
         [self.bgPlayer setVolume:[volume floatValue]];
         [self.bgPlayer play];
@@ -779,7 +779,7 @@
     
     if (error == nil) {
         
-        [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+        [self.playButton setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
         [self.bgPlayer2 setNumberOfLoops:-1];
         [self.bgPlayer2 setVolume:[volume floatValue]];
         [self.bgPlayer2 play];
@@ -808,7 +808,7 @@
     
     if (error == nil) {
         
-        [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+        [self.playButton setImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
         
         [self.bgPlayer3 setNumberOfLoops:-1];
         [self.bgPlayer3 setVolume:[volume floatValue]];
@@ -1009,6 +1009,7 @@
         }
         
         [self.recordButton setImage:[UIImage imageNamed:@"redo"] forState:UIControlStateNormal];
+        [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
         
         [self.timer invalidate];
         
@@ -1079,7 +1080,9 @@
     [toggleBtn setTitle:@"Preview melodies" forState:UIControlStateNormal];
     
     if (flag && player == self.fgPlayer) {
-        [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+        //[self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+        //Moving down the logic, so that if the payer is moving to the next part,
+        //It doesn't flicker a play button
         
         //if (player == self.fgPlayer) {
         [self.bgPlayer stop];
@@ -1108,11 +1111,13 @@
                 [self handleEndOfPlayback];
                 [self.profileImageView setImage:[UIImage imageNamed:@"Profile"]];
                 self.currentPartIndex = 0;
+                [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
             }
             
         } else {
             [self.profileImageView setImage:[UIImage imageNamed:@"Profile"]];
             self.currentPartIndex = 0;
+            [self.playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
         }
     }
 }
