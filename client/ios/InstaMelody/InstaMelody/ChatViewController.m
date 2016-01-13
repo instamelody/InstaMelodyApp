@@ -1131,6 +1131,8 @@
                                         NSUserDomainMask, YES);
     NSString *documentsPath = [paths objectAtIndex:0];
     
+    int count = 0;
+    
     NSArray *files = [[self.partArray objectAtIndex:self.currentPartIndex] objectForKey:@"Files"];
     for (NSString *filePath in files) {
         if ([filePath containsString:@"recording"]) {
@@ -1160,8 +1162,6 @@
             }
             
         } else {
-            
-            int count = 0;
             
             NSString *melodyPath = [documentsPath stringByAppendingPathComponent:@"Melodies"];
             
