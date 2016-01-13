@@ -1690,9 +1690,9 @@
                                         </variation>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="For the best results, please plug in your headphones" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3CC-EF-z8l">
-                                        <rect key="frame" x="164" y="364" width="218" height="37"/>
+                                        <rect key="frame" x="168" y="364" width="210" height="37"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="218" id="19o-HT-9K2"/>
+                                            <constraint firstAttribute="width" constant="210" id="19o-HT-9K2"/>
                                             <constraint firstAttribute="height" constant="37" id="3sA-Y5-xgP"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="14"/>
@@ -3783,6 +3783,6 @@ We are committed to conducting our business in accordance with these principles 
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="42P-9A-i60"/>
-        <segue reference="SjU-KU-hD4"/>
+        <segue reference="4ps-ka-4X8"/>
     </inferredMetricsTieBreakers>
 </document>
