@@ -231,6 +231,7 @@
     [[NSNotificationCenter defaultCenter] addObserverForName:@"pickedMelody" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
         //
         if (note.userInfo != nil) {
+            
             Melody *melody = [Melody MR_findFirstByAttribute:@"melodyId" withValue:[note.userInfo objectForKey:@"melodyId"]];
             
             NSString *name = melody.melodyName;
@@ -242,6 +243,10 @@
             BOOL isToken3 = [name isEqualToString:self.selectedMelody3.melodyName];
             
             if (tokenInputView.allTokens.count < 4 && !isToken1 && !isToken2 && !isToken3) {
+                
+                HUD.indeterminate = YES;
+                HUD.status = @"Downloading Audio";
+                [HUD show:YES];
                 
                 switch (tokenInputView.allTokens.count) {
                     case 0:
@@ -257,6 +262,7 @@
                         [self loadMelody3:melody];
                         break;
                     default:
+                        [HUD hide:YES];
                         break;
                 }
                 
@@ -1417,6 +1423,10 @@
         
         if (group)
             dispatch_group_leave(group);
+        else if (!HUD.hidden)
+            [HUD hide:YES];
+        //If there is a dispatch group, go there
+        //If not, then just hide the HUD
         
     }];
     [downloadTask resume];
@@ -2156,6 +2166,8 @@
         //
         
         self.loopStatusLabel.text = @"Melody loaded!";
+        if (HUD)
+            [HUD hide:YES];
         
         //self.playButton.hidden = NO;
         
@@ -2210,6 +2222,8 @@
         //
         
         self.loopStatusLabel.text = @"Melody loaded!";
+        if (HUD)
+            [HUD hide:YES];
         
         //self.playButton.hidden = NO;
         
@@ -2262,6 +2276,8 @@
         //
         
         self.loopStatusLabel.text = @"Melody loaded!";
+        if (HUD)
+            [HUD hide:YES];
         
         //self.playButton.hidden = NO;
         
