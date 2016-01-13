@@ -80,11 +80,22 @@
     self.twitterButton.layer.cornerRadius = 4.0;
     self.twitterButton.layer.masksToBounds = true;
     
+    UITapGestureRecognizer *singleFingerTap =
+    [[UITapGestureRecognizer alloc] initWithTarget:self
+                                            action:@selector(handleSingleTap)];
+    [self.view addGestureRecognizer:singleFingerTap];
+    
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)handleSingleTap {
+    
+    [self.view endEditing:YES];
+    
 }
 
 #pragma mark - Navigation
