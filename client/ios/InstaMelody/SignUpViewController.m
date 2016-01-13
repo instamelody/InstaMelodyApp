@@ -70,6 +70,11 @@
     
     [self loadProfileImage];
     
+    UITapGestureRecognizer *singleFingerTap =
+    [[UITapGestureRecognizer alloc] initWithTarget:self
+                                            action:@selector(handleSingleTap)];
+    [self.view addGestureRecognizer:singleFingerTap];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated  {
@@ -508,6 +513,12 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     [self.scrollView setContentOffset:CGPointZero animated:YES];
+}
+
+-(void)handleSingleTap {
+    
+    [self.view endEditing:YES];
+    
 }
 
 /*
