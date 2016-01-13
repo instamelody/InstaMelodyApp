@@ -132,7 +132,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view tag="11" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a3G-eF-s6a">
-                                        <rect key="frame" x="30" y="230" width="260" height="25"/>
+                                        <rect key="frame" x="30" y="191" width="260" height="25"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ADo-1M-WqO">
                                                 <rect key="frame" x="0.0" y="23" width="260" height="1"/>
@@ -182,7 +182,7 @@
                                         </constraints>
                                     </view>
                                     <view tag="12" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Fj-iB-bdv">
-                                        <rect key="frame" x="30" y="270" width="260" height="25"/>
+                                        <rect key="frame" x="30" y="231" width="260" height="25"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1gP-uk-6TY">
                                                 <rect key="frame" x="0.0" y="23" width="260" height="1"/>
@@ -225,7 +225,7 @@
                                         </constraints>
                                     </view>
                                     <button opaque="NO" alpha="0.5499999999999996" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pkQ-MK-b0m">
-                                        <rect key="frame" x="30" y="310" width="260" height="45"/>
+                                        <rect key="frame" x="30" y="271" width="260" height="45"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="260" id="dU5-3e-Mly"/>
@@ -240,34 +240,8 @@
                                             <action selector="signIn:" destination="tJt-rS-ObC" eventType="touchUpInside" id="rs7-iF-oIM"/>
                                         </connections>
                                     </button>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="egD-kB-n8n">
-                                        <rect key="frame" x="30" y="410" width="260" height="40"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="      Don't have an account?" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dsV-KE-XzG">
-                                                <rect key="frame" x="0.0" y="0.0" width="181" height="40"/>
-                                                <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="13"/>
-                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1FS-OY-9b2">
-                                                <rect key="frame" x="189" y="0.0" width="71" height="40"/>
-                                                <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="13"/>
-                                                <state key="normal" title="Sign Up">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                                <connections>
-                                                    <segue destination="nbi-tE-dvK" kind="show" identifier="presentSignupSegue" id="SjU-KU-hD4"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="260" id="Eqx-EG-01A"/>
-                                            <constraint firstAttribute="height" constant="40" id="HbR-Cn-b1d"/>
-                                        </constraints>
-                                    </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aqh-9Q-vAB">
-                                        <rect key="frame" x="0.0" y="470" width="320" height="50"/>
+                                        <rect key="frame" x="0.0" y="396" width="320" height="50"/>
                                         <subviews>
                                             <button opaque="NO" alpha="0.79999999999999982" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XFB-dO-Yy8" customClass="FBSDKLoginButton">
                                                 <rect key="frame" x="8" y="0.0" width="135" height="50"/>
@@ -293,9 +267,35 @@
                                             <constraint firstAttribute="width" constant="320" id="tws-ae-6Vt"/>
                                         </constraints>
                                     </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="egD-kB-n8n">
+                                        <rect key="frame" x="30" y="336" width="260" height="40"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="      Don't have an account?" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dsV-KE-XzG">
+                                                <rect key="frame" x="0.0" y="0.0" width="181" height="40"/>
+                                                <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="13"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1FS-OY-9b2">
+                                                <rect key="frame" x="189" y="0.0" width="71" height="40"/>
+                                                <fontDescription key="fontDescription" name="CenturyGothic" family="Century Gothic" pointSize="13"/>
+                                                <state key="normal" title="Sign Up">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <segue destination="nbi-tE-dvK" kind="show" identifier="presentSignupSegue" id="SjU-KU-hD4"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="260" id="Eqx-EG-01A"/>
+                                            <constraint firstAttribute="height" constant="40" id="HbR-Cn-b1d"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="a3G-eF-s6a" firstAttribute="top" secondItem="QLo-o1-Dp6" secondAttribute="bottom" constant="69" id="7cw-c0-ofO"/>
+                                    <constraint firstItem="a3G-eF-s6a" firstAttribute="top" secondItem="QLo-o1-Dp6" secondAttribute="bottom" constant="30" id="7cw-c0-ofO"/>
                                     <constraint firstAttribute="bottom" secondItem="aqh-9Q-vAB" secondAttribute="bottom" constant="6" id="BGy-k8-8Ud"/>
                                     <constraint firstAttribute="height" constant="526" id="CLN-00-NrN"/>
                                     <constraint firstAttribute="trailing" secondItem="pkQ-MK-b0m" secondAttribute="trailing" constant="30" id="ERs-0n-Mbl"/>
@@ -306,7 +306,7 @@
                                     <constraint firstAttribute="width" constant="320" id="UDG-p4-y1c"/>
                                     <constraint firstAttribute="centerX" secondItem="aqh-9Q-vAB" secondAttribute="centerX" id="VJA-Mg-PwH"/>
                                     <constraint firstItem="QLo-o1-Dp6" firstAttribute="top" secondItem="AuC-oa-rUV" secondAttribute="bottom" constant="28" id="VMF-b1-vpV"/>
-                                    <constraint firstItem="egD-kB-n8n" firstAttribute="top" secondItem="pkQ-MK-b0m" secondAttribute="bottom" constant="55" id="WG2-xc-Bt0"/>
+                                    <constraint firstItem="egD-kB-n8n" firstAttribute="top" secondItem="pkQ-MK-b0m" secondAttribute="bottom" constant="20" id="WG2-xc-Bt0"/>
                                     <constraint firstAttribute="centerX" secondItem="AuC-oa-rUV" secondAttribute="centerX" id="ayH-aT-iG1"/>
                                     <constraint firstAttribute="centerX" secondItem="8Fj-iB-bdv" secondAttribute="centerX" id="bGe-OK-Sde"/>
                                     <constraint firstItem="pkQ-MK-b0m" firstAttribute="top" secondItem="8Fj-iB-bdv" secondAttribute="bottom" constant="15" id="iH9-fM-69R"/>
