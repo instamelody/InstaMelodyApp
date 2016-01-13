@@ -153,11 +153,11 @@
         NSDictionary *responseDict =
         (NSDictionary *)responseObject;
         [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"Token"] forKey:@"authToken"];
+        //self.userField.text = [responseDict objectForKey:@"UserId"];
         
         [[NSUserDefaults standardUserDefaults] synchronize];
         
-        
-        [self getUserDetails:self.userField.text];
+        [self getUserDetailsWithName:nil orWithID:[responseDict objectForKey:@"UserId"]];
         
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -206,6 +206,7 @@
         
         UITextField *textField = alert.textFields[0];
         NSString * userName = textField.text;
+        self.userField.text = userName;
         NSString * password = @"doesnt matter";
         NSString * firstName = [self handleBlank:[result objectForKey:@"first_name"]];
         NSString * lastName = [self handleBlank:[result objectForKey:@"last_name"]];
@@ -344,8 +345,7 @@
             
             [[NSUserDefaults standardUserDefaults] synchronize];
             
-            
-            [self getUserDetails:self.userField.text];
+            [self getUserDetailsWithName:self.userField.text orWithID:nil];
             
 
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -480,7 +480,7 @@
             self.userField.text = userName;
             self.passField.text = password;
             
-            [self getUserDetails:userName];
+            [self getUserDetailsWithName:userName  orWithID:nil];
             
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
@@ -546,11 +546,11 @@
     self.passField.text = password;
     
     //[self signIn:nil];
-    [self getUserDetails:self.userField.text];
+    [self getUserDetailsWithName:self.userField.text orWithID:nil];
     
 }
 
--(void)getUserDetails:(NSString*)displayName {
+-(void)getUserDetailsWithName:(NSString*)displayName orWithID:(NSString *)userId {
     
     //https://api.instamelody.com/v1.0/User?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&displayName=testeraccount
     
@@ -562,8 +562,17 @@
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     
+    NSDictionary *parameters;
     
-    NSDictionary *parameters = @{@"token": token, @"displayName": displayName};
+    if (displayName)
+    {
+        parameters = @{@"token": token, @"displayName": displayName};
+    } else if (userId)
+    {
+        parameters = @{@"token": token, @"Id": userId};
+    } else {
+        return;
+    }
     
     [manager GET:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
