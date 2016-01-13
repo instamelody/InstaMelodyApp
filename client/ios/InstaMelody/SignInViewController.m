@@ -476,12 +476,16 @@
                 
             });
             
-            NSDictionary *responseDict =
-            (NSDictionary *)responseObject;
-            [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"Token"] forKey:@"authToken"];
+            NSDictionary *responseDict = (NSDictionary *)responseObject;
+            NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+            [defaults setObject:[responseDict objectForKey:@"Token"] forKey:@"authToken"];
+            
+            //Needed for the prepareImage: method below
+            [defaults setObject:firstName forKey:@"FirstName"];
+            [defaults setObject:lastName forKey:@"LastName"];
             
             [[NSUserDefaults standardUserDefaults] synchronize];
-            
+        
             if (profileImage != nil) {
                 [[NetworkManager sharedManager] prepareImage:profileImage];
             }
