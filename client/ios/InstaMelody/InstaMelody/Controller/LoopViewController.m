@@ -235,7 +235,9 @@
         }
         
         //add melody
-        self.savedGroupId = //[note.userInfo objectForKey:@"groupId"];
+        self.savedGroupId = _groupId;
+        
+        _groupId = _melodyId = 0;
             
     }
 }
@@ -2223,7 +2225,7 @@
             self.loopStatusLabel.text = [NSString stringWithFormat:@"Downloading (%.0f%%)", percent];
         });
         
-        NSLog(@"Progress… %f", progress.fractionCompleted);
+        //NSLog(@"Progress… %f", progress.fractionCompleted);
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
@@ -2617,6 +2619,7 @@
     //vc.delegate = self;
     MelodyGroupController *groupVC = vc.topViewController;
     groupVC.groupId = self.savedGroupId;
+    groupVC.delegate = self;
     [self presentViewController:vc animated:YES completion:nil];
     
 }

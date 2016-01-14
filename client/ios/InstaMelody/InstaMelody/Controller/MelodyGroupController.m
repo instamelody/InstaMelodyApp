@@ -144,6 +144,7 @@
     
     vc.melodyList = sortedArray;
     vc.groupId = melodyGroup.groupId;
+    vc.delegate = self.delegate;
     
 }
 

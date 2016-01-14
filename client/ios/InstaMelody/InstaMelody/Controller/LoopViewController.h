@@ -35,7 +35,10 @@
 
 @property BOOL isNotMyStudio;
 @property BOOL isForeignChatLoop;
+
+//These two vars handle the interaction between MelodyPickerController and LoopViewController.
 @property NSNumber* melodyId;
+@property NSNumber* groupId;
 
 @property (nonatomic, strong) NSDictionary *selectedLoop;
 //@property (nonatomic, strong) UserMelody *selectedUserMelody;
