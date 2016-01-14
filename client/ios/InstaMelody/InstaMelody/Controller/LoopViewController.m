@@ -1186,11 +1186,6 @@
 
 -(void)downloadAllFiles {
     
-    
-    HUD.indeterminate = YES;
-    HUD.status = @"Downloading Audio";
-    [HUD show:YES];
-    
     dispatch_group_t group = dispatch_group_create();
     
     for (NSDictionary *part in self.partArray) {
@@ -1265,6 +1260,7 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
 
+        if (HUD.isVisible)
             [HUD hide:YES];
             
         });
@@ -1283,6 +1279,10 @@
 -(void)downloadFile:(NSString *)sourceFilePath toPath:(NSString *)destinationFilePath withDispatchGroup:(dispatch_group_t)group {
     if (group)
         dispatch_group_enter(group);
+    
+    HUD.indeterminate = YES;
+    HUD.status = @"Downloading Audio";
+    [HUD show:YES];
     
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
@@ -1343,7 +1343,7 @@
         
         if (group)
             dispatch_group_leave(group);
-        else if (!HUD.hidden)
+        else if (HUD.isVisible)
             [HUD hide:YES];
         //If there is a dispatch group, go there
         //If not, then just hide the HUD
@@ -2094,10 +2094,6 @@
         
         self.loopStatusLabel.text = @"Melody downloading (0%)";
         
-        HUD.indeterminate = YES;
-        HUD.status = @"Downloading Audio";
-        [HUD show:YES];
-        
         [self downloadFile:melody.filePathUrlString toPath:pathString];
     }
 }
@@ -2151,9 +2147,6 @@
         //else, download, show progress, set loaded, set play button
         
         self.loopStatusLabel.text = @"Melody downloading (0%)";
-        HUD.indeterminate = YES;
-        HUD.status = @"Downloading Audio";
-        [HUD show:YES];
         
         [self downloadFile:melody.filePathUrlString toPath:pathString];
     }
@@ -2206,9 +2199,6 @@
         //else, download, show progress, set loaded, set play button
         
         self.loopStatusLabel.text = @"Melody downloading (0%)";
-        HUD.indeterminate = YES;
-        HUD.status = @"Downloading Audio";
-        [HUD show:YES];
         
         [self downloadFile:melody.filePathUrlString toPath:pathString];
     }
