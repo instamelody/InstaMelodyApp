@@ -66,6 +66,7 @@
         
         vc.melodyList = sortedArray;
         vc.groupId = melodyGroup.groupId;
+        vc.delegate = self.delegate;
         [self.navigationController pushViewController:vc animated:YES];
         
     }
