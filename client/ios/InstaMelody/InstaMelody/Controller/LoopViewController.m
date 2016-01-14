@@ -244,10 +244,6 @@
             
             if (tokenInputView.allTokens.count < 4 && !isToken1 && !isToken2 && !isToken3) {
                 
-                HUD.indeterminate = YES;
-                HUD.status = @"Downloading Audio";
-                [HUD show:YES];
-                
                 switch (tokenInputView.allTokens.count) {
                     case 0:
                         self.compositionMelody = melody;
@@ -2171,8 +2167,6 @@
         //
         
         self.loopStatusLabel.text = @"Melody loaded!";
-        if (HUD)
-            [HUD hide:YES];
         
         //self.playButton.hidden = NO;
         
@@ -2180,6 +2174,10 @@
         //else, download, show progress, set loaded, set play button
         
         self.loopStatusLabel.text = @"Melody downloading (0%)";
+        
+        HUD.indeterminate = YES;
+        HUD.status = @"Downloading Audio";
+        [HUD show:YES];
         
         [self downloadFile:melody.filePathUrlString toPath:pathString];
     }
@@ -2227,8 +2225,6 @@
         //
         
         self.loopStatusLabel.text = @"Melody loaded!";
-        if (HUD)
-            [HUD hide:YES];
         
         //self.playButton.hidden = NO;
         
@@ -2236,6 +2232,9 @@
         //else, download, show progress, set loaded, set play button
         
         self.loopStatusLabel.text = @"Melody downloading (0%)";
+        HUD.indeterminate = YES;
+        HUD.status = @"Downloading Audio";
+        [HUD show:YES];
         
         [self downloadFile:melody.filePathUrlString toPath:pathString];
     }
@@ -2281,8 +2280,6 @@
         //
         
         self.loopStatusLabel.text = @"Melody loaded!";
-        if (HUD)
-            [HUD hide:YES];
         
         //self.playButton.hidden = NO;
         
@@ -2290,6 +2287,9 @@
         //else, download, show progress, set loaded, set play button
         
         self.loopStatusLabel.text = @"Melody downloading (0%)";
+        HUD.indeterminate = YES;
+        HUD.status = @"Downloading Audio";
+        [HUD show:YES];
         
         [self downloadFile:melody.filePathUrlString toPath:pathString];
     }
