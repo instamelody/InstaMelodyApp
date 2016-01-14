@@ -924,7 +924,7 @@
             
             time_t unixTime = time(NULL);
             
-            NSString *fileName = [NSString stringWithFormat:@"recording_%d.wav", (int)unixTime];
+            NSString *fileName = [NSString stringWithFormat:@"recording_%d.m4a", (int)unixTime];
             
             NSString *filePath = [recordingPath
                                   stringByAppendingPathComponent:fileName];
@@ -938,10 +938,11 @@
                                      numberWithInt:AVAudioQualityMedium]
                              forKey:AVEncoderAudioQualityKey];
             
-            [settingsDict setObject:[NSNumber numberWithInt:kAudioFormatLinearPCM] forKey:AVFormatIDKey];
+            //[settingsDict setObject:[NSNumber numberWithInt:kAudioFormatLinearPCM] forKey:AVFormatIDKey];
+
+            [settingsDict setObject:[NSNumber numberWithInt:kAudioFormatMPEG4AAC] forKey:AVFormatIDKey];
             
-            [settingsDict setObject:[NSNumber numberWithInt:16]
-                             forKey:AVEncoderBitRateKey];
+            //[settingsDict setObject:[NSNumber numberWithInt:16] forKey:AVEncoderBitRateKey];
             self.recorder = [[AVAudioRecorder alloc]
                              initWithURL:fileURL
                              settings:settingsDict error:&error];
