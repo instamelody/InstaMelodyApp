@@ -14,6 +14,7 @@
 #import "NSString+FontAwesome.h"
 #import "DataManager.h"
 #import "StationViewController.h"
+#import "NetworkManager.h"
 //@import Contacts;
 @import ContactsUI;
 
@@ -315,6 +316,13 @@
             if ([friendDict objectForKey:@"Image"] != nil && [[friendDict objectForKey:@"Image"] isKindOfClass:[NSDictionary class]]) {
                 NSDictionary *imageDict = [friendDict objectForKey:@"Image"];
                 newFriend.profileFilePath = [imageDict objectForKey:@"FilePath"];
+                dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    [[NetworkManager sharedManager] checkAndDownloadFile:newFriend.profileFilePath ofType:@"Profiles"
+                                              withPostDownloadCompletion:^(void){
+                                                  [self.tableView reloadData];
+                                              }];
+                });
+                 
             }
         }
         
@@ -331,7 +339,6 @@
             }
             //
         }];
-        
         
         //NSDictionary *responseDict = (NSDictionary *)responseObject;
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
