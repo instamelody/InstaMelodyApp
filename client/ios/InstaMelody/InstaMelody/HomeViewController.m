@@ -71,6 +71,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"downloadedProfile" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
         [self loadProfileImage];
+        NSLog(@"**** received notification for 'downloadedProfile'....");
     }];
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"infoUpdated" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
@@ -81,6 +82,7 @@
             self.displayNameLabel.text = [NSString stringWithFormat:@"@%@", [defaults objectForKey:@"DisplayName"]];
             
             [self loadProfileImage];
+            NSLog(@"**** received notification for 'infoUpdated'....");
             
         }
     }];

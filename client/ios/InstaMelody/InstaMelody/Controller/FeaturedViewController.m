@@ -33,7 +33,7 @@
         self.newestArray = [note.userInfo objectForKey:@"Data"];
         [self.currentCollectionView reloadData];
     }];
-    
+#warning addObserver in ViewDidLoad does not work; need to move to viewDidAppear or use another approach.
     [[NSNotificationCenter defaultCenter] addObserverForName:kTopName object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
         self.topArray = [note.userInfo objectForKey:@"Data"];
         [self.featuredCollectionView reloadData];
