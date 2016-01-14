@@ -8,6 +8,7 @@
 
 #import "NetworkManager.h"
 #import "AppDelegate.h"
+#import "AFURLSessionManager.h"
 
 @implementation NetworkManager
 
@@ -857,6 +858,70 @@
     UIGraphicsEndImageContext();
     
     [self updateProfilePicture:resizedImage];
+    
+}
+
+-(void)checkAndDownloadFile:(NSString *)fileURL ofType:(NSString *)fileType withPostDownloadCompletion:(void (^)(void))downloadCompletionBlock
+{
+    //fileURL should be the server extension of file, eg: Uploads/Images/__profile_1452646100.jpg
+    //fileType should be the local directory name, currently one of: Melodies, Profiles, Recordings.
+    
+    //fileType = [NSString stringWithFormat:@"%@/", fileType];
+    
+    NSFileManager * fileManager = [NSFileManager defaultManager];
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    NSString *localDirectoryPath = [documentsPath stringByAppendingPathComponent:fileType];
+    
+    //Get the directory portion of the file URL
+    NSArray * parts = [fileURL componentsSeparatedByString:@"/"];
+    NSString * fileName = [parts lastObject];
+    
+    //NSString * directory = [
+    //NSString * directory = [fileURL stringByReplacingOccurrencesOfString:[parts lastObject] withString:@""];
+    
+    if (![fileManager fileExistsAtPath:localDirectoryPath])
+    {
+        NSError* error;
+        if([[NSFileManager defaultManager] createDirectoryAtPath:localDirectoryPath withIntermediateDirectories:NO attributes:nil error:&error]) {
+            
+            NSLog(@"success creating folder");
+            
+        } else {
+            NSLog(@"[%@] ERROR: attempting to write create MyFolder directory", [self class]);
+            NSAssert( FALSE, @"Failed to create directory maybe out of disk space?");
+        }
+    }
+    
+    if (![fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/%@", localDirectoryPath, fileName]])
+    {
+        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+        AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
+        
+        NSString *APICallURL = [NSString stringWithFormat:@"%@/%@", DOWNLOAD_BASE_URL, fileURL];
+        APICallURL = [APICallURL stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+        
+        NSURL * destinationURL = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", localDirectoryPath, fileName]];
+        
+        NSURL *URL = [NSURL URLWithString:APICallURL];
+        NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+        NSProgress *progress = nil;
+        
+        NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:&progress destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+                return destinationURL;
+        }
+                                                  
+        completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+            
+            NSLog(@"Succesful download of file %@", destinationURL);
+            if (downloadCompletionBlock)
+                downloadCompletionBlock();
+            
+        }];
+        [downloadTask resume];
+
+    } else {
+        NSLog(@"No need to download file %@/%@", localDirectoryPath, fileName);
+    }
     
 }
 
