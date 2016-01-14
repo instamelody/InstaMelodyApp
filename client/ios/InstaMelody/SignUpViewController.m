@@ -408,6 +408,7 @@
         self.HUD.status = @"Signing up";
         [self.HUD show:YES];
         
+        __weak typeof(self) weakSelf = self;
         
         NSString *requestUrl = [NSString stringWithFormat:@"%@/User/New", API_BASE_URL];
         
@@ -429,13 +430,15 @@
                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"You are now logged in" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
                 [alertView show];
                 
-                NSDictionary *responseDict =
-                (NSDictionary *)responseObject;
-                [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"Token"] forKey:@"authToken"];
+                NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+                NSDictionary *responseDict = (NSDictionary *)responseObject;
+                [defaults setObject:[responseDict objectForKey:@"Token"] forKey:@"authToken"];
+                
+                //Needed for the prepareImage: method below
+                [defaults setObject:weakSelf.firstNameField.text forKey:@"FirstName"];
+                [defaults setObject:weakSelf.lastNameField.text forKey:@"LastName"];
                 
                 [[NSUserDefaults standardUserDefaults] synchronize];
-                
-                
                 
                 if (self.savedImage != nil) {
                     [[NetworkManager sharedManager] prepareImage:self.savedImage];
