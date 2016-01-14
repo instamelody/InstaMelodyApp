@@ -96,7 +96,6 @@
     self.progressView.progressTintColor = INSTA_BLUE;
     self.progressView.thicknessRatio = 0.1f;
     
-    
     HUD = [[M13ProgressHUD alloc] initWithProgressView:[[M13ProgressViewRing alloc] init]];
     HUD.progressViewSize = CGSizeMake(60.0, 60.0);
     HUD.animationPoint = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height / 2);
@@ -115,90 +114,7 @@
          
         //self.isNewPart = NO;
          
-     }
-    
-
-    
-    /* SELECTEDUSERMELODY ONLY SET IN STATIONVIEWCONTROLLER AND SEEMINGLY NEVER SET
-     else if (self.selectedUserMelody != nil) {
-        
-        int count = 0;
-        NSLog(@"loaded with a melody");
-         
-         if ([self.selectedUserMelody.userId isEqualToString:myUserId]) {
-             self.isNotMyStudio = NO;
-         }
-                           
-        if ([self.selectedUserMelody.isExplicit boolValue]) {
-            self.explicitCheckbox.on = YES;
-            self.publicCheckbox.on = NO;
-        } else {
-            self.explicitCheckbox.on = NO;
-            self.publicCheckbox.on = YES;
-        }
-         
-         initialIsExplicitStatus = self.selectedUserMelody.isExplicit;
-         
-         //if ([self.selectedUserMelody.isStationPostMelody boolValue]) {
-           //  self.publicCheckbox.on = YES;
-         //}
-         //Dropping use of this flag. If explicit is off, it is public.
-         
-        for (UserMelodyPart *part in [self.selectedUserMelody parts]) {
-            if ([part.isUserCreated boolValue] == true) {
-                //get and set recording
-                
-                //part.fileName
-                
-                NSArray *paths =
-                NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-                                                    NSUserDomainMask, YES);
-                NSString *documentsPath = [paths objectAtIndex:0];
-                
-                NSString *recordingPath = [documentsPath stringByAppendingPathComponent:@"Recordings"];
-                
-                NSString *filePath = [recordingPath
-                                      stringByAppendingPathComponent:part.fileName];
-                
-                if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
-                    self.currentRecordingURL = [NSURL URLWithString:filePath];
-                    self.playButton.hidden = NO;
-                } else {
-                    [self downloadRecording:part.filePath toPath:filePath];
-                }
-                
-                
-                
-            } else if (count == 0) {
-                Melody *melody = [Melody MR_findFirstByAttribute:@"melodyId" withValue:part.partId];
-                
-                //get and set system melodies
-                [self didSelectMelody:melody];
-                count++;
-            } else if (count == 1) {
-                //
-                
-                Melody *melody = [Melody MR_findFirstByAttribute:@"melodyId" withValue:part.partId];
-                
-                [self didSelectMelody2:melody];
-                count++;
-                
-            } else if (count == 2) {
-                //
-                
-                Melody *melody = [Melody MR_findFirstByAttribute:@"melodyId" withValue:part.partId];
-                
-                [self didSelectMelody3:melody];
-                count++;
-                
-            }
-        }
-         
-        //self.isNewPart = NO;
-     }
-    */
-    
-     else {
+     } else {
          //creating a loop from scratch...
          
          NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -227,50 +143,6 @@
          self.explicitCheckbox.on = NO;
          self.publicCheckbox.on = YES;
      }
-    
-    [[NSNotificationCenter defaultCenter] addObserverForName:@"pickedMelody" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-        //
-        if (note.userInfo != nil) {
-            
-            Melody *melody = [Melody MR_findFirstByAttribute:@"melodyId" withValue:[note.userInfo objectForKey:@"melodyId"]];
-            
-            NSString *name = melody.melodyName;
-            CLToken *token = [[CLToken alloc] initWithDisplayText:name context:nil];
-            CLTokenInputView *tokenInputView = (CLTokenInputView *)[self.tableView viewWithTag:99];
-            
-            BOOL isToken1 = [name isEqualToString:self.selectedMelody.melodyName];
-            BOOL isToken2 = [name isEqualToString:self.selectedMelody2.melodyName];
-            BOOL isToken3 = [name isEqualToString:self.selectedMelody3.melodyName];
-            
-            if (tokenInputView.allTokens.count < 4 && !isToken1 && !isToken2 && !isToken3) {
-                
-                switch (tokenInputView.allTokens.count) {
-                    case 0:
-                        self.compositionMelody = melody;
-                        [self loadMelody:melody];
-                        break;
-                    case 1:
-                        self.compositionMelody2 = melody;
-                        [self loadMelody2:melody];
-                        break;
-                    case 2:
-                        self.compositionMelody3 = melody;
-                        [self loadMelody3:melody];
-                        break;
-                    default:
-                        [HUD hide:YES];
-                        break;
-                }
-                
-                [tokenInputView addToken:token];
-                
-            }
-            
-            //add melody
-            self.savedGroupId = [note.userInfo objectForKey:@"groupId"];
-            
-        }
-    }];
     
     //[[NSNotificationCenter defaultCenter] postNotificationName:@"pickedMelody" object:nil userInfo:userDict];
     
@@ -322,6 +194,50 @@
     
     [[UIBarButtonItem appearance] setTitleTextAttributes:buttonTextAttributes forState:UIControlStateNormal];
     self.backwardButton.hidden = YES;
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    if (_melodyId > 0)
+    {
+        Melody *melody = [Melody MR_findFirstByAttribute:@"melodyId" withValue:_melodyId];
+        
+        NSString *name = melody.melodyName;
+        CLToken *token = [[CLToken alloc] initWithDisplayText:name context:nil];
+        CLTokenInputView *tokenInputView = (CLTokenInputView *)[self.tableView viewWithTag:99];
+        
+        BOOL isToken1 = [name isEqualToString:self.selectedMelody.melodyName];
+        BOOL isToken2 = [name isEqualToString:self.selectedMelody2.melodyName];
+        BOOL isToken3 = [name isEqualToString:self.selectedMelody3.melodyName];
+        
+        if (tokenInputView.allTokens.count < 4 && !isToken1 && !isToken2 && !isToken3) {
+            
+            switch (tokenInputView.allTokens.count) {
+                case 0:
+                    self.compositionMelody = melody;
+                    [self loadMelody:melody];
+                    break;
+                case 1:
+                    self.compositionMelody2 = melody;
+                    [self loadMelody2:melody];
+                    break;
+                case 2:
+                    self.compositionMelody3 = melody;
+                    [self loadMelody3:melody];
+                    break;
+                default:
+                    [HUD hide:YES];
+                    break;
+            }
+            
+            [tokenInputView addToken:token];
+            
+        }
+        
+        //add melody
+        self.savedGroupId = //[note.userInfo objectForKey:@"groupId"];
+            
+    }
 }
 
 -(void)viewDidDisappear:(BOOL)animated {

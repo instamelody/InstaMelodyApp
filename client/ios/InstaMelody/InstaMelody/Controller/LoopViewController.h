@@ -35,6 +35,7 @@
 
 @property BOOL isNotMyStudio;
 @property BOOL isForeignChatLoop;
+@property NSNumber* melodyId;
 
 @property (nonatomic, strong) NSDictionary *selectedLoop;
 //@property (nonatomic, strong) UserMelody *selectedUserMelody;

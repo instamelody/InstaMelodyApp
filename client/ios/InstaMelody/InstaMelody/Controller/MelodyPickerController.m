@@ -87,9 +87,11 @@
     
     Melody *melody = (Melody *)[self.melodyList objectAtIndex:indexPath.row];
     
-    NSDictionary *userDict = @{@"melodyId": melody.melodyId};
+    //NSDictionary *userDict = @{@"melodyId": melody.melodyId};
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"previewMelody" object:nil userInfo:userDict];
+    _delegate.melodyId = melody.melodyId;
+    
+    //[[NSNotificationCenter defaultCenter] postNotificationName:@"previewMelody" object:nil userInfo:userDict];
     
 }
 
