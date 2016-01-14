@@ -209,8 +209,8 @@
         
         SignUpViewController *signupVC = (SignUpViewController *)segue.destinationViewController;
         
-        NSString * phone = ([defaults objectForKey:@"PhoneNumber"]) ? [defaults objectForKey:@"PhoneNumber"] : @"";
-        NSString * email = ([defaults objectForKey:@"EmailAddress"]) ? [defaults objectForKey:@"EmailAddress"] : @"";
+        NSString * phone = ([defaults objectForKey:@"PhoneNumber"]) ? [defaults objectForKey:@"PhoneNumber"] : @"111";
+        NSString * email = ([defaults objectForKey:@"EmailAddress"]) ? [defaults objectForKey:@"EmailAddress"] : @"X";
         
         signupVC.userInfo = @{@"FirstName": [defaults objectForKey:@"FirstName"], @"LastName": [defaults objectForKey:@"LastName"], @"PhoneNumber":  phone, @"EmailAddress": email, @"DateOfBirth": [defaults objectForKey:@"DateOfBirth"], @"IsFemale":[defaults objectForKey:@"IsFemale"], @"DisplayName" : [defaults objectForKey:@"DisplayName"]};
         signupVC.title = @"Edit Profile";
