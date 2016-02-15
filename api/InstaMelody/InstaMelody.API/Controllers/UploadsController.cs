@@ -51,9 +51,9 @@ namespace InstaMelody.API.Controllers
                         }
 
                         var results = new List<ApiFile>();
-                        var provider = await this.Request.Content.ReadAsMultipartAsync(new InMemoryMultipartFormDataStreamProvider());
-                        var files = provider.Files;
-                        foreach (var file in files)
+
+                        var provider = await Request.Content.ReadAsMultipartAsync();
+                        foreach (var file in provider.Contents)
                         {
                             var uploadedFile = await this.TryUploadFile(file, token);
                             if (uploadedFile != null)
@@ -69,6 +69,25 @@ namespace InstaMelody.API.Controllers
                                 return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.FailedFileUpload);
                             }
                         }
+
+                        //var provider = await this.Request.Content.ReadAsMultipartAsync(new InMemoryMultipartFormDataStreamProvider());
+                        //var files = provider.Files;
+                        //foreach (var file in files)
+                        //{
+                        //    var uploadedFile = await this.TryUploadFile(file, token);
+                        //    if (uploadedFile != null)
+                        //    {
+                        //        results.Add(uploadedFile);
+                        //        bll.ExpireToken(token);
+                        //    }
+                        //    else
+                        //    {
+                        //        bll.DeleteAssociatedFileInfo(token);
+                        //        bll.ExpireToken(token);
+
+                        //        return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, Exceptions.FailedFileUpload);
+                        //    }
+                        //}
 
                         return this.Request.CreateResponse(HttpStatusCode.OK, results);
                     }

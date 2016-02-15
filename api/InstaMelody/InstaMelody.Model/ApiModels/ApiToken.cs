@@ -8,5 +8,7 @@ namespace InstaMelody.Model.ApiModels
         /// Gets or sets the date and time.
         /// </summary>
         public Guid Token { get; set; }
+
+        public Guid UserId { get; set; }
     }
 }

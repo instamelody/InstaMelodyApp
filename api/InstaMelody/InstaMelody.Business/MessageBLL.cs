@@ -505,6 +505,10 @@ namespace InstaMelody.Business
 
                 var dal = new Chats();
                 var users = dal.GetUsersInChat(chat.Id);
+                if (users == null || !users.Any())
+                {
+                    return results;
+                }
 
                 var userBll = new UserBll();
                 foreach (var chatUser in users)

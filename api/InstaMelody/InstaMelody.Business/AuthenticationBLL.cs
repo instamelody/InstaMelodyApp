@@ -88,7 +88,7 @@ namespace InstaMelody.Business
             var sessionToken = sessionDal.AddSession(credentialedUser.Id, deviceToken);
             if (!sessionToken.Equals(default(Guid)))
             {
-                return new ApiToken { Token = sessionToken };
+                return new ApiToken { Token = sessionToken, UserId = credentialedUser.Id };
             }
 
             InstaMelodyLogger.Log(
@@ -149,7 +149,7 @@ namespace InstaMelody.Business
             var sessionToken = sessionDal.AddSession(credentialedUser.Id, deviceToken);
             if (!sessionToken.Equals(default(Guid)))
             {
-                return new ApiToken { Token = sessionToken };
+                return new ApiToken { Token = sessionToken, UserId = credentialedUser.Id };
             }
 
             InstaMelodyLogger.Log(
@@ -210,7 +210,7 @@ namespace InstaMelody.Business
             var sessionToken = sessionDal.AddSession(credentialedUser.Id, deviceToken);
             if (!sessionToken.Equals(default(Guid)))
             {
-                return new ApiToken { Token = sessionToken };
+                return new ApiToken { Token = sessionToken, UserId = credentialedUser.Id };
             }
 
             InstaMelodyLogger.Log(
@@ -244,7 +244,7 @@ namespace InstaMelody.Business
 
             dal.UpdateSessionActivity(session.Token);
 
-            return new ApiToken { Token = session.Token };
+            return new ApiToken { Token = session.Token, UserId = session.UserId };
         }
 
         /// <summary>
@@ -271,7 +271,7 @@ namespace InstaMelody.Business
 
             dal.UpdateSessionActivity(session.Token);
 
-            return new ApiToken { Token = session.Token };
+            return new ApiToken { Token = session.Token, UserId = session.UserId };
         }
 
         /// <summary>
