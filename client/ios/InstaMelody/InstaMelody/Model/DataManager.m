@@ -159,7 +159,7 @@
         // NSLog(@"JSON: %@", responseObject);
         NSLog(@"melodies updated");
         
-        NSArray *infoList = (NSArray *)responseObject;
+        //NSArray *infoList = (NSArray *)responseObject;
         
         //get profile pic
         
@@ -262,7 +262,6 @@
                     
                     //NSString *fileString = [NSString stringWithFormat:@"file://%@", destinationFilePath];
                     NSURL *fileURL = [NSURL fileURLWithPath:pathString];
-                    
                     return fileURL;
                     
                     //NSURL *documentsDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
@@ -271,7 +270,11 @@
                     
                     if (error == nil) {
                         NSLog(@"File downloaded to: %@", filePath);
-                        
+                        NSError *error = nil;
+                        BOOL success = [filePath setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
+                        if(!success){
+                            NSLog(@"Error excluding %@ from backup %@", [filePath lastPathComponent], error);
+                        }
                     } else {
                         NSLog(@"Download error: %@", error.description);
                     }
@@ -468,7 +471,7 @@
         // NSLog(@"JSON: %@", responseObject);
         NSLog(@"melodies updated");
         
-        NSArray *melodyList = (NSArray *)responseObject;
+        //NSArray *melodyList = (NSArray *)responseObject;
         
         //[self addUserMelody:melodyList];
         

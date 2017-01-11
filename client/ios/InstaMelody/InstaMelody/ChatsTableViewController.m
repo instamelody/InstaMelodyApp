@@ -140,7 +140,7 @@
         }
         //cell.nameLabel.text = [NSString stringWithFormat:@"Chat with %@ +%ld others", friend.displayName, userArray.count - 2];
         cell.nameLabel.text = names;
-        cell.descriptionLabel.text = [NSString stringWithFormat:@"%ld users", userArray.count];
+        cell.descriptionLabel.text = [NSString stringWithFormat:@"%td users", userArray.count];
         
         if ([chatDict objectForKey:@"Name"] != nil) {
             NSString *nameString = [chatDict objectForKey:@"Name"];
@@ -282,7 +282,7 @@
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
             NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
             
-            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %td: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
             
             NSLog(@"%@",ErrorResponse);
             
@@ -322,7 +322,7 @@
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
             NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
             
-            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %td: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
             
             NSLog(@"%@",ErrorResponse);
             
@@ -359,7 +359,7 @@
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
             NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
             
-            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %td: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
             
             NSLog(@"%@",ErrorResponse);
             

@@ -198,7 +198,7 @@
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
             NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
             
-            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %d: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
             
             NSLog(@"%@",ErrorResponse);
             
@@ -266,7 +266,7 @@
                 //Run UI Updates
                 self.stationLabel.text = [selectedStation objectForKey:@"Name"];
                 
-                [self.fanButton setTitle:[NSString stringWithFormat:@"%ld Fans", numFans] forState:UIControlStateNormal];
+                [self.fanButton setTitle:[NSString stringWithFormat:@"%ld Fans", (long)numFans] forState:UIControlStateNormal];
                 //[self.vipButton setTitle:[NSString stringWithFormat:@"%ld VIPs", numVips] forState:UIControlStateNormal];
                 [self fixButtons];
                 
@@ -411,11 +411,11 @@
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
             NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
             
-            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %td: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
             
             NSLog(@"%@",ErrorResponse);
             
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            //UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             //TODOAHMED
             //[alertView show];
             isUsersStation = TRUE;
@@ -511,6 +511,7 @@
         self.cleanLoopArray = [tempArray sortedArrayUsingDescriptors:descriptors];
         
         [self.collectionView reloadData];
+        [self change:nil];
         
         
         //NSDictionary *responseDict = (NSDictionary *)responseObject;
@@ -702,7 +703,7 @@
             cell.coverImage.image = [UIImage imageWithContentsOfFile:imagePath];
             
         } else {
-            NSString *userName = [NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName];
+            //NSString *userName = [NSString stringWithFormat:@"%@ %@", friend.firstName, friend.lastName];
             //[cell.coverImage setImageWithString:userName color:nil circular:YES];
         }
         
@@ -736,12 +737,18 @@
     if ([userId isEqualToString:myUserId])
     {
         loopVC.isNotMyStudio = false;
+        loopVC.isForeignChatLoop = NO;
         appDelegate.loopOwnersId = myUserId;
     } else {
         loopVC.isNotMyStudio = true;
+        loopVC.isForeignChatLoop = YES;
+        //Really should see if this user is a participant in the chat;
+        //For now, just block the ability to add a part. They can always go in via chat.
+        
         appDelegate.loopOwnersId = userId;
     }
     
+    /* OBJECT MESSAGE NEVER FOUND IN LOOPDICT?
     NSDictionary *messageDict = [loopDict objectForKey:@"Message"];
     
     if (messageDict != nil) {
@@ -774,8 +781,10 @@
         }
         
         
-    } else {
-        
+    }
+    
+    else {
+    */
         NSArray *partArray = [loopDict objectForKey:@"Parts"];
         
         if (partArray!= nil && [partArray isKindOfClass:[NSArray class]]) {
@@ -787,7 +796,7 @@
             loopVC = nil;
         }
         
-    }
+    //}
     
     if (loopVC != nil) {
             [self.navigationController pushViewController:loopVC animated:YES];
@@ -891,9 +900,22 @@
     switch (control.selectedSegmentIndex) {
         case 0: {
             
-            NSArray *tempArray = self.loopArray;
-           
+            //NSArray *tempArray = self.loopArray;
+            //NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
+            //Initially this tab showed all loops
+            
+            //Change: first tab shows only public loops
+            NSMutableArray *tempArray = [NSMutableArray new];
+            for (NSDictionary *itemDict in self.loopArray) {
+                NSString * explicit = [NSString stringWithFormat:@"%@", [itemDict valueForKey:@"IsExplicit"]];
+                if ([explicit isEqualToString:@"0"]) {
+                    [tempArray addObject:itemDict];
+                }
+            }
+            
             NSArray *descriptors = [NSArray arrayWithObject:valueDescriptor];
+            
+            
             self.loopArray = [tempArray sortedArrayUsingDescriptors:descriptors];
             
             break;
@@ -989,11 +1011,11 @@
             
             NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
             
-            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %td: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
             
             NSLog(@"%@",ErrorResponse);
             
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            //UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             //[alertView show];
         }
     }];

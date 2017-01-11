@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "MGSwipeTableCell.h"
 #import "MGSwipeButton.h"
+@import ContactsUI;
 
-@interface FriendsTableViewController : UITableViewController <MGSwipeTableCellDelegate>
+@interface FriendsTableViewController : UITableViewController <MGSwipeTableCellDelegate, CNContactPickerDelegate>
 
 -(IBAction)requestFriend:(id)sender;
 

@@ -70,6 +70,11 @@
     
     [self loadProfileImage];
     
+    UITapGestureRecognizer *singleFingerTap =
+    [[UITapGestureRecognizer alloc] initWithTarget:self
+                                            action:@selector(handleSingleTap)];
+    [self.view addGestureRecognizer:singleFingerTap];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated  {
@@ -217,8 +222,9 @@
     
     if ([self.userInfo objectForKey:@"EmailAddress"] != nil) {
         self.emailAddressField.text = [self.userInfo objectForKey:@"EmailAddress"];
-        self.emailAddressField.textColor = [UIColor lightGrayColor];
-        self.emailAddressField.enabled = NO;
+        //self.emailAddressField.textColor = [UIColor lightGrayColor];
+        //self.emailAddressField.enabled = NO;
+        //Change above to make email address editable
     }
     
     if ([self.userInfo objectForKey:@"PhoneNumber"] != nil) {
@@ -279,7 +285,7 @@
     
     NSNumber *isFemale = self.genderField.enabled ? [NSNumber numberWithBool:NO] : [NSNumber numberWithBool:YES];
     
-    NSString *monthYear = self.dobField.text;
+    //NSString *monthYear = self.dobField.text;
     
     NSString *encodedEmail = [self.emailAddressField.text stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
     NSDictionary *parameters = @{@"Token" : userToken ,  @"User": @{@"DisplayName": self.usernameField.text, @"FirstName": self.firstNameField.text, @"LastName": self.lastNameField.text, @"PhoneNumber" : self.phoneNumberField.text, @"EmailAddress" : encodedEmail, @"IsFemale": isFemale}};
@@ -287,7 +293,7 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     
     self.HUD.indeterminate = YES;
-    self.HUD.status = @"Signing up";
+    self.HUD.status = @"Updating";
     [self.HUD show:YES];
     
     
@@ -298,7 +304,7 @@
         
         
             if (self.savedImage != nil) {
-                [self prepareImage:self.savedImage];
+                [[NetworkManager sharedManager] prepareImage:self.savedImage];
             }
             
             [self.HUD hide:YES];
@@ -313,7 +319,7 @@
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
             NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
             
-            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %td: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
             
             NSLog(@"%@",ErrorResponse);
             
@@ -370,7 +376,7 @@
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
             NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
             
-            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %td: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
             
             NSLog(@"%@",ErrorResponse);
             
@@ -382,7 +388,7 @@
 
 -(void)createNewUser {
     
-    if (![self.usernameField.text isEqualToString:@""] && ![self.passwordField.text isEqualToString:@""] && ![self.firstNameField.text isEqualToString:@""] && ![self.lastNameField.text isEqualToString:@""] && ![self.phoneNumberField.text isEqualToString:@""]) {
+    if (![self.usernameField.text isEqualToString:@""] && ![self.passwordField.text isEqualToString:@""] && ![self.firstNameField.text isEqualToString:@""] && ![self.lastNameField.text isEqualToString:@""] && ![self.emailAddressField.text isEqualToString:@""]) {
         
         NSNumber *isFemale = self.genderField.enabled ? [NSNumber numberWithBool:NO] : [NSNumber numberWithBool:YES];
         
@@ -391,9 +397,9 @@
         NSString *encodedEmail = [self.emailAddressField.text stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
         NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"DisplayName": self.usernameField.text, @"Password": self.passwordField.text, @"FirstName": self.firstNameField.text, @"LastName": self.lastNameField.text, @"PhoneNumber" : self.phoneNumberField.text, @"EmailAddress" : encodedEmail, @"IsFemale": isFemale, @"DateOfBirth": monthYear}];
         
-        if (self.fbToken != nil) {
-            [parameters setObject:self.fbToken forKey:@"FacebookToken"];
-        }
+        //if (self.fbToken != nil) {
+        //    [parameters setObject:self.fbToken forKey:@"FacebookUserId"];
+        //}
         
         
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
@@ -402,13 +408,14 @@
         self.HUD.status = @"Signing up";
         [self.HUD show:YES];
         
+        __weak typeof(self) weakSelf = self;
         
         NSString *requestUrl = [NSString stringWithFormat:@"%@/User/New", API_BASE_URL];
         
         [manager POST:requestUrl parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"JSON: %@", responseObject);
             
-            NSDictionary *responseDict = (NSDictionary *)responseObject;
+            //NSDictionary *responseDict = (NSDictionary *)responseObject;
             
             NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{@"DisplayName": self.usernameField.text, @"Password": self.passwordField.text}];
             
@@ -423,16 +430,18 @@
                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"You are now logged in" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
                 [alertView show];
                 
-                NSDictionary *responseDict =
-                (NSDictionary *)responseObject;
-                [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"Token"] forKey:@"authToken"];
+                NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+                NSDictionary *responseDict = (NSDictionary *)responseObject;
+                [defaults setObject:[responseDict objectForKey:@"Token"] forKey:@"authToken"];
+                
+                //Needed for the prepareImage: method below
+                [defaults setObject:weakSelf.firstNameField.text forKey:@"FirstName"];
+                [defaults setObject:weakSelf.lastNameField.text forKey:@"LastName"];
                 
                 [[NSUserDefaults standardUserDefaults] synchronize];
                 
-                
-                
                 if (self.savedImage != nil) {
-                    [self prepareImage:self.savedImage];
+                    [[NetworkManager sharedManager] prepareImage:self.savedImage];
                 }
                 
                 [self.HUD hide:YES];
@@ -450,7 +459,7 @@
                 if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
                     NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
                     
-                    NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+                    NSString *ErrorResponse = [NSString stringWithFormat:@"Error %td: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
                     
                     [self.HUD hide:YES];
                     NSLog(@"%@",ErrorResponse);
@@ -470,7 +479,7 @@
             if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
                 NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
                 
-                NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+                NSString *ErrorResponse = [NSString stringWithFormat:@"Error %td: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
                 
                 NSLog(@"%@",ErrorResponse);
                 
@@ -479,7 +488,7 @@
             }
         }];
     } else {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please fill in all fields" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please fill in all required fields" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alertView show];
     }
 }
@@ -507,6 +516,12 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     [self.scrollView setContentOffset:CGPointZero animated:YES];
+}
+
+-(void)handleSingleTap {
+    
+    [self.view endEditing:YES];
+    
 }
 
 /*
@@ -603,7 +618,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     }];
 }
 
-
+/*
 -(void)prepareImage:(UIImage *)image {
     
     UIImage *resizedImage = nil;
@@ -637,6 +652,6 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     
     [[NetworkManager sharedManager] updateProfilePicture:resizedImage];
 }
-
+*/
 
 @end

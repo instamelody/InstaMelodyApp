@@ -8,6 +8,7 @@
 
 #import "NetworkManager.h"
 #import "AppDelegate.h"
+#import "AFURLSessionManager.h"
 
 @implementation NetworkManager
 
@@ -180,12 +181,20 @@
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
             NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
             
-            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            if ([[errorDict objectForKey:@"Message"] isEqualToString:@"Cannot send a message to a Chat that User is not a member of."])
+            {
+                //They are not a member of this chat, so we need to make a different API call...
+                [self uploadLoopPart:userDict];
+                
+            } else {
             
-            NSLog(@"%@",ErrorResponse);
-            
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [alertView show];
+                NSString *ErrorResponse = [NSString stringWithFormat:@"Error %td: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+                
+                NSLog(@"%@",ErrorResponse);
+                
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [alertView show];
+            }
         }
     }];
     
@@ -198,7 +207,7 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     //save to file
     
-    time_t unixTime = time(NULL);
+    //time_t unixTime = time(NULL);
     
     
     NSString *recordingPath = [userDict objectForKey:@"LoopURL"];
@@ -291,7 +300,7 @@
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
             NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
             
-            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %d: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
             
             NSLog(@"%@",ErrorResponse);
             
@@ -307,7 +316,7 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     //save to file
     
-    time_t unixTime = time(NULL);
+    //time_t unixTime = time(NULL);
     
     
     NSString *recordingPath = [userDict objectForKey:@"LoopURL"];
@@ -441,7 +450,7 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     //save to file
     
-    time_t unixTime = time(NULL);
+    //time_t unixTime = time(NULL);
     
     
     NSString *recordingPath = [userDict objectForKey:@"LoopURL"];
@@ -533,7 +542,7 @@
             //[self uploadData:imageData withFileToken:fileTokenString andFileName:imageName];
             if ([isStationPostMelody isEqualToString:@"1"]) {
                 
-                NSDictionary *loopDict = [responseDict objectForKey:@"Loop"];
+                //NSDictionary *loopDict = [responseDict objectForKey:@"Loop"];
                 //[self makeLoopPublic:loopDict];
                 
                 /*
@@ -556,7 +565,7 @@
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
             NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
             
-            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %td: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
             
             NSLog(@"%@",ErrorResponse);
             
@@ -692,7 +701,7 @@
     NSString *imageName = [NSString stringWithFormat:@"%@_%@_profile_%d.jpg", [defaults objectForKey:@"FirstName"], [defaults objectForKey:@"LastName"], (int)unixTime];
     
     //try to create folder
-    NSFileManager *fileManager = [NSFileManager defaultManager];
+    //NSFileManager *fileManager = [NSFileManager defaultManager];
     
     NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     
@@ -715,8 +724,21 @@
     //save to folder
     NSString *imagePath = [profilePath stringByAppendingPathComponent:imageName];
     NSData *imageData = UIImageJPEGRepresentation(image, 0.7);
-    [imageData writeToFile:imagePath atomically:YES];
-    
+    BOOL result = [imageData writeToFile:imagePath atomically:YES];
+    if (!result)
+    {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:@"There was a problem saving the file on the phone." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+        return;
+        
+    } else {
+        NSError *error = nil;
+        NSURL *localURL = [NSURL fileURLWithPath:imagePath];
+        BOOL success = [localURL setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
+        if(!success){
+            NSLog(@"Error excluding %@ from backup %@", [localURL lastPathComponent], error);
+        }
+    }
     
     //step 1 - get file token
     NSString *token =  [defaults objectForKey:@"authToken"];
@@ -780,11 +802,11 @@
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"Success: %@", responseObject);
         
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"File uploaded successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alertView show];
+        //UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"File uploaded successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        //[alertView show];
         
-        NSArray *responseArray = (NSArray *)responseObject;
-        NSDictionary *responseDict = responseArray[0];
+        //NSArray *responseArray = (NSArray *)responseObject;
+        //NSDictionary *responseDict = responseArray[0];
         
         //[[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"Path"] forKey:@"ProfileFilePath"];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"uploadDone" object:nil];
@@ -794,7 +816,7 @@
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
             NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
             
-            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %d: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
             
             NSLog(@"%@",ErrorResponse);
             
@@ -802,6 +824,104 @@
             [alertView show];
         }
     }];
+    
+}
+
+-(void)prepareImage:(UIImage *)image {
+    
+    UIImage *resizedImage = nil;
+    CGSize originalImageSize = image.size;
+    CGSize targetImageSize = CGSizeMake(150.0f, 150.0f);
+    float scaleFactor, tempImageHeight, tempImageWidth;
+    CGRect croppingRect;
+    BOOL favorsX = NO;
+    if (originalImageSize.width > originalImageSize.height) {
+        scaleFactor = targetImageSize.height / originalImageSize.height;
+        favorsX = YES;
+    } else {
+        scaleFactor = targetImageSize.width / originalImageSize.width;
+        favorsX = NO;
+    }
+    
+    tempImageHeight = originalImageSize.height * scaleFactor;
+    tempImageWidth = originalImageSize.width * scaleFactor;
+    if (favorsX) {
+        float delta = (tempImageWidth - targetImageSize.width) / 2;
+        croppingRect = CGRectMake(-1.0f * delta, 0, tempImageWidth, tempImageHeight);
+    } else {
+        float delta = (tempImageHeight - targetImageSize.height) / 2;
+        croppingRect = CGRectMake(0, -1.0f * delta, tempImageWidth, tempImageHeight);
+    }
+    UIGraphicsBeginImageContext(targetImageSize);
+    [image drawInRect:croppingRect];
+    resizedImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    [self updateProfilePicture:resizedImage];
+    
+}
+
+-(void)checkAndDownloadFile:(NSString *)fileURL ofType:(NSString *)fileType withPostDownloadCompletion:(void (^)(void))downloadCompletionBlock
+{
+    //fileURL should be the server extension of file, eg: Uploads/Images/__profile_1452646100.jpg
+    //fileType should be the local directory name, currently one of: Melodies, Profiles, Recordings.
+    
+    //fileType = [NSString stringWithFormat:@"%@/", fileType];
+    
+    NSFileManager * fileManager = [NSFileManager defaultManager];
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    NSString *localDirectoryPath = [documentsPath stringByAppendingPathComponent:fileType];
+    
+    //Get the directory portion of the file URL
+    NSArray * parts = [fileURL componentsSeparatedByString:@"/"];
+    NSString * fileName = [parts lastObject];
+    
+    //NSString * directory = [
+    //NSString * directory = [fileURL stringByReplacingOccurrencesOfString:[parts lastObject] withString:@""];
+    
+    if (![fileManager fileExistsAtPath:localDirectoryPath])
+    {
+        NSError* error;
+        if([[NSFileManager defaultManager] createDirectoryAtPath:localDirectoryPath withIntermediateDirectories:NO attributes:nil error:&error]) {
+            
+            NSLog(@"success creating folder");
+            
+        } else {
+            NSLog(@"[%@] ERROR: attempting to write create MyFolder directory", [self class]);
+            NSAssert( FALSE, @"Failed to create directory maybe out of disk space?");
+        }
+    }
+    
+    if (![fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@/%@", localDirectoryPath, fileName]])
+    {
+        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+        AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
+        
+        NSString *APICallURL = [NSString stringWithFormat:@"%@/%@", DOWNLOAD_BASE_URL, fileURL];
+        APICallURL = [APICallURL stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+        
+        NSURL * destinationURL = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", localDirectoryPath, fileName]];
+        
+        NSURL *URL = [NSURL URLWithString:APICallURL];
+        NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+        NSProgress *progress = nil;
+        
+        NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:&progress destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+                return destinationURL;
+        }
+                                                  
+        completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+            
+            NSLog(@"Succesful download of file %@", destinationURL);
+            if (downloadCompletionBlock)
+                downloadCompletionBlock();
+            
+        }];
+        [downloadTask resume];
+
+    } else {
+        NSLog(@"No need to download file %@/%@", localDirectoryPath, fileName);
+    }
     
 }
 

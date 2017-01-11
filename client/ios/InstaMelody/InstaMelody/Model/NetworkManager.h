@@ -20,6 +20,8 @@
 -(void)uploadLoop:(NSDictionary *)userDict;
 -(void)updateProfilePicture:(UIImage *)image;
 -(void)uploadFile:(NSString *)filePath withFileToken:(NSString *)fileToken;
+-(void)prepareImage:(UIImage *)image;
+-(void)checkAndDownloadFile:(NSString *)fileURL ofType:(NSString *)fileType withPostDownloadCompletion:(void (^)(void))downloadCompletionBlock;
 
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 

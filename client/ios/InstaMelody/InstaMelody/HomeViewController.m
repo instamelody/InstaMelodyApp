@@ -1,4 +1,4 @@
-//
+    //
 //  HomeViewController.m
 //  
 //
@@ -71,6 +71,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"downloadedProfile" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
         [self loadProfileImage];
+        NSLog(@"**** received notification for 'downloadedProfile'....");
     }];
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"infoUpdated" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
@@ -81,6 +82,7 @@
             self.displayNameLabel.text = [NSString stringWithFormat:@"@%@", [defaults objectForKey:@"DisplayName"]];
             
             [self loadProfileImage];
+            NSLog(@"**** received notification for 'infoUpdated'....");
             
         }
     }];
@@ -209,7 +211,10 @@
         
         SignUpViewController *signupVC = (SignUpViewController *)segue.destinationViewController;
         
-        signupVC.userInfo = @{@"FirstName": [defaults objectForKey:@"FirstName"], @"LastName": [defaults objectForKey:@"LastName"], @"PhoneNumber":  [defaults objectForKey:@"PhoneNumber"], @"EmailAddress": [defaults objectForKey:@"EmailAddress"], @"DateOfBirth": [defaults objectForKey:@"DateOfBirth"], @"IsFemale":[defaults objectForKey:@"IsFemale"], @"DisplayName" : [defaults objectForKey:@"DisplayName"]};
+        NSString * phone = ([defaults objectForKey:@"PhoneNumber"]) ? [defaults objectForKey:@"PhoneNumber"] : @"111";
+        NSString * email = ([defaults objectForKey:@"EmailAddress"]) ? [defaults objectForKey:@"EmailAddress"] : @"X";
+        
+        signupVC.userInfo = @{@"FirstName": [defaults objectForKey:@"FirstName"], @"LastName": [defaults objectForKey:@"LastName"], @"PhoneNumber":  phone, @"EmailAddress": email, @"DateOfBirth": [defaults objectForKey:@"DateOfBirth"], @"IsFemale":[defaults objectForKey:@"IsFemale"], @"DisplayName" : [defaults objectForKey:@"DisplayName"]};
         signupVC.title = @"Edit Profile";
         
     }
@@ -315,7 +320,7 @@
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     NotificationsViewController *vc = (NotificationsViewController *)[sb instantiateViewControllerWithIdentifier:@"NotificationsViewController"];
     vc.title = @"Notifications";
-    vc.isFeed = NO;
+    vc.isFeed = YES; //NO;
     
     [self.navigationController pushViewController:vc animated:YES];
 }
@@ -517,7 +522,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
             
             NSLog(@"%@",ErrorResponse);
             
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            //UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             //TODOAHMED
             //[alertView show];
             
@@ -560,7 +565,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
             
             NSLog(@"%@",ErrorResponse);
             
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            //UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             //TODOAHMED
             //[alertView show];
             
@@ -571,8 +576,6 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 
 
 -(void)getUserDetails:(NSString*)displayName {
-    
-    //https://api.instamelody.com/v1.0/User?token=9d0ab021-fcf8-4ec3-b6e3-bb1d0d03b12e&displayName=testeraccount
     
     NSString *requestUrl = [NSString stringWithFormat:@"%@/User", API_BASE_URL];
     
@@ -600,9 +603,13 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         
         [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"IsFemale"] forKey:@"IsFemale"];
         
-        [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"PhoneNumber"] forKey:@"PhoneNumber"];
+        NSString * phone = ([responseDict objectForKey:@"PhoneNumber"] == [NSNull null]) ? @"" : [responseDict objectForKey:@"PhoneNumber"];
         
-        [[NSUserDefaults standardUserDefaults] setObject:[responseDict objectForKey:@"EmailAddress"] forKey:@"EmailAddress"];
+        [[NSUserDefaults standardUserDefaults] setObject:phone forKey:@"PhoneNumber"];
+        
+        NSString * email = ([responseDict objectForKey:@"EmailAddress"] == [NSNull null]) ? @"" : [responseDict objectForKey:@"EmailAddress"];
+        
+        [[NSUserDefaults standardUserDefaults] setObject:email forKey:@"EmailAddress"];
         
         if ([responseDict objectForKey:@"Image"] != nil && [[responseDict objectForKey:@"Image"] isKindOfClass:[NSDictionary class]]) {
             NSDictionary *imageDict = [responseDict objectForKey:@"Image"];
@@ -624,7 +631,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
             
             NSLog(@"%@",ErrorResponse);
             
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            //UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:ErrorResponse delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             //[alertView show];
         }
     }];

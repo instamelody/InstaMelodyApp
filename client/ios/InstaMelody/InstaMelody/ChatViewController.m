@@ -13,6 +13,7 @@
 #import "constants.h"
 #import "Friend.h"
 #import <MagicalRecord/MagicalRecord.h>
+#import "zoomPopup.h"
 
 @interface ChatViewController ()
 
@@ -464,6 +465,32 @@
 {
     NSLog(@"Tapped message bubble!");
     
+    /*JSQMessage *message = [self.messages objectAtIndex:indexPath.row];
+    
+    if (message.isMediaMessage) {
+        id<JSQMessageMediaData> mediaItem = message.media;
+        
+        if ([mediaItem isKindOfClass:[JSQPhotoMediaItem class]]) {
+            
+            NSLog(@"Tapped photo message bubble!");
+            
+            JSQPhotoMediaItem *photoItem = (JSQPhotoMediaItem *)mediaItem;
+            [self popupImage:photoItem.image];
+        }
+    } */
+}
+
+- (void) popupImage: (UIImage*)image
+{
+    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    UIView *topView = window.rootViewController.view;
+    UIImageView * imageView = [[UIImageView alloc] initWithImage:image];
+    
+    zoomPopup  *popup = [[zoomPopup alloc] initWithMainview:topView andStartRect:CGRectMake(topView.frame.size.width/5, topView.frame.size.height/5, 0, 0)];
+    [popup showPopup:imageView];
+}
+
+    
     /*
     JSQMessage *message = (JSQMessage *)[self.messages objectAtIndex:indexPath.row];
     NSString *tag = message.tag;
@@ -501,7 +528,6 @@
         //NSString *umId = [umDict objectForKey:@""]
     }
      */
-}
 
 - (void)collectionView:(JSQMessagesCollectionView *)collectionView didTapCellAtIndexPath:(NSIndexPath *)indexPath touchLocation:(CGPoint)touchLocation
 {
@@ -554,7 +580,7 @@
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
             NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
             
-            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %td: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
             
             NSLog(@"%@",ErrorResponse);
             
@@ -681,7 +707,7 @@
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
             NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
             
-            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %td: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
             
             NSLog(@"%@",ErrorResponse);
             
@@ -727,7 +753,7 @@
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
             NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
             
-            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %td: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
             
             NSLog(@"%@",ErrorResponse);
             
@@ -1019,6 +1045,8 @@
     } else {
         vc.isNotMyStudio = YES;
     }
+    vc.isForeignChatLoop = NO;
+    //I'm in the chat, so it's not foreign
     
     NSString *nameString = [self.chatDict objectForKey:@"Name"];
     if (nameString != nil && [nameString isKindOfClass:[NSString class]] && ![nameString containsString:@"ChatLoop_"]) {
@@ -1038,6 +1066,7 @@
     vc.delegate = self;
     vc.isFromChat = TRUE;
     vc.isNotMyStudio = FALSE;
+    vc.isForeignChatLoop = NO;
     
     NSString *nameString = [self.chatDict objectForKey:@"Name"];
     if (nameString != nil && [nameString isKindOfClass:[NSString class]] && ![nameString containsString:@"ChatLoop_"]) {
@@ -1102,6 +1131,8 @@
                                         NSUserDomainMask, YES);
     NSString *documentsPath = [paths objectAtIndex:0];
     
+    int count = 0;
+    
     NSArray *files = [[self.partArray objectAtIndex:self.currentPartIndex] objectForKey:@"Files"];
     for (NSString *filePath in files) {
         if ([filePath containsString:@"recording"]) {
@@ -1131,8 +1162,6 @@
             }
             
         } else {
-            
-            int count = 0;
             
             NSString *melodyPath = [documentsPath stringByAppendingPathComponent:@"Melodies"];
             
@@ -1187,7 +1216,7 @@
     
     [self playEverything];
     
-    NSString *stringText = [NSString stringWithFormat:@"%@ (%ld/%ld)", [[self.partArray objectAtIndex:self.currentPartIndex] objectForKey:@"PartName"], (self.currentPartIndex+1), self.partArray.count];
+    NSString *stringText = [NSString stringWithFormat:@"%@ (%td/%td)", [[self.partArray objectAtIndex:self.currentPartIndex] objectForKey:@"PartName"], (self.currentPartIndex+1), self.partArray.count];
     
     [self.statusButton setTitle:stringText forState:UIControlStateNormal];
     
@@ -1312,6 +1341,13 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     NSData *imageData = UIImageJPEGRepresentation(image, 0.7);
     [imageData writeToFile:imagePath atomically:YES];
     
+    NSError *error = nil;
+    NSURL *localURL = [NSURL fileURLWithPath:imagePath];
+    BOOL success = [localURL setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
+    if(!success){
+        NSLog(@"Error excluding %@ from backup %@", [localURL lastPathComponent], error);
+    }
+    
     return imagePath;
 }
 
@@ -1373,7 +1409,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
             NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
             
-            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %td: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
             
             NSLog(@"%@",ErrorResponse);
             
@@ -1428,7 +1464,6 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
             
             //NSString *fileString = [NSString stringWithFormat:@"file://%@", destinationFilePath];
             NSURL *fileURL = [NSURL fileURLWithPath:pathString];
-            
             return fileURL;
             
             //NSURL *documentsDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
@@ -1437,6 +1472,12 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
             
             if (error == nil) {
                 NSLog(@"File downloaded to: %@", filePath);
+                
+                NSError *error = nil;
+                BOOL success = [filePath setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
+                if(!success){
+                    NSLog(@"Error excluding %@ from backup %@", [filePath lastPathComponent], error);
+                }
                 
                 [self refreshMessages];
                 
@@ -1488,7 +1529,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         
         //NSString *fileString = [NSString stringWithFormat:@"file://%@", destinationFilePath];
         NSURL *fileURL = [NSURL fileURLWithPath:destinationFilePath];
-        
+
         return fileURL;
         
         //NSURL *documentsDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
@@ -1497,6 +1538,13 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         
         if (error == nil) {
             NSLog(@"File downloaded to: %@", filePath);
+            
+            NSError *error = nil;
+            BOOL success = [filePath setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
+            if(!success){
+                NSLog(@"Error excluding %@ from backup %@", [filePath lastPathComponent], error);
+            }
+            
             [self.statusButton setTitle:@"Melody loaded" forState:UIControlStateNormal];
             
             //self.playButton.hidden = NO;
@@ -1550,7 +1598,6 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         
         //NSString *fileString = [NSString stringWithFormat:@"file://%@", destinationFilePath];
         NSURL *fileURL = [NSURL fileURLWithPath:destinationFilePath];
-        
         return fileURL;
         
         //NSURL *documentsDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
@@ -1559,6 +1606,13 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         
         if (error == nil) {
             NSLog(@"File downloaded to: %@", filePath);
+            
+            NSError *error = nil;
+            BOOL success = [filePath setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
+            if(!success){
+                NSLog(@"Error excluding %@ from backup %@", [filePath lastPathComponent], error);
+            }
+            
             [self.statusButton setTitle:@"Recording loaded!" forState:UIControlStateNormal];
             
             self.currentRecordingURL = filePath;
@@ -1606,7 +1660,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     
     NSNumber *volume = [self.defaults objectForKey:@"melodyVolume"];
     
-    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    //NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     
    NSString *pathString = self.selectedMelodyPath;
     
@@ -1636,7 +1690,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 
 -(IBAction)playLoop2:(id)sender {
     NSNumber *volume = [self.defaults objectForKey:@"melodyVolume"];
-    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    //NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     
     NSString *pathString = self.selectedMelodyPath2;
     
@@ -1666,7 +1720,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 
 -(IBAction)playLoop3:(id)sender {
     NSNumber *volume = [self.defaults objectForKey:@"melodyVolume"];
-    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    //NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     
     NSString *pathString = self.selectedMelodyPath2;
     

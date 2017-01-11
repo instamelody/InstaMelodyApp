@@ -32,8 +32,14 @@
     
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
-    
+    NSLog(@"Facebook SDK version %@",  [FBSDKSettings sdkVersion]);
     [MagicalRecord setupCoreDataStackWithStoreNamed:@"InstaMelody"];
+    NSURL * dbURL = [NSPersistentStore MR_urlForStoreName:@"InstaMelody"];
+    NSError *error = nil;
+    BOOL success = [dbURL setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
+    if(!success){
+        NSLog(@"Error excluding %@ from backup %@", [dbURL lastPathComponent], error);
+    }
     
     [[Twitter sharedInstance] startWithConsumerKey:@"Xq6cieg5b6FFEqSsJHzTnbrW8" consumerSecret:@"GtR8gm0JZySbZfVLlW4YwzCMc8D7ERXIz0C8kdN3TjZ5MBVkxc"];
     [[Crashlytics sharedInstance] setDebugMode:YES];

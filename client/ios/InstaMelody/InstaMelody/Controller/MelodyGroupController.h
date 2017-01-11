@@ -17,6 +17,8 @@
 
 @property (nonatomic, strong) NSNumber *groupId;
 
+@property (weak) id delegate;
+
 -(IBAction)cancel:(id)sender;
 
 @end

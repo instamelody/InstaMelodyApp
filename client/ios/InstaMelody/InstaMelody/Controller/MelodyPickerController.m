@@ -77,33 +77,20 @@
     return cell;
 }
 
--(IBAction)preview:(id)sender {
-    [sender setTitle:[NSString fontAwesomeIconStringForEnum:FACloudDownload] forState:UIControlStateNormal];
-    
-    UIButton *button = (UIButton *)sender;
-    UITableViewCell *cell = (UITableViewCell *)button.superview;
-    
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    
-    Melody *melody = (Melody *)[self.melodyList objectAtIndex:indexPath.row];
-    
-    NSDictionary *userDict = @{@"melodyId": melody.melodyId};
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"previewMelody" object:nil userInfo:userDict];
-    
-}
-
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     //pass back item
     
     Melody *melody = (Melody *)[self.melodyList objectAtIndex:indexPath.row];
     
-    NSDictionary *userDict = @{@"melodyId": melody.melodyId, @"groupId":  self.groupId};
+    //NSDictionary *userDict = @{@"melodyId": melody.melodyId, @"groupId":  self.groupId};
     
     //NSDictionary *userDict = [NSDictionary dictionaryWithObject:melody.melodyId forKey:@"melodyId"];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"pickedMelody" object:nil userInfo:userDict];
+    //[[NSNotificationCenter defaultCenter] postNotificationName:@"pickedMelody" object:nil userInfo:userDict];
+    
+    _delegate.melodyId = melody.melodyId;
+    _delegate.groupId = self.groupId;
     
     [self done:nil];
 }

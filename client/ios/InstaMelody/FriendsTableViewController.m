@@ -14,6 +14,9 @@
 #import "NSString+FontAwesome.h"
 #import "DataManager.h"
 #import "StationViewController.h"
+#import "NetworkManager.h"
+//@import Contacts;
+@import ContactsUI;
 
 @interface FriendsTableViewController ()
 
@@ -201,7 +204,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (indexPath.section == 0) {
+    if (indexPath.section == 0 && self.friendsList.count > 0) {
         Friend *selectedFriend = [self.friendsList objectAtIndex:indexPath.row];
         
         if (selectedFriend != nil) {
@@ -313,6 +316,13 @@
             if ([friendDict objectForKey:@"Image"] != nil && [[friendDict objectForKey:@"Image"] isKindOfClass:[NSDictionary class]]) {
                 NSDictionary *imageDict = [friendDict objectForKey:@"Image"];
                 newFriend.profileFilePath = [imageDict objectForKey:@"FilePath"];
+                dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    [[NetworkManager sharedManager] checkAndDownloadFile:newFriend.profileFilePath ofType:@"Profiles"
+                                              withPostDownloadCompletion:^(void){
+                                                  [self.tableView reloadData];
+                                              }];
+                });
+                 
             }
         }
         
@@ -329,7 +339,6 @@
             }
             //
         }];
-        
         
         //NSDictionary *responseDict = (NSDictionary *)responseObject;
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -407,7 +416,7 @@
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
             NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
             
-            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %td: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
             
             NSLog(@"%@",ErrorResponse);
             
@@ -439,7 +448,7 @@
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
             NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
             
-            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %td: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
             
             NSLog(@"%@",ErrorResponse);
             
@@ -478,7 +487,7 @@
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
             NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
             
-            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %td: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
             
             NSLog(@"%@",ErrorResponse);
             
@@ -514,7 +523,7 @@
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
             NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
             
-            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %td: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
             
             NSLog(@"%@",ErrorResponse);
             
@@ -525,30 +534,47 @@
 }
 
 -(IBAction)requestFriend:(id)sender {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Add a friend" message:@"Enter a friend's email address or user name" preferredStyle:UIAlertControllerStyleAlert];
     
-    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-        textField.placeholder = @"Username or e-mail address";
+    /* Remove this feature for now...
+    if ([CNContactPickerViewController class]) {
+        //iOS 9 or better, we're good to go
+        CNContactPickerViewController *cVC = [[CNContactPickerViewController alloc] init];
+        cVC.delegate = self;
+        NSPredicate * emailOnly = [NSPredicate predicateWithFormat:@"emailAddresses.@count > 0"];
+        cVC.predicateForEnablingContact = emailOnly;
+        //cVC.predicateForSelectionOfContact = [NSPredicate predicateWithFormat:@"TRUEPREDICATE"];
+        cVC.predicateForSelectionOfContact= [NSPredicate predicateWithFormat:@"FALSEPREDICATE"];
+        cVC.displayedPropertyKeys = @[@"emailAddresses"];
         
-    }];
-    
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDestructive handler:nil];
-    
-    UIAlertAction *submitAction = [UIAlertAction actionWithTitle:@"Submit" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        //
-        UITextField *textField = alert.textFields[0];
+        [self.view.window.rootViewController presentViewController:cVC animated:YES completion:nil];
+    } else {
+        // iOS 8 or worse, use the old code
+        */
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Add a friend" message:@"Enter a friend's email address or user name" preferredStyle:UIAlertControllerStyleAlert];
         
-        if ([self NSStringIsValidEmail:textField.text]) {
-            [self requestFriendWithEmail:textField.text];
-        } else {
-            [self requestFriendWithUsername:textField.text];
-        }
-    }];
+        [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+            textField.placeholder = @"Username or e-mail address";
+            
+        }];
+        
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDestructive handler:nil];
+        
+        UIAlertAction *submitAction = [UIAlertAction actionWithTitle:@"Submit" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            //
+            UITextField *textField = alert.textFields[0];
+            
+            if ([self NSStringIsValidEmail:textField.text]) {
+                [self requestFriendWithEmail:textField.text];
+            } else {
+                [self requestFriendWithUsername:textField.text];
+            }
+        }];
 
-    [alert addAction:cancelAction];
-    [alert addAction:submitAction];
-    
-    [self presentViewController:alert animated:YES completion:nil];
+        [alert addAction:cancelAction];
+        [alert addAction:submitAction];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+    //}
 }
 
 -(BOOL) NSStringIsValidEmail:(NSString *)checkString
@@ -560,6 +586,27 @@
     NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
     return [emailTest evaluateWithObject:checkString];
 }
+
+#pragma mark Contact Picker Delegate
+
+- (void)contactPicker:(CNContactPickerViewController *)picker
+     didSelectContact:(CNContact *)contact
+{
+    NSLog(@"didselect!");
+    
+    //if (contact.emailAddresses)
+    
+}
+
+- (void)contactPicker:(CNContactPickerViewController *)picker
+didSelectContactProperty:(CNContactProperty *)contactProperty
+//didSelectContactProperties:(NSArray<CNContactProperty *> *)contactProperties
+{
+    NSLog(@"didselectcontactproperty value = %@", contactProperty.value);
+    [self requestFriendWithEmail:contactProperty.value];
+    
+}
+
 
 #pragma mark Swipe Delegate
 

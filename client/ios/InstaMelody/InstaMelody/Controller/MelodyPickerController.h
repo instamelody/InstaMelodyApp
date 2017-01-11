@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Melody.h"
+#import "LoopViewController.h"
 
 @interface MelodyPickerController : UIViewController
 
@@ -16,6 +17,8 @@
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 
 @property (nonatomic, strong) NSNumber *groupId;
+
+@property (weak) LoopViewController * delegate;
 
 -(IBAction)done:(id)sender;
 

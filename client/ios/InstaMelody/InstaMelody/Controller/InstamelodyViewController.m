@@ -47,7 +47,8 @@
     
     UIImage *soloImage = [UIImage imageNamed:@"solo"];
     UIImage *chatImage = [UIImage imageNamed:@"chat"];
-    UIImage *loopImage = [UIImage imageNamed:@"loop"];
+    UIImage *loopImage = [UIImage imageNamed:@"solo"]; //@"loop"];
+    //Switching this image per request. 
     
     micImage = [self imageWithImage:micImage scaledToSize:CGSizeMake(70, 70)];
     soloImage = [self imageWithImage:soloImage scaledToSize:CGSizeMake(60, 60)];
@@ -214,7 +215,7 @@
         if ([operation.responseObject isKindOfClass:[NSDictionary class]]) {
             NSDictionary *errorDict = [NSJSONSerialization JSONObjectWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] options:0 error:nil];
             
-            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %ld: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
+            NSString *ErrorResponse = [NSString stringWithFormat:@"Error %td: %@", operation.response.statusCode, [errorDict objectForKey:@"Message"]];
             
             NSLog(@"%@",ErrorResponse);
             
